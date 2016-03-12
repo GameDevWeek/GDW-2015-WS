@@ -3,7 +3,7 @@ Unicorn Bubblegum
 1EB = Eine Einhornbreite
 1GB = Eine Gegnerbreite
 
-###Input
+### Input
 - Auf dem Boden:
   - Pfeiltasten: Bewegung links/rechts, sprung
   - Taste A: Hornattacke
