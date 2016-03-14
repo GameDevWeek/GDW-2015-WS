@@ -5,12 +5,11 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 
 public class StartPointComponent extends Component implements Poolable {
 
-    public int x;
-    public int y;
+    public float x;
+    public float y;
     @Override
     public void reset() {
-        x = 0;
-        y = 0;
+        x = y = 0;
     }
 
 }

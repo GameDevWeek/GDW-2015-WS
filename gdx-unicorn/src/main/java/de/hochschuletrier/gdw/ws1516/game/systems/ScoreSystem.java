@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 
+import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
 
 /*
@@ -32,14 +33,14 @@ public class ScoreSystem extends EntitySystem implements EntityListener{
     }
     @Override
     public void entityAdded(Entity entity) {
-        ScoreComponent component=entity.getComponent(ScoreComponent.class);
+        ScoreComponent component=ComponentMappers.score.get(entity);
         if (component!=null){
             scoreComponent = component;
         }
     }
     @Override
     public void entityRemoved(Entity entity) {
-        ScoreComponent component=entity.getComponent(ScoreComponent.class);
+        ScoreComponent component=ComponentMappers.score.get(entity);
         if (component.equals(scoreComponent)){
             scoreComponent = null;
         }
