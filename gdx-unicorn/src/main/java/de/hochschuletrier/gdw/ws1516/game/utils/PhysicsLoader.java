@@ -7,13 +7,13 @@ import de.hochschuletrier.gdw.ws1516.game.Game;
 
 public class PhysicsLoader implements MapLoader {
 
-	public PhysicsLoader() {
+    public PhysicsLoader() {
 
-	}
+    }
 
-	@Override
-	public void parseMap(TiledMap map, Game game, PooledEngine engine) {
+    @Override
+    public void parseMap(TiledMap map, Game game, PooledEngine engine) {
 
-	}
+    }
 
 }

@@ -9,90 +9,90 @@ import de.hochschuletrier.gdw.ws1516.game.components.factories.EntityFactoryPara
 
 public class EntityCreator {
 
-	private static EntityFactoryParam factoryParam = new EntityFactoryParam();
+    private static EntityFactoryParam factoryParam = new EntityFactoryParam();
 
-	private static EntityFactory<EntityFactoryParam> entityFactory;
+    private static EntityFactory<EntityFactoryParam> entityFactory;
 
-	private static PooledEngine engine;
+    private static PooledEngine engine;
 
-	// keine Instanzen erstellen
-	private EntityCreator() {
-	}
+    // keine Instanzen erstellen
+    private EntityCreator() {
+    }
 
-	public static void setEngine(PooledEngine e) {
-		engine = e;
-	}
+    public static void setEngine(PooledEngine e) {
+        engine = e;
+    }
 
-	/** Basic Entities */
-	public static Entity createEntity(String name, float x, float y) {
-		factoryParam.x = x;
-		factoryParam.y = y;
-		Entity entity = entityFactory.createEntity(name, factoryParam);
+    /** Basic Entities */
+    public static Entity createEntity(String name, float x, float y) {
+        factoryParam.x = x;
+        factoryParam.y = y;
+        Entity entity = entityFactory.createEntity(name, factoryParam);
 
-		engine.addEntity(entity);
-		return entity;
-	}
+        engine.addEntity(entity);
+        return entity;
+    }
 
-	/** Master Entities */
-	public static Entity createEntity(String name, String path, float x, float y, float speed, boolean loop,
-			String action) {
-		factoryParam.x = x;
-		factoryParam.y = y;
-		factoryParam.path = path;
-		factoryParam.speed = speed;
-		factoryParam.loop = loop;
-		factoryParam.action = action;
+    /** Master Entities */
+    public static Entity createEntity(String name, String path, float x, float y, float speed, boolean loop,
+            String action) {
+        factoryParam.x = x;
+        factoryParam.y = y;
+        factoryParam.path = path;
+        factoryParam.speed = speed;
+        factoryParam.loop = loop;
+        factoryParam.action = action;
 
-		Entity entity = entityFactory.createEntity(name, factoryParam);
+        Entity entity = entityFactory.createEntity(name, factoryParam);
 
-		engine.addEntity(entity);
-		return entity;
-	}
+        engine.addEntity(entity);
+        return entity;
+    }
 
-	/** Movable Entities */
-	public static Entity createEntity(String name, String path, float x, float y, float speed, boolean loop) {
-		factoryParam.x = x;
-		factoryParam.y = y;
-		factoryParam.path = path;
-		factoryParam.speed = speed;
-		factoryParam.loop = loop;
+    /** Movable Entities */
+    public static Entity createEntity(String name, String path, float x, float y, float speed, boolean loop) {
+        factoryParam.x = x;
+        factoryParam.y = y;
+        factoryParam.path = path;
+        factoryParam.speed = speed;
+        factoryParam.loop = loop;
 
-		Entity entity = entityFactory.createEntity(name, factoryParam);
+        Entity entity = entityFactory.createEntity(name, factoryParam);
 
-		engine.addEntity(entity);
-		return entity;
-	}
+        engine.addEntity(entity);
+        return entity;
+    }
 
-	/** Enemy Entities */
-	public static Entity createEntity(String name, String path, float x, float y) {
-		factoryParam.x = x;
-		factoryParam.y = y;
-		factoryParam.path = path;
+    /** Enemy Entities */
+    public static Entity createEntity(String name, String path, float x, float y) {
+        factoryParam.x = x;
+        factoryParam.y = y;
+        factoryParam.path = path;
 
-		Entity entity = entityFactory.createEntity(name, factoryParam);
+        Entity entity = entityFactory.createEntity(name, factoryParam);
 
-		engine.addEntity(entity);
-		return entity;
-	}
+        engine.addEntity(entity);
+        return entity;
+    }
 
-	/** Action Entities */
-	public static Entity createEntity(String name, float x, float y, String action) {
-		factoryParam.x = x;
-		factoryParam.y = y;
-		factoryParam.action = action;
+    /** Action Entities */
+    public static Entity createEntity(String name, float x, float y, String action) {
+        factoryParam.x = x;
+        factoryParam.y = y;
+        factoryParam.action = action;
 
-		Entity entity = entityFactory.createEntity(name, factoryParam);
+        Entity entity = entityFactory.createEntity(name, factoryParam);
 
-		engine.addEntity(entity);
-		return entity;
-	}
+        engine.addEntity(entity);
+        return entity;
+    }
 
-	public static void setGame(Game game) {
-		factoryParam.game = game;
-	}
+    public static void setGame(Game game) {
+        factoryParam.game = game;
+    }
 
-	public static void setEntityFactory(EntityFactory<EntityFactoryParam> eF) {
-		entityFactory = eF;
-	}
+    public static void setEntityFactory(EntityFactory<EntityFactoryParam> eF) {
+        entityFactory = eF;
+    }
 
 }
