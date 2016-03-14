@@ -18,6 +18,7 @@ public class RenderSystem extends SortedSubIteratingSystem {
         super(Family.all(PositionComponent.class, RenderLayerComponent.class).get(), renderComparator, priority);
 
         addSubSystem(new AnimationRenderSystem());
+        addSubSystem(new ParticleRenderSystem());
     }
 
     @Override
