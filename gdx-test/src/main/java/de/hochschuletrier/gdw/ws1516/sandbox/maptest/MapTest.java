@@ -86,6 +86,11 @@ public class MapTest extends SandboxGame {
                 (Layer layer, TileInfo info) -> info.getBooleanProperty("blocked", false),
                 (Rectangle rect) -> addShape(rect, tileWidth, tileHeight));
 
+        // Test to access objects in TiledMap
+        ObjectLoader objLoader = new ObjectLoader();
+        objLoader.generateNameList(map);
+        objLoader.printNames();
+        
         // create a simple player ball
         Entity player = engine.createEntity();
         PhysixModifierComponent modifyComponent = engine.createComponent(PhysixModifierComponent.class);

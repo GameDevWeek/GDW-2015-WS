@@ -45,192 +45,190 @@ import org.apache.commons.cli.PosixParser;
  * @author Santo Pfingsten
  */
 public class Main extends StateBasedGame {
-    
-    public static CommandLine cmdLine;
 
-    public static final boolean IS_RELEASE = ClassUtils.getClassUrl(Main.class).getProtocol().equals("jar");
+	public static CommandLine cmdLine;
 
-    public static final int WINDOW_HEIGHT = 600;
-    public static final int WINDOW_WIDTH = 1024;
+	public static final boolean IS_RELEASE = ClassUtils.getClassUrl(Main.class).getProtocol().equals("jar");
 
-    private final AssetManagerX assetManager = new AssetManagerX();
-    private static Main instance;
+	public static final int WINDOW_HEIGHT = 600;
+	public static final int WINDOW_WIDTH = 1024;
 
-    public final DevConsole console = new DevConsole(16);
-    private final DevConsoleView consoleView = new DevConsoleView(console);
-    private Skin consoleSkin;
-    public static final InputMultiplexer inputMultiplexer = new InputMultiplexer();
-    private final CVarEnum<SoundDistanceModel> distanceModel = new CVarEnum("snd_distanceModel", SoundDistanceModel.INVERSE, SoundDistanceModel.class, 0, "sound distance model");
-    private final CVarEnum<SoundEmitter.Mode> emitterMode = new CVarEnum("snd_mode", SoundEmitter.Mode.STEREO, SoundEmitter.Mode.class, 0, "sound mode");
+	private final AssetManagerX assetManager = new AssetManagerX();
+	private static Main instance;
 
-    public Main() {
-        super(new BaseGameState());
-    }
+	public final DevConsole console = new DevConsole(16);
+	private final DevConsoleView consoleView = new DevConsoleView(console);
+	private Skin consoleSkin;
+	public static final InputMultiplexer inputMultiplexer = new InputMultiplexer();
+	private final CVarEnum<SoundDistanceModel> distanceModel = new CVarEnum("snd_distanceModel",
+			SoundDistanceModel.INVERSE, SoundDistanceModel.class, 0, "sound distance model");
+	private final CVarEnum<SoundEmitter.Mode> emitterMode = new CVarEnum("snd_mode", SoundEmitter.Mode.STEREO,
+			SoundEmitter.Mode.class, 0, "sound mode");
 
-    public static Main getInstance() {
-        if (instance == null) {
-            instance = new Main();
-        }
-        return instance;
-    }
+	public Main() {
+		super(new BaseGameState());
+	}
 
-    /**
-     * @return the assetManager
-     */
-    public AssetManagerX getAssetManager() {
-        return assetManager;
-    }
+	public static Main getInstance() {
+		if (instance == null) {
+			instance = new Main();
+		}
+		return instance;
+	}
 
-    private void setupDummyLoader() {
-    }
+	/**
+	 * @return the assetManager
+	 */
+	public AssetManagerX getAssetManager() {
+		return assetManager;
+	}
 
-    private void loadAssetLists() {
-        TextureParameter param = new TextureParameter();
-        param.minFilter = param.magFilter = Texture.TextureFilter.Linear;
+	private void setupDummyLoader() {
+	}
 
-        assetManager.loadAssetList("data/json/images.json", Texture.class, param);
-        assetManager.loadAssetList("data/json/sounds.json", Sound.class, null);
-        assetManager.loadAssetList("data/json/music.json", Music.class, null);
-        assetManager.loadAssetListWithParam("data/json/animations.json", AnimationExtended.class,
-                AnimationExtendedLoader.AnimationExtendedParameter.class);
-        BitmapFontParameter fontParam = new BitmapFontParameter();
-        fontParam.flip = true;
-        assetManager.loadAssetList("data/json/fonts.json", BitmapFont.class, fontParam);
-    }
+	private void loadAssetLists() {
+		TextureParameter param = new TextureParameter();
+		param.minFilter = param.magFilter = Texture.TextureFilter.Linear;
 
-    private void setupGdx() {
-        KeyUtil.init();
-        Gdx.graphics.setContinuousRendering(true);
+		assetManager.loadAssetList("data/json/images.json", Texture.class, param);
+		assetManager.loadAssetList("data/json/sounds.json", Sound.class, null);
+		assetManager.loadAssetList("data/json/music.json", Music.class, null);
+		assetManager.loadAssetListWithParam("data/json/animations.json", AnimationExtended.class,
+				AnimationExtendedLoader.AnimationExtendedParameter.class);
+		BitmapFontParameter fontParam = new BitmapFontParameter();
+		fontParam.flip = true;
+		assetManager.loadAssetList("data/json/fonts.json", BitmapFont.class, fontParam);
+	}
 
-        Gdx.input.setCatchMenuKey(true);
-        Gdx.input.setCatchBackKey(true);
-        Gdx.input.setInputProcessor(inputMultiplexer);
-    }
+	private void setupGdx() {
+		KeyUtil.init();
+		Gdx.graphics.setContinuousRendering(true);
 
-    @Override
-    public void create() {
-        CurrentResourceLocator.set(new GdxResourceLocator(Files.FileType.Local));
-        DrawUtil.init();
-        setupDummyLoader();
-        loadAssetLists();
-        setupGdx();
-        SoundInstance.init();
+		Gdx.input.setCatchMenuKey(true);
+		Gdx.input.setCatchBackKey(true);
+		Gdx.input.setInputProcessor(inputMultiplexer);
+	}
 
-        consoleSkin = new Skin(Gdx.files.internal("data/skins/basic.json"));
-        consoleView.init(consoleSkin);
-        addScreenListener(consoleView);
-        inputMultiplexer.addProcessor(consoleView.getInputProcessor());
-        inputMultiplexer.addProcessor(HotkeyManager.getInputProcessor());
+	@Override
+	public void create() {
+		CurrentResourceLocator.set(new GdxResourceLocator(Files.FileType.Local));
+		DrawUtil.init();
+		setupDummyLoader();
+		loadAssetLists();
+		setupGdx();
+		SoundInstance.init();
 
-        changeState(new LoadGameState(assetManager, this::onLoadComplete), null, null);
+		consoleSkin = new Skin(Gdx.files.internal("data/skins/basic.json"));
+		consoleView.init(consoleSkin);
+		addScreenListener(consoleView);
+		inputMultiplexer.addProcessor(consoleView.getInputProcessor());
+		inputMultiplexer.addProcessor(HotkeyManager.getInputProcessor());
 
-        this.console.register(distanceModel);
-        distanceModel.addListener((CVar) -> distanceModel.get().activate());
+		changeState(new LoadGameState(assetManager, this::onLoadComplete), null, null);
 
-        this.console.register(emitterMode);
-        emitterMode.addListener(this::onEmitterModeChanged);
-    }
+		this.console.register(distanceModel);
+		distanceModel.addListener((CVar) -> distanceModel.get().activate());
 
-    private void onLoadComplete() {
-        final MainMenuState mainMenuState = new MainMenuState(assetManager);
-        addPersistentState(mainMenuState);
-        changeState(mainMenuState, null, null);
-        SandboxCommand.init(assetManager);
-        
-        if (cmdLine.hasOption("sandbox")) {
-            SandboxCommand.runSandbox(cmdLine.getOptionValue("sandbox"));
-        }
-    }
+		this.console.register(emitterMode);
+		emitterMode.addListener(this::onEmitterModeChanged);
+	}
 
-    @Override
-    public void dispose() {
-        super.dispose();
-        DrawUtil.batch.dispose();
-        consoleView.dispose();
-        consoleSkin.dispose();
-        SoundEmitter.disposeGlobal();
-    }
+	private void onLoadComplete() {
+		final MainMenuState mainMenuState = new MainMenuState(assetManager);
+		addPersistentState(mainMenuState);
+		changeState(mainMenuState, null, null);
+		SandboxCommand.init(assetManager);
 
-    protected void preRender() {
-        DrawUtil.clearColor(Color.BLACK);
-        DrawUtil.clear();
-        DrawUtil.resetColor();
+		if (cmdLine.hasOption("sandbox")) {
+			SandboxCommand.runSandbox(cmdLine.getOptionValue("sandbox"));
+		}
+	}
 
-        DrawUtil.batch.begin();
-    }
+	@Override
+	public void dispose() {
+		super.dispose();
+		DrawUtil.batch.dispose();
+		consoleView.dispose();
+		consoleSkin.dispose();
+		SoundEmitter.disposeGlobal();
+	}
 
-    protected void postRender() {
-        DrawUtil.batch.end();
-        if (consoleView.isVisible()) {
-            consoleView.render();
-        }
-    }
+	protected void preRender() {
+		DrawUtil.clearColor(Color.BLACK);
+		DrawUtil.clear();
+		DrawUtil.resetColor();
 
-    @Override
-    protected void preUpdate(float delta) {
-        if (consoleView.isVisible()) {
-            consoleView.update(delta);
-        }
-        console.executeCmdQueue();
-        SoundEmitter.updateGlobal();
+		DrawUtil.batch.begin();
+	}
 
-        preRender();
-    }
+	protected void postRender() {
+		DrawUtil.batch.end();
+		if (consoleView.isVisible()) {
+			consoleView.render();
+		}
+	}
 
-    @Override
-    protected void postUpdate(float delta) {
-        postRender();
-    }
+	@Override
+	protected void preUpdate(float delta) {
+		if (consoleView.isVisible()) {
+			consoleView.update(delta);
+		}
+		console.executeCmdQueue();
+		SoundEmitter.updateGlobal();
 
-    @Override
-    public void resize(int width, int height) {
-        super.resize(width, height);
-        SoundEmitter.setListenerPosition(width / 2, height / 2, 10, emitterMode.get());
-    }
+		preRender();
+	}
 
-    public void onEmitterModeChanged(CVar cvar) {
-        int x = Gdx.graphics.getWidth() / 2;
-        int y = Gdx.graphics.getHeight() / 2;
-        SoundEmitter.setListenerPosition(x, y, 10, emitterMode.get());
-    }
+	@Override
+	protected void postUpdate(float delta) {
+		postRender();
+	}
 
-    @Override
-    public void pause() {
-    }
+	@Override
+	public void resize(int width, int height) {
+		super.resize(width, height);
+		SoundEmitter.setListenerPosition(width / 2, height / 2, 10, emitterMode.get());
+	}
 
-    @Override
-    public void resume() {
-    }
+	public void onEmitterModeChanged(CVar cvar) {
+		int x = Gdx.graphics.getWidth() / 2;
+		int y = Gdx.graphics.getHeight() / 2;
+		SoundEmitter.setListenerPosition(x, y, 10, emitterMode.get());
+	}
 
-    public static void main(String[] args) {
-        LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-        cfg.title = "LibGDX Test";
-        cfg.width = WINDOW_WIDTH;
-        cfg.height = WINDOW_HEIGHT;
-        cfg.useGL30 = false;
-        cfg.vSyncEnabled = true;
-        cfg.foregroundFPS = 60;
-        cfg.backgroundFPS = 60;
+	@Override
+	public void pause() {
+	}
 
-        parseOptions(args);
-        new LwjglApplication(getInstance(), cfg);
-    }
+	@Override
+	public void resume() {
+	}
 
-    private static void parseOptions(String[] args) throws IllegalArgumentException {
-        CommandLineParser cmdLineParser = new PosixParser();
+	public static void main(String[] args) {
+		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
+		cfg.title = "LibGDX Test";
+		cfg.width = WINDOW_WIDTH;
+		cfg.height = WINDOW_HEIGHT;
+		cfg.useGL30 = false;
+		cfg.vSyncEnabled = true;
+		cfg.foregroundFPS = 60;
+		cfg.backgroundFPS = 60;
 
-        Options options = new Options();
-        options.addOption(OptionBuilder.withLongOpt("sandbox")
-                .withDescription("Start a Sandbox Game")
-                .withType(String.class)
-                .hasArg()
-                .withArgName("Sandbox Classname")
-                .create());
+		parseOptions(args);
+		new LwjglApplication(getInstance(), cfg);
+	}
 
-        try {
-            cmdLine = cmdLineParser.parse(options, args);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+	private static void parseOptions(String[] args) throws IllegalArgumentException {
+		CommandLineParser cmdLineParser = new PosixParser();
+
+		Options options = new Options();
+		options.addOption(OptionBuilder.withLongOpt("sandbox").withDescription("Start a Sandbox Game")
+				.withType(String.class).hasArg().withArgName("Sandbox Classname").create());
+
+		try {
+			cmdLine = cmdLineParser.parse(options, args);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
