@@ -83,12 +83,12 @@ public class Game extends InputAdapter {
 		addContactListeners();
 		setupPhysixWorld();
 		entityFactory.init(engine, assetManager);
-		
+
 		// EntityCreator
 		EntityCreator.setEngine(engine);
 		EntityCreator.setGame(this);
 		EntityCreator.setEntityFactory(entityFactory);
-		
+
 		// Hier Dateipfad zur Map einfuegen
 		loadMap("data/maps/demo.tmx");
 	}

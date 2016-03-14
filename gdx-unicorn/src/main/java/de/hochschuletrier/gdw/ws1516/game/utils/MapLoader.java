@@ -7,6 +7,6 @@ import de.hochschuletrier.gdw.ws1516.game.Game;
 
 public interface MapLoader {
 
-	public void parseMap(TiledMap map,Game game, PooledEngine engine);
-	
+	public void parseMap(TiledMap map, Game game, PooledEngine engine);
+
 }

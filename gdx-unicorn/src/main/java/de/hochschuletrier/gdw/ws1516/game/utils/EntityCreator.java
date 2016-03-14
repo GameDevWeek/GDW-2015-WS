@@ -34,7 +34,7 @@ public class EntityCreator {
 	}
 
 	/** Movable Entities */
-	public static Entity createEntity(String name, String path, float x, float y,  float speed, boolean loop) {
+	public static Entity createEntity(String name, String path, float x, float y, float speed, boolean loop) {
 		factoryParam.x = x;
 		factoryParam.y = y;
 		factoryParam.path = path;
