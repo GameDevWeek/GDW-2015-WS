@@ -23,7 +23,7 @@ public class MainMenuPage extends MenuPage {
         addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Options", new MenuOptions(skin, menuManager));
         addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Credits", new MenuPageCredits(skin, menuManager));
     
-        addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 100, 50, "Exit", this::stopGame);
+        addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 100, 50, "Exit", () -> System.exit(-1));
         
         
     }    

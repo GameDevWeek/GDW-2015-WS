@@ -6,7 +6,7 @@ import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
 
 public class MenuOptions extends MenuPage {
     
-    private MenuManager menuManager;
+    
 
     public MenuOptions(Skin skin, MenuManager menuManager) {
         super(skin, "menu_bg");
