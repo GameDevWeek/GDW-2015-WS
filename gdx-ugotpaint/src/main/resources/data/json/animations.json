@@ -1,0 +1,34 @@
+{
+    "segment": {
+        "filename": "data/animations/segment.png",
+        "frames" : 1,
+        "frameDuration": [0.15],
+        "playType" : "LOOP",
+        "columns": 1,
+        "rows" : 1
+    },
+    "projectile": {
+        "filename": "data/animations/projectile.png",
+        "frames" : 1,
+        "frameDuration": [0.15],
+        "playType" : "LOOP",
+        "columns": 1,
+        "rows" : 1
+    },
+    "ball": {
+        "filename": "data/animations/ball.png",
+        "frames" : 2,
+        "frameDuration": [0.5, 0.5],
+        "playType" : "LOOP",
+        "columns": 2,
+        "rows" : 1
+    },
+    "box": {
+        "filename": "data/animations/box.png",
+        "frames" : 2,
+        "frameDuration": [0.5, 0.5],
+        "playType" : "LOOP",
+        "columns": 2,
+        "rows" : 1
+    }
+}
