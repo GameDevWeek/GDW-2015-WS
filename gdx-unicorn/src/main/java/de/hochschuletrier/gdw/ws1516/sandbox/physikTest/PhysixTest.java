@@ -44,13 +44,15 @@ public class PhysixTest extends SandboxGame {
     public static final int POSITION_ITERATIONS = 3;
     public static final int VELOCITY_ITERATIONS = 8;
     public static final float STEP_SIZE = 1 / 30.0f;
-    public static final int GRAVITY = 90;
+    public static final int GRAVITY = 30;
     public static final int BOX2D_SCALE = 40;
     
     private final float playerDensity=5f;
     private final float playerFriction=0.2f;
     private final float playerRestitution=0.4f;
     private final float playerSize=30;
+    
+    float time=0;
 
     private final PooledEngine engine = new PooledEngine(
             GameConstants.ENTITY_POOL_INITIAL_SIZE, GameConstants.ENTITY_POOL_MAX_SIZE,
@@ -164,8 +166,8 @@ public class PhysixTest extends SandboxGame {
         if(playerBody != null) {
             float speed = 10000.0f;
             float velX = 0, velY = 0;
-            float cooldown=5;
-            float time=0;
+            float cooldown=0.5f;
+
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 velX -= delta * speed;
             }
@@ -179,11 +181,12 @@ public class PhysixTest extends SandboxGame {
                 velY += delta * speed;
             }
 
-            playerBody.setLinearVelocity(velX, velY);
+//            playerBody.setLinearVelocity(velX, velY);
+            playerBody.applyImpulse(velX, velY);
             
             if (Gdx.input.isKeyPressed(Input.Keys.SPACE)&&time<=0) {
                 time=cooldown;
-                playerBody.applyImpulse(0, -500);
+                playerBody.applyImpulse(0, -5000);
             }
             
             if(time>0){

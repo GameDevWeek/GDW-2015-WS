@@ -65,7 +65,7 @@ public class PhysicsLoader implements MapLoader {
     
     //Create a trigger from the given object
     private void createTrigger(final LayerObject triggerObject) {
-        
+//        triggerObject.getProperty("action", "").equals("deathzone");
         //TODO : Create trigger zone
         
     }
