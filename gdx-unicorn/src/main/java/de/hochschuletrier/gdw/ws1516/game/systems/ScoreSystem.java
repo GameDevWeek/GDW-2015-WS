@@ -8,24 +8,17 @@ import com.badlogic.ashley.systems.IteratingSystem;
 
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
 
+/*
+ * TODO listeners für Objekte einsammeln und zählen in diesem hoch
+ */
 public class ScoreSystem extends IteratingSystem{
 
     private ScoreComponent scoreComponent;
     
-    public ScoreSystem(Family family) {
-        super(family);
+    public ScoreSystem() {
+        super(Family.all(ScoreComponent.class).get());
         scoreComponent = null;
     }
-
-    @Override
-    protected void processEntity(Entity entity, float deltaTime) {
-        // TODO Auto-generated method stub
-        /*
-         * nach komponenten unterscheiden
-         * 
-         */
-    }
-
     @Override
     public void update(float deltaTime) {
         getEntities().forEach((t)->{
@@ -35,6 +28,9 @@ public class ScoreSystem extends IteratingSystem{
             }
         });
         super.update(deltaTime);
+    }
+    @Override
+    protected void processEntity(Entity entity, float deltaTime) {
         
     }
 
