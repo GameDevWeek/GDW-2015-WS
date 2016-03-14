@@ -1,0 +1,207 @@
+{
+    "unicorn": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Animation": {
+                "animation": "unicorn_idle"
+            },
+            "PhysixBody": {
+                "type": "circle",
+                "size": 30,
+                "density": 5,
+                "friction": 0.2,
+                "restitution": 0.4
+            }
+        }
+    },
+    "hunter": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Animation": {
+                "animation": "unicorn_idle"
+            },
+            "PhysixBody": {
+                "type": "circle",
+                "size": 30,
+                "density": 5,
+                "friction": 0.2,
+                "restitution": 0.4
+            }
+        }
+    },
+    "tourist": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Animation": {
+                "animation": "paparazzi_idle"
+            },
+            "PhysixBody": {
+                "type": "circle",
+                "size": 30,
+                "density": 5,
+                "friction": 0.2,
+                "restitution": 0.4
+            }
+        }
+    },
+    "bubblegum_blue": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Texture": {
+                "texture": "bubblegum_blue"
+            },
+            "PhysixBody": {
+                "type": "circle",
+                "size": 30,
+                "density": 5,
+                "friction": 0.2,
+                "restitution": 0.4
+            }
+        }
+    },
+    "bubblegum_rainbow": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Texture": {
+                "texture": "bubblegum_rainbow"
+            },
+            "PhysixBody": {
+                "type": "circle",
+                "size": 30,
+                "density": 5,
+                "friction": 0.2,
+                "restitution": 0.4
+            }
+        }
+    },
+    "bubblegum_spitting": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Texture": {
+                "texture": "bubblegum_spitting"
+            },
+            "PhysixBody": {
+                "type": "circle",
+                "size": 30,
+                "density": 5,
+                "friction": 0.2,
+                "restitution": 0.4
+            }
+        }
+    },
+    "chocolate": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Texture": {
+                "texture": "coin"
+            },
+            "PhysixBody": {
+                "type": "circle",
+                "size": 30,
+                "density": 5,
+                "friction": 0.2,
+                "restitution": 0.4
+            }
+        }
+    },
+    "splatter_0": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Texture": {
+                "texture": "splatter_0"
+            },
+            "PhysixBody": {
+                "type": "circle",
+                "size": 30,
+                "density": 5,
+                "friction": 0.2,
+                "restitution": 0.4
+            }
+        }
+    },
+    "splatter_1": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Texture": {
+                "texture": "splatter_1"
+            },
+            "PhysixBody": {
+                "type": "circle",
+                "size": 30,
+                "density": 5,
+                "friction": 0.2,
+                "restitution": 0.4
+            }
+        }
+    },
+    "splatter_2": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Texture": {
+                "texture": "splatter_2"
+            },
+            "PhysixBody": {
+                "type": "circle",
+                "size": 30,
+                "density": 5,
+                "friction": 0.2,
+                "restitution": 0.4
+            }
+        }
+    },
+    
+    "ball": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "ImpactSound" : {
+                "sound": "click",
+                "minImpulseStrength": 20,
+                "minSpeed": 20,
+                "minDelay": 100
+            },
+            "Animation": {
+                "animation": "ball"
+            },
+            "PhysixBody": {
+                "type": "circle",
+                "size": 30,
+                "density": 5,
+                "friction": 0.2,
+                "restitution": 0.4
+            }
+        }
+    },
+    "box": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "ImpactSound" : {
+                "sound": "click",
+                "minImpulseStrength": 20,
+                "minSpeed": 20,
+                "minDelay": 100
+            },
+            "Animation": {
+                "animation": "box"
+            },
+            "PhysixBody": {
+                "type": "box",
+                "size": 60,
+                "density": 10,
+                "friction": 0.5,
+                "restitution": 0.1
+            }
+        }
+    }
+}

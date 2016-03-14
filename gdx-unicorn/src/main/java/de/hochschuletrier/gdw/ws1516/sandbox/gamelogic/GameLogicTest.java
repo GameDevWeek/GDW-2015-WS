@@ -1,6 +1,7 @@
-package de.hochschuletrier.gdw.ws1516.sandbox.maptest;
+package de.hochschuletrier.gdw.ws1516.sandbox.gamelogic;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -10,6 +11,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.cameras.orthogonal.LimitedSmoothCamera;
+import de.hochschuletrier.gdw.commons.gdx.input.hotkey.Hotkey;
+import de.hochschuletrier.gdw.commons.gdx.input.hotkey.HotkeyModifier;
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixBodyDef;
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixFixtureDef;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
@@ -27,7 +30,13 @@ import de.hochschuletrier.gdw.commons.tiled.tmx.TmxImage;
 import de.hochschuletrier.gdw.commons.tiled.utils.RectangleGenerator;
 import de.hochschuletrier.gdw.commons.utils.Rectangle;
 import de.hochschuletrier.gdw.ws1516.Main;
+import de.hochschuletrier.gdw.ws1516.events.GameRestartEvent;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.StartPointComponent;
+import de.hochschuletrier.gdw.ws1516.game.systems.RespawnSystem;
 import de.hochschuletrier.gdw.ws1516.sandbox.SandboxGame;
 import java.util.HashMap;
 import org.slf4j.Logger;
@@ -35,11 +44,14 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author Santo Pfingsten
+ * @author Tobi
  */
-public class MapTest extends SandboxGame {
+public class GameLogicTest extends SandboxGame {
 
-    private static final Logger logger = LoggerFactory.getLogger(MapTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(GameLogicTest.class);
+
+private final Hotkey restart = new Hotkey(() -> {GameRestartEvent.emit();
+    }, Input.Keys.F2);
 
     public static final int POSITION_ITERATIONS = 3;
     public static final int VELOCITY_ITERATIONS = 8;
@@ -63,13 +75,19 @@ public class MapTest extends SandboxGame {
     private PhysixBodyComponent playerBody;
     private final HashMap<TileSet, Texture> tilesetImages = new HashMap();
 
-    public MapTest() {
+    private EntitySystem respawnSystem = new RespawnSystem();
+
+    public GameLogicTest() {
         engine.addSystem(physixSystem);
         engine.addSystem(physixDebugRenderSystem);
+        engine.addSystem(respawnSystem );
     }
 
     @Override
     public void init(AssetManagerX assetManager) {
+        restart.register();
+        
+        
         map = loadMap("data/maps/demo.tmx");
         for (TileSet tileset : map.getTileSets()) {
             TmxImage img = tileset.getImage();
@@ -86,15 +104,20 @@ public class MapTest extends SandboxGame {
                 (Layer layer, TileInfo info) -> info.getBooleanProperty("blocked", false),
                 (Rectangle rect) -> addShape(rect, tileWidth, tileHeight));
 
-        // Test to access objects in TiledMap
-        ObjectLoader objLoader = new ObjectLoader();
-        objLoader.generateNameList(map);
-        objLoader.printNames();
-        
         // create a simple player ball
         Entity player = engine.createEntity();
         PhysixModifierComponent modifyComponent = engine.createComponent(PhysixModifierComponent.class);
         player.add(modifyComponent);
+        ScoreComponent scoreComp = engine.createComponent(ScoreComponent.class);
+        player.add(scoreComp);
+        PlayerComponent playerComp = engine.createComponent(PlayerComponent.class);
+        player.add(playerComp);
+        PositionComponent positionComp = engine.createComponent(PositionComponent.class);
+        player.add(positionComp);
+        
+        
+        
+        
 
         modifyComponent.schedule(() -> {
             playerBody = engine.createComponent(PhysixBodyComponent.class);
@@ -106,6 +129,13 @@ public class MapTest extends SandboxGame {
         });
         engine.addEntity(player);
 
+        
+        
+        Entity start = engine.createEntity();
+        StartPointComponent startComp = engine.createComponent(StartPointComponent.class);
+        start.add(startComp);
+        engine.addEntity(start);
+        
         // Setup camera
         camera.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         totalMapWidth = map.getWidth() * map.getTileWidth();

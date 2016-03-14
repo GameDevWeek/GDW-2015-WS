@@ -47,14 +47,13 @@ public class MapTest extends SandboxGame {
     public static final int GRAVITY = 0;
     public static final int BOX2D_SCALE = 40;
 
-    private final PooledEngine engine = new PooledEngine(
-            GameConstants.ENTITY_POOL_INITIAL_SIZE, GameConstants.ENTITY_POOL_MAX_SIZE,
-            GameConstants.COMPONENT_POOL_INITIAL_SIZE, GameConstants.COMPONENT_POOL_MAX_SIZE
-    );
+    private final PooledEngine engine = new PooledEngine(GameConstants.ENTITY_POOL_INITIAL_SIZE,
+            GameConstants.ENTITY_POOL_MAX_SIZE, GameConstants.COMPONENT_POOL_INITIAL_SIZE,
+            GameConstants.COMPONENT_POOL_MAX_SIZE);
     private final PhysixSystem physixSystem = new PhysixSystem(GameConstants.BOX2D_SCALE,
-            GameConstants.VELOCITY_ITERATIONS, GameConstants.POSITION_ITERATIONS, GameConstants.PRIORITY_PHYSIX
-    );
-    private final PhysixDebugRenderSystem physixDebugRenderSystem = new PhysixDebugRenderSystem(GameConstants.PRIORITY_DEBUG_WORLD);
+            GameConstants.VELOCITY_ITERATIONS, GameConstants.POSITION_ITERATIONS, GameConstants.PRIORITY_PHYSIX);
+    private final PhysixDebugRenderSystem physixDebugRenderSystem = new PhysixDebugRenderSystem(
+            GameConstants.PRIORITY_DEBUG_WORLD);
     private final LimitedSmoothCamera camera = new LimitedSmoothCamera();
     private float totalMapWidth, totalMapHeight;
 
@@ -82,15 +81,9 @@ public class MapTest extends SandboxGame {
         int tileWidth = map.getTileWidth();
         int tileHeight = map.getTileHeight();
         RectangleGenerator generator = new RectangleGenerator();
-        generator.generate(map,
-                (Layer layer, TileInfo info) -> info.getBooleanProperty("blocked", false),
+        generator.generate(map, (Layer layer, TileInfo info) -> info.getBooleanProperty("blocked", false),
                 (Rectangle rect) -> addShape(rect, tileWidth, tileHeight));
 
-        // Test to access objects in TiledMap
-        ObjectLoader objLoader = new ObjectLoader();
-        objLoader.generateNameList(map);
-        objLoader.printNames();
-        
         // create a simple player ball
         Entity player = engine.createEntity();
         PhysixModifierComponent modifyComponent = engine.createComponent(PhysixModifierComponent.class);
@@ -98,9 +91,11 @@ public class MapTest extends SandboxGame {
 
         modifyComponent.schedule(() -> {
             playerBody = engine.createComponent(PhysixBodyComponent.class);
-            PhysixBodyDef bodyDef = new PhysixBodyDef(BodyType.DynamicBody, physixSystem).position(100, 100).fixedRotation(true);
+            PhysixBodyDef bodyDef = new PhysixBodyDef(BodyType.DynamicBody, physixSystem).position(100, 100)
+                    .fixedRotation(true);
             playerBody.init(bodyDef, physixSystem, player);
-            PhysixFixtureDef fixtureDef = new PhysixFixtureDef(physixSystem).density(5).friction(0.2f).restitution(0.4f).shapeCircle(30);
+            PhysixFixtureDef fixtureDef = new PhysixFixtureDef(physixSystem).density(5).friction(0.2f).restitution(0.4f)
+                    .shapeCircle(30);
             playerBody.createFixture(fixtureDef);
             player.add(playerBody);
         });
@@ -121,8 +116,8 @@ public class MapTest extends SandboxGame {
         float x = rect.x * tileWidth + width / 2;
         float y = rect.y * tileHeight + height / 2;
 
-        
-        PhysixBodyDef bodyDef = new PhysixBodyDef(BodyDef.BodyType.StaticBody, physixSystem).position(x, y).fixedRotation(false);
+        PhysixBodyDef bodyDef = new PhysixBodyDef(BodyDef.BodyType.StaticBody, physixSystem).position(x, y)
+                .fixedRotation(false);
         Body body = physixSystem.getWorld().createBody(bodyDef);
         body.createFixture(new PhysixFixtureDef(physixSystem).density(1).friction(0.5f).shapeBox(width, height));
     }
@@ -137,8 +132,7 @@ public class MapTest extends SandboxGame {
         try {
             return new TiledMap(filename, LayerObject.PolyMode.ABSOLUTE);
         } catch (Exception ex) {
-            throw new IllegalArgumentException(
-                    "Map konnte nicht geladen werden: " + filename);
+            throw new IllegalArgumentException("Map konnte nicht geladen werden: " + filename);
         }
     }
 
@@ -149,11 +143,11 @@ public class MapTest extends SandboxGame {
             mapRenderer.render(0, 0, layer);
         }
         engine.update(delta);
-        
+
         mapRenderer.update(delta);
         camera.update(delta);
 
-        if(playerBody != null) {
+        if (playerBody != null) {
             float speed = 10000.0f;
             float velX = 0, velY = 0;
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
