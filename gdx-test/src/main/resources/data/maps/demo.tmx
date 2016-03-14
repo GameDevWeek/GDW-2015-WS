@@ -20,7 +20,7 @@
     <property name="test" value="Test"/>
    </properties>
   </object>
-  <object id="3" gid="72" x="384" y="96" width="24" height="24">
+  <object id="3" name="Wurst" gid="72" x="384" y="96" width="24" height="24">
    <properties>
     <property name="entity_type" value="player_start"/>
    </properties>
