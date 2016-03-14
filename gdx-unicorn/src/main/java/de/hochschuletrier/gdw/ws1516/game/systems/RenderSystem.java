@@ -3,7 +3,6 @@ package de.hochschuletrier.gdw.ws1516.game.systems;
 import java.util.Comparator;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.Family;
 
 import de.hochschuletrier.gdw.commons.gdx.ashley.SortedSubIteratingSystem;
@@ -15,6 +14,7 @@ public class RenderSystem extends SortedSubIteratingSystem {
     
     private final static RenderComparator renderComparator = new RenderComparator();
 
+    @SuppressWarnings("unchecked")
     public RenderSystem(int priority) {
         super(Family.all(PositionComponent.class, RenderLayerComponent.class).get(), renderComparator, priority);
 

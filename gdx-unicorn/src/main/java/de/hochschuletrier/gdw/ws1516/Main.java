@@ -46,7 +46,7 @@ import org.apache.commons.cli.PosixParser;
  * @author Santo Pfingsten
  */
 public class Main extends StateBasedGame {
-    
+
     public static CommandLine cmdLine;
 
     public static final boolean IS_RELEASE = ClassUtils.getClassUrl(Main.class).getProtocol().equals("jar");
@@ -61,8 +61,10 @@ public class Main extends StateBasedGame {
     private final DevConsoleView consoleView = new DevConsoleView(console);
     private Skin consoleSkin;
     public static final InputMultiplexer inputMultiplexer = new InputMultiplexer();
-    private final CVarEnum<SoundDistanceModel> distanceModel = new CVarEnum("snd_distanceModel", SoundDistanceModel.INVERSE, SoundDistanceModel.class, 0, "sound distance model");
-    private final CVarEnum<SoundEmitter.Mode> emitterMode = new CVarEnum("snd_mode", SoundEmitter.Mode.STEREO, SoundEmitter.Mode.class, 0, "sound mode");
+    private final CVarEnum<SoundDistanceModel> distanceModel = new CVarEnum("snd_distanceModel",
+            SoundDistanceModel.INVERSE, SoundDistanceModel.class, 0, "sound distance model");
+    private final CVarEnum<SoundEmitter.Mode> emitterMode = new CVarEnum("snd_mode", SoundEmitter.Mode.STEREO,
+            SoundEmitter.Mode.class, 0, "sound mode");
 
     public Main() {
         super(new BaseGameState());
@@ -138,7 +140,7 @@ public class Main extends StateBasedGame {
         addPersistentState(mainMenuState);
         changeState(mainMenuState, null, null);
         SandboxCommand.init(assetManager);
-        
+
         if (cmdLine.hasOption("sandbox")) {
             SandboxCommand.runSandbox(cmdLine.getOptionValue("sandbox"));
         }
@@ -222,12 +224,8 @@ public class Main extends StateBasedGame {
         CommandLineParser cmdLineParser = new PosixParser();
 
         Options options = new Options();
-        options.addOption(OptionBuilder.withLongOpt("sandbox")
-                .withDescription("Start a Sandbox Game")
-                .withType(String.class)
-                .hasArg()
-                .withArgName("Sandbox Classname")
-                .create());
+        options.addOption(OptionBuilder.withLongOpt("sandbox").withDescription("Start a Sandbox Game")
+                .withType(String.class).hasArg().withArgName("Sandbox Classname").create());
 
         try {
             cmdLine = cmdLineParser.parse(options, args);
