@@ -23,6 +23,7 @@ import de.hochschuletrier.gdw.ws1516.game.GameConstants;
  */
 public class PhysicsLoader implements MapLoader {
 
+
     /** Friction value for static geometry parsed by this class */
     public static final float PHYSIX_WORLD_FRICTION = 0.5f;    
     
@@ -38,8 +39,6 @@ public class PhysicsLoader implements MapLoader {
                                              GameConstants.VELOCITY_ITERATIONS,
                                              GameConstants.POSITION_ITERATIONS,
                                              GameConstants.PRIORITY_PHYSIX);
-
-    }
 
     @Override
     public void parseMap(final TiledMap map, final Game game, final PooledEngine engine) {
@@ -61,7 +60,6 @@ public class PhysicsLoader implements MapLoader {
                        .filter((object) -> !object.getProperty("action", "").equals(""))           
                        .forEach((trigger) -> createTrigger(trigger));                             
         
-    }
     
     //Create a trigger from the given object
     private void createTrigger(final LayerObject triggerObject) {

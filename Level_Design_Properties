@@ -1,0 +1,35 @@
+Level Design Property Guide
+
+Reihenfolge der Layer (provisorisch)
+	
+	-background
+	-middleground
+	-objectLayer
+	-foreground
+	
+Entity:
+
+	-entity_type player_start
+	-entity_type tourist
+	-entity_type hunter
+	-entity_type safe_point
+	-entity_type trigger (Attribut action[goal, death_zone])
+	-entity_type extra_life
+	-entity_type blue_bubblegum
+	-entity_type rainbow_bubblegum
+	-entity_type chocolate
+	
+	-entity_type platform (Attribut path, speed) // speed 40 px per sec
+	-entity_type path (Attribut name, loop)
+	-entity_type physics_line
+	
+	
+Tile Properties:
+
+	-blocked (true für blockiert, nichts, wenn nicht)
+	
+	
+Map Properties
+
+	-music
+	
