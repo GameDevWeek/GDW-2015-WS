@@ -34,6 +34,7 @@ import de.hochschuletrier.gdw.ws1516.game.contactlisteners.ImpactSoundListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.TriggerListener;
 import de.hochschuletrier.gdw.ws1516.game.systems.AnimationRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
+import de.hochschuletrier.gdw.ws1516.game.utils.EntityCreator;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.MapLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
@@ -83,13 +84,19 @@ public class Game extends InputAdapter {
 		setupPhysixWorld();
 		entityFactory.init(engine, assetManager);
 		
+		// EntityCreator
+		EntityCreator.setEngine(engine);
+		EntityCreator.setGame(this);
+		EntityCreator.setEntityFactory(entityFactory);
+		
 		// Hier Dateipfad zur Map einfuegen
 		loadMap("data/maps/demo.tmx");
 	}
 
 	/**
 	 * 
-	 * @param filename filepath to the map that is to be loaded
+	 * @param filename
+	 *            filepath to the map that is to be loaded
 	 */
 	private void loadMap(String filename) {
 		// Map laden
@@ -164,22 +171,12 @@ public class Game extends InputAdapter {
 		engine.addEntity(entity);
 	}
 
-	public Entity createEntity(String name, float x, float y) {
-		factoryParam.game = this;
-		factoryParam.x = x;
-		factoryParam.y = y;
-		Entity entity = entityFactory.createEntity(name, factoryParam);
-
-		engine.addEntity(entity);
-		return entity;
-	}
-
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		if (button == 0)
-			createEntity("ball", screenX, screenY);
+			EntityCreator.createEntity("ball", screenX, screenY);
 		else
-			createEntity("box", screenX, screenY);
+			EntityCreator.createEntity("box", screenX, screenY);
 		return true;
 	}
 
