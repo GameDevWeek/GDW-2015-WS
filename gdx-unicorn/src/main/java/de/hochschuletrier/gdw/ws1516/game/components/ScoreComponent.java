@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Pool;
 
 public class ScoreComponent extends Component implements Pool.Poolable{
 
+    
     public int chocoCoins;
     public int bubblegums;
     public int killedEnemies;
