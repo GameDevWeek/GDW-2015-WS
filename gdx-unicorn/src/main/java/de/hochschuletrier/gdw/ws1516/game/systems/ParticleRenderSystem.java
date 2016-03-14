@@ -11,6 +11,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.RenderLayerComponent;
 
 public class ParticleRenderSystem extends SubSystem {
+    @SuppressWarnings("unchecked")
     public ParticleRenderSystem() {
         // TODO set family to correct filter
         super(Family.all(PositionComponent.class).get());
