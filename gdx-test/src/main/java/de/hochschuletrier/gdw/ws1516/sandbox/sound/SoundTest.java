@@ -4,13 +4,14 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.audio.SoundEmitter;
+import de.hochschuletrier.gdw.ws1516.events.TestEvent;
 import de.hochschuletrier.gdw.ws1516.sandbox.SandboxGame;
 
 /**
  *
  * @author Santo Pfingsten
  */
-public class SoundTest extends SandboxGame {
+public class SoundTest extends SandboxGame implements TestEvent.Listener {
 
     private final SoundEmitter emitter = new SoundEmitter();
     private Sound helicopter;
@@ -23,11 +24,13 @@ public class SoundTest extends SandboxGame {
     public void init(AssetManagerX assetManager) {
         helicopter = assetManager.getSound("helicopter");
         emitter.play(helicopter, true);
+        TestEvent.register(this);
     }
 
     @Override
     public void dispose() {
         emitter.dispose();
+        TestEvent.unregister(this);
     }
 
     @Override
@@ -39,6 +42,7 @@ public class SoundTest extends SandboxGame {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         cursor.set(screenX, screenY);
+        TestEvent.emit("adasdasd");
         return false;
     }
 
@@ -52,5 +56,10 @@ public class SoundTest extends SandboxGame {
     public boolean mouseMoved(int screenX, int screenY) {
         cursor.set(screenX, screenY);
         return false;
+    }
+
+    @Override
+    public void onTestEvent(String message) {
+        //todo
     }
 }
