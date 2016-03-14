@@ -22,7 +22,7 @@
         <module>gdw-examples</module>
         <module>gdx-test</module>
         <module>gdx-tools</module>
-        <module>gdx-mainmenu</module>
+        
   </modules>
 
     <dependencies>

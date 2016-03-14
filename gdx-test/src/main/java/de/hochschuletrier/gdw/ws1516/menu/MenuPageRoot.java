@@ -17,11 +17,12 @@ public class MenuPageRoot extends MenuPage {
     public enum Type {
 
         MAINMENU,
-        INGAME
+        INGAME,
+        OPTIONS
     }
 
     public MenuPageRoot(Skin skin, MenuManager menuManager, Type type) {
-        super(skin, "default");
+        super(skin, "menu_bg");
 
 //        addActor(new DecoImage(assetManager.getTexture("menu_bg_root_bottom")));
         int x = 600;
