@@ -4,7 +4,7 @@ import com.badlogic.gdx.utils.SnapshotArray;
 
 import de.hochschuletrier.gdw.ws1516.events.TestEvent.Listener;
 
-public class GameRestartEvent {
+public class GameRestartEvent{
     public static interface Listener {
         void onGameRestartEvent();
     }
