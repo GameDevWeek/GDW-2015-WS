@@ -30,7 +30,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.TriggerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.factories.EntityFactoryParam;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.ImpactSoundListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.TriggerListener;
-import de.hochschuletrier.gdw.ws1516.game.systems.AnimationRenderSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.SimpleAnimationRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 import java.util.function.Consumer;
@@ -49,7 +49,7 @@ public class Game extends InputAdapter {
             GameConstants.VELOCITY_ITERATIONS, GameConstants.POSITION_ITERATIONS, GameConstants.PRIORITY_PHYSIX
     );
     private final PhysixDebugRenderSystem physixDebugRenderSystem = new PhysixDebugRenderSystem(GameConstants.PRIORITY_DEBUG_WORLD);
-    private final AnimationRenderSystem animationRenderSystem = new AnimationRenderSystem(GameConstants.PRIORITY_ANIMATIONS);
+    private final SimpleAnimationRenderSystem animationRenderSystem = new SimpleAnimationRenderSystem(GameConstants.PRIORITY_ANIMATIONS);
     private final UpdatePositionSystem updatePositionSystem = new UpdatePositionSystem(GameConstants.PRIORITY_PHYSIX + 1);
 
     private final EntityFactoryParam factoryParam = new EntityFactoryParam();
