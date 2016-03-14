@@ -72,12 +72,12 @@ Unicorn Bubblegum
 	- Sobald in Sichtweite, laufen sie auf das Einhorn zu. 
 	- Treten nur in Gruppen auf.
 - Jäger:
-	- Sobald in Sichtweite, lehnen sie zum Schuss an (dauert ~1s) und schiessen ein langsames Projektil.
+	- Sobald in Sichtweite, legen sie zum Schuss an (dauert ~1s) und schießen ein langsames Projektil.
 		- Cooldown: 3s.
 		- Geschwindigkeit: 0,75 Einhorngeschwindigkeit
 		- Das Einhorn kann über das Projektil springen
 		- Kann in alle Richtungen schießen
-		- Schussanlehnen muss visualisiert werden
+		- Schuß anlegen muss visualisiert werden
 		- Keine Auswirkungen durch Gravitation
 
 ### Welt
