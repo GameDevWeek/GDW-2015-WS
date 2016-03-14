@@ -132,7 +132,7 @@ private Hotkey stopSound = null;
 
         stopSound = new Hotkey(() -> {SoundEvent.stopSound(player);
         }, Input.Keys.F2,HotkeyModifier.CTRL);
-        
+        stopSound.register();
 
         modifyComponent.schedule(() -> {
             playerBody = engine.createComponent(PhysixBodyComponent.class);
