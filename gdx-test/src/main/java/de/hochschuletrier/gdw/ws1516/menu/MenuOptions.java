@@ -11,7 +11,7 @@ public class MenuOptions extends MenuPage {
     public MenuOptions(Skin skin, MenuManager menuManager) {
         super(skin, "menu_bg");
        
-        this.menuManager=menuManager;
+        
         int i = 0;
         int xOffset = 20;
         int yOffset = 370;
@@ -20,7 +20,7 @@ public class MenuOptions extends MenuPage {
        
         addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 100, 50, "Video", this::enterVideoOptions);
         addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 100, 50, "Sound", this::enterSoundOptions);
-        addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 100, 50,"Zurück", this::back);
+        addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 100, 50,"Zurück", ()->menuManager.popPage());
     }
     
     
@@ -29,9 +29,7 @@ public class MenuOptions extends MenuPage {
     
     private void enterVideoOptions(){
     }
-    private void back(){
-       menuManager.popPage();
-    }
+   
     
     
 
