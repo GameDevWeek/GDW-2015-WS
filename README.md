@@ -5,7 +5,7 @@ Unicorn Bubblegum
 
 ### Input
 - Auf dem Boden:
-  - Pfeiltasten: Bewegung links/rechts, sprung
+  - Pfeiltasten: Bewegung links/rechts, Sprung
   - Taste A: Hornattacke
   - Taste B: Rosa Kaugummi
   - Taste C: Blaues Kaugummi
