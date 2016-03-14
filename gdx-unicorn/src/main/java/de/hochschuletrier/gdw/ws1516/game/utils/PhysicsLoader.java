@@ -39,6 +39,7 @@ public class PhysicsLoader implements MapLoader {
                                              GameConstants.VELOCITY_ITERATIONS,
                                              GameConstants.POSITION_ITERATIONS,
                                              GameConstants.PRIORITY_PHYSIX);
+    }
 
     @Override
     public void parseMap(final TiledMap map, final Game game, final PooledEngine engine) {
@@ -58,7 +59,8 @@ public class PhysicsLoader implements MapLoader {
                        .flatMap((list) -> list.stream())                                            
                        .filter((object) -> object.getProperty("entity_type", "").equals("trigger")) 
                        .filter((object) -> !object.getProperty("action", "").equals(""))           
-                       .forEach((trigger) -> createTrigger(trigger));                             
+                       .forEach((trigger) -> createTrigger(trigger));   
+    }
         
     
     //Create a trigger from the given object
