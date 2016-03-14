@@ -12,6 +12,8 @@ public class AnimationComponentFactory extends ComponentFactory<EntityFactoryPar
         return "Animation";
     }
 
+    
+    
     @Override
     public void run(Entity entity, SafeProperties meta, SafeProperties properties, EntityFactoryParam param) {
         AnimationComponent component = engine.createComponent(AnimationComponent.class);
