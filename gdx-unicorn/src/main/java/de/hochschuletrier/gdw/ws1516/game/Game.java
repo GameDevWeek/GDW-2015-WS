@@ -22,6 +22,8 @@ import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixModifierComponent;
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixDebugRenderSystem;
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
+import de.hochschuletrier.gdw.commons.tiled.LayerObject;
+import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ImpactSoundComponent;
@@ -32,28 +34,35 @@ import de.hochschuletrier.gdw.ws1516.game.contactlisteners.ImpactSoundListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.TriggerListener;
 import de.hochschuletrier.gdw.ws1516.game.systems.AnimationRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
+import de.hochschuletrier.gdw.ws1516.game.utils.EntityCreator;
+import de.hochschuletrier.gdw.ws1516.game.utils.EntityLoader;
+import de.hochschuletrier.gdw.ws1516.game.utils.MapLoader;
+import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 import java.util.function.Consumer;
 
 public class Game extends InputAdapter {
 
     private final CVarBool physixDebug = new CVarBool("physix_debug", true, 0, "Draw physix debug");
-    private final Hotkey togglePhysixDebug = new Hotkey(() -> physixDebug.toggle(false), Input.Keys.F1, HotkeyModifier.CTRL);
+    private final Hotkey togglePhysixDebug = new Hotkey(() -> physixDebug.toggle(false), Input.Keys.F1,
+            HotkeyModifier.CTRL);
 
-    private final PooledEngine engine = new PooledEngine(
-            GameConstants.ENTITY_POOL_INITIAL_SIZE, GameConstants.ENTITY_POOL_MAX_SIZE,
-            GameConstants.COMPONENT_POOL_INITIAL_SIZE, GameConstants.COMPONENT_POOL_MAX_SIZE
-    );
+    private final PooledEngine engine = new PooledEngine(GameConstants.ENTITY_POOL_INITIAL_SIZE,
+            GameConstants.ENTITY_POOL_MAX_SIZE, GameConstants.COMPONENT_POOL_INITIAL_SIZE,
+            GameConstants.COMPONENT_POOL_MAX_SIZE);
 
     private final PhysixSystem physixSystem = new PhysixSystem(GameConstants.BOX2D_SCALE,
-            GameConstants.VELOCITY_ITERATIONS, GameConstants.POSITION_ITERATIONS, GameConstants.PRIORITY_PHYSIX
-    );
-    private final PhysixDebugRenderSystem physixDebugRenderSystem = new PhysixDebugRenderSystem(GameConstants.PRIORITY_DEBUG_WORLD);
-    private final AnimationRenderSystem animationRenderSystem = new AnimationRenderSystem(GameConstants.PRIORITY_ANIMATIONS);
-    private final UpdatePositionSystem updatePositionSystem = new UpdatePositionSystem(GameConstants.PRIORITY_PHYSIX + 1);
+            GameConstants.VELOCITY_ITERATIONS, GameConstants.POSITION_ITERATIONS, GameConstants.PRIORITY_PHYSIX);
+    private final PhysixDebugRenderSystem physixDebugRenderSystem = new PhysixDebugRenderSystem(
+            GameConstants.PRIORITY_DEBUG_WORLD);
+    private final AnimationRenderSystem animationRenderSystem = new AnimationRenderSystem(
+            GameConstants.PRIORITY_ANIMATIONS);
+    private final UpdatePositionSystem updatePositionSystem = new UpdatePositionSystem(
+            GameConstants.PRIORITY_PHYSIX + 1);
 
     private final EntityFactoryParam factoryParam = new EntityFactoryParam();
-    private final EntityFactory<EntityFactoryParam> entityFactory = new EntityFactory("data/json/entities.json", Game.class);
+    private final EntityFactory<EntityFactoryParam> entityFactory = new EntityFactory("data/json/entities.json",
+            Game.class);
 
     public Game() {
         // If this is a build jar file, disable hotkeys
@@ -74,6 +83,40 @@ public class Game extends InputAdapter {
         addContactListeners();
         setupPhysixWorld();
         entityFactory.init(engine, assetManager);
+
+        // EntityCreator
+        EntityCreator.setEngine(engine);
+        EntityCreator.setGame(this);
+        EntityCreator.setEntityFactory(entityFactory);
+
+        // Hier Dateipfad zur Map einfuegen
+        loadMap("data/maps/demo.tmx");
+    }
+
+    /**
+     * 
+     * @param filename
+     *            filepath to the map that is to be loaded
+     */
+    private void loadMap(String filename) {
+        // Map laden
+        TiledMap map;
+        try {
+            map = new TiledMap(filename, LayerObject.PolyMode.ABSOLUTE);
+        } catch (Exception ex) {
+            throw new IllegalArgumentException("Map konnte nicht geladen werden: " + filename);
+        }
+
+        // Wenn map geladen wurde
+        if (map != null) {
+
+            // Map parsen
+            MapLoader[] mapLoaders = { new PhysicsLoader(), new EntityLoader() };
+            for (MapLoader mapLoader : mapLoaders) {
+                mapLoader.parseMap(map, this, engine);
+            }
+        }
+
     }
 
     private void addSystems() {
@@ -92,7 +135,8 @@ public class Game extends InputAdapter {
 
     private void setupPhysixWorld() {
         physixSystem.setGravity(0, 24);
-        PhysixBodyDef bodyDef = new PhysixBodyDef(BodyDef.BodyType.StaticBody, physixSystem).position(410, 500).fixedRotation(false);
+        PhysixBodyDef bodyDef = new PhysixBodyDef(BodyDef.BodyType.StaticBody, physixSystem).position(410, 500)
+                .fixedRotation(false);
         Body body = physixSystem.getWorld().createBody(bodyDef);
         body.createFixture(new PhysixFixtureDef(physixSystem).density(1).friction(0.5f).shapeBox(800, 20));
         PhysixUtil.createHollowCircle(physixSystem, 180, 180, 150, 30, 6);
@@ -127,22 +171,12 @@ public class Game extends InputAdapter {
         engine.addEntity(entity);
     }
 
-    public Entity createEntity(String name, float x, float y) {
-        factoryParam.game = this;
-        factoryParam.x = x;
-        factoryParam.y = y;
-        Entity entity = entityFactory.createEntity(name, factoryParam);
-
-        engine.addEntity(entity);
-        return entity;
-    }
-
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if(button == 0)
-            createEntity("ball", screenX, screenY);
+        if (button == 0)
+            EntityCreator.createEntity("ball", screenX, screenY);
         else
-            createEntity("box", screenX, screenY);
+            EntityCreator.createEntity("box", screenX, screenY);
         return true;
     }
 
