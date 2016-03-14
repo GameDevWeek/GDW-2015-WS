@@ -5,18 +5,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
 
 public class MenuOptions extends MenuPage {
+    
+    private MenuManager menuManager;
 
     public MenuOptions(Skin skin, MenuManager menuManager) {
         super(skin, "menu_bg");
        
-        int x = 200;
+        this.menuManager=menuManager;
         int i = 0;
-        int y = 370;
-        
+        int xOffset = 20;
+        int yOffset = 370;
         int yStep = 55;
-        addLeftAlignedButton(x,y-yStep * (i++),400,50,"Video",this::enterVideoOptions);
-        addLeftAlignedButton(x,y-yStep * (i++),400,50,"Audio",this::enterSoundOptions);
-        addLeftAlignedButton(50,50 ,200,50,"Audio",this::enterSoundOptions);
+        
+       
+        addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 100, 50, "Video", this::enterVideoOptions);
+        addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 100, 50, "Sound", this::enterSoundOptions);
+        addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 100, 50,"Zurück", this::back);
     }
     
     
@@ -25,6 +29,10 @@ public class MenuOptions extends MenuPage {
     
     private void enterVideoOptions(){
     }
+    private void back(){
+       menuManager.popPage();
+    }
+    
     
 
     public static void main(String[] args) {
