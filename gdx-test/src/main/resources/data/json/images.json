@@ -1,4 +1,12 @@
 {
+    
+    "bubblegum_blue": "data/dummies/bubblegum_blue.png",
+    "bubblegum_rainbow": "data/dummies/bubblegum_rainbow.png",
+    "bubblegum_spitting": "data/dummies/bubblegum_spitting.png",
+    "coin": "data/dummies/coin.png",
+    "gum_bubble": "data/dummies/gum_bubble.png",
+    "splatter": "data/dummies/splatter.png",
+    
     "menu_fg": "data/ui/menu/fg_border.png",
     "menu_bg": "data/ui/menu/bg_root.png"
 }

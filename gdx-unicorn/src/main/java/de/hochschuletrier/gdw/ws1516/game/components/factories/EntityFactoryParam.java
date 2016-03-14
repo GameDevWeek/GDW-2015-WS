@@ -6,4 +6,8 @@ public class EntityFactoryParam {
     public float x;
     public float y;
     public Game game;
+    public String action;
+    public float speed;
+    public boolean loop;
+    public String path;
 }

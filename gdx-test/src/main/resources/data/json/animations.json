@@ -1,4 +1,45 @@
 {
+    "hunter_walking": {
+        "filename": "data/dummies/hunter.png",
+        "frames" : 1,
+        "frameDuration": [0.15],
+        "playType" : "LOOP",
+        "columns": 1,
+        "rows" : 1
+    },
+    "paparazzi_walking": {
+        "filename": "data/dummies/paparazzi.png",
+        "frames" : 1,
+        "frameDuration": [0.15],
+        "playType" : "LOOP",
+        "columns": 1,
+        "rows" : 1
+    },
+    "unicorn_walking": {
+        "filename": "data/dummies/unicorn.png",
+        "frames" : 1,
+        "frameDuration": [0.15],
+        "playType" : "LOOP",
+        "columns": 1,
+        "rows" : 1
+    },
+    "unicorn_idle": {
+        "filename": "data/dummies/unicorn.png",
+        "frames" : 1,
+        "frameDuration": [0.15],
+        "playType" : "LOOP",
+        "columns": 1,
+        "rows" : 1
+    },
+    "unicorn_falling": {
+        "filename": "data/dummies/unicorn.png",
+        "frames" : 1,
+        "frameDuration": [0.15],
+        "playType" : "LOOP",
+        "columns": 1,
+        "rows" : 1
+    },
+    
     "walking": {
         "filename": "data/animations/walking.png",
         "frames" : 7,
