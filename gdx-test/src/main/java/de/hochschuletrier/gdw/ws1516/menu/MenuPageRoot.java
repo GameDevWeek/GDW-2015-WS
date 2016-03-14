@@ -21,7 +21,7 @@ public class MenuPageRoot extends MenuPage {
     }
 
     public MenuPageRoot(Skin skin, MenuManager menuManager, Type type) {
-        super(skin, "menu_bg");
+        super(skin, "default");
 
 //        addActor(new DecoImage(assetManager.getTexture("menu_bg_root_bottom")));
         int x = 600;
