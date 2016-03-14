@@ -10,6 +10,8 @@ import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.RenderLayerComponent;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -29,7 +31,7 @@ public class SimpleAnimationRenderSystem extends EntitySystem implements EntityL
 
     @Override
     public void addedToEngine(Engine engine) {
-        Family family = Family.all(PositionComponent.class, AnimationComponent.class).get();
+        Family family = Family.all(PositionComponent.class, AnimationComponent.class).exclude(RenderLayerComponent.class).get();
         engine.addEntityListener(family, this);
     }
 
