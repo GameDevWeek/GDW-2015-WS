@@ -24,6 +24,11 @@ public class ScoreSystem extends IteratingSystem{
          * nach komponenten unterscheiden
          * 
          */
+        if ( false ) // wenn entity ein SchokoCoin ist, nach selben prinzip fortfahren
+        {
+            scoreComponent.chocoCoins ++;
+            
+        }
     }
 
     @Override
