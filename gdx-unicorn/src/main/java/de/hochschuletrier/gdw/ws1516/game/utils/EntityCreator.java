@@ -33,6 +33,22 @@ public class EntityCreator {
 		return entity;
 	}
 
+	/** Master Entities */
+	public static Entity createEntity(String name, String path, float x, float y, float speed, boolean loop,
+			String action) {
+		factoryParam.x = x;
+		factoryParam.y = y;
+		factoryParam.path = path;
+		factoryParam.speed = speed;
+		factoryParam.loop = loop;
+		factoryParam.action = action;
+
+		Entity entity = entityFactory.createEntity(name, factoryParam);
+
+		engine.addEntity(entity);
+		return entity;
+	}
+
 	/** Movable Entities */
 	public static Entity createEntity(String name, String path, float x, float y, float speed, boolean loop) {
 		factoryParam.x = x;

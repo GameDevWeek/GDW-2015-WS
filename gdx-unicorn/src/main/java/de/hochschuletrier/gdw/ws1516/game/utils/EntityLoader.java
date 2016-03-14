@@ -25,7 +25,8 @@ public class EntityLoader implements MapLoader {
 				for (LayerObject obj : layer.getObjects()) {
 					String name = obj.getProperty("entity_type", null);
 					if (name != null) {
-						EntityCreator.createEntity(name, obj.getX(), obj.getY());
+						EntityCreator.createEntity(name, obj.getProperty("path", null), obj.getX(), obj.getY(),
+								obj.getFloatProperty("speed", 0.f), obj.getBooleanProperty("loop", false));
 						objects.add(name);
 					}
 				}
