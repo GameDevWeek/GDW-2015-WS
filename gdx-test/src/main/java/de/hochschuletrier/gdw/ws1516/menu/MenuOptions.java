@@ -5,6 +5,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
 
 public class MenuOptions extends MenuPage {
+<<<<<<< HEAD
+=======
+    
+    
+>>>>>>> 5d80311dbf91b93ba5812f41aa49e25c90b61cae
 
     public MenuOptions(Skin skin, MenuManager menuManager) {
         super(skin, "menu_bg");
