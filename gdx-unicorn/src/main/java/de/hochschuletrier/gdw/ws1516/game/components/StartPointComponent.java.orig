@@ -9,7 +9,13 @@ public class StartPointComponent extends Component implements Poolable {
     public float y;
     @Override
     public void reset() {
+<<<<<<< HEAD
+        x = 0;
+        y = 0;
+        
+=======
         x = y = 0;
+>>>>>>> 9ec1ebfda4fadc3c2ab811ed1a80e7af5d059a17
     }
 
 }
