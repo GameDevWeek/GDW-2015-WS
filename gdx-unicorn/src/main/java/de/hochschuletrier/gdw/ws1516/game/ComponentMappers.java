@@ -12,4 +12,6 @@ public class ComponentMappers {
     public static final ComponentMapper<ImpactSoundComponent> impactSound = ComponentMapper.getFor(ImpactSoundComponent.class);
     public static final ComponentMapper<AnimationComponent> animation = ComponentMapper.getFor(AnimationComponent.class);
     public static final ComponentMapper<RenderLayerComponent> renderLayer = ComponentMapper.getFor(RenderLayerComponent.class);
+    
+    public static final ComponentMapper<ParticleTestComponent> particleTest = ComponentMapper.getFor(ParticleTestComponent.class);
 }

@@ -2,10 +2,13 @@ package de.hochschuletrier.gdw.ws1516.game;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -36,8 +39,13 @@ import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 import java.util.function.Consumer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Game extends InputAdapter {
 
+    private static final Logger logger = LoggerFactory.getLogger(Game.class);
+    
     private final CVarBool physixDebug = new CVarBool("physix_debug", true, 0, "Draw physix debug");
     private final Hotkey togglePhysixDebug = new Hotkey(() -> physixDebug.toggle(false), Input.Keys.F1, HotkeyModifier.CTRL);
 
@@ -146,6 +154,21 @@ public class Game extends InputAdapter {
             createEntity("ball", screenX, screenY);
         else
             createEntity("box", screenX, screenY);
+//        if(button == 0)
+//        {
+////            logger.info("Hello {}", 2);
+//            logger.error("error");
+//            logger.info("info");
+//            //load effect
+//            ParticleEffect p = new ParticleEffect();
+//            p.load(Gdx.files.internal("effects/partikelTest.p"), Gdx.files.internal("effects"));
+//            p.start();
+//            
+//            //show effect
+////            SpriteBatch batch = new SpriteBatch();
+////            batch.begin();
+////            p.draw(batch);
+//        }
         return true;
     }
 

@@ -21,6 +21,9 @@
             },
             "RenderLayer":{
                 "layer": 0
+            },
+            "ParticleTest": {
+                "effect": "test"
             }
         }
     },
