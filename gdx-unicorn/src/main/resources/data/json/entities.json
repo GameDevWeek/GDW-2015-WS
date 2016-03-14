@@ -19,9 +19,10 @@
                 "friction": 0.2,
                 "restitution": 0.4
             },
-            "RenderLayer":{
+            "RenderLayer": {
                 "layer": 0
-            }
+            },
+            "DummyUnicorn": {}
         }
     },
     "box": {

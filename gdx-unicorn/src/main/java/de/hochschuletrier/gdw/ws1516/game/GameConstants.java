@@ -6,6 +6,7 @@ public class GameConstants {
     public static final int PRIORITY_PHYSIX = 0;
     public static final int PRIORITY_ENTITIES = 10;
     public static final int PRIORITY_RENDERING = 20;
+    public static final int PRIORITY_CAMERA = 25;
     public static final int PRIORITY_DEBUG_WORLD = 30;
     public static final int PRIORITY_HUD = 40;
     public static final int PRIORITY_REMOVE_ENTITIES = 1000;
