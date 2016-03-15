@@ -6,7 +6,7 @@
             "type": "linear",
             "destinations":[
             {"x":-100,"y":200,"speed":"100"},
-            {"x":500,"y":200,"speed":"100"}
+            {"x":460,"y":200,"speed":"100"}
             ]
         },
         "leftToMidU":{
@@ -19,7 +19,7 @@
         "midToRightT":{
             "type": "linear",
             "destinations":[
-            {"x":500,"y":200,"speed":"100"},
+            {"x":460,"y":200,"speed":"100"},
             {"x":1000,"y":200,"speed":"100"}
             ]
         },
@@ -40,8 +40,8 @@
         "stayT":{
             "type":"linear",
             "destinations":[
-                {"x":500,"y":200 ,"speed":1},
-                {"x":502,"y":200 ,"speed":1}
+                {"x":460,"y":200 ,"speed":1},
+                {"x":462,"y":200 ,"speed":1}
             ]
         },
         "bubblegum":{
