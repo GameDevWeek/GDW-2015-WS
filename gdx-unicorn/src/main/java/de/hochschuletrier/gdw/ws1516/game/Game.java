@@ -135,15 +135,14 @@ public class Game extends InputAdapter {
         // Wenn map geladen wurde
         if (map != null) {
             
-            initialzeRenderer();
-            
             // Map parsen
             MapLoader[] mapLoaders = { new PhysicsLoader(), new EntityLoader() };
             for (MapLoader mapLoader : mapLoaders) {
                 mapLoader.parseMap(map, this, engine);
             }
+            
+            initialzeRenderer();
         }
-
     }
     
     private void initialzeRenderer()
