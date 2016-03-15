@@ -1,6 +1,8 @@
 package de.hochschuletrier.gdw.ws1516.sandbox.physikTest;
 
 import java.util.HashMap;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +17,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.cameras.orthogonal.LimitedSmoothCamera;
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixBodyDef;
+import de.hochschuletrier.gdw.commons.gdx.physix.PhysixComponentAwareContactListener;
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixFixtureDef;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixModifierComponent;
@@ -28,7 +31,12 @@ import de.hochschuletrier.gdw.commons.tiled.TileSet;
 import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.commons.tiled.tmx.TmxImage;
 import de.hochschuletrier.gdw.ws1516.Main;
+import de.hochschuletrier.gdw.ws1516.events.BulletSpawnEvent;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.components.BulletComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
+import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BulletListener;
+import de.hochschuletrier.gdw.ws1516.game.systems.BulletSystem;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
 import de.hochschuletrier.gdw.ws1516.sandbox.SandboxGame;
 
@@ -51,6 +59,8 @@ public class PhysixTest extends SandboxGame {
     private final float playerRestitution=0.4f;
     private final float playerSize=30;
     
+    private Entity player;
+    
     float time=0;
 
     private final PooledEngine engine = new PooledEngine(
@@ -72,6 +82,7 @@ public class PhysixTest extends SandboxGame {
     public PhysixTest() {
         engine.addSystem(physixSystem);
         engine.addSystem(physixDebugRenderSystem);
+        engine.addSystem(new BulletSystem(engine));
     }
 
     @Override
@@ -85,16 +96,21 @@ public class PhysixTest extends SandboxGame {
         mapRenderer = new TiledMapRendererGdx(map, tilesetImages);
 
 
-        //TODO : fix call with null
+        //TODO : fix call with null (no game)
         PhysicsLoader loader = new PhysicsLoader();
         loader.parseMap(map, null, engine);
         
         physixSystem.setGravity(0, GRAVITY);
         
+        PhysixComponentAwareContactListener contactListener = new PhysixComponentAwareContactListener();
+        physixSystem.getWorld().setContactListener(contactListener);
+        contactListener.addListener(BulletComponent.class, new BulletListener());
+        
         // create a simple player ball
-        Entity player = engine.createEntity();
+        player = engine.createEntity();
         PhysixModifierComponent modifyComponent = engine.createComponent(PhysixModifierComponent.class);
         player.add(modifyComponent);
+        player.add(engine.createComponent(PlayerComponent.class));
 
         modifyComponent.schedule(() -> {
             playerBody = engine.createComponent(PhysixBodyComponent.class);
@@ -159,8 +175,38 @@ public class PhysixTest extends SandboxGame {
                 velY += delta * speed;
             }
 
-//            playerBody.setLinearVelocity(velX, velY);
-//            playerBody.applyImpulse(velX, velY);
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                float angle = player.getComponent(PhysixBodyComponent.class).getAngle();
+                player.getComponent(PhysixBodyComponent.class).setAngle(angle + 0.1f);
+            } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+                float angle = player.getComponent(PhysixBodyComponent.class).getAngle();
+                player.getComponent(PhysixBodyComponent.class).setAngle(angle - 0.1f);
+            }
+
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+                
+                //Bullet movement vector
+                float moveX = (float) Math.cos(player.getComponent(PhysixBodyComponent.class).getAngle());
+                float moveY = (float) Math.sin(player.getComponent(PhysixBodyComponent.class).getAngle());
+                
+                //TODO : HCV - Good enough for the demo LOL
+                float spawnX = player.getComponent(PhysixBodyComponent.class).getX() + (moveX * (playerSize + 5) * 1.2f);
+                float spawnY = player.getComponent(PhysixBodyComponent.class).getY() + (moveY * (playerSize + 5) * 1.2f);
+                
+                BulletSpawnEvent.emit(spawnX, spawnY, moveX, moveY, 
+                           (bullet, player) -> {
+                               logger.debug("impact player");
+                           },
+                           (bullet, entity) -> {
+                               logger.debug("impact entity");
+                           },
+                           (bullet) -> {
+                               logger.debug("impact world");
+                               engine.removeEntity(bullet);
+                           });
+                
+            }
+            
             playerBody.setLinearVelocityX(velX);
             
             if (Gdx.input.isKeyPressed(Input.Keys.SPACE)&&time<=0) {
@@ -174,5 +220,6 @@ public class PhysixTest extends SandboxGame {
             camera.setDestination(playerBody.getPosition());
         }
     }
+
 }
 

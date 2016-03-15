@@ -26,13 +26,17 @@ public class GameConstants {
     public static float MUSIC_FADE_TIME = 2;
     
     // Scoreborad-Constant
-    public static float SCORE_TIME_POINTS = - 100 / 60;
+    public static final float SCORE_TIME_POINTS = - 100 / 60;
     public static final int SCORE_CHOCOCOINS_POINTS = 1;
     public static final int SCORE_BONBONS_POINTS = 3;
     public static final int SCORE_DEATHS = 0; // negative Points ??
     public static final int SCORE_KILLED_ENEMIES = 0;
     public static final int SCORE_KILLED_OBSTACLES = 0;
     public static final int SCORE_HITS = 0;
+
+    //Vision System
+    public static final int GLOBAL_VISION=5;
+    public static final int UNICORN_SIZE=128;
     
     // GameLogic
     public static final double ENEMY_SIGHT_DISTANCE = 400.0;
