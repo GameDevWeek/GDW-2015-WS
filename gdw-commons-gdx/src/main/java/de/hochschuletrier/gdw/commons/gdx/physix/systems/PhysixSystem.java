@@ -132,7 +132,7 @@ public class PhysixSystem extends IteratingSystem implements EntityListener {
         RopeJointDef ropeJointDef = new RopeJointDef();
         ropeJointDef.bodyA = a.getBody();
         ropeJointDef.bodyB = b.getBody();
-        ropeJointDef.maxLength = length * scale;
+        ropeJointDef.maxLength = length * scaleInv;
         ropeJointDef.collideConnected = true;
         world.createJoint(ropeJointDef);
     }
