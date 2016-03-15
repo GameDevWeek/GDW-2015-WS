@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Timer;
 
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
@@ -23,10 +24,12 @@ public class HudRenderSystem extends IteratingSystem {
 
 
     private final AssetManagerX assetManager;
+    private final BitmapFont font;
     
     public HudRenderSystem(int priority) {
         super(Family.all(PlayerComponent.class).get(),priority);
         assetManager=Main.getInstance().getAssetManager();
+        font = assetManager.getFont("quartz_50");
        
     }
 
@@ -47,16 +50,17 @@ public class HudRenderSystem extends IteratingSystem {
         Skin skin = ((MainMenuState)Main.getInstance().getPersistentState(MainMenuState.class)).getSkin();
         Label label = new Label("Hallo Welt", skin);
         
-        
-        BitmapFont font = assetManager.getFont("quartz_50");
-        String s = "Hallo Welt";
+       
+        String s = "time";
+       
         
        
-        font.draw(DrawUtil.batch, s, 400, 585);
+        font.draw(DrawUtil.batch, s, 400, 20);
          FileHandle handle = Gdx.files.internal("data/dummies/coin.png");
         
         Texture hearts = new Texture(handle);
-        DrawUtil.draw(hearts, 20, 540, 50, 50);
+        DrawUtil.draw(hearts, 20, 20, 50, 50);
+        
         
    //     DrawUtil.draw(texture , 10, 10, 100, 100);
         
