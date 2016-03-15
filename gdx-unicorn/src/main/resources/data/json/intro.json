@@ -2,42 +2,108 @@
     "timeFactor": 1.0,
     "textStyles" :{},
     "paths" : {
-        "test":{
+        "leftToMidT":{
             "type": "linear",
             "destinations":[
-            {"x": 400, "y":400, "speed":100},
-            {"x": 500, "y":500, "speed":100},
-            {"x": 500, "y":400, "speed":100},
-            {"x": 400, "y":500, "speed":100},
-            {"x": 400, "y":400, "speed":100}
+            {"x":-100,"y":200,"speed":"100"},
+            {"x":500,"y":200,"speed":"100"}
             ]
         },
-        "test2":{
+        "leftToMidU":{
+            "type": "linear",
+            "destinations":[
+            {"x":-100,"y":200,"speed":"300"},
+            {"x":500,"y":200,"speed":"300"}
+            ]
+        },
+        "midToRightT":{
+            "type": "linear",
+            "destinations":[
+            {"x":500,"y":200,"speed":"100"},
+            {"x":1000,"y":200,"speed":"100"}
+            ]
+        },
+        "midToRightU":{
+            "type": "linear",
+            "destinations":[
+            {"x":500,"y":200,"speed":"300"},
+            {"x":1000,"y":200,"speed":"300"}
+            ]
+        },
+        "stay":{
+            "type":"linear",
+            "destinations":[
+                {"x":500,"y":200 ,"speed":0.000000000001},
+                {"x":500,"y":202 ,"speed":0.000000000001}
+            ]
+        },
+        "bubblegum":{
             "type": "linear",
                 "destinations":[
-                    {"x": 0, "y":0, "speed":500},
-                    {"x": 500, "y":500, "speed":500},
-                    {"x": 600, "y":500, "speed":10}
+                    {"x": 500, "y":750, "speed":100},
+                    {"x": 500, "y":200, "speed":100},
+                    {"x": 500, "y":200, "speed":0}
                 ]
             }
        },
     "queues" : {
-        "testQ":{
+        "trexQ":{
             "layer" :0,
             "time" : 0,
             "items" : [
-                {"type":"texture","path":"test","resource":"coin"}
+                {"type":"texture","path":"leftToMidT","resource":"coin"}
             ],
-            "finalNext":"testQ2",
-            "animations" : [
-                { "time": 1000, "animation": "pause_path", "animationTime": -1, "group": "*" }
-            ]
+            "finalNext" : "trexQ2",
+            "animations" : []
         },
-        "testQ2":{
+        "trexQ2":{
             "layer" :0,
             "time" : -1,
             "items" : [
-                {"type":"texture","path":"test2","resource":"coin"}
+                {"type":"texture","path":"midToRightT","resource":"coin"}
+            ],
+            "finalNext" : "unicornQ",
+            "animations" : []
+        },
+        "unicornQ":{
+            "layer" :0,
+            "time" : -1,
+            "items" : [
+                {"type":"texture","path":"leftToMidU","resource":"coin"}
+            ],
+            "finalNext" : "unicornQ2",
+            "animations" : []
+        },
+        "unicornQ2":{
+            "layer" :0,
+            "time" : -1,
+            "items" : [
+                {"type":"texture","path":"midToRightU","resource":"coin"}
+            ],
+            "animations" : []
+        },
+        "bubblegumQ":{
+            "layer" :0,
+            "time" : 0,
+            "items" : [
+                {"type":"texture", "path":"bubblegum","resource":"bubblegum_rainbow"}
+            ],
+            "finalNext" : "bubblegumQ2",
+            "animations" : []
+        },
+        "unicornQ2":{
+            "layer" :0,
+            "time" : -1,
+            "items" : [
+                {"type":"texture","path":"stay","resource":"coin"}
+            ],
+            "animations" : []
+        },
+        "bubblegumQ2":{
+            "layer" :0,
+            "time" : -1,
+            "items" : [
+                {"type":"texture","path":"stay","resource":"bubblegum_rainbow"}
             ],
             "animations" : []
         }

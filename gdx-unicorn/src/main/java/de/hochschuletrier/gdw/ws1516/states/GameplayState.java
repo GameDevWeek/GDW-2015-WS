@@ -48,7 +48,7 @@ public class GameplayState extends BaseGameState {
         menuInputProcessor = menuManager.getInputProcessor();
         gameInputProcessor = game.getInputProcessor();
 
-        menuManager.addLayer(new DecoImage(assetManager.getTexture("menu_fg")));
+//        menuManager.addLayer(new DecoImage(assetManager.getTexture("menu_fg")));
         menuManager.pushPage(menuPageRoot);
 //        menuManager.getStage().setDebugAll(true);
 
