@@ -10,6 +10,9 @@ import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
 
 public class MainMenuPage extends MenuPage {
 
+    
+   
+    
     public MainMenuPage(Skin skin, MenuManager menuManager) {
         super(skin, "menu_bg");
         
@@ -17,7 +20,7 @@ public class MainMenuPage extends MenuPage {
         int xOffset = 20;
         int yOffset = 370;
         int yStep = 55;
-        
+    
         addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 150, 50, "Start Game", this::startGame);
       
         addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Options", new MenuOptions(skin, menuManager));
@@ -44,7 +47,7 @@ public class MainMenuPage extends MenuPage {
     
     protected final void addPageEntry(MenuManager menuManager, int x, int y, String text, MenuPage page) {
         menuManager.addLayer(page);
-        addLeftAlignedButton(x, y, 300, 40, text, () -> menuManager.pushPage(page));
+        addLeftAlignedButton(x, y, 100, 40, text, () -> menuManager.pushPage(page));
     }
     
 

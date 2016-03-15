@@ -10,7 +10,12 @@ import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
 
 public class MainMenuPage extends MenuPage {
 
-    public MainMenuPage(Skin skin, MenuManager menuManager) {
+    public enum Type {
+        MENU,
+        PAUSED
+        
+    }
+    public MainMenuPage(Skin skin, MenuManager menuManager, Type type) {
         super(skin, "menu_bg");
         
         int i = 0;
@@ -18,13 +23,21 @@ public class MainMenuPage extends MenuPage {
         int yOffset = 370;
         int yStep = 55;
         
+        if(type==Type.MENU) {
         addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 150, 50, "Start Game", this::startGame);
-      
+        }
+        else if(type==Type.PAUSED) {
+            addLeftAlignedButton(xOffset, yOffset - yStep * (i++), 150, 50, "Continue Game", () -> menuManager.popPage());
+        }
         addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Options", new MenuOptions(skin, menuManager));
         addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Credits", new MenuPageCredits(skin, menuManager));
     
+        if(type==Type.MENU) {
         addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 100, 50, "Exit", () -> System.exit(-1));
-        
+        }
+        else if (type==Type.PAUSED) {
+            addLeftAlignedButton(xOffset, yOffset - yStep*(i++), 150, 50, "Menu", this::stopGame);
+        }
         
     }    
 
@@ -44,7 +57,7 @@ public class MainMenuPage extends MenuPage {
     
     protected final void addPageEntry(MenuManager menuManager, int x, int y, String text, MenuPage page) {
         menuManager.addLayer(page);
-        addLeftAlignedButton(x, y, 300, 40, text, () -> menuManager.pushPage(page));
+        addLeftAlignedButton(x, y, 150, 40, text, () -> menuManager.pushPage(page));
     }
     
 
