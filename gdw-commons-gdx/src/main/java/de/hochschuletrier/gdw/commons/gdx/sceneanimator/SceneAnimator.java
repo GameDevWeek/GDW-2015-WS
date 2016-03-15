@@ -17,8 +17,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -33,6 +33,8 @@ public class SceneAnimator {
     private final Array<Queue> queueArray = new Array();
     private final HashMap<String, Path<Vector2>> paths = new HashMap();
     private float timeFactor;
+    private final HashSet<SceneAnimatorListener> listeners = new HashSet();
+    private boolean doneTriggered;
 
     /**
      * @return the timeFactor
@@ -194,6 +196,7 @@ public class SceneAnimator {
         for (Queue queue : queueArray) {
             queue.reset();
         }
+        doneTriggered = false;
     }
 
     public void render() {
@@ -218,7 +221,19 @@ public class SceneAnimator {
             }
         }
         if (done) {
-            reset();
+            if(!doneTriggered) {
+                doneTriggered = true;
+                for (SceneAnimatorListener listener : listeners)
+                    listener.onSceneEnd();
+            }
         }
+    }
+    
+    public void addListener(SceneAnimatorListener listener) {
+        listeners.add(listener);
+    }
+    
+    public void removeListener(SceneAnimatorListener listener) {
+        listeners.remove(listener);
     }
 }
