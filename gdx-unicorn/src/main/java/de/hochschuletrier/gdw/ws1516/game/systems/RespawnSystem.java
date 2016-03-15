@@ -11,6 +11,7 @@ import com.badlogic.ashley.core.Family;
 
 import de.hochschuletrier.gdw.ws1516.events.GameRespawnEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.components.HitPointsComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.StartPointComponent;
@@ -24,13 +25,15 @@ public class RespawnSystem extends EntitySystem implements GameRespawnEvent.List
     private Entity startPoint;
     
     @Override
-    public void onGameRestartEvent() {
-        PositionComponent position = ComponentMappers.position.get(player);
-        StartPointComponent playerStartPoint = ComponentMappers.startPoint.get(startPoint);
-        if ( position != null && playerStartPoint != null )
+    public void onGameRepawnEvent() {
+        PositionComponent currentPlayerPosition = ComponentMappers.position.get(player);
+        StartPointComponent reaspawnPosition = ComponentMappers.startPoint.get(startPoint);
+        if ( currentPlayerPosition != null && reaspawnPosition != null )
         {
-            position.x = playerStartPoint.x;
-            position.y = playerStartPoint.y;
+            currentPlayerPosition.x = reaspawnPosition.x;
+            currentPlayerPosition.y = reaspawnPosition.y;
+            HitPointsComponent hitPoints = ComponentMappers.hp.get(player);
+            hitPoints.value = hitPoints.max;
         }else
         {
             logger.warn("No Player or no RespawnPoint set");
