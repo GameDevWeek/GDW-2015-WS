@@ -9,6 +9,7 @@ public class SoundEvent {
     public static interface Listener {
         void onSoundPlay(String sound, Entity playOver, boolean b);
 
+        void onSoundStop(String sound, Entity playOver);
         void onSoundStop(Entity playOver);
     }
 

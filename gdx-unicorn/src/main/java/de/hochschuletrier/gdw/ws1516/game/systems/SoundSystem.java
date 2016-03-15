@@ -20,6 +20,10 @@ import de.hochschuletrier.gdw.ws1516.game.components.SoundEmitterComponent;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.GameLogicTest;
 import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
 
+/**
+ * @author phili_000
+ *
+ */
 public class SoundSystem extends IteratingSystem implements SoundEvent.Listener {
 
     private static final Logger logger = LoggerFactory.getLogger(GameLogicTest.class);
@@ -50,6 +54,18 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener 
         PositionComponent position = ComponentMappers.position.get(entity);
         PhysixBodyComponent body = ComponentMappers.physixBody.get(entity);
 //        soundEmitter.emitter.setPosition(body.getPosition().x, body.getPosition().y, 0);
+        
+        /*
+         * Löschen der beendeten Sounds
+         */
+        SoundInstance[] instances=new SoundInstance[soundEmitter.soundInstances.size()];
+        soundEmitter.soundInstances.toArray(instances);
+        for (SoundInstance instance : instances){
+            if (instance.isStopped()){
+                soundEmitter.soundInstances.remove(instance);
+            }
+        }
+        
         soundEmitter.emitter.setPosition(position.x, position.y, 0);
         soundEmitter.emitter.update();
         
@@ -82,11 +98,38 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener 
         if (soundInstance != null) {
             soundInstance.setVolume(100f);
         }
+        soundEmitter.soundInstances.add(soundInstance);
+        soundEmitter.soundNames.add(sound);
 
     }
 
     @Override
     public void onSoundStop(Entity entity) {
-        ComponentMappers.soundEmitter.get(entity).emitter.dispose();
+        SoundEmitterComponent soundEmitter = ComponentMappers.soundEmitter.get(entity);
+        for (SoundInstance instance : soundEmitter.soundInstances){
+            instance.stop();
+        }
+        soundEmitter.soundInstances.clear();
+        soundEmitter.soundNames.clear();
+        onSoundStop(null, entity);
+    }
+
+    /**
+     * @param sound 
+     *          Sound to be stopped, null stops all sounds
+     * @param entity
+     *          Entity which plays the sound
+     */
+    @Override
+    public void onSoundStop(String sound,Entity entity) {
+        SoundEmitterComponent soundEmitter = ComponentMappers.soundEmitter.get(entity);
+        for (int i=0;i<soundEmitter.soundNames.size();i++){
+            if (sound == null ||  soundEmitter.soundNames.get(i).equals(sound)){
+                soundEmitter.soundInstances.get(i).stop();
+                soundEmitter.soundInstances.remove(i);
+                soundEmitter.soundNames.remove(i);
+                i--;
+            }
+        }
     }
 }
