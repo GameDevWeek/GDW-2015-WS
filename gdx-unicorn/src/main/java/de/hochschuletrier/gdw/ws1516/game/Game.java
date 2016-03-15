@@ -10,6 +10,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -221,10 +222,14 @@ public class Game extends InputAdapter {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        
+        Vector2 screenCoords = new Vector2(screenX, screenY);
+        Vector2 worldCoords = cameraSystem.screenToWorldCoordinates(screenCoords);
+        
         if (button == 0)
-            EntityCreator.createEntity("ball", screenX, screenY);
+            EntityCreator.createEntity("ball", worldCoords.x, worldCoords.y);
         else
-            EntityCreator.createEntity("box", screenX, screenY);
+            EntityCreator.createEntity("box", worldCoords.x, worldCoords.y);
         return true;
     }
 
