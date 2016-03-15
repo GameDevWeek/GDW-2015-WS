@@ -44,7 +44,7 @@ public class MainMenuPage extends MenuPage {
     
     protected final void addPageEntry(MenuManager menuManager, int x, int y, String text, MenuPage page) {
         menuManager.addLayer(page);
-        addLeftAlignedButton(x, y, 300, 40, text, () -> menuManager.pushPage(page));
+        addLeftAlignedButton(x, y, 150, 40, text, () -> menuManager.pushPage(page));
     }
     
 
