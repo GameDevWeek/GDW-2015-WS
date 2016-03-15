@@ -62,6 +62,7 @@ public class GameplayState extends BaseGameState {
                 if (keycode == Input.Keys.ESCAPE) {
                     if (mainProcessor == gameInputProcessor) {
                         mainProcessor = menuInputProcessor;
+                        
                     } else {
                         menuManager.popPage();
                     }
