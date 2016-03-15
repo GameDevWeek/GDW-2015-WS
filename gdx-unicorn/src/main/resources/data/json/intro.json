@@ -148,9 +148,10 @@
             "layer": 2,
             "time": 0,
             "items" : [
-                {"type":"text","path":"story","style":"name","text":"blablabla"}
+                {"type":"text","x":500, "y": 400,"style":"name","text":"blablabla"}
             ],
             "animations" : [
+                {"time":0, "animation":"untype_instant"},
                 {"animation":"type","animationTime":300},
                 {"time":4000, "animation":"untype","animationTime":100}
             ],
@@ -160,9 +161,10 @@
             "layer": 2,
             "time": -1,
             "items" : [
-                {"type":"text","path":"story","style":"name","text":"123456"}
+                {"type":"text","x":500, "y": 400,"style":"name","text":"123456"}
             ],
             "animations" : [
+                {"time":0, "animation":"untype_instant"},
                 {"animation":"type","animationTime":300},
                 {"time":4000, "animation":"untype","animationTime":100}
             ]
