@@ -201,6 +201,12 @@ public class SceneAnimator {
             queue.render();
         }
     }
+    
+    public void abortPausePaths() {
+        for (Queue queue : queueArray) {
+            queue.abortPausePaths();
+        }
+    }
 
     public void update(float delta) {
         delta *= timeFactor;

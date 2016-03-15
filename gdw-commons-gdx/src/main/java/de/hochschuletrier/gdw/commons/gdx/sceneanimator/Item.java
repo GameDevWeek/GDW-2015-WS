@@ -24,6 +24,7 @@ public abstract class Item {
     protected float opacity;
     public final ArrayList<Animation> animations = new ArrayList();
     protected boolean oriented;
+    private float pausePath;
 
     public Item(String group, float startTime, float angle, boolean oriented, float opacity) {
         this.group = group;
@@ -41,7 +42,12 @@ public abstract class Item {
         });
         startTime = originalStartTime;
         pathTime = 0;
+        pausePath = 0;
         //Fixme: angle, opacity
+    }
+    
+    public void abortPausePath() {
+        pausePath = 0;
     }
 
     public void setPosition(float x, float y) {
@@ -65,6 +71,15 @@ public abstract class Item {
             }
         }
         if (startTime == 0 && path != null) {
+            if(pausePath < 0)
+                return;
+            if(pausePath > 0) {
+                pausePath -= deltaTime;
+                if(pausePath <= 0)
+                    pausePath = 0;
+                else
+                    return;
+            }
             pathTime += deltaTime;
             if (oriented) {
                 setAngle(path.derivativeAt(temp, pathTime).angle());
@@ -88,7 +103,13 @@ public abstract class Item {
         return group.equals("*") || this.group.equalsIgnoreCase(group);
     }
 
-    public abstract void startAnimation(Animation animation);
+    public boolean startAnimation(Animation animation) {
+        if(animation.animation.toLowerCase().equals("pause_path")) {
+            pausePath = animation.animationTime;
+            return true;
+        }
+        return false;
+    }
 
     boolean isDone() {
         return path == null || pathTime > path.getTotalTime();

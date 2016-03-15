@@ -90,4 +90,10 @@ public class Queue {
             return done;
         return false;
     }
+
+    void abortPausePaths() {
+        for (Item item : items) {
+            item.abortPausePath();
+        }
+    }
 }

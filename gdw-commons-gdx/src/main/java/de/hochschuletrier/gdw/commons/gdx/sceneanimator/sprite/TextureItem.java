@@ -42,12 +42,16 @@ public class TextureItem extends Item {
     }
 
     @Override
-    public void startAnimation(Animation animation) {
+    public boolean startAnimation(Animation animation) {
+        if(super.startAnimation(animation))
+            return true;
+
         if(animation.animation == null) {
             this.region.setTexture(null);
         } else {
             this.animationTime = 0;
             region.setRegion(getter.getTexture(animation.animation));
         }
+        return true;
     }
 }
