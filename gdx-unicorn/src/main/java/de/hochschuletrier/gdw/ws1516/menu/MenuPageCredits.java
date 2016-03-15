@@ -12,11 +12,12 @@ import de.hochschuletrier.gdw.commons.gdx.input.hotkey.HotkeyModifier;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
 import de.hochschuletrier.gdw.commons.gdx.sceneanimator.SceneAnimator;
 import de.hochschuletrier.gdw.commons.gdx.sceneanimator.SceneAnimatorActor;
+import de.hochschuletrier.gdw.commons.gdx.sceneanimator.SceneAnimatorListener;
 import de.hochschuletrier.gdw.ws1516.Main;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter {
+public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter, SceneAnimatorListener {
 
     private static final Logger logger = LoggerFactory.getLogger(MenuPageCredits.class);
     private final Hotkey increaseSpeed = new Hotkey(this::increaseSpeed, Input.Keys.PAGE_UP, HotkeyModifier.CTRL);
@@ -42,6 +43,7 @@ public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter {
 
         try {
             sceneAnimator = new SceneAnimator(this, "data/json/intro.json");
+            sceneAnimator.addListener(this);
             final SceneAnimatorActor sceneAnimatorActor = new SceneAnimatorActor(sceneAnimator);
             menuManager.getStage().addListener(new ClickListener() {
                 @Override
@@ -77,5 +79,10 @@ public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter {
     @Override
     public Texture getTexture(String name) {
         return assetManager.getTexture(name);
+    }
+
+    @Override
+    public void onSceneEnd() {
+        sceneAnimator.reset();
     }
 }
