@@ -8,26 +8,30 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-<<<<<<< HEAD
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Timer;
-=======
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
->>>>>>> 5b2d0018e7af58e1df9a659311cdd02f3e9c3cbd
+
+
+
+
 
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
+import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
 
 public class HudRenderSystem extends IteratingSystem {
 
-<<<<<<< HEAD
+
 
     private final AssetManagerX assetManager;
     private final BitmapFont font;
@@ -36,17 +40,7 @@ public class HudRenderSystem extends IteratingSystem {
         super(Family.all(PlayerComponent.class).get(),priority);
         assetManager=Main.getInstance().getAssetManager();
         font = assetManager.getFont("quartz_50");
-       
-=======
-private AssetManagerX assetManager;
-private BitmapFont font;
 
-    public HudRenderSystem(int priority) {
-        super(Family.all(PlayerComponent.class).get(),priority);
-        assetManager=Main.getInstance().getAssetManager();
-   
-
->>>>>>> 5b2d0018e7af58e1df9a659311cdd02f3e9c3cbd
     }
 
     @Override
@@ -57,23 +51,13 @@ private BitmapFont font;
     
     @Override
     public void update(float delta) {
-        
-        
 
-       
-        
-<<<<<<< HEAD
+        Main.getInstance().screenCamera.bind();
         Skin skin = ((MainMenuState)Main.getInstance().getPersistentState(MainMenuState.class)).getSkin();
         Label label = new Label("Hallo Welt", skin);
-        
-       
         String s = "time";
-       
-        
-       
         font.draw(DrawUtil.batch, s, 400, 20);
-         FileHandle handle = Gdx.files.internal("data/dummies/coin.png");
-        
+        FileHandle handle = Gdx.files.internal("data/dummies/coin.png");
         Texture hearts = new Texture(handle);
         DrawUtil.draw(hearts, 20, 20, 50, 50);
         
@@ -87,10 +71,9 @@ private BitmapFont font;
         
         
         
-=======
-        
+
        
->>>>>>> 5b2d0018e7af58e1df9a659311cdd02f3e9c3cbd
+
     }
 
 }
