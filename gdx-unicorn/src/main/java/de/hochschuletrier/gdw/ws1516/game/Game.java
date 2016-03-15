@@ -30,12 +30,14 @@ import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ImpactSoundComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.ParticleTestComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.TriggerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.factories.EntityFactoryParam;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.ImpactSoundListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.TriggerListener;
 import de.hochschuletrier.gdw.ws1516.game.systems.CameraSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.ParticleRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.SimpleAnimationRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
@@ -183,13 +185,31 @@ public class Game extends InputAdapter {
         });
         engine.addEntity(entity);
     }
+    
+    public ParticleEffect effect;
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (button == 0)
-            EntityCreator.createEntity("ball", screenX, screenY);
+        {
+            System.out.println("Button = 0");
+//            EntityCreator.createEntity("ball", screenX, screenY);
+            EntityCreator.createEntity("particleTest", screenX, screenY);
+        }
         else
             EntityCreator.createEntity("box", screenX, screenY);
+        
+//        if(button == 0)
+//        {
+//            Entity entity = engine.createEntity();
+//            ParticleTestComponent component = engine.createComponent(ParticleTestComponent.class);
+//            entity.add(component);
+//            engine.addEntity(entity);
+////            effect = new ParticleEffect();
+////            effect.load(Gdx.files.internal("src/main/resources/data/particleEffects/particleTest.p"), Gdx.files.internal(""));
+////            effect.start();
+//        }
+        
         return true;
     }
 

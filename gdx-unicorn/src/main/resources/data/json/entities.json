@@ -183,10 +183,10 @@
             "RenderLayer": {
                 "layer": 0
             },
+            "DummyUnicorn": {},
             "ParticleTest": {
                 "effect": "test"
-            },
-            "DummyUnicorn": {}
+            }
         }
     },
     "box": {
@@ -208,6 +208,15 @@
                 "density": 10,
                 "friction": 0.5,
                 "restitution": 0.1
+            }
+        }
+    },
+    "particleTest": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "ParticleTest": {
+                "effect": "test"
             }
         }
     }
