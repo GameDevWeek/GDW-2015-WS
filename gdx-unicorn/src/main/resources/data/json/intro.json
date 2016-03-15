@@ -1,0 +1,43 @@
+{
+    "timeFactor": 1.0,
+    "textStyles" :{},
+    "paths" : {
+        "test":{
+            "type": "linear",
+            "destinations":[
+            {"x": 400, "y":400, "speed":100},
+            {"x": 500, "y":500, "speed":100},
+            {"x": 500, "y":400, "speed":100},
+            {"x": 400, "y":500, "speed":100},
+            {"x": 400, "y":400, "speed":100}
+            ]
+        },
+        "test2":{
+            "type": "linear",
+                "destinations":[
+                    {"x": 0, "y":0, "speed":500},
+                    {"x": 500, "y":500, "speed":500},
+                    {"x": 600, "y":500, "speed":10}
+                ]
+            }
+       },
+    "queues" : {
+        "testQ":{
+            "layer" :0,
+            "time" : 0,
+            "items" : [
+                {"type":"texture","path":"test","resource":"coin"}
+            ],
+            "finalNext":"testQ2",
+            "animations" : []
+        },
+        "testQ2":{
+            "layer" :0,
+            "time" : -1,
+            "items" : [
+                {"type":"texture","path":"test2","resource":"coin"}
+            ],
+            "animations" : []
+        }
+    }
+}
