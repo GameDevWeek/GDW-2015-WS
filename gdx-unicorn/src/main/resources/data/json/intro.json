@@ -4,6 +4,13 @@
        "name": { "color": "FFFFFF", "font": "verdana_32", "align": "center" }
     },
     "paths" : {
+        "story":{
+            "type": "linear",
+            "destinations": [
+            {"x":500,"y":400,"speed":0.2},
+            {"x":500,"y":401,"speed":1}
+            ]
+        },
         "leftToMidT":{
             "type": "linear",
             "destinations":[
@@ -141,7 +148,7 @@
             "layer": 2,
             "time": 0,
             "items" : [
-                {"type":"text","x":500,"y":400,"style":"name","text":"blablabla"}
+                {"type":"text","path":"story","style":"name","text":"blablabla"}
             ],
             "animations" : [
                 {"animation":"type","animationTime":300},
@@ -153,7 +160,7 @@
             "layer": 2,
             "time": -1,
             "items" : [
-                {"type":"text","x":500,"y":400,"style":"name","text":"123456"}
+                {"type":"text","path":"story","style":"name","text":"123456"}
             ],
             "animations" : [
                 {"animation":"type","animationTime":300},
