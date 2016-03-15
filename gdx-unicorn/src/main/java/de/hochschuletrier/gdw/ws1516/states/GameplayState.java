@@ -17,6 +17,7 @@ import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.menu.HUD;
 import de.hochschuletrier.gdw.ws1516.menu.MainMenuPage;
 import de.hochschuletrier.gdw.ws1516.menu.MenuPageRoot;
 
@@ -44,12 +45,16 @@ public class GameplayState extends BaseGameState {
 
         Skin skin = ((MainMenuState)Main.getInstance().getPersistentState(MainMenuState.class)).getSkin();
         final MainMenuPage menuPageRoot = new MainMenuPage(skin, menuManager, MainMenuPage.Type.PAUSED);
+        HUD hud = new HUD(skin, "none");
         menuManager.addLayer(menuPageRoot);
+        menuManager.addLayer(hud);
         menuInputProcessor = menuManager.getInputProcessor();
         gameInputProcessor = game.getInputProcessor();
+       
 
         menuManager.addLayer(new DecoImage(assetManager.getTexture("menu_fg")));
         menuManager.pushPage(menuPageRoot);
+        menuManager.pushPage(hud);
 //        menuManager.getStage().setDebugAll(true);
 
         Main.getInstance().addScreenListener(menuManager);
@@ -62,6 +67,7 @@ public class GameplayState extends BaseGameState {
                     if (mainProcessor == gameInputProcessor) {
                         mainProcessor = menuInputProcessor;
                     } else {
+                        System.out.println("Test");
                         menuManager.popPage();
                     }
                     return true;
