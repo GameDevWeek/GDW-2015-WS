@@ -38,7 +38,6 @@ public class PhysixBodyComponentFactory extends ComponentFactory<EntityFactoryPa
             String type = properties.getString("type", "");
             switch(type) {
                 case "circle": addCircle(param, entity, properties); break;
-                case "box": addBox(param, entity, properties); break;
                 default: logger.error("Unknown type: {}", type); break;
             }
         });
@@ -77,6 +76,7 @@ public class PhysixBodyComponentFactory extends ComponentFactory<EntityFactoryPa
         return new PhysixFixtureDef(physixSystem)
                 .density(properties.getFloat("density", 5))
                 .friction(properties.getFloat("friction", 5))
-                .restitution(properties.getFloat("restitution", 0));
+                .restitution(properties.getFloat("restitution", 0))
+                .sensor(properties.getBoolean("sensor"));
     }
 }

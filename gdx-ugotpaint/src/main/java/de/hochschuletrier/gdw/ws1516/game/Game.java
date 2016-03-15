@@ -22,6 +22,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.factories.EntityFactoryPara
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.ImpactListener;
 import de.hochschuletrier.gdw.ws1516.game.systems.AnimationRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.CanvasRenderSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.PickupSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.input.InputSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.input.KeyboardInputSystem;
@@ -44,8 +45,9 @@ public class Game extends InputAdapter {
 
     private final EntityFactoryParam factoryParam = new EntityFactoryParam();
     private final EntityFactory<EntityFactoryParam> entityFactory = new EntityFactory("data/json/entities.json", Game.class);
+    private final PickupSystem pickupSystem = new PickupSystem(this);
 
-    private InputForwarder inputForwarder = new InputForwarder();
+    private final InputForwarder inputForwarder = new InputForwarder();
     
     public Game() {
         // If this is a build jar file, disable hotkeys
@@ -70,6 +72,8 @@ public class Game extends InputAdapter {
         inputForwarder.set(engine.getSystem(KeyboardInputSystem.class));
         createSnake(0, 50, 50, Color.RED);
         createSnake(1, 850, 550, Color.BLUE);
+        pickupSystem.schedulePickup();
+        pickupSystem.schedulePickup();
     }
 
     private void addSystems() {
@@ -81,12 +85,13 @@ public class Game extends InputAdapter {
         engine.addSystem(updatePositionSystem);
         engine.addSystem(new KeyboardInputSystem());
         engine.addSystem(new InputSystem());
+        engine.addSystem(pickupSystem);
     }
 
     private void addContactListeners() {
         PhysixComponentAwareContactListener contactListener = new PhysixComponentAwareContactListener();
         physixSystem.getWorld().setContactListener(contactListener);
-        contactListener.addListener(PlayerComponent.class, new ImpactListener());
+        contactListener.addListener(PlayerComponent.class, new ImpactListener(engine));
     }
 
     private void setupPhysixWorld() {
@@ -108,7 +113,7 @@ public class Game extends InputAdapter {
     }
     
     public Entity createEntity(String name, float x, float y, Color tint) {
-        factoryParam.tint = tint;
+        factoryParam.color = tint;
         factoryParam.x = x;
         factoryParam.y = y;
         Entity entity = entityFactory.createEntity(name, factoryParam);

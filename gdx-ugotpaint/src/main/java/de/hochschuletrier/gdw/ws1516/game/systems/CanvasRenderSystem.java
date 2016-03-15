@@ -21,6 +21,7 @@ public class CanvasRenderSystem extends IteratingSystem {
     private final Color pixelColor = new Color();
     private final Texture texture = new Texture(pixmap);
     private float pctFilled;
+    private float nextUpdate = 0;
 
     public CanvasRenderSystem(int priority) {
         super(Family.all(PositionComponent.class, AnimationComponent.class).get(), priority);
@@ -56,15 +57,20 @@ public class CanvasRenderSystem extends IteratingSystem {
         DrawUtil.batch.draw(texture, 0, 0, w, h);
         DrawUtil.resetColor();
         
-        float drawnPixels = 0;
-        float totalPixels = w * h;
-        for(int x=0; x<w; x++) {
-            for(int y=0; y<h; y++) {
-                pixelColor.set(pixmap.getPixel(x, y));
-                if(pixelColor.a > 0)
-                    drawnPixels++;
+        // Only update pctFilled every second
+        nextUpdate -= deltaTime;
+        if(nextUpdate <= 0) {
+            nextUpdate = 1;
+            float drawnPixels = 0;
+            float totalPixels = w * h;
+            for(int x=0; x<w; x++) {
+                for(int y=0; y<h; y++) {
+                    pixelColor.set(pixmap.getPixel(x, y));
+                    if(pixelColor.a > 0)
+                        drawnPixels++;
+                }
             }
+            this.pctFilled =  drawnPixels / totalPixels;
         }
-        this.pctFilled =  drawnPixels / totalPixels;
     }
 }

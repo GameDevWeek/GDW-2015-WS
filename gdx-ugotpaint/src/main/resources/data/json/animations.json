@@ -1,6 +1,6 @@
 {
     "segment": {
-        "filename": "data/animations/segment.png",
+        "filename": "data/animations/segment_soft_border.png",
         "frames" : 1,
         "frameDuration": [0.15],
         "playType" : "LOOP",

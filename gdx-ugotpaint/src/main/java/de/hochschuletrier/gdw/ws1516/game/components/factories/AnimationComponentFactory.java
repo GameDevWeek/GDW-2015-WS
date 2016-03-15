@@ -15,7 +15,7 @@ public class AnimationComponentFactory extends ComponentFactory<EntityFactoryPar
     @Override
     public void run(Entity entity, SafeProperties meta, SafeProperties properties, EntityFactoryParam param) {
         AnimationComponent component = engine.createComponent(AnimationComponent.class);
-        component.tint = param.tint;
+        component.tint = param.color;
         component.animation = assetManager.getAnimation(properties.getString("animation"));
         assert (component.animation != null);
         entity.add(component);
