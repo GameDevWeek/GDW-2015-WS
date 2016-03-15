@@ -13,5 +13,7 @@ public class ComponentMappers {
     public static final ComponentMapper<AnimationComponent> animation = ComponentMapper.getFor(AnimationComponent.class);
     public static final ComponentMapper<ScoreComponent> score = ComponentMapper.getFor(ScoreComponent.class);
     public static final ComponentMapper<StartPointComponent> startPoint = ComponentMapper.getFor(StartPointComponent.class);
-    public static final ComponentMapper<SoundEmitterComponent> soundEmitter = ComponentMapper.getFor(SoundEmitterComponent.class); ;
+    public static final ComponentMapper<SoundEmitterComponent> soundEmitter = ComponentMapper.getFor(SoundEmitterComponent.class);
+    public static final ComponentMapper<HitPointsComponent> hp = ComponentMapper.getFor(HitPointsComponent.class);
+    public static final ComponentMapper<LiveComponent> lives = ComponentMapper.getFor(LiveComponent.class);
 }
