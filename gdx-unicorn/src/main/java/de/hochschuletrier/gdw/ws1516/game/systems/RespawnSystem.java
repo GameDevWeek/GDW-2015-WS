@@ -1,5 +1,7 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
+import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +11,10 @@ import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 
+import de.hochschuletrier.gdw.commons.gdx.ashley.EntityInfo;
 import de.hochschuletrier.gdw.ws1516.events.GameRespawnEvent;
+import de.hochschuletrier.gdw.ws1516.events.TriggerEvent;
+import de.hochschuletrier.gdw.ws1516.events.TriggerEvent.Action;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.HitPointsComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
@@ -22,12 +27,14 @@ public class RespawnSystem extends EntitySystem implements GameRespawnEvent.List
 
     private static final Logger logger = LoggerFactory.getLogger(GameLogicTest.class);
     private Entity player;
-    private Entity startPoint;
+    
+    public RespawnSystem() {
+    }
     
     @Override
     public void onGameRepawnEvent() {
         PositionComponent currentPlayerPosition = ComponentMappers.position.get(player);
-        StartPointComponent reaspawnPosition = ComponentMappers.startPoint.get(startPoint);
+        StartPointComponent reaspawnPosition = ComponentMappers.startPoint.get(player);
         if ( currentPlayerPosition != null && reaspawnPosition != null )
         {
             currentPlayerPosition.x = reaspawnPosition.x;
@@ -58,9 +65,10 @@ public class RespawnSystem extends EntitySystem implements GameRespawnEvent.List
     public void entityAdded(Entity entity) {
         if (entity.getComponent(PlayerComponent.class) != null) {
             player = entity;
-        }
-        if (entity.getComponent(StartPointComponent.class) != null) {
-            startPoint = entity;
+            StartPointComponent start = player.getComponent(StartPointComponent.class );
+            PositionComponent position = player.getComponent(PositionComponent.class );
+            start.x = position.x;
+            start.y = position.y;
         }
     }
 
@@ -68,8 +76,7 @@ public class RespawnSystem extends EntitySystem implements GameRespawnEvent.List
     public void entityRemoved(Entity entity) {
         if (entity == player) {
             player = null;
-        } else if (entity == startPoint) {
-            startPoint = null;
-        }
+        } 
     }
+
 }

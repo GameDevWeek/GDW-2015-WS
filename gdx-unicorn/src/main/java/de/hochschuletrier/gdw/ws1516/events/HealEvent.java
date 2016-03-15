@@ -3,23 +3,18 @@ package de.hochschuletrier.gdw.ws1516.events;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.SnapshotArray;
 
-public class HitEvent {
+public class HealEvent {
 
-    public static enum HitType {
-        TOUCH,
-        BULLET;
-    }
-    
     public static interface Listener {
-        void onHitEvent(Entity entity, HitType type, int value);
+        void onHealEvent(Entity entity, int value);
     }
     
     private static final SnapshotArray<Listener> listeners = new SnapshotArray<Listener>();
 
-    public static void emit(Entity entity, HitType type,  int value) {
+    public static void emit(Entity entity,  int value) {
         Object[] items = listeners.begin();
         for (int i = 0, n = listeners.size; i < n; i++) {
-            ((Listener) items[i]).onHitEvent(entity, type,value);
+            ((Listener) items[i]).onHealEvent(entity, value);
         }
         listeners.end();
     }
