@@ -29,7 +29,9 @@
                 {"type":"texture","path":"test","resource":"coin"}
             ],
             "finalNext":"testQ2",
-            "animations" : []
+            "animations" : [
+                { "time": 1000, "animation": "pause_path", "animationTime": -1, "group": "*" }
+            ]
         },
         "testQ2":{
             "layer" :0,
