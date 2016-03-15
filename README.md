@@ -44,6 +44,7 @@ Unicorn Bubblegum
 - Blau: Flugkaugummi.
 	- Bei Aktivierung: Kaut für 1s, bläst Kaugummiblase, steigt etwas an und geht in den Flugmodus über.
 	- Man fliegt für eine Dauer von 10s
+	- Fluggeschwindigkeit 75 % der Laufgeschwindigkeit
 
 ### Hornattacke
 - Bei Aktivierung richtet es sein Horn nach vorne und rennt schnell vorwärts für ca. 2 EB.
