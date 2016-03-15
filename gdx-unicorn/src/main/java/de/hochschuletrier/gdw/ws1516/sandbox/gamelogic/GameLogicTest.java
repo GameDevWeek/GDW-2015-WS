@@ -31,12 +31,15 @@ import de.hochschuletrier.gdw.commons.tiled.utils.RectangleGenerator;
 import de.hochschuletrier.gdw.commons.utils.Rectangle;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.events.GameRestartEvent;
+import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.SoundEmitterComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.StartPointComponent;
 import de.hochschuletrier.gdw.ws1516.game.systems.RespawnSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.SoundSystem;
 import de.hochschuletrier.gdw.ws1516.sandbox.SandboxGame;
 import java.util.HashMap;
 import org.slf4j.Logger;
@@ -51,7 +54,9 @@ public class GameLogicTest extends SandboxGame {
     private static final Logger logger = LoggerFactory.getLogger(GameLogicTest.class);
 
 private final Hotkey restart = new Hotkey(() -> {GameRestartEvent.emit();
-    }, Input.Keys.F2);
+    }, Input.Keys.F3,HotkeyModifier.CTRL);
+private Hotkey playSound = null;
+private Hotkey stopSound = null;
 
     public static final int POSITION_ITERATIONS = 3;
     public static final int VELOCITY_ITERATIONS = 8;
@@ -77,10 +82,14 @@ private final Hotkey restart = new Hotkey(() -> {GameRestartEvent.emit();
 
     private EntitySystem respawnSystem = new RespawnSystem();
 
+    private final SoundSystem soundSystem = new SoundSystem(null);
+
+
     public GameLogicTest() {
         engine.addSystem(physixSystem);
         engine.addSystem(physixDebugRenderSystem);
         engine.addSystem(respawnSystem );
+        engine.addSystem(soundSystem );
     }
 
     @Override
@@ -114,10 +123,16 @@ private final Hotkey restart = new Hotkey(() -> {GameRestartEvent.emit();
         player.add(playerComp);
         PositionComponent positionComp = engine.createComponent(PositionComponent.class);
         player.add(positionComp);
+        SoundEmitterComponent soundComponent = engine.createComponent(SoundEmitterComponent.class);
+        player.add(soundComponent);
         
-        
-        
-        
+        playSound = new Hotkey(() -> {SoundEvent.emit("helicopter",player,true);
+        }, Input.Keys.F1,HotkeyModifier.CTRL);
+        playSound.register();
+
+        stopSound = new Hotkey(() -> {SoundEvent.stopSound(player);
+        }, Input.Keys.F2,HotkeyModifier.CTRL);
+        stopSound.register();
 
         modifyComponent.schedule(() -> {
             playerBody = engine.createComponent(PhysixBodyComponent.class);
