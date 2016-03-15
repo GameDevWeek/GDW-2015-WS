@@ -53,7 +53,7 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener 
         SoundEmitterComponent soundEmitter = ComponentMappers.soundEmitter.get(entity);
         PositionComponent position = ComponentMappers.position.get(entity);
         PhysixBodyComponent body = ComponentMappers.physixBody.get(entity);
-//        soundEmitter.emitter.setPosition(body.getPosition().x, body.getPosition().y, 0);
+        soundEmitter.emitter.setPosition(position.x, position.y, 0);
         
         /*
          * Löschen der beendeten Sounds

@@ -3,8 +3,6 @@ package de.hochschuletrier.gdw.ws1516.events;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.SnapshotArray;
 
-import de.hochschuletrier.gdw.ws1516.events.TestEvent.Listener;
-
 public class DeathEvent {
     public static interface Listener {
         void onDeathEvent(Entity entity);
