@@ -14,6 +14,7 @@ import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.GameLogicTest;
+import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
 import de.hochschuletrier.gdw.ws1516.events.TriggerEvent;
@@ -35,21 +36,26 @@ public class TriggerSystem extends EntitySystem implements  TriggerEvent.Listene
     }
 
     @Override
+    public void removedFromEngine(Engine engine) {
+        // TODO Auto-generated method stub
+        super.removedFromEngine(engine);
+        TriggerEvent.unregister(this);
+    }
+    
+    @Override
     public void onTriggerEvent(TriggerEvent.Action type,Entity triggeringEntity) {
         switch( type)
         {
-        case DEATH_ZONE:
+        case DEATH_ZONE:            
             
-//            
-//              DeathEvent Schmeißen
-//              DeathEvent.trigger(triggeringEntity);
-//             
-            break;
+              DeathEvent.emit(triggeringEntity);
+             
+            break; 
         default:
             logger.warn("unhandeld TriggerEvent : {}",type.toString());
             break;
         }
         
     }
-
+ 
 }
