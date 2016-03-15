@@ -21,9 +21,11 @@ import de.hochschuletrier.gdw.ws1516.events.TriggerEvent;
 /*
  * TODO listeners für Objekte einsammeln und zählen in diesem hoch
  */
-public class TriggerSystem extends EntitySystem implements  TriggerEvent.Listener{
+public class TriggerSystem extends EntitySystem implements TriggerEvent.Listener , EntityListener{
 
-    private static final Logger logger = LoggerFactory.getLogger(GameLogicTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(TriggerSystem.class);
+    
+    private Entity unicorn = null;
     
     public TriggerSystem() {
         
@@ -32,6 +34,8 @@ public class TriggerSystem extends EntitySystem implements  TriggerEvent.Listene
     @Override
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
+        Family family=Family.one(PlayerComponent.class).get();
+        engine.addEntityListener(family, this);
         TriggerEvent.register(this);
     }
 
@@ -39,9 +43,23 @@ public class TriggerSystem extends EntitySystem implements  TriggerEvent.Listene
     public void removedFromEngine(Engine engine) {
         // TODO Auto-generated method stub
         super.removedFromEngine(engine);
+        engine.removeEntityListener(this);
         TriggerEvent.unregister(this);
     }
-    
+
+    @Override
+    public void entityAdded(Entity entity) {
+        if (entity.getComponent(PlayerComponent.class)!=null){
+            unicorn=entity;
+        }
+    }
+
+    @Override
+    public void entityRemoved(Entity entity) {
+        if (entity==unicorn){
+            unicorn=null;
+        }
+    }
     @Override
     public void onTriggerEvent(TriggerEvent.Action type,Entity triggeringEntity) {
         switch( type)
@@ -57,5 +75,6 @@ public class TriggerSystem extends EntitySystem implements  TriggerEvent.Listene
         }
         
     }
+
  
 }
