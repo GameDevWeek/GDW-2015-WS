@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarBool;
 import de.hochschuletrier.gdw.commons.gdx.ashley.EntityFactory;
 import de.hochschuletrier.gdw.commons.gdx.assets.AnimationExtended;
@@ -47,6 +48,8 @@ import de.hochschuletrier.gdw.ws1516.game.components.factories.EntityFactoryPara
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.ImpactSoundListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.TriggerListener;
 import de.hochschuletrier.gdw.ws1516.game.systems.CameraSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.KeyboardInputSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.MovementSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.ParticleRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.SimpleAnimationRenderSystem;
@@ -86,7 +89,10 @@ public class Game extends InputAdapter {
     private final UpdatePositionSystem updatePositionSystem = new UpdatePositionSystem(
             GameConstants.PRIORITY_PHYSIX + 1);
     private final NameSystem nameSystem = new NameSystem(GameConstants.PRIORITY_NAME);
-
+    private final KeyboardInputSystem keyBoardInputSystem= new KeyboardInputSystem(GameConstants.PRIORITY_INPUT);
+    private final MovementSystem movementSystem=new MovementSystem(GameConstants.PRIORITY_MOVEMENT);
+    
+    
     private final EntityFactoryParam factoryParam = new EntityFactoryParam();
     private final EntityFactory<EntityFactoryParam> entityFactory = new EntityFactory("data/json/entities.json",
             Game.class);
@@ -172,6 +178,8 @@ public class Game extends InputAdapter {
         engine.addSystem(animationRenderSystem);
         engine.addSystem(updatePositionSystem);
         engine.addSystem(nameSystem);
+        engine.addSystem(keyBoardInputSystem);
+        engine.addSystem(movementSystem);
     }
 
     private void addContactListeners() {
@@ -233,7 +241,7 @@ public class Game extends InputAdapter {
         Vector2 worldCoords = cameraSystem.screenToWorldCoordinates(screenCoords);
         
         if (button == 0)
-            EntityCreator.createEntity("ball", worldCoords.x, worldCoords.y);
+            EntityCreator.createEntity("unicorn", worldCoords.x, worldCoords.y);
         else
             EntityCreator.createEntity("box", worldCoords.x, worldCoords.y);
         return true;

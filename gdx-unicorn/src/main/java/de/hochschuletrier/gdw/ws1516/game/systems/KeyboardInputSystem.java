@@ -1,16 +1,20 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 
+import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 
 public class KeyboardInputSystem extends IteratingSystem implements InputProcessor {
-    
+    private static final Logger logger = LoggerFactory.getLogger(KeyboardInputSystem.class);
     private boolean jump = false;
     private boolean spit = false;
     private boolean hornAttack = false;
@@ -19,8 +23,8 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
     private float direction = 0.0f;    
 
     
-    public KeyboardInputSystem(Family family) {
-        super(Family.all(InputComponent.class, PlayerComponent.class).get());
+    public KeyboardInputSystem(int priority) {
+        super(Family.all(InputComponent.class, PlayerComponent.class).get(),priority);
     }
 
     @Override
@@ -30,6 +34,7 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
             case Input.Keys.SPACE:
             case Input.Keys.W:
                 jump = true;
+                logger.debug("should jump{}");
                 break;
             case Input.Keys.LEFT:
             case Input.Keys.A:
