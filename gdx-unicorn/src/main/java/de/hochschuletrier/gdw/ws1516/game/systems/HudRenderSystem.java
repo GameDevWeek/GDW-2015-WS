@@ -11,7 +11,13 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+<<<<<<< HEAD
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Timer;
+=======
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+>>>>>>> 5b2d0018e7af58e1df9a659311cdd02f3e9c3cbd
 
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
@@ -21,6 +27,17 @@ import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 
 public class HudRenderSystem extends IteratingSystem {
 
+<<<<<<< HEAD
+
+    private final AssetManagerX assetManager;
+    private final BitmapFont font;
+    
+    public HudRenderSystem(int priority) {
+        super(Family.all(PlayerComponent.class).get(),priority);
+        assetManager=Main.getInstance().getAssetManager();
+        font = assetManager.getFont("quartz_50");
+       
+=======
 private AssetManagerX assetManager;
 private BitmapFont font;
 
@@ -29,6 +46,7 @@ private BitmapFont font;
         assetManager=Main.getInstance().getAssetManager();
    
 
+>>>>>>> 5b2d0018e7af58e1df9a659311cdd02f3e9c3cbd
     }
 
     @Override
@@ -44,8 +62,35 @@ private BitmapFont font;
 
        
         
+<<<<<<< HEAD
+        Skin skin = ((MainMenuState)Main.getInstance().getPersistentState(MainMenuState.class)).getSkin();
+        Label label = new Label("Hallo Welt", skin);
         
        
+        String s = "time";
+       
+        
+       
+        font.draw(DrawUtil.batch, s, 400, 20);
+         FileHandle handle = Gdx.files.internal("data/dummies/coin.png");
+        
+        Texture hearts = new Texture(handle);
+        DrawUtil.draw(hearts, 20, 20, 50, 50);
+        
+        
+   //     DrawUtil.draw(texture , 10, 10, 100, 100);
+        
+        
+        
+        
+        
+        
+        
+        
+=======
+        
+       
+>>>>>>> 5b2d0018e7af58e1df9a659311cdd02f3e9c3cbd
     }
 
 }
