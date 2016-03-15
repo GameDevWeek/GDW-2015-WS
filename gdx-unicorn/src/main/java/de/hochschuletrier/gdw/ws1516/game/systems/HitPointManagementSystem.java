@@ -12,7 +12,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.LiveComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
-import de.hochschuletrier.gdw.ws1516.events.GameRestartEvent;
+import de.hochschuletrier.gdw.ws1516.events.GameRespawnEvent;
 
 public class HitPointManagementSystem extends EntitySystem implements HitEvent.Listener, DeathEvent.Listener {
 
@@ -71,7 +71,7 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
         liveComp.value--;
         
         if (liveComp.value > 0)
-            GameRestartEvent.emit();
+            GameRespawnEvent.emit();
         else
             GameOverEvent.emit();
     }

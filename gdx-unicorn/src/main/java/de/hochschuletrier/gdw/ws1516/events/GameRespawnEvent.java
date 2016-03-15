@@ -2,7 +2,7 @@ package de.hochschuletrier.gdw.ws1516.events;
 
 import com.badlogic.gdx.utils.SnapshotArray;
 
-public class GameRestartEvent{
+public class GameRespawnEvent{
     public static interface Listener {
         void onGameRestartEvent();
     }

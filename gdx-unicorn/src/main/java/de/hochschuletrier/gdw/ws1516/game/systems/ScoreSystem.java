@@ -6,8 +6,10 @@ import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Application;
 
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
@@ -74,4 +76,16 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
         
     }
 
+    public long getFinalScore(int time)
+    {
+        return scoreComponent.chocoCoins * GameConstants.SCORE_CHOCOCOINS_POINTS
+                + scoreComponent.bonbons * GameConstants.SCORE_BONBONS_POINTS +
+                (long)(time * GameConstants.SCORE_TIME_POINTS ) +
+                scoreComponent.deaths  * GameConstants.SCORE_DEATHS + 
+                scoreComponent.killedEnemies * GameConstants.SCORE_KILLED_ENEMIES  +
+                scoreComponent.killedObstacles * GameConstants.SCORE_KILLED_OBSTACLES +
+                scoreComponent.hits * GameConstants.SCORE_HITS;                
+        
+    }
+    
 }
