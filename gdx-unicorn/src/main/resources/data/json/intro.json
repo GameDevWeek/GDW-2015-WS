@@ -54,7 +54,9 @@
                 {"type":"texture","path":"leftToMidT","resource":"coin"}
             ],
             "finalNext" : "trexQ2",
-            "animations" : []
+            "animations" : [
+                { "time": 2000, "animation": "pause_path", "animationTime": -1, "group": "*" }
+            ]
         },
         "trexQ2":{
             "layer" :0,
