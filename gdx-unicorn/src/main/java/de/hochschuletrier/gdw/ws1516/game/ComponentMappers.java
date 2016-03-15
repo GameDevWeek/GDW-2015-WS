@@ -20,4 +20,8 @@ public class ComponentMappers {
     public static final ComponentMapper<PathComponent> path = ComponentMapper.getFor(PathComponent.class);
     public static final ComponentMapper<HitPointsComponent> hp = ComponentMapper.getFor(HitPointsComponent.class);
     public static final ComponentMapper<LiveComponent> lives = ComponentMapper.getFor(LiveComponent.class);
+    public static final ComponentMapper<MovementComponent> movement = ComponentMapper.getFor(MovementComponent.class);
+    public static final ComponentMapper<PlayerComponent> player = ComponentMapper.getFor(PlayerComponent.class);
+    public static final ComponentMapper<InputComponent> input = ComponentMapper.getFor(InputComponent.class);
+    
 }
