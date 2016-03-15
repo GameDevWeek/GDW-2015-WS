@@ -5,14 +5,12 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 
 public class HitPointsComponent extends Component implements Poolable {
 
+    public int max;
     public int value;
     
     @Override
     public void reset() {
         value = 0;
-    }
-
-    public void decreaseHP() {
-        value--;
+        max = 0;
     }
 }

@@ -9,9 +9,11 @@ Unicorn Bubblegum
   - Taste A: Hornattacke
   - Taste B: Rosa Kaugummi
   - Taste C: Blaues Kaugummi
+  - Geschwindigkeit beim Laufen: tbd
 - Im Flugmodus:
 	- Pfeiltasten: Bewegung links/rechts, auf/ab
 	- Taste A,B,C: Blase platzen lassen
+	- Geschwindigkeit beim Fliegen: 75% der Laufgeschwindigkeit
 - Im Fallen:
 	- Pfeiltasten: Bewegung links/rechts
 	- Taste A,B,C: wirkungslos
@@ -41,6 +43,8 @@ Unicorn Bubblegum
 	- Das Kaugummi, liegengeblieben oder am Gegner klebend  blockiert den Weg, so dass Gegner nicht dran vorbei können. Das Einhorn kann jedoch drüber springen.
 - Blau: Flugkaugummi.
 	- Bei Aktivierung: Kaut für 1s, bläst Kaugummiblase, steigt etwas an und geht in den Flugmodus über.
+	- Man fliegt für eine Dauer von 10s
+	- Fluggeschwindigkeit 75 % der Laufgeschwindigkeit
 
 ### Hornattacke
 - Bei Aktivierung richtet es sein Horn nach vorne und rennt schnell vorwärts für ca. 2 EB.
@@ -49,9 +53,9 @@ Unicorn Bubblegum
 - Cooldown: 3-5s
 
 ### Items zum aufsammeln
-- Blaues Kaugummi
-- Lebenspunkt
-- Score Items: Schokotaler, Bonbons, etc.
+- Blaues Kaugummi (vor allem vor schwierigen Levelabschnitten)
+- Lebenspunkt (max. 2 pro Level aufsammelbar)
+- Score Items: Schokotaler (1 Punkt), Bonbons (3 Punkte)
 - Regenbogenkaugummi:
 	- Verhält sich wie der Mario Stern: Wird direkt aktiviert, schnelleres laufen, automatisches aufspießen von Gegnern.
 	- Dauer: 10s
@@ -92,6 +96,11 @@ Unicorn Bubblegum
 - Anzahl blaue Kaugummis
 - Anzahl Scoreitems
 - Zeit
+
+Highscore Berechnung:
+- Anzahl der Schokomünzen (1 Punkt pro Münze)
+- Anzahl der Bonbons (3 Punkte pro Bonbon)
+- Berechnung: 1000 - (Zeit * 100) - (Tode * 50) + (Schokomünzen + Bonbons) * 3 = Highscore
 
 ### Motivation
 Das Einhorn sieht einen T-Rex der versucht, Kaugummiblasen zu machen. Der T-Rex schafft es jedoch nicht und das Einhorn will ihm helfen. Dazu muss es durch verschiedene Level kommen

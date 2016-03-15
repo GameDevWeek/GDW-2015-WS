@@ -2,7 +2,7 @@ package de.hochschuletrier.gdw.ws1516.events;
 
 import com.badlogic.gdx.utils.SnapshotArray;
 
-import de.hochschuletrier.gdw.ws1516.events.GameRestartEvent.Listener;
+import de.hochschuletrier.gdw.ws1516.events.GameRespawnEvent.Listener;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
 
 public class ScoreBoardEvent {

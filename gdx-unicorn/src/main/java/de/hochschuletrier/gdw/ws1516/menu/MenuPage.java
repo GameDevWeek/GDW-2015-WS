@@ -40,6 +40,9 @@ public class MenuPage extends Group {
             clipEnd();
         }
     }
+    
+
+    
 
     protected final void addLeftAlignedButton(int x, int y, int width, int height, String text, Runnable runnable) {
         TextButton button = addButton(x, y, width, height, text, runnable, "default");
