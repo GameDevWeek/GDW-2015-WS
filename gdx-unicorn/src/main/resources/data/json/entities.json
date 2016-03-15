@@ -3,16 +3,22 @@
         "meta": {},
         "components": {
             "Position": {},
+            "Input":{},
+            "Player":{},
+            "Movable":{
+                "state":"on_ground"
+                },
             "Animation": {
                 "animation": "unicorn_idle"
             },
             "PhysixBody": {
-                "type": "circle",
+                "type": "player",
                 "size": 30,
                 "density": 5,
                 "friction": 0.2,
                 "restitution": 0.4
-            }
+            },
+            "CameraTarget": {}
         }
     },
     "hunter": {
@@ -179,7 +185,14 @@
                 "density": 5,
                 "friction": 0.2,
                 "restitution": 0.4
-            }
+            },
+            "RenderLayer": {
+                "layer": 0
+            },
+            "ParticleTest": {
+                "effect": "test"
+            },
+            "CameraTarget": {}
         }
     },
     "box": {
@@ -203,5 +216,21 @@
                 "restitution": 0.1
             }
         }
+    },
+    "path": {
+        "meta": {},
+        "components": {
+          "Path" : {}
+        }
+    },
+    "particleTest": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "ParticleTest": {
+                "effect": "test"
+            }
+        }
     }
+    
 }

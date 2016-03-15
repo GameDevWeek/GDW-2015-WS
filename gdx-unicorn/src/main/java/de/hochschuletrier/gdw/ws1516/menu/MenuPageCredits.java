@@ -39,7 +39,7 @@ public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter {
         super(skin, "menu_bg");
 
         try {
-            sceneAnimator = new SceneAnimator(this, "data/json/credits.json");
+            sceneAnimator = new SceneAnimator(this, "data/json/intro.json");
             addActor(new SceneAnimatorActor(sceneAnimator));
 
             // If this is a build jar file, disable hotkeys
@@ -52,7 +52,7 @@ public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter {
             logger.error("Error loading credits", ex);
         }
 
-        addCenteredButton(menuManager.getWidth() - 100, 54, 100, 40, "Zurück", () -> menuManager.popPage());
+        addCenteredButton(menuManager.getWidth() - 100, 54, 100, 40, "Zurüüüück", () -> menuManager.popPage());
     }
 
     @Override

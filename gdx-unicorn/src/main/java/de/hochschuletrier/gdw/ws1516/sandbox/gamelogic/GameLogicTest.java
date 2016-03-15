@@ -30,14 +30,18 @@ import de.hochschuletrier.gdw.commons.tiled.tmx.TmxImage;
 import de.hochschuletrier.gdw.commons.tiled.utils.RectangleGenerator;
 import de.hochschuletrier.gdw.commons.utils.Rectangle;
 import de.hochschuletrier.gdw.ws1516.Main;
-import de.hochschuletrier.gdw.ws1516.events.GameRestartEvent;
+import de.hochschuletrier.gdw.ws1516.events.GameRespawnEvent;
+import de.hochschuletrier.gdw.ws1516.events.HitEvent;
 import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.components.HitPointsComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.LiveComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.SoundEmitterComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.StartPointComponent;
+import de.hochschuletrier.gdw.ws1516.game.systems.HitPointManagementSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RespawnSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.SoundSystem;
 import de.hochschuletrier.gdw.ws1516.sandbox.SandboxGame;
@@ -53,10 +57,19 @@ public class GameLogicTest extends SandboxGame {
 
     private static final Logger logger = LoggerFactory.getLogger(GameLogicTest.class);
 
-private final Hotkey restart = new Hotkey(() -> {GameRestartEvent.emit();
-    }, Input.Keys.F3,HotkeyModifier.CTRL);
-private Hotkey playSound = null;
-private Hotkey stopSound = null;
+    
+    /// Hotkeys
+    private Entity unicorn = null;
+    private final Hotkey restart = new Hotkey(() -> {GameRespawnEvent.emit();
+        }, Input.Keys.F3,HotkeyModifier.CTRL);
+    private Hotkey playSound = new Hotkey(() -> {SoundEvent.emit("helicopter",unicorn,true);
+    }, Input.Keys.F1,HotkeyModifier.CTRL);
+    private Hotkey stopSound = new Hotkey(() -> {SoundEvent.stopSound(unicorn);
+    }, Input.Keys.F2,HotkeyModifier.CTRL);
+    private final Hotkey damage = new  Hotkey(() -> {HitEvent.emit(unicorn,HitEvent.HitType.TOUCH,1);
+    }, Input.Keys.F4,HotkeyModifier.CTRL);
+    
+    private SandBoxEventLogger sbeLogger = new SandBoxEventLogger();
 
     public static final int POSITION_ITERATIONS = 3;
     public static final int VELOCITY_ITERATIONS = 8;
@@ -84,17 +97,18 @@ private Hotkey stopSound = null;
 
     private final SoundSystem soundSystem = new SoundSystem(null);
 
+    private final HitPointManagementSystem hitPointSystem = new HitPointManagementSystem();
 
     public GameLogicTest() {
         engine.addSystem(physixSystem);
         engine.addSystem(physixDebugRenderSystem);
         engine.addSystem(respawnSystem );
         engine.addSystem(soundSystem );
+        engine.addSystem(hitPointSystem);
     }
 
     @Override
     public void init(AssetManagerX assetManager) {
-        restart.register();
         
         
         map = loadMap("data/maps/demo.tmx");
@@ -123,17 +137,27 @@ private Hotkey stopSound = null;
         player.add(playerComp);
         PositionComponent positionComp = engine.createComponent(PositionComponent.class);
         player.add(positionComp);
+        StartPointComponent startPositionComp = engine.createComponent(StartPointComponent.class);
+        player.add(startPositionComp);
         SoundEmitterComponent soundComponent = engine.createComponent(SoundEmitterComponent.class);
         player.add(soundComponent);
+        HitPointsComponent hitPoint = engine.createComponent(HitPointsComponent.class);
+        hitPoint.value = 3;
+        hitPoint.max = 3;
+        player.add(hitPoint);
+        LiveComponent livePoint = engine.createComponent(LiveComponent.class);
+        livePoint.value = 2;
+        player.add(livePoint);
+
         
-        playSound = new Hotkey(() -> {SoundEvent.emit("helicopter",player,true);
-        }, Input.Keys.F1,HotkeyModifier.CTRL);
+        unicorn = player;
         playSound.register();
-
-        stopSound = new Hotkey(() -> {SoundEvent.stopSound(player);
-        }, Input.Keys.F2,HotkeyModifier.CTRL);
         stopSound.register();
+        restart.register();
+        damage.register();       
+        
 
+        
         modifyComponent.schedule(() -> {
             playerBody = engine.createComponent(PhysixBodyComponent.class);
             PhysixBodyDef bodyDef = new PhysixBodyDef(BodyType.DynamicBody, physixSystem).position(100, 100).fixedRotation(true);
