@@ -50,5 +50,5 @@ public class TriggerSystem extends EntitySystem implements  TriggerEvent.Listene
         }
         
     }
-
+ 
 }
