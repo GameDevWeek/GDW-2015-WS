@@ -50,15 +50,15 @@ public class HudRenderSystem extends IteratingSystem {
         Main.getInstance().screenCamera.bind();
       
         String s = "time";
-        String score = "score"+"x";
+        String score = "x"+"score";
         font.draw(DrawUtil.batch, s, 400, 20);
-        font.draw(DrawUtil.batch,score, 850,20);
+        font.draw(DrawUtil.batch,score, 950,20);
         
         FileHandle handle = Gdx.files.internal("data/dummies/coin.png");
         Texture hearts = new Texture(handle);
         Texture coins = new Texture(handle);
         DrawUtil.draw(hearts, 20, 20, 50, 50);
-        DrawUtil.draw(coins, 850, 20, 50, 50);
+        DrawUtil.draw(coins, 900, 20, 50, 50);
   
     }
 
