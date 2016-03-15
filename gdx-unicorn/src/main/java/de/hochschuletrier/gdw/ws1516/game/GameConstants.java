@@ -34,4 +34,7 @@ public class GameConstants {
     public static final int SCORE_KILLED_OBSTACLES = 0;
     public static final int SCORE_HITS = 0;
     
+    // GameLogic
+    public static final double ENEMY_SIGHT_DISTANCE = 400.0;
+    
 }

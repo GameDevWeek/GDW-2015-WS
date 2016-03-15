@@ -10,6 +10,7 @@ import de.hochschuletrier.gdw.ws1516.game.systems.EnemyHandlingSystem;
 public class AttackPatternComponent extends Component implements Poolable{
 
     public ArrayList<EnemyHandlingSystem.Action> pattern = new ArrayList<EnemyHandlingSystem.Action>();
+    public int currentIndex;
     
     @Override
     public void reset() {
