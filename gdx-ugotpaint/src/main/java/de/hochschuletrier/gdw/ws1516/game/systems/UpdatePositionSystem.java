@@ -22,6 +22,8 @@ public class UpdatePositionSystem extends IteratingSystem {
     public void processEntity(Entity entity, float deltaTime) {
         PhysixBodyComponent physix = ComponentMappers.physixBody.get(entity);
         PositionComponent position = ComponentMappers.position.get(entity);
+        position.oldX = position.x;
+        position.oldY = position.y;
         position.x = physix.getX();
         position.y = physix.getY();
         position.rotation = physix.getAngle() * MathUtils.radiansToDegrees;

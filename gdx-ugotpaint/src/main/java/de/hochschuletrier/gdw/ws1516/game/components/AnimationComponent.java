@@ -9,14 +9,12 @@ public class AnimationComponent extends Component implements Pool.Poolable {
 
     public AnimationExtended animation;
     public float stateTime;
-    public int layer;
     public Color tint = Color.WHITE;
 
     @Override
     public void reset() {
         animation = null;
         stateTime = 0;
-        layer = 0;
         tint = Color.WHITE;
     }
 }

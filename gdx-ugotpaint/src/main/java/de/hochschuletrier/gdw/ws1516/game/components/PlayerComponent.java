@@ -9,4 +9,7 @@ public class PlayerComponent extends Component implements Pool.Poolable {
     public void reset() {
     }
 
+    public void setFrom(PlayerComponent player) {
+    }
+
 }

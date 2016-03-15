@@ -15,7 +15,12 @@ public class AnimationRenderSystem extends IteratingSystem {
         super(Family.all(PositionComponent.class, AnimationComponent.class).get(), priority);
     }
 
-    
+    @Override
+    public void update(float deltaTime) {
+        super.update(deltaTime);
+        DrawUtil.resetColor();
+    }
+
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         AnimationComponent animation = ComponentMappers.animation.get(entity);
