@@ -8,6 +8,7 @@ public class GameConstants {
     public static final int PRIORITY_ANIMATIONS = 20;
     public static final int PRIORITY_DEBUG_WORLD = 30;
     public static final int PRIORITY_HUD = 40;
+    public static final int PRIORITY_NAME = 50;
     public static final int PRIORITY_REMOVE_ENTITIES = 1000;
 
     // PooledEngine parameters
@@ -20,6 +21,6 @@ public class GameConstants {
     public static final int POSITION_ITERATIONS = 3;
     public static final int VELOCITY_ITERATIONS = 8;
     public static final int BOX2D_SCALE = 40;
-    
+
     public static float MUSIC_FADE_TIME = 2;
 }

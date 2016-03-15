@@ -14,4 +14,5 @@ public class ComponentMappers {
     public static final ComponentMapper<ScoreComponent> score = ComponentMapper.getFor(ScoreComponent.class);
     public static final ComponentMapper<StartPointComponent> startPoint = ComponentMapper.getFor(StartPointComponent.class);
     public static final ComponentMapper<SoundEmitterComponent> soundEmitter = ComponentMapper.getFor(SoundEmitterComponent.class); ;
+    public static final ComponentMapper<PathComponent> path = ComponentMapper.getFor(PathComponent.class);
 }
