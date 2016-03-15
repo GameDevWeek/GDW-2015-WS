@@ -35,7 +35,7 @@ public class HudRenderSystem extends IteratingSystem {
         super(Family.all(PlayerComponent.class).get(),priority);
         
         assetManager=Main.getInstance().getAssetManager();
-        font = assetManager.getFont("quartz_50");
+        font = assetManager.getFont("verdana_32");
 
     }
 
