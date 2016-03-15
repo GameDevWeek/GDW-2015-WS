@@ -182,7 +182,8 @@ public class PhysixTest extends SandboxGame {
             }
 
 //            playerBody.setLinearVelocity(velX, velY);
-            playerBody.applyImpulse(velX, velY);
+//            playerBody.applyImpulse(velX, velY);
+            playerBody.setLinearVelocityX(velX);
             
             if (Gdx.input.isKeyPressed(Input.Keys.SPACE)&&time<=0) {
                 time=cooldown;
