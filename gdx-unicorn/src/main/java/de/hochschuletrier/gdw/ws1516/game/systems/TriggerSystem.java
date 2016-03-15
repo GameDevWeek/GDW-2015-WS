@@ -36,6 +36,13 @@ public class TriggerSystem extends EntitySystem implements  TriggerEvent.Listene
     }
 
     @Override
+    public void removedFromEngine(Engine engine) {
+        // TODO Auto-generated method stub
+        super.removedFromEngine(engine);
+        TriggerEvent.unregister(this);
+    }
+    
+    @Override
     public void onTriggerEvent(TriggerEvent.Action type,Entity triggeringEntity) {
         switch( type)
         {
