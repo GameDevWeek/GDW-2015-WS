@@ -54,4 +54,9 @@ public class TextureItem extends Item {
         }
         return true;
     }
+    
+    @Override
+    protected boolean isAnimationDone() {
+        return true;
+    }
 }

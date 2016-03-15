@@ -60,4 +60,9 @@ public class AnimationItem extends Item {
         }
         return true;
     }
+    
+    @Override
+    protected boolean isAnimationDone() {
+        return this.animationTime > this.totalAnimationTime;
+    }
 }

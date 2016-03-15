@@ -70,7 +70,7 @@ public abstract class Item {
                 startTime = 0;
             }
         }
-        if (startTime == 0 && path != null) {
+        if (startTime == 0) {
             if(pausePath < 0)
                 return;
             if(pausePath > 0) {
@@ -81,15 +81,17 @@ public abstract class Item {
                     return;
             }
             pathTime += deltaTime;
-            if (oriented) {
-                setAngle(path.derivativeAt(temp, pathTime).angle());
+            if(path != null) {
+                if (oriented) {
+                    setAngle(path.derivativeAt(temp, pathTime).angle());
+                }
+                setPosition(path.valueAt(temp, pathTime));
             }
-            setPosition(path.valueAt(temp, pathTime));
 
             Iterator<Animation> it = animations.iterator();
             while (it.hasNext()) {
                 Animation animation = it.next();
-                if (animation.time < pathTime) {
+                if (animation.time <= pathTime) {
                     startAnimation(animation);
                     it.remove();
                 }
@@ -111,8 +113,13 @@ public abstract class Item {
         return false;
     }
 
+    protected abstract boolean isAnimationDone();
+
     boolean isDone() {
-        return path == null || pathTime > path.getTotalTime();
+        if(path == null) {
+            return animations.isEmpty() && isAnimationDone();
+        }
+        return pathTime > path.getTotalTime();
     }
     
     boolean isStarted() {

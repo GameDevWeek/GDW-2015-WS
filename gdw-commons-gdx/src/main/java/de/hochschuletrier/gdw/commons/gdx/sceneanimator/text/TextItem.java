@@ -198,4 +198,9 @@ public class TextItem extends Item {
         }
         return false;
     }
+    
+    @Override
+    protected boolean isAnimationDone() {
+        return anim == null;
+    }
 }

@@ -40,6 +40,7 @@ public class Queue {
 
     public void start() {
         startTime = 0;
+        update(0);
     }
 
     public void render() {
