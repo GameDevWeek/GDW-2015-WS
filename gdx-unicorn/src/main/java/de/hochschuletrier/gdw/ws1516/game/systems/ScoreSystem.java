@@ -8,12 +8,14 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
-
+import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
+import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
 /*
  * TODO listeners für Objekte einsammeln und zählen in diesem hoch
  */
-public class ScoreSystem extends EntitySystem implements EntityListener{
+public class ScoreSystem extends EntitySystem implements EntityListener , ScoreBoardEvent.Listener{
 
     private ScoreComponent scoreComponent;
     
@@ -44,6 +46,32 @@ public class ScoreSystem extends EntitySystem implements EntityListener{
         if (component.equals(scoreComponent)){
             scoreComponent = null;
         }
+    }
+
+    @Override
+    public void onScoreEvent(ScoreType type, int value) {
+        switch( type)
+        {
+        case CHOCO_COIN:
+            scoreComponent.chocoCoins += value;
+                break;
+        case BUBBLE_GUM:
+            scoreComponent.bubblegums += value;
+                break;
+        case DEATH:
+            scoreComponent.deaths += value;
+                break;
+        case HIT:
+            scoreComponent.hits += value;
+                break;
+        case KILLED_ENEMIE:
+            scoreComponent.killedEnemies += value;
+                break;
+        case KILLED_OBSTACLE:
+            scoreComponent.killedObstacles += value;
+                break;
+        }
+        
     }
 
 }
