@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
+import de.hochschuletrier.gdw.ws1516.events.ShootEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 
@@ -18,6 +19,10 @@ public class InputSystem extends IteratingSystem {
         InputComponent input = ComponentMappers.input.get(entity);
         PhysixBodyComponent physixBody = ComponentMappers.physixBody.get(entity);
         physixBody.setLinearVelocity(input.moveDirection.nor().scl(80));
+        if(input.shoot) {
+            ShootEvent.emit(entity);
+            input.shoot = false;
+        }
 //        physixBody.setAwake(true);
     }
 }

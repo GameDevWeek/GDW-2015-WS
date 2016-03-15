@@ -7,10 +7,10 @@ import de.hochschuletrier.gdw.commons.gdx.physix.PhysixContactAdapter;
 import de.hochschuletrier.gdw.ws1516.events.PickupEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 
-public class ImpactListener extends PhysixContactAdapter {
+public class PlayerImpactListener extends PhysixContactAdapter {
     private final PooledEngine engine;
     
-    public ImpactListener(PooledEngine engine) {
+    public PlayerImpactListener(PooledEngine engine) {
         this.engine = engine;
     }
 

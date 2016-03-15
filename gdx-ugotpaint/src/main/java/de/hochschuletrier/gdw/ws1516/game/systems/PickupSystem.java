@@ -39,7 +39,7 @@ public class PickupSystem extends EntitySystem implements PickupEvent.Listener {
         while (scheduledPickups > 0) {
             float x = rand.nextFloat() * Main.WINDOW_WIDTH - 1;
             float y = rand.nextFloat() * Main.WINDOW_HEIGHT - 1;
-            game.createEntity("pickup", x, y, Color.WHITE);
+            game.createEntity("pickup", x, y, 0, 0, Color.WHITE);
             scheduledPickups--;
         }
     }

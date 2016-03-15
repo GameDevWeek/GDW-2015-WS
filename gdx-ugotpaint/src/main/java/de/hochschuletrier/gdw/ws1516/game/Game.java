@@ -6,26 +6,36 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarBool;
 import de.hochschuletrier.gdw.commons.gdx.ashley.EntityFactory;
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.input.InputForwarder;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.Hotkey;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.HotkeyModifier;
+import de.hochschuletrier.gdw.commons.gdx.physix.PhysixBodyDef;
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixComponentAwareContactListener;
+import de.hochschuletrier.gdw.commons.gdx.physix.PhysixFixtureDef;
+import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
+import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixModifierComponent;
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixDebugRenderSystem;
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
+import de.hochschuletrier.gdw.commons.utils.Point;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.ProjectileComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.factories.EntityFactoryParam;
-import de.hochschuletrier.gdw.ws1516.game.contactlisteners.ImpactListener;
+import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerImpactListener;
+import de.hochschuletrier.gdw.ws1516.game.contactlisteners.ProjectileImpactListener;
 import de.hochschuletrier.gdw.ws1516.game.systems.AnimationRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.CanvasRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.PickupSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.ShootSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.input.InputSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.input.KeyboardInputSystem;
+import java.util.ArrayList;
 
 public class Game extends InputAdapter {
 
@@ -85,17 +95,40 @@ public class Game extends InputAdapter {
         engine.addSystem(updatePositionSystem);
         engine.addSystem(new KeyboardInputSystem());
         engine.addSystem(new InputSystem());
+        engine.addSystem(new ShootSystem(this));
         engine.addSystem(pickupSystem);
     }
 
     private void addContactListeners() {
         PhysixComponentAwareContactListener contactListener = new PhysixComponentAwareContactListener();
         physixSystem.getWorld().setContactListener(contactListener);
-        contactListener.addListener(PlayerComponent.class, new ImpactListener(engine));
+        contactListener.addListener(PlayerComponent.class, new PlayerImpactListener(engine));
+        contactListener.addListener(ProjectileComponent.class, new ProjectileImpactListener(engine));
     }
 
     private void setupPhysixWorld() {
         physixSystem.setGravity(0, 0);
+        
+        Entity entity = engine.createEntity();
+        PhysixModifierComponent modifyComponent = engine.createComponent(PhysixModifierComponent.class);
+        entity.add(modifyComponent);
+
+        modifyComponent.schedule(() -> {
+            PhysixBodyComponent bodyComponent = engine.createComponent(PhysixBodyComponent.class);
+            PhysixBodyDef bodyDef = new PhysixBodyDef(BodyDef.BodyType.StaticBody, physixSystem);
+            bodyComponent.init(bodyDef, physixSystem, entity);
+            ArrayList<Point> points = new ArrayList();
+            points.add(new Point(0,0));
+            points.add(new Point(0,Main.WINDOW_HEIGHT));
+            points.add(new Point(Main.WINDOW_WIDTH,Main.WINDOW_HEIGHT));
+            points.add(new Point(Main.WINDOW_WIDTH,0));
+            points.add(new Point(0,0));
+            
+            PhysixFixtureDef fixtureDef = new PhysixFixtureDef(physixSystem).shapePolyline(points);
+            bodyComponent.createFixture(fixtureDef);
+            entity.add(bodyComponent);
+        });
+        engine.addEntity(entity);
     }
 
     public void update(float delta) {
@@ -104,7 +137,7 @@ public class Game extends InputAdapter {
     }
 
     public Entity createSnake(int index, float x, float y, Color tint) {
-        Entity e = createEntity("snake", x, y, tint);
+        Entity e = createEntity("snake", x, y, 0, 0, tint);
         final InputComponent input = engine.createComponent(InputComponent.class);
         input.index = index;
         e.add(input);
@@ -112,10 +145,12 @@ public class Game extends InputAdapter {
         return e;
     }
     
-    public Entity createEntity(String name, float x, float y, Color tint) {
+    public Entity createEntity(String name, float x, float y, float velX, float velY, Color tint) {
         factoryParam.color = tint;
         factoryParam.x = x;
         factoryParam.y = y;
+        factoryParam.velX = velX;
+        factoryParam.velY = velY;
         Entity entity = entityFactory.createEntity(name, factoryParam);
 
         engine.addEntity(entity);

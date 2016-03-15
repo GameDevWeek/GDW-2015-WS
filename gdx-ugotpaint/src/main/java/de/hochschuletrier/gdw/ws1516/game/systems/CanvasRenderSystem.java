@@ -10,6 +10,7 @@ import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 
 public class CanvasRenderSystem extends IteratingSystem {
@@ -24,7 +25,7 @@ public class CanvasRenderSystem extends IteratingSystem {
     private float nextUpdate = 0;
 
     public CanvasRenderSystem(int priority) {
-        super(Family.all(PositionComponent.class, AnimationComponent.class).get(), priority);
+        super(Family.all(PositionComponent.class, AnimationComponent.class, InputComponent.class).get(), priority);
     }
 
     public float getPctFilled() {

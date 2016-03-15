@@ -37,8 +37,9 @@
         "meta": {},
         "components": {
             "Position": {},
+            "Projectile": {},
             "Animation": {
-                "animation": "segment"
+                "animation": "projectile"
             },
             "PhysixBody": {
                 "type": "circle",

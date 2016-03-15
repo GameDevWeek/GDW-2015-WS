@@ -46,6 +46,8 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
         }
         
         input.moveDirection.set(velX, velY).nor();
+        if(!input.moveDirection.isZero())
+            input.lastMoveDirection.set(input.moveDirection);
         
         if(state.shoot) {
             input.shoot = true;
