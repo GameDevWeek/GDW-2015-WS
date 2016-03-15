@@ -1,11 +1,17 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
@@ -15,12 +21,10 @@ import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 
 public class HudRenderSystem extends IteratingSystem {
 
-//    private final BitmapFont font;
-//    private final Game game;
+private AssetManager assetManager;
     public HudRenderSystem(int priority) {
         super(Family.all(PlayerComponent.class).get(),priority);
-        
-       
+
     }
 
     @Override
@@ -31,12 +35,7 @@ public class HudRenderSystem extends IteratingSystem {
     
     @Override
     public void update(float delta) {
-        
-        
-        Main.getInstance().screenCamera.bind();
-        
-        DrawUtil.fillRect(10, 10, 200, 150, Color.CYAN);
-        DrawUtil.drawRect(10,10, 200, 150, Color.RED);
+
     }
 
 }
