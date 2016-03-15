@@ -38,6 +38,16 @@ public class EnemyVisionSystem extends IteratingSystem implements EntityListener
     }
 
     @Override
+    public void addedToEngine(Engine engine) {
+        super.addedToEngine(engine);
+        engine.addEntityListener(this);
+    }
+    @Override
+    public void removedFromEngine(Engine engine) {
+        super.removedFromEngine(engine);
+        engine.removeEntityListener(this);
+    }
+    @Override
     public void entityAdded(Entity entity) {
         if (entity.getComponent(PlayerComponent.class)!=null && entity.getComponent(PositionComponent.class)!=null){
             unicorn=entity;
