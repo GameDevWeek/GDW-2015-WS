@@ -105,18 +105,18 @@ Highscore Berechnung:
 ### Menü
 - Startmenü (Spiel starten, Optionen, Highscore, Spiel beenden)
 
-- Spiel starten (Levelauswahlbildschirm, dann Klick auf Spiel starten mit ausgewähltem Level)
-- Optionen (Lautstärke Sounds/Musik ändern, Steuerung anschauen)
-- Highscore (Anzeige der Bestenliste)
-- Spiel beenden (beendet das Spiel)
+ - Spiel starten (Levelauswahlbildschirm, dann Klick auf Spiel starten mit ausgewähltem Level)
+ - Optionen (Lautstärke Sounds/Musik ändern, Steuerung anschauen)
+ - Highscore (Anzeige der Bestenliste)
+ - Spiel beenden (beendet das Spiel)
 
- - Ingamemenü (Spiel fortsetzen, Levelauswahl, Optionen, Zum Hauptmenü, Spiel beenden)
+- Ingamemenü (Spiel fortsetzen, Levelauswahl, Optionen, Zum Hauptmenü, Spiel beenden)
 
-- Spiel fortsetzen (Spiel wird fortgesetzt)
-- Levelauswahl (wie beim Startmenü, Spiel wird aber nicht beendet)
-- Optionen (Lautstärke Sounds/Musik ändern, Steuerung anschauen,
-- Zum Hauptmenü (beendet das aktuelle Spiel und ladet das Startmenü)
-- Spiel beenden (Beendet das Spiel)
+ - Spiel fortsetzen (Spiel wird fortgesetzt)
+ - Levelauswahl (wie beim Startmenü, Spiel wird aber nicht beendet)
+ - Optionen (Lautstärke Sounds/Musik ändern, Steuerung anschauen,
+ - Zum Hauptmenü (beendet das aktuelle Spiel und ladet das Startmenü)
+ - Spiel beenden (Beendet das Spiel)
 
 ### Motivation
 Das Einhorn sieht einen T-Rex der versucht, Kaugummiblasen zu machen. Der T-Rex schafft es jedoch nicht und das Einhorn will ihm helfen. Dazu muss es durch verschiedene Level kommen
