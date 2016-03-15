@@ -38,8 +38,12 @@ public class HudRenderSystem extends IteratingSystem {
     
     public HudRenderSystem(int priority) {
         super(Family.all(PlayerComponent.class).get(),priority);
+        
         assetManager=Main.getInstance().getAssetManager();
         font = assetManager.getFont("quartz_50");
+
+
+
 
     }
 
@@ -52,17 +56,34 @@ public class HudRenderSystem extends IteratingSystem {
     @Override
     public void update(float delta) {
 
+        
+          
         Main.getInstance().screenCamera.bind();
+
         Skin skin = ((MainMenuState)Main.getInstance().getPersistentState(MainMenuState.class)).getSkin();
-        Label label = new Label("Hallo Welt", skin);
         String s = "time";
+       
+
+
+        Main.getInstance().screenCamera.bind();
+ 
+        Label label = new Label("Hallo Welt", skin);
+      
+
         font.draw(DrawUtil.batch, s, 400, 20);
         FileHandle handle = Gdx.files.internal("data/dummies/coin.png");
         Texture hearts = new Texture(handle);
         DrawUtil.draw(hearts, 20, 20, 50, 50);
+<<<<<<< HEAD
 
    //     DrawUtil.draw(texture , 10, 10, 100, 100);
 
+=======
+        
+        
+   //     DrawUtil.draw(texture , 10, 10, 100, 100);
+    
+>>>>>>> 0ee6ebe8ffbc1020c8a607e83136501695b2914a
     }
 
 }
