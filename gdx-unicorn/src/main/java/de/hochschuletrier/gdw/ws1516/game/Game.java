@@ -40,12 +40,14 @@ import de.hochschuletrier.gdw.commons.utils.Rectangle;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ImpactSoundComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.ParticleTestComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.TriggerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.factories.EntityFactoryParam;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.ImpactSoundListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.TriggerListener;
 import de.hochschuletrier.gdw.ws1516.game.systems.CameraSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.ParticleRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.SimpleAnimationRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.NameSystem;
@@ -221,6 +223,8 @@ public class Game extends InputAdapter {
         });
         engine.addEntity(entity);
     }
+    
+    public ParticleEffect effect;
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {

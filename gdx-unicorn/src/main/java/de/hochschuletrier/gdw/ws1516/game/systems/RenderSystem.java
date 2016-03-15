@@ -13,20 +13,28 @@ import de.hochschuletrier.gdw.ws1516.game.components.RenderLayerComponent;
 public class RenderSystem extends SortedSubIteratingSystem {
     
     private final static RenderComparator renderComparator = new RenderComparator();
+    
+    private ParticleRenderSystem particleRenderSystem;
 
     @SuppressWarnings("unchecked")
     public RenderSystem(int priority) {
         super(Family.all(PositionComponent.class, RenderLayerComponent.class).get(), renderComparator, priority);
 
         addSubSystem(new AnimationRenderSystem());
-        addSubSystem(new ParticleRenderSystem());
+//        addSubSystem(new ParticleRenderSystem());
+        particleRenderSystem = new ParticleRenderSystem();
+        addSubSystem(particleRenderSystem);
+        
+        System.out.println("RenderSystem constructor");
     }
 
     @Override
     public void processEntity(Entity entity, float deltaTime) {
         // preprocessing if necessary
         super.processEntity(entity, deltaTime);
+//        particleRenderSystem.processEntity(entity, deltaTime);
         // postprocessing if necessary
+//        System.out.println("RenderSystem processEntity");
     }
     
     @Override
@@ -34,6 +42,7 @@ public class RenderSystem extends SortedSubIteratingSystem {
         // preprocessing if necessary
         super.update(deltaTime);
         // postprocessing if necessary
+//        System.out.println("RenderSystem update");
     }
 
     private static final class RenderComparator implements Comparator<Entity> {
