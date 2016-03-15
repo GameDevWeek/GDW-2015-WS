@@ -6,7 +6,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 
-import de.hochschuletrier.gdw.ws1516.game.components.KeyboardInputComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 
 public class KeyboardInputSystem extends IteratingSystem implements InputProcessor {
@@ -20,7 +20,7 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
 
     
     public KeyboardInputSystem(Family family) {
-        super(Family.all(KeyboardInputComponent.class, PlayerComponent.class).get());
+        super(Family.all(InputComponent.class, PlayerComponent.class).get());
     }
 
     @Override
@@ -114,7 +114,7 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         
-        KeyboardInputComponent input = entity.getComponent(KeyboardInputComponent.class);
+        InputComponent input = entity.getComponent(InputComponent.class);
         input.direction = direction;
         input.fly = fly;
         input.hornAttack = hornAttack;

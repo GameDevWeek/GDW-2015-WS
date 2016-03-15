@@ -20,6 +20,11 @@ public class GameConstants {
     public static final int POSITION_ITERATIONS = 3;
     public static final int VELOCITY_ITERATIONS = 8;
     public static final int BOX2D_SCALE = 40;
+    public static final float PLAYER_SPEED = 10000.0f;
+    public static final float PLAYER_JUMP_IMPULSE = -500.0f;
     
     public static float MUSIC_FADE_TIME = 2;
+    
+    public static final float TILESIZE_X=64;
+    public static final float TILESIZE_Y=64;
 }
