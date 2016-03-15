@@ -28,6 +28,7 @@ import de.hochschuletrier.gdw.ws1516.menu.MenuPageRoot;
  */
 public class GameplayState extends BaseGameState {
 
+
     private static final Color OVERLAY_COLOR = new Color(0f, 0f, 0f, 0.0f);
 
     private final Game game;
@@ -40,18 +41,24 @@ public class GameplayState extends BaseGameState {
 
     public GameplayState(AssetManagerX assetManager, Game game) {
         this.game = game;
+        
 
         music = assetManager.getMusic("gameplay");
 
         Skin skin = ((MainMenuState)Main.getInstance().getPersistentState(MainMenuState.class)).getSkin();
         final MainMenuPage menuPageRoot = new MainMenuPage(skin, menuManager, MainMenuPage.Type.PAUSED);
-        menuManager.addLayer(menuPageRoot);
+
+        menuManager.addLayer(menuPageRoot);   
         menuInputProcessor = menuManager.getInputProcessor();
         gameInputProcessor = game.getInputProcessor();
-       
-
         menuManager.addLayer(new DecoImage(assetManager.getTexture("menu_fg")));
         menuManager.pushPage(menuPageRoot);
+
+        
+ 
+        
+//        menuManager.getStage().setDebugAll(true);
+
 
         Main.getInstance().addScreenListener(menuManager);
 
@@ -63,7 +70,6 @@ public class GameplayState extends BaseGameState {
                     if (mainProcessor == gameInputProcessor) {
                         mainProcessor = menuInputProcessor;                        
                     } else {
-                        System.out.println("Test");
                         menuManager.popPage();
                                             }
                     return true;
