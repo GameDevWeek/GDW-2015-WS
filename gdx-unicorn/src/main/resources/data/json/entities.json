@@ -191,7 +191,8 @@
             },
             "ParticleTest": {
                 "effect": "test"
-            }
+            },
+            "CameraTarget": {}
         }
     },
     "box": {

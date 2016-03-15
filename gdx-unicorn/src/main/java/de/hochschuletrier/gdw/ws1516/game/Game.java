@@ -49,6 +49,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.factories.EntityFactoryPara
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.ImpactSoundListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerContactListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.TriggerListener;
+
 import de.hochschuletrier.gdw.ws1516.game.systems.CameraSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.KeyboardInputSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.MovementSystem;
@@ -56,6 +57,10 @@ import de.hochschuletrier.gdw.ws1516.game.systems.ParticleRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.SimpleAnimationRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.NameSystem;
+
+import de.hochschuletrier.gdw.ws1516.game.systems.AnimationRenderSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.HudRenderSystem;
+
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityCreator;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityLoader;
@@ -63,13 +68,20 @@ import de.hochschuletrier.gdw.ws1516.game.utils.MapLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 
+
 import java.util.HashMap;
+
+
+
+
 import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Game extends InputAdapter {
+    
+    
 
     private static final Logger logger = LoggerFactory.getLogger(Game.class);
     
@@ -90,11 +102,19 @@ public class Game extends InputAdapter {
     private final SimpleAnimationRenderSystem animationRenderSystem = new SimpleAnimationRenderSystem(GameConstants.PRIORITY_RENDERING);
     private final UpdatePositionSystem updatePositionSystem = new UpdatePositionSystem(
             GameConstants.PRIORITY_PHYSIX + 1);
+
     private final NameSystem nameSystem = new NameSystem(GameConstants.PRIORITY_NAME);
+
     private final KeyboardInputSystem keyBoardInputSystem= new KeyboardInputSystem(GameConstants.PRIORITY_INPUT);
     private final MovementSystem movementSystem=new MovementSystem(GameConstants.PRIORITY_MOVEMENT);
     
     
+
+
+    //
+    private final HudRenderSystem hudRenderSystem = new HudRenderSystem(1001);
+    //
+
     private final EntityFactoryParam factoryParam = new EntityFactoryParam();
     private final EntityFactory<EntityFactoryParam> entityFactory = new EntityFactory("data/json/entities.json",
             Game.class);
@@ -108,6 +128,7 @@ public class Game extends InputAdapter {
         if (!Main.IS_RELEASE) {
             togglePhysixDebug.register();
         }
+     
     }
 
     public void dispose() {
@@ -187,6 +208,7 @@ public class Game extends InputAdapter {
         engine.addSystem(nameSystem);
         engine.addSystem(keyBoardInputSystem);
         engine.addSystem(movementSystem);
+        engine.addSystem(hudRenderSystem);
     }
 
     private void addContactListeners() {
@@ -211,6 +233,8 @@ public class Game extends InputAdapter {
     }
 
     public void update(float delta) {
+        cameraSystem.bindCamera();
+        
         for (Layer layer : map.getLayers()) {
             mapRenderer.render(0, 0, layer);
         }

@@ -93,6 +93,10 @@ public abstract class Item {
     boolean isDone() {
         return path == null || pathTime > path.getTotalTime();
     }
+    
+    boolean isStarted() {
+        return startTime >= 0;
+    }
 
     boolean shouldRender() {
         return startTime == 0 && (path == null || pathTime < path.getTotalTime());
