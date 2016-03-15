@@ -25,7 +25,6 @@ import de.hochschuletrier.gdw.ws1516.game.Game;
  * @author Eileen
  * @version 1.0
  */
-//TODO : rename class to physix ?
 public class PhysicsLoader implements MapLoader {
 
     /** Friction value for static geometry parsed by this class */
