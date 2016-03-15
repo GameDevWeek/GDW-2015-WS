@@ -4,7 +4,9 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
@@ -35,8 +37,11 @@ public class HudRenderSystem extends IteratingSystem {
         
         Main.getInstance().screenCamera.bind();
         
-        DrawUtil.fillRect(10, 10, 200, 150, Color.CYAN);
-        DrawUtil.drawRect(10,10, 200, 150, Color.RED);
+        FileHandle handle = Gdx.files.internal("data/dummies/coin.png");
+        Texture texture = new Texture(handle);
+        DrawUtil.draw(texture , 10, 10, 100, 100);
+        
+        
     }
 
 }

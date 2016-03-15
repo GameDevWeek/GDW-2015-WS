@@ -34,7 +34,7 @@ import de.hochschuletrier.gdw.ws1516.game.contactlisteners.TriggerListener;
 import de.hochschuletrier.gdw.ws1516.game.systems.AnimationRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
-import de.hochschuletrier.gdw.ws1516.game.menu.HUD;
+
 
 import java.util.function.Consumer;
 
@@ -65,7 +65,7 @@ public class Game extends InputAdapter {
             
        
         }
-        HUD hud = new HUD(skin,"none");
+       
        
     }
 
