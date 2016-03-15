@@ -103,14 +103,14 @@ Highscore Berechnung:
 - Berechnung: 1000 - (Zeit * 100) - (Tode * 50) + (Schokomünzen + Bonbons) * 3 = Highscore
 
 ### Menü
- # Startmenü (Spiel starten, Optionen, Highscore, Spiel beenden)
+- Startmenü (Spiel starten, Optionen, Highscore, Spiel beenden)
         bei Klick auf:
             - Spiel starten (Levelauswahlbildschirm, dann Klick auf Spiel starten mit ausgewähltem Level)
             - Optionen (Lautstärke Sounds/Musik ändern, Steuerung anschauen)
             - Highscore (Anzeige der Bestenliste)
             - Spiel beenden (beendet das Spiel)
 
-# Ingamemenü (Spiel fortsetzen, Levelauswahl, Optionen, Zum Hauptmenü, Spiel beenden)
+ - Ingamemenü (Spiel fortsetzen, Levelauswahl, Optionen, Zum Hauptmenü, Spiel beenden)
         bei Klick auf:
             - Spiel fortsetzen (Spiel wird fortgesetzt)
             - Levelauswahl (wie beim Startmenü, Spiel wird aber nicht beendet)
