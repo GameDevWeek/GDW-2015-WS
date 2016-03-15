@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import de.hochschuletrier.gdw.commons.gdx.cameras.orthogonal.LimitedSmoothCamera;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
-import de.hochschuletrier.gdw.ws1516.game.components.DummyUnicornComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.CameraTargetComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 
 public class CameraSystem extends IteratingSystem {
@@ -19,7 +19,7 @@ public class CameraSystem extends IteratingSystem {
     
     @SuppressWarnings("unchecked")
     public CameraSystem(int priority) {
-        super(Family.all(DummyUnicornComponent.class).get(), priority);
+        super(Family.all(CameraTargetComponent.class).get(), priority);
         
         this.camera = new LimitedSmoothCamera();
     }

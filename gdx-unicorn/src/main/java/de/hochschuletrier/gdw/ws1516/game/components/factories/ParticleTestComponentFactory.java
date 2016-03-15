@@ -13,19 +13,16 @@ public class ParticleTestComponentFactory extends ComponentFactory<EntityFactory
     @Override
     public String getType() 
     {
-        System.out.println("ParticleTestComponentFactory getType");
         return "ParticleTest";
     }
 
     @Override
     public void run(Entity entity, SafeProperties meta, SafeProperties properties, EntityFactoryParam param)
     {
-        System.out.println("ParticleTestComponentFactory run");
         ParticleTestComponent component = engine.createComponent(ParticleTestComponent.class);
         String var = properties.getString("effect");
         ParticleEffect var2 = assetManager.getParticleEffect(var);
         component.effect = new ParticleEffect(var2);
         entity.add(component);
     }
-
 }

@@ -20,18 +20,9 @@ public class ParticleRenderSystem extends SortedSubIteratingSystem.SubSystem
 
     @Override
     public void processEntity(Entity entity, float deltaTime) 
-    {        
-//        System.out.println("ParticleRenderSystem Process");
-        
+    {
         ParticleTestComponent component = ComponentMappers.particleTest.get(entity);
-        if(component != null)
-        {
-            System.out.println("o Render because not null");
-        }
-        else
-        {
-            System.out.println("x Dont render because null");
-        }
+        
         PositionComponent position = ComponentMappers.position.get(entity);
         
         for(ParticleEmitter emitter : component.effect.getEmitters())
@@ -42,7 +33,5 @@ public class ParticleRenderSystem extends SortedSubIteratingSystem.SubSystem
         }
         component.effect.setPosition(position.x, position.y);
         component.effect.draw(DrawUtil.batch);
-        
-//        System.out.println("ParticleRenderSystem processEnde");
     }
 }

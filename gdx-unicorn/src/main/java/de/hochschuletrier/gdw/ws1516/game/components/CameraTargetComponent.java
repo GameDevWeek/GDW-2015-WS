@@ -4,12 +4,10 @@ import com.badlogic.ashley.core.Component;
 
 import de.hochschuletrier.gdw.commons.utils.pool.Poolable;
 
-public class DummyUnicornComponent extends Component implements Poolable {
+public class CameraTargetComponent extends Component implements Poolable {
 
     @Override
     public void reset() {
-        // TODO Auto-generated method stub
 
     }
-
 }
