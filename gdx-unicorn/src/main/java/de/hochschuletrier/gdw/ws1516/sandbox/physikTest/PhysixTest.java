@@ -1,13 +1,17 @@
 package de.hochschuletrier.gdw.ws1516.sandbox.physikTest;
 
+import java.util.HashMap;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.cameras.orthogonal.LimitedSmoothCamera;
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixBodyDef;
@@ -20,18 +24,13 @@ import de.hochschuletrier.gdw.commons.gdx.tiled.TiledMapRendererGdx;
 import de.hochschuletrier.gdw.commons.resourcelocator.CurrentResourceLocator;
 import de.hochschuletrier.gdw.commons.tiled.Layer;
 import de.hochschuletrier.gdw.commons.tiled.LayerObject;
-import de.hochschuletrier.gdw.commons.tiled.TileInfo;
 import de.hochschuletrier.gdw.commons.tiled.TileSet;
 import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.commons.tiled.tmx.TmxImage;
-import de.hochschuletrier.gdw.commons.tiled.utils.RectangleGenerator;
-import de.hochschuletrier.gdw.commons.utils.Rectangle;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
 import de.hochschuletrier.gdw.ws1516.sandbox.SandboxGame;
-import java.util.HashMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -76,7 +75,7 @@ public class PhysixTest extends SandboxGame {
     }
 
     @Override
-    public void init(AssetManagerX assetManager) {
+    public void init(final AssetManagerX assetManager) {
         map = loadMap("data/maps/demo.tmx");
         for (TileSet tileset : map.getTileSets()) {
             TmxImage img = tileset.getImage();
@@ -85,18 +84,12 @@ public class PhysixTest extends SandboxGame {
         }
         mapRenderer = new TiledMapRendererGdx(map, tilesetImages);
 
-        // Generate static world
-        int tileWidth = map.getTileWidth();
-        int tileHeight = map.getTileHeight();
-        RectangleGenerator generator = new RectangleGenerator();
-        generator.generate(map,
-                (Layer layer, TileInfo info) -> info.getBooleanProperty("blocked", false),
-                (Rectangle rect) -> addShape(rect, tileWidth, tileHeight));
 
-//        // Test to access objects in TiledMap
-//        ObjectLoader objLoader = new ObjectLoader();
-//        objLoader.generateNameList(map);
-//        objLoader.printNames();
+        //TODO : fix call with null
+        PhysicsLoader loader = new PhysicsLoader();
+        loader.parseMap(map, null, engine);
+        
+        physixSystem.setGravity(0, GRAVITY);
         
         // create a simple player ball
         Entity player = engine.createEntity();
@@ -112,10 +105,7 @@ public class PhysixTest extends SandboxGame {
             player.add(playerBody);
         });
         engine.addEntity(player);
-
-        //manipulate physixSystem
-        physixSystem.setGravity(0, GRAVITY);
-        
+      
         // Setup camera
         camera.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         totalMapWidth = map.getWidth() * map.getTileWidth();
@@ -125,25 +115,13 @@ public class PhysixTest extends SandboxGame {
         Main.getInstance().addScreenListener(camera);
     }
 
-    private void addShape(Rectangle rect, int tileWidth, int tileHeight) {
-        float width = rect.width * tileWidth;
-        float height = rect.height * tileHeight;
-        float x = rect.x * tileWidth + width / 2;
-        float y = rect.y * tileHeight + height / 2;
-
-        
-        PhysixBodyDef bodyDef = new PhysixBodyDef(BodyDef.BodyType.StaticBody, physixSystem).position(x, y).fixedRotation(false);
-        Body body = physixSystem.getWorld().createBody(bodyDef);
-        body.createFixture(new PhysixFixtureDef(physixSystem).density(1).friction(0.5f).shapeBox(width, height));
-    }
-
     @Override
     public void dispose() {
         Main.getInstance().removeScreenListener(camera);
         tilesetImages.values().forEach(Texture::dispose);
     }
 
-    public TiledMap loadMap(String filename) {
+    public TiledMap loadMap(final String filename) {
         try {
             return new TiledMap(filename, LayerObject.PolyMode.ABSOLUTE);
         } catch (Exception ex) {
@@ -153,7 +131,7 @@ public class PhysixTest extends SandboxGame {
     }
 
     @Override
-    public void update(float delta) {
+    public void update(final float delta) {
         camera.bind();
         for (Layer layer : map.getLayers()) {
             mapRenderer.render(0, 0, layer);
