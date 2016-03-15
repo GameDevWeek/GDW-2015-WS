@@ -11,8 +11,4 @@ public class HitPointsComponent extends Component implements Poolable {
     public void reset() {
         value = 0;
     }
-
-    public void decreaseHP() {
-        value--;
-    }
 }
