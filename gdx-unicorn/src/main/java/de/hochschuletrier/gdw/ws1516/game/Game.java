@@ -42,10 +42,12 @@ import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ImpactSoundComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ParticleTestComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.TriggerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.factories.EntityFactoryParam;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.ImpactSoundListener;
+import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerContactListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.TriggerListener;
 import de.hochschuletrier.gdw.ws1516.game.systems.CameraSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.KeyboardInputSystem;
@@ -116,6 +118,7 @@ public class Game extends InputAdapter {
         Main.getInstance().console.register(physixDebug);
         physixDebug.addListener((CVar) -> physixDebugRenderSystem.setProcessing(physixDebug.get()));
 
+        
         addSystems();
         addContactListeners();
         setupPhysixWorld();
@@ -125,9 +128,13 @@ public class Game extends InputAdapter {
         EntityCreator.setEngine(engine);
         EntityCreator.setGame(this);
         EntityCreator.setEntityFactory(entityFactory);
+       
 
         // Hier Dateipfad zur Map einfuegen
         loadMap("data/maps/demo.tmx");
+        
+        //test:
+        EntityCreator.createEntity("unicorn", 800, 100);
     }
 
     /**
@@ -187,6 +194,7 @@ public class Game extends InputAdapter {
         physixSystem.getWorld().setContactListener(contactListener);
         contactListener.addListener(ImpactSoundComponent.class, new ImpactSoundListener());
         contactListener.addListener(TriggerComponent.class, new TriggerListener());
+        contactListener.addListener(PlayerComponent.class, new PlayerContactListener());
     }
 
     private void setupPhysixWorld() {
@@ -241,13 +249,13 @@ public class Game extends InputAdapter {
         Vector2 worldCoords = cameraSystem.screenToWorldCoordinates(screenCoords);
         
         if (button == 0)
-            EntityCreator.createEntity("unicorn", worldCoords.x, worldCoords.y);
+            EntityCreator.createEntity("circle", worldCoords.x, worldCoords.y);
         else
             EntityCreator.createEntity("box", worldCoords.x, worldCoords.y);
         return true;
     }
 
     public InputProcessor getInputProcessor() {
-        return this;
+        return keyBoardInputSystem;
     }
 }

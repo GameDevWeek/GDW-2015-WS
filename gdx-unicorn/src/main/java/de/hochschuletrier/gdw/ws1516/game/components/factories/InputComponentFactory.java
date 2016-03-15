@@ -5,11 +5,11 @@ import de.hochschuletrier.gdw.commons.gdx.ashley.ComponentFactory;
 import de.hochschuletrier.gdw.commons.utils.SafeProperties;
 import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 
-public class KeyboardInputComponentFactory extends ComponentFactory<EntityFactoryParam> {
+public class InputComponentFactory extends ComponentFactory<EntityFactoryParam> {
 
     @Override
     public String getType() {
-        return "KeyboardInput";
+        return "Input";
     }
 
     @Override

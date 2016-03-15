@@ -103,7 +103,7 @@ public class PhysixBodyComponentFactory extends
         fixtureDef = new PhysixFixtureDef(physixSystem)
 
         .density(1).friction(0f).restitution(0f)
-        .shapeCircle(width * 0.08f, new Vector2(0, height * 0.49f)).sensor(true);
+        .shapeCircle(width * 0.1f, new Vector2(0, height * 0.49f)).sensor(true);
         fixture = playerBody.createFixture(fixtureDef);
         fixture.setUserData("foot");//foot becaUSE IST ON THE GROUND
 

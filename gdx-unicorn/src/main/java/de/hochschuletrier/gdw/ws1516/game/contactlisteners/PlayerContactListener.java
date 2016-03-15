@@ -9,32 +9,27 @@ import com.badlogic.ashley.core.PooledEngine;
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixContact;
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixContactAdapter;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
-import de.hochschuletrier.gdw.ws1516.game.components.JumpComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 
-public class PlayerContactListener extends PhysixContactAdapter {
+public class PlayerContactListener extends PhysixContactAdapter{
     private static final Logger logger = LoggerFactory.getLogger(PlayerContactListener.class);
-    PooledEngine engine;
+//    PooledEngine engine;
     
-    public PlayerContactListener(PooledEngine engine){
-        super();
-        this.engine = engine;
-    }
+
 
     public void beginContact(PhysixContact contact) {
-        
-        if (contact.getOtherComponent() == null)
-            return;
-
         Entity player = contact.getMyComponent().getEntity();
+        if (contact.getOtherComponent() == null){
+            ComponentMappers.movement.get(player).state=MovementComponent.State.ON_GROUND;
+            return;
+        }
         Entity otherEntity = contact.getOtherComponent().getEntity();
         
         //for Jumps:
-        if("foot".equals(contact.getMyFixture().getUserData())){
-            JumpComponent jump = ComponentMappers.jump.get(player);
-            
-            if(!contact.getOtherFixture().isSensor())
-            {
-                jump.isGrounded = true;
+        if("foot".equals(contact.getMyFixture().getUserData())){       
+
+            if(!contact.getOtherFixture().isSensor()){
+                ComponentMappers.movement.get(player).state=MovementComponent.State.ON_GROUND;
             }
                 // TODO: Platfom, killsPlayerOnContact, ...
         }
@@ -43,6 +38,10 @@ public class PlayerContactListener extends PhysixContactAdapter {
     }
     
     public void endContact(PhysixContact contact){
+        if (contact.getOtherComponent() == null){
+            return;
+        }
+        
         Entity player = contact.getMyComponent().getEntity();
         Entity otherEntity = contact.getOtherComponent().getEntity();
         

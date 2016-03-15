@@ -1,5 +1,8 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
@@ -10,12 +13,13 @@ import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.*;
 
 public class MovementSystem extends IteratingSystem {
+    private static final Logger logger = LoggerFactory
+            .getLogger(MovementSystem.class);
 
     public MovementSystem(int priority) {
-        super(Family
-                .all(PhysixBodyComponent.class)
-                .one(MovementComponent.class, JumpComponent.class,
-                        PlayerComponent.class).get(), priority);
+        super(Family.all(PhysixBodyComponent.class)
+                .one(MovementComponent.class, PlayerComponent.class).get(),
+                priority);
     }
 
     @Override
@@ -23,30 +27,25 @@ public class MovementSystem extends IteratingSystem {
         PhysixBodyComponent physix = ComponentMappers.physixBody.get(entity);
         InputComponent input = ComponentMappers.input.get(entity);
         MovementComponent movement = ComponentMappers.movement.get(entity);
-        JumpComponent jump = ComponentMappers.jump.get(entity);
+        // JumpComponent jump = ComponentMappers.jump.get(entity);
         PlayerComponent playerComp = ComponentMappers.player.get(entity);
 
-
         if (movement != null) {
-            //normal move
+            // normal move
             if (input != null) {
                 movement.velocityX = (movement.speed * input.direction);
-            }
+                physix.setLinearVelocityX(movement.velocityX);
 
-            // jumps
-            if (jump != null) {
-                // if jump was called
-                if (input != null) {
-                    if (input.jump && jump.isGrounded) {
-                        JumpEvent.emit(entity);
-                        jump.isGrounded = false;
-                        physix.applyImpulse(0, jump.jumpImpulse);
-                    }
+                if (input.jump
+                        && movement.state == MovementComponent.State.ON_GROUND) {
+                    JumpEvent.emit(entity);
+                    movement.state = MovementComponent.State.JUMPING;
+                    physix.applyImpulse(0, movement.jumpImpulse);
                 }
-
             }
 
         }
+
     }
 
 }

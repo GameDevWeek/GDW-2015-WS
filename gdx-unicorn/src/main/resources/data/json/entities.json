@@ -3,6 +3,11 @@
         "meta": {},
         "components": {
             "Position": {},
+            "Input":{},
+            "Player":{},
+            "Movable":{
+                "state":"on_ground"
+                },
             "Animation": {
                 "animation": "unicorn_idle"
             },

@@ -3,6 +3,7 @@ package de.hochschuletrier.gdw.ws1516.game.systems;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
@@ -22,11 +23,17 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
     
     private float direction = 0.0f;    
 
+
     
     public KeyboardInputSystem(int priority) {
         super(Family.all(InputComponent.class, PlayerComponent.class).get(),priority);
     }
 
+//    @Override
+//    public public void addedToEngine(Engine engine) {
+//        logger.debug("wurde Hinzugefügt{}");
+//    };
+    
     @Override
     public boolean keyDown(int keycode) {
         switch (keycode) {
@@ -34,7 +41,6 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
             case Input.Keys.SPACE:
             case Input.Keys.W:
                 jump = true;
-                logger.debug("should jump{}");
                 break;
             case Input.Keys.LEFT:
             case Input.Keys.A:
