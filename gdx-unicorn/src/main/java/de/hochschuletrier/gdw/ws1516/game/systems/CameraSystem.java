@@ -45,11 +45,10 @@ public class CameraSystem extends IteratingSystem {
     }
     
     
-    /*
     public void setCameraBounds(int xMin, int yMin, int xMax, int yMax) {
-        camera.setBounds();
+        camera.setBounds(xMin, yMin, xMax, yMax);
+        camera.updateForced();
     }
-    */
     
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
@@ -59,9 +58,5 @@ public class CameraSystem extends IteratingSystem {
         camera.setDestination(playerPos.x, playerPos.y);
         camera.update(deltaTime);
         camera.bind();
-        
-        
-
     }
-
 }
