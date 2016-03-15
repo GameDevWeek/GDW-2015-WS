@@ -76,10 +76,10 @@ public class GameplayState extends BaseGameState {
             public boolean keyUp(int keycode) {
                 if (keycode == Input.Keys.ESCAPE) {
                     if (mainProcessor == gameInputProcessor) {
-                        mainProcessor = menuInputProcessor;
+                        mainProcessor = menuInputProcessor;                        
                     } else {
                         menuManager.popPage();
-                    }
+                                            }
                     return true;
                 }
                 return super.keyUp(keycode);
