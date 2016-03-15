@@ -21,9 +21,11 @@ import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 
 public class HudRenderSystem extends IteratingSystem {
 
-private AssetManager assetManager;
+private AssetManagerX assetManager;
+private BitmapFont font;
     public HudRenderSystem(int priority) {
         super(Family.all(PlayerComponent.class).get(),priority);
+   
 
     }
 
@@ -35,7 +37,13 @@ private AssetManager assetManager;
     
     @Override
     public void update(float delta) {
+        
+        
 
+       
+        
+        
+       
     }
 
 }

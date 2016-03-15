@@ -10,6 +10,9 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
@@ -29,6 +32,7 @@ import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.commons.tiled.tmx.TmxImage;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.components.factories.EntityFactoryParam;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
 import de.hochschuletrier.gdw.ws1516.sandbox.SandboxGame;
 
@@ -91,17 +95,55 @@ public class PhysixTest extends SandboxGame {
         
         physixSystem.setGravity(0, GRAVITY);
         
-        // create a simple player ball
+        // create a simple test player 
         Entity player = engine.createEntity();
         PhysixModifierComponent modifyComponent = engine.createComponent(PhysixModifierComponent.class);
         player.add(modifyComponent);
 
         modifyComponent.schedule(() -> {
-            playerBody = engine.createComponent(PhysixBodyComponent.class);
-            PhysixBodyDef bodyDef = new PhysixBodyDef(BodyType.DynamicBody, physixSystem).position(100, 100).fixedRotation(true);
-            playerBody.init(bodyDef, physixSystem, player);
-            PhysixFixtureDef fixtureDef = new PhysixFixtureDef(physixSystem).density(playerDensity).friction(playerFriction).restitution(playerRestitution).shapeCircle(playerSize);
-            playerBody.createFixture(fixtureDef);
+            float width = 2*GameConstants.TILESIZE_X;
+            float height = 1*GameConstants.TILESIZE_Y;
+            
+            PhysixBodyComponent playerBody = getBodyComponent(new Vector2(20,40), player);
+            PhysixBodyDef playerDef = new PhysixBodyDef(
+                    BodyDef.BodyType.DynamicBody, physixSystem)
+                    .position(20, 40).fixedRotation(true)
+                    .linearDamping(1).angularDamping(1);
+
+            playerBody.init(playerDef, physixSystem, player);
+            float scale = 20;
+         // Horn
+            PhysixFixtureDef fixtureDef = new PhysixFixtureDef(physixSystem)
+                    .density(1).friction(0).restitution(0f)
+                    .shapeCircle(width * 0.1f, new Vector2(0, -height * 0.4f));
+            Fixture fixture = playerBody.createFixture(fixtureDef);
+
+           fixtureDef = new PhysixFixtureDef(physixSystem)
+            .density(1f).friction(0f).restitution(0f)
+            .shapeBox(width * 0.18f, height * 0.825f, new Vector2(0, 0), 0);
+            fixture = playerBody.createFixture(fixtureDef);
+
+            /*fixtureDef = new PhysixFixtureDef(physixSystem)
+            .density(1).friction(0).restitution(0f)
+            .shapeCircle(width*0.4f,new Vector2(0,-height * 0.1f)).sensor(true);
+            fixture = bodyComponent.createFixture(fixtureDef);*/
+
+
+            //mainBody
+            fixtureDef = new PhysixFixtureDef(physixSystem)
+                    .density(1).friction(0f).restitution(0f)
+                    .shapeCircle(width * 0.1f, new Vector2(0, height * 0.425f));
+            fixture = playerBody.createFixture(fixtureDef);
+            fixture.setUserData("laser");
+            
+            //jump contact
+            fixtureDef = new PhysixFixtureDef(physixSystem)
+
+            .density(1).friction(0f).restitution(0f)
+            .shapeCircle(width * 0.08f, new Vector2(0, height * 0.49f)).sensor(true);
+            fixture = playerBody.createFixture(fixtureDef);
+            fixture.setUserData("jump");
+
             player.add(playerBody);
         });
         engine.addEntity(player);
@@ -114,7 +156,20 @@ public class PhysixTest extends SandboxGame {
         camera.updateForced();
         Main.getInstance().addScreenListener(camera);
     }
+    
+    private PhysixBodyComponent getBodyComponent(Vector2 param,
+            Entity entity) {
+        PhysixBodyComponent bodyComponent = engine
+                .createComponent(PhysixBodyComponent.class);
+        PhysixBodyDef bodyDef = getBodyDef(param);
+        bodyComponent.init(bodyDef, physixSystem, entity);
+        return bodyComponent;
+    }
 
+    private PhysixBodyDef getBodyDef(Vector2 param) {
+        return new PhysixBodyDef(BodyDef.BodyType.DynamicBody, physixSystem)
+                .position(param.x, param.y).fixedRotation(false);
+    }
     @Override
     public void dispose() {
         Main.getInstance().removeScreenListener(camera);
