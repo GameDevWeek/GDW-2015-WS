@@ -1,6 +1,8 @@
 {
     "timeFactor": 1.0,
-    "textStyles" :{},
+    "textStyles" : {
+       "name": { "color": "FFFFFF", "font": "verdana_32", "align": "center" }
+    },
     "paths" : {
         "leftToMidT":{
             "type": "linear",
@@ -34,7 +36,7 @@
             "type":"linear",
             "destinations":[
                 {"x":500,"y":200 ,"speed":0.1},
-                {"x":502,"y":200 ,"speed":0.1}
+                {"x":502,"y":200 ,"speed":0.001}
             ]
         },
         "stayT":{
@@ -87,6 +89,7 @@
             "items" : [
                 {"type":"texture","path":"leftToRight","resource":"coin"}
             ],
+            "next":"pressStartQ",
             "animations" : [
                 { "time": 2350, "animation": "pause_path", "animationTime": -1, "group": "*" }
             ]
@@ -123,6 +126,39 @@
                 {"type":"texture","path":"stay","resource":"bubblegum_rainbow"}
             ],
             "animations" : []
+        },
+        "pressStartQ" :{
+            "layer": 2,
+            "time" : -1,
+            "items" : [
+                {"type":"text","path":"stay","style":"name","text":"PRESS START"}
+            ],
+            "animations" : [
+                {"animation":"type","animationTime":300}
+            ]
+        },
+        "story1Q" :{
+            "layer": 2,
+            "time": 0,
+            "items" : [
+                {"type":"text","x":500,"y":400,"style":"name","text":"blablabla"}
+            ],
+            "animations" : [
+                {"animation":"type","animationTime":300},
+                {"time":4000, "animation":"untype","animationTime":100}
+            ],
+            "finalNext":"story2Q"
+        },
+        "story2Q" :{
+            "layer": 2,
+            "time": -1,
+            "items" : [
+                {"type":"text","x":500,"y":400,"style":"name","text":"123456"}
+            ],
+            "animations" : [
+                {"animation":"type","animationTime":300},
+                {"time":4000, "animation":"untype","animationTime":100}
+            ]
         }
     }
 }
