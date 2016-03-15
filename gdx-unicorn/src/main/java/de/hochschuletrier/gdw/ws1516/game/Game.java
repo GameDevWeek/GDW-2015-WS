@@ -7,8 +7,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -25,8 +27,16 @@ import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixModifierComponent;
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixDebugRenderSystem;
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
+import de.hochschuletrier.gdw.commons.gdx.tiled.TiledMapRendererGdx;
+import de.hochschuletrier.gdw.commons.resourcelocator.CurrentResourceLocator;
+import de.hochschuletrier.gdw.commons.tiled.Layer;
 import de.hochschuletrier.gdw.commons.tiled.LayerObject;
+import de.hochschuletrier.gdw.commons.tiled.TileInfo;
+import de.hochschuletrier.gdw.commons.tiled.TileSet;
 import de.hochschuletrier.gdw.commons.tiled.TiledMap;
+import de.hochschuletrier.gdw.commons.tiled.tmx.TmxImage;
+import de.hochschuletrier.gdw.commons.tiled.utils.RectangleGenerator;
+import de.hochschuletrier.gdw.commons.utils.Rectangle;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ImpactSoundComponent;
@@ -46,6 +56,8 @@ import de.hochschuletrier.gdw.ws1516.game.utils.EntityLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.MapLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
+
+import java.util.HashMap;
 import java.util.function.Consumer;
 
 import org.slf4j.Logger;
@@ -76,6 +88,10 @@ public class Game extends InputAdapter {
     private final EntityFactoryParam factoryParam = new EntityFactoryParam();
     private final EntityFactory<EntityFactoryParam> entityFactory = new EntityFactory("data/json/entities.json",
             Game.class);
+    
+    private TiledMap map;
+    private TiledMapRendererGdx mapRenderer;
+    private final HashMap<TileSet, Texture> tilesetImages = new HashMap();
 
     public Game() {
         // If this is a build jar file, disable hotkeys
@@ -113,7 +129,6 @@ public class Game extends InputAdapter {
      */
     private void loadMap(String filename) {
         // Map laden
-        TiledMap map;
         try {
             map = new TiledMap(filename, LayerObject.PolyMode.ABSOLUTE);
         } catch (Exception ex) {
@@ -122,7 +137,9 @@ public class Game extends InputAdapter {
 
         // Wenn map geladen wurde
         if (map != null) {
-
+            
+            initialzeRenderer();
+            
             // Map parsen
             MapLoader[] mapLoaders = { new PhysicsLoader(), new EntityLoader() };
             for (MapLoader mapLoader : mapLoaders) {
@@ -130,6 +147,20 @@ public class Game extends InputAdapter {
             }
         }
 
+    }
+    
+    private void initialzeRenderer()
+    {
+        for (TileSet tileset : map.getTileSets()) {
+            TmxImage img = tileset.getImage();
+            String filename = CurrentResourceLocator.combinePaths(tileset.getFilename(), img.getSource());
+            tilesetImages.put(tileset, new Texture(filename));
+        }
+        mapRenderer = new TiledMapRendererGdx(map, tilesetImages);
+        
+        int totalMapWidth = map.getWidth() * map.getTileWidth();
+        int totalMapHeight = map.getHeight() * map.getTileHeight();
+        cameraSystem.setCameraBounds(0, 0, totalMapWidth, totalMapHeight);
     }
 
     private void addSystems() {
@@ -162,8 +193,13 @@ public class Game extends InputAdapter {
     }
 
     public void update(float delta) {
-        Main.getInstance().screenCamera.bind();
+        for (Layer layer : map.getLayers()) {
+            mapRenderer.render(0, 0, layer);
+        }
+
         engine.update(delta);
+
+        mapRenderer.update(delta);
     }
 
     public void createTrigger(float x, float y, float width, float height, Consumer<Entity> consumer) {
@@ -190,26 +226,14 @@ public class Game extends InputAdapter {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        
+        Vector2 screenCoords = new Vector2(screenX, screenY);
+        Vector2 worldCoords = cameraSystem.screenToWorldCoordinates(screenCoords);
+        
         if (button == 0)
-        {
-            System.out.println("Button = 0");
-//            EntityCreator.createEntity("ball", screenX, screenY);
-            EntityCreator.createEntity("particleTest", screenX, screenY);
-        }
+            EntityCreator.createEntity("ball", worldCoords.x, worldCoords.y);
         else
-            EntityCreator.createEntity("box", screenX, screenY);
-        
-//        if(button == 0)
-//        {
-//            Entity entity = engine.createEntity();
-//            ParticleTestComponent component = engine.createComponent(ParticleTestComponent.class);
-//            entity.add(component);
-//            engine.addEntity(entity);
-////            effect = new ParticleEffect();
-////            effect.load(Gdx.files.internal("src/main/resources/data/particleEffects/particleTest.p"), Gdx.files.internal(""));
-////            effect.start();
-//        }
-        
+            EntityCreator.createEntity("box", worldCoords.x, worldCoords.y);
         return true;
     }
 
