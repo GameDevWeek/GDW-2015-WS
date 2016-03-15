@@ -43,7 +43,7 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener 
         super.addedToEngine(engine);
         SoundEvent.unregister(this);
     };
-
+    
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         SoundEmitterComponent soundEmitter = ComponentMappers.soundEmitter.get(entity);
