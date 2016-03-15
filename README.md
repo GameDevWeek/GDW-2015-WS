@@ -102,6 +102,22 @@ Highscore Berechnung:
 - Anzahl der Bonbons (3 Punkte pro Bonbon)
 - Berechnung: 1000 - (Zeit * 100) - (Tode * 50) + (Schokomünzen + Bonbons) * 3 = Highscore
 
+### Menü
+ # Startmenü (Spiel starten, Optionen, Highscore, Spiel beenden)
+        bei Klick auf:
+            - Spiel starten (Levelauswahlbildschirm, dann Klick auf Spiel starten mit ausgewähltem Level)
+            - Optionen (Lautstärke Sounds/Musik ändern, Steuerung anschauen)
+            - Highscore (Anzeige der Bestenliste)
+            - Spiel beenden (beendet das Spiel)
+
+# Ingamemenü (Spiel fortsetzen, Levelauswahl, Optionen, Zum Hauptmenü, Spiel beenden)
+        bei Klick auf:
+            - Spiel fortsetzen (Spiel wird fortgesetzt)
+            - Levelauswahl (wie beim Startmenü, Spiel wird aber nicht beendet)
+            - Optionen (Lautstärke Sounds/Musik ändern, Steuerung anschauen,
+            - Zum Hauptmenü (beendet das aktuelle Spiel und ladet das Startmenü)
+            - Spiel beenden (Beendet das Spiel)
+
 ### Motivation
 Das Einhorn sieht einen T-Rex der versucht, Kaugummiblasen zu machen. Der T-Rex schafft es jedoch nicht und das Einhorn will ihm helfen. Dazu muss es durch verschiedene Level kommen
 
