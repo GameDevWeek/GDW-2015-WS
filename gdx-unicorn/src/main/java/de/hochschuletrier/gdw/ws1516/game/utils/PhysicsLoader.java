@@ -16,6 +16,8 @@ import de.hochschuletrier.gdw.commons.tiled.TileInfo;
 import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.commons.tiled.utils.RectangleGenerator;
 import de.hochschuletrier.gdw.commons.utils.Rectangle;
+import de.hochschuletrier.gdw.ws1516.events.TriggerEvent;
+import de.hochschuletrier.gdw.ws1516.events.TriggerEvent.Action;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 
 /**
@@ -65,14 +67,20 @@ public class PhysicsLoader implements MapLoader {
                        .flatMap((list) -> list.stream())                                            
                        .filter((object) -> object.getProperty("entity_type", "").equals("trigger")) 
                        .filter((object) -> !object.getProperty("action", "").equals(""))           
-                       .forEach((trigger) -> createTrigger(trigger));   
+                       .forEach((trigger) -> createTrigger(game, trigger));   
     }
-        
     
     //Create a trigger from the given object
-    private void createTrigger(final LayerObject triggerObject) {
-        //triggerObject.getProperty("action", "").equals("deathzone");
-        //TODO : Create trigger zone
+    private void createTrigger(final Game game, final LayerObject triggerObject) {
+
+        //Find trigger action
+        final Action action = Action.toAction(triggerObject.getProperty("action", ""));
+        
+        //Create trigger entity
+        game.createTrigger(triggerObject.getX(),  triggerObject.getY(),
+                           triggerObject.getWidth(), triggerObject.getHeight(),
+                           (entity) -> TriggerEvent.emit(action, entity));
+                
         
     }
     
