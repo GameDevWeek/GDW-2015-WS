@@ -13,7 +13,7 @@ Unicorn Bubblegum
 - Im Flugmodus:
 	- Pfeiltasten: Bewegung links/rechts, auf/ab
 	- Taste A,B,C: Blase platzen lassen
-	- Geschwindigkeit beim Fliegen: tbd
+	- Geschwindigkeit beim Fliegen: 75% der Laufgeschwindigkeit
 - Im Fallen:
 	- Pfeiltasten: Bewegung links/rechts
 	- Taste A,B,C: wirkungslos
