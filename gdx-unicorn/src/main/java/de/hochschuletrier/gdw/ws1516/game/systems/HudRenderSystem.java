@@ -35,7 +35,7 @@ public class HudRenderSystem extends IteratingSystem {
         super(Family.all(PlayerComponent.class).get(),priority);
         
         assetManager=Main.getInstance().getAssetManager();
-        font = assetManager.getFont("quartz_50");
+        font = assetManager.getFont("verdana_32");
 
     }
 
@@ -50,11 +50,15 @@ public class HudRenderSystem extends IteratingSystem {
         Main.getInstance().screenCamera.bind();
       
         String s = "time";
+        String score = "score"+"x";
         font.draw(DrawUtil.batch, s, 400, 20);
+        font.draw(DrawUtil.batch,score, 850,20);
         
         FileHandle handle = Gdx.files.internal("data/dummies/coin.png");
         Texture hearts = new Texture(handle);
+        Texture coins = new Texture(handle);
         DrawUtil.draw(hearts, 20, 20, 50, 50);
+        DrawUtil.draw(coins, 850, 20, 50, 50);
   
     }
 
