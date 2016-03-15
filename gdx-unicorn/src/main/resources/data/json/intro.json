@@ -42,8 +42,8 @@
         "stay":{
             "type":"linear",
             "destinations":[
-                {"x":500,"y":200 ,"speed":0.1},
-                {"x":502,"y":200 ,"speed":0.001}
+                {"x":500,"y":200 ,"speed":0.001},
+                {"x":500,"y":201 ,"speed":0.001}
             ]
         },
         "stayT":{
@@ -148,26 +148,14 @@
             "layer": 2,
             "time": 0,
             "items" : [
-                {"type":"text","x":500, "y": 400,"style":"name","text":"blablabla"}
+                {"type":"text","x":500, "y": 400,"style":"name","text":"The T-Rex can't reach the bubblegum"},
+                {"type":"text","x":500, "y": 400,"style":"name","delay":5000,"text":"You have to help him!"}
             ],
             "animations" : [
                 {"time":0, "animation":"untype_instant"},
-                {"animation":"type","animationTime":300},
-                {"time":4000, "animation":"untype","animationTime":100}
-            ],
-            "finalNext":"story2Q"
-        },
-        "story2Q" :{
-            "layer": 2,
-            "time": -1,
-            "items" : [
-                {"type":"text","x":500, "y": 400,"style":"name","text":"123456"}
-            ],
-            "animations" : [
-                {"time":0, "animation":"untype_instant"},
-                {"animation":"type","animationTime":300},
-                {"time":4000, "animation":"untype","animationTime":100}
+                {"animation":"type","animationTime":100},
+                {"time":4000, "animation":"untype","animationTime":25}
             ]
-        }
+        }   
     }
 }
