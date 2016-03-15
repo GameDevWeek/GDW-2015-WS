@@ -210,5 +210,12 @@
                 "restitution": 0.1
             }
         }
+    },
+    "path": {
+        "meta": {},
+        "components": {
+          "Path" : {}
+        }
     }
+    
 }

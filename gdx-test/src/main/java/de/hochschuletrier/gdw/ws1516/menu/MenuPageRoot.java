@@ -18,7 +18,7 @@ public class MenuPageRoot extends MenuPage {
 
         MAINMENU,
         INGAME,
-        OPTIONS
+        
     }
 
     public MenuPageRoot(Skin skin, MenuManager menuManager, Type type) {
@@ -36,9 +36,7 @@ public class MenuPageRoot extends MenuPage {
             addLeftAlignedButton(x, y - yStep * (i++), 400, 50, "Spiel verlassen", this::stopGame);
             addCenteredButton(x,y - yStep*(i++),800,800,"was kann man machen", this::stopGame);
         }
-        else if (type == Type.OPTIONS) {
-            
-        }
+       
         addPageEntry(menuManager, x, y - yStep * (i++), "Credits", new MenuPageCredits(skin, menuManager));
         addCenteredButton(menuManager.getWidth() - 80, 54, 100, 40, "Exit", () -> System.exit(-1));
         addCenteredButton(menuManager.getWidth()-200,200,200,200, "Testest", () -> System.exit(-1));
