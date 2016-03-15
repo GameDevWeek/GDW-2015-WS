@@ -9,6 +9,7 @@ public class SoundEvent {
     public static interface Listener {
         void onSoundPlay(String sound, Entity playOver, boolean b);
 
+        void onSoundStop(String sound, Entity playOver);
         void onSoundStop(Entity playOver);
     }
 
@@ -40,6 +41,13 @@ public class SoundEvent {
         Object[] items = listeners.begin();
         for (int i = 0, n = listeners.size; i < n; i++) {
             ((Listener) items[i]).onSoundStop(entity);
+        }
+        listeners.end();
+    }
+    public static void stopSound(String sound,Entity entity) {
+        Object[] items = listeners.begin();
+        for (int i = 0, n = listeners.size; i < n; i++) {
+            ((Listener) items[i]).onSoundStop(sound,entity);
         }
         listeners.end();
     }
