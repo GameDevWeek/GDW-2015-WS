@@ -195,6 +195,8 @@ public class Game extends InputAdapter {
     }
 
     public void update(float delta) {
+        cameraSystem.bindCamera();
+        
         for (Layer layer : map.getLayers()) {
             mapRenderer.render(0, 0, layer);
         }

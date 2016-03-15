@@ -15,7 +15,6 @@ public class ParticleRenderSystem extends SortedSubIteratingSystem.SubSystem
     public ParticleRenderSystem() 
     {
         super(Family.all(PositionComponent.class, ParticleTestComponent.class).get());
-        System.out.println("ParticleRenderSystem");
     }
 
     @Override
