@@ -10,6 +10,7 @@ import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
 
 public class MainMenuPage extends MenuPage {
 
+
     public enum Type {
         MENU,
         PAUSED
@@ -22,6 +23,14 @@ public class MainMenuPage extends MenuPage {
         int xOffset = 55;
         int yOffset = 370;
         int yStep = 55;
+        
+        
+    
+        
+        
+        
+        
+        
         
         if(type==Type.MENU) {
         addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 150, 50, "Start Game", this::startGame);
@@ -42,10 +51,11 @@ public class MainMenuPage extends MenuPage {
     }    
 
     private void startGame() {
-        if (!main.isTransitioning()) {
+        if (!main.isTransitioning()) {      
             Game game = new Game();
             game.init(assetManager);
             main.changeState(new GameplayState(assetManager, game), new SplitHorizontalTransition(500), null);
+            
         }
     }
     
@@ -57,6 +67,7 @@ public class MainMenuPage extends MenuPage {
     
     protected final void addPageEntry(MenuManager menuManager, int x, int y, String text, MenuPage page) {
         menuManager.addLayer(page);
+        
         addLeftAlignedButton(x, y, 150, 40, text, () -> menuManager.pushPage(page));
     }
     

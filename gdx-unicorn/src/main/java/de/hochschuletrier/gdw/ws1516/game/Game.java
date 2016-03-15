@@ -9,6 +9,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarBool;
 import de.hochschuletrier.gdw.commons.gdx.ashley.EntityFactory;
 import de.hochschuletrier.gdw.commons.gdx.assets.AnimationExtended;
@@ -39,9 +40,14 @@ import de.hochschuletrier.gdw.ws1516.game.utils.EntityLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.MapLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
+
+
+
 import java.util.function.Consumer;
 
 public class Game extends InputAdapter {
+    
+    
 
     private final CVarBool physixDebug = new CVarBool("physix_debug", true, 0, "Draw physix debug");
     private final Hotkey togglePhysixDebug = new Hotkey(() -> physixDebug.toggle(false), Input.Keys.F1,
@@ -69,6 +75,7 @@ public class Game extends InputAdapter {
         if (!Main.IS_RELEASE) {
             togglePhysixDebug.register();
         }
+     
     }
 
     public void dispose() {
