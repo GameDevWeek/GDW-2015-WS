@@ -105,12 +105,6 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener 
 
     @Override
     public void onSoundStop(Entity entity) {
-        SoundEmitterComponent soundEmitter = ComponentMappers.soundEmitter.get(entity);
-        for (SoundInstance instance : soundEmitter.soundInstances){
-            instance.stop();
-        }
-        soundEmitter.soundInstances.clear();
-        soundEmitter.soundNames.clear();
         onSoundStop(null, entity);
     }
 

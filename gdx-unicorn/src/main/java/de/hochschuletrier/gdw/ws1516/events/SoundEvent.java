@@ -44,6 +44,13 @@ public class SoundEvent {
         }
         listeners.end();
     }
+    public static void stopSound(String sound,Entity entity) {
+        Object[] items = listeners.begin();
+        for (int i = 0, n = listeners.size; i < n; i++) {
+            ((Listener) items[i]).onSoundStop(sound,entity);
+        }
+        listeners.end();
+    }
 
     public static void register(Listener listener) {
         listeners.add(listener);
