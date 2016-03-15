@@ -43,7 +43,7 @@ public class TriggerSystem extends EntitySystem implements  TriggerEvent.Listene
             
               DeathEvent.emit(triggeringEntity);
              
-            break;
+            break; 
         default:
             logger.warn("unhandeld TriggerEvent : {}",type.toString());
             break;
