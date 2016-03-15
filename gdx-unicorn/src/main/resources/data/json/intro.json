@@ -23,18 +23,25 @@
             {"x":1000,"y":200,"speed":"100"}
             ]
         },
-        "midToRightU":{
+        "leftToRight":{
             "type": "linear",
             "destinations":[
-            {"x":500,"y":200,"speed":"300"},
+            {"x":-200,"y":200,"speed":"300"},
             {"x":1000,"y":200,"speed":"300"}
             ]
         },
         "stay":{
             "type":"linear",
             "destinations":[
-                {"x":500,"y":200 ,"speed":0.000000000001},
-                {"x":500,"y":202 ,"speed":0.000000000001}
+                {"x":500,"y":200 ,"speed":0.1},
+                {"x":502,"y":200 ,"speed":0.1}
+            ]
+        },
+        "stayT":{
+            "type":"linear",
+            "destinations":[
+                {"x":500,"y":200 ,"speed":1},
+                {"x":502,"y":200 ,"speed":1}
             ]
         },
         "bubblegum":{
@@ -48,18 +55,24 @@
        },
     "queues" : {
         "trexQ":{
-            "layer" :0,
+            "layer" :1,
             "time" : 0,
             "items" : [
                 {"type":"texture","path":"leftToMidT","resource":"coin"}
             ],
+            "finalNext" : "trexQP"
+        },
+        "trexQP":{
+            "layer" :1,
+            "time" : -1,
+            "items" : [
+                {"type":"texture","path":"stayT","resource":"coin"}
+            ],
             "finalNext" : "trexQ2",
-            "animations" : [
-                { "time": 2000, "animation": "pause_path", "animationTime": -1, "group": "*" }
-            ]
+            "animations" : []
         },
         "trexQ2":{
-            "layer" :0,
+            "layer" :1,
             "time" : -1,
             "items" : [
                 {"type":"texture","path":"midToRightT","resource":"coin"}
@@ -67,14 +80,16 @@
             "finalNext" : "unicornQ",
             "animations" : []
         },
+        
         "unicornQ":{
-            "layer" :0,
+            "layer" :1,
             "time" : -1,
             "items" : [
-                {"type":"texture","path":"leftToMidU","resource":"coin"}
+                {"type":"texture","path":"leftToRight","resource":"coin"}
             ],
-            "finalNext" : "unicornQ2",
-            "animations" : []
+            "animations" : [
+                { "time": 2350, "animation": "pause_path", "animationTime": -1, "group": "*" }
+            ]
         },
         "unicornQ2":{
             "layer" :0,
