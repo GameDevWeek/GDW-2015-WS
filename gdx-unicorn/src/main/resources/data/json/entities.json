@@ -12,7 +12,8 @@
                 "density": 5,
                 "friction": 0.2,
                 "restitution": 0.4
-            }
+            },
+            "CameraTarget": {}
         }
     },
     "hunter": {
@@ -179,6 +180,12 @@
                 "density": 5,
                 "friction": 0.2,
                 "restitution": 0.4
+            },
+            "RenderLayer": {
+                "layer": 0
+            },
+            "ParticleTest": {
+                "effect": "test"
             }
         }
     },
@@ -208,6 +215,15 @@
         "meta": {},
         "components": {
           "Path" : {}
+        }
+    },
+    "particleTest": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "ParticleTest": {
+                "effect": "test"
+            }
         }
     }
     
