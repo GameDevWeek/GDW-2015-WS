@@ -1,0 +1,68 @@
+{
+    "timeFactor": 1.0,
+    "textStyles" :{},
+    "paths" : {
+        "unicorn":{
+            "type": "linear",
+            "destinations":[
+            {"x": -500, "y":250, "speed":750},
+            {"x": 1500, "y":250, "speed":750},
+            {"x": -500, "y":250, "speed":750},
+            {"x": 1500, "y":250, "speed":750},
+            {"x": -500, "y":250, "speed":750},
+            {"x": 500, "y":200, "speed":750}
+            ]
+        },
+        "stay":{
+            "type":"linear",
+            "destinations":[
+                {"x":500,"y":200 ,"speed":0.000000000001},
+                {"x":500,"y":202 ,"speed":0.000000000001}
+            ]
+        },
+        "bubblegum":{
+            "type": "linear",
+                "destinations":[
+                    {"x": 500, "y":750, "speed":50},
+                    {"x": 500, "y":200, "speed":50},
+                    {"x": 500, "y":200, "speed":0}
+                ]
+            }
+       },
+    "queues" : {
+        "unicornQ":{
+            "layer" :0,
+            "time" : 0,
+            "items" : [
+                {"type":"texture","path":"unicorn","resource":"coin"}
+            ],
+            "finalNext" : "unicornQ2",
+            "animations" : []
+        },
+        "bubblegumQ":{
+            "layer" :0,
+            "time" : 0,
+            "items" : [
+                {"type":"texture", "path":"bubblegum","resource":"bubblegum_rainbow"}
+            ],
+            "finalNext" : "bubblegumQ2",
+            "animations" : []
+        },
+        "unicornQ2":{
+            "layer" :0,
+            "time" : -1,
+            "items" : [
+                {"type":"texture","path":"stay","resource":"coin"}
+            ],
+            "animations" : []
+        },
+        "bubblegumQ2":{
+            "layer" :0,
+            "time" : -1,
+            "items" : [
+                {"type":"texture","path":"stay","resource":"bubblegum_rainbow"}
+            ],
+            "animations" : []
+        }
+    }
+}

@@ -16,6 +16,7 @@ public class AnimationComponentFactory extends ComponentFactory<EntityFactoryPar
     public void run(Entity entity, SafeProperties meta, SafeProperties properties, EntityFactoryParam param) {
         AnimationComponent component = engine.createComponent(AnimationComponent.class);
         component.animation = assetManager.getAnimation(properties.getString("animation"));
+        component.flipHorizontal = properties.getBoolean("flipHorizontal", false);
         assert (component.animation != null);
         entity.add(component);
     }
