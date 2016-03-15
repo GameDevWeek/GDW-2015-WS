@@ -34,7 +34,7 @@ public class MainMenuState extends BaseGameState {
     public MainMenuState(AssetManagerX assetManager) {
         music = assetManager.getMusic("menu");
 
-        final MainMenuPage menuPageRoot = new MainMenuPage(skin, menuManager);
+        final MainMenuPage menuPageRoot = new MainMenuPage(skin, menuManager, MainMenuPage.Type.MENU);
         menuManager.addLayer(menuPageRoot);
 
         menuManager.addLayer(new DecoImage(assetManager.getTexture("menu_fg")));

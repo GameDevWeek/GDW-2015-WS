@@ -93,6 +93,11 @@ Unicorn Bubblegum
 - Anzahl Scoreitems
 - Zeit
 
+Highscore Berechnung:
+- Anzahl der Schokomünzen (1 Punkt pro Münze)
+- Anzahl der Bonbons (3 Punkte pro Bonbon)
+- Berechnung: 1000 - (Zeit * 100) - (Tode * 50) + (Schokomünzen + Bonbons) * 3 = Highscore
+
 ### Motivation
 Das Einhorn sieht einen T-Rex der versucht, Kaugummiblasen zu machen. Der T-Rex schafft es jedoch nicht und das Einhorn will ihm helfen. Dazu muss es durch verschiedene Level kommen
 
