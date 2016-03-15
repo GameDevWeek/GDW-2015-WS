@@ -9,6 +9,7 @@ public class AnimationComponent extends Component implements Pool.Poolable {
     public AnimationExtended animation;
     public float stateTime;
     public int layer;
+    public boolean flipHorizontal;
 
     @Override
     public void reset() {

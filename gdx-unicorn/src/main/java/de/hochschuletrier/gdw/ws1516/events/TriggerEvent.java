@@ -10,7 +10,27 @@ import de.hochschuletrier.gdw.ws1516.events.TestEvent.Listener;
 
 public class TriggerEvent {
     public static enum Action{
-        DEATH_ZONE
+        DEATH_ZONE("death_zone"),NONE("");
+        private String identifier;
+        Action(String s)
+        {
+            
+            identifier = s.toUpperCase();
+        }
+        public static Action toAction(String name)
+        {
+            name = name.toUpperCase();
+//            return Action.valueOf(name);
+            
+            for( Action a : Action.values() )
+            {
+                if ( a.identifier.equals(name) )
+                {
+                    return a;
+                }
+            }
+            return NONE;
+        }
     }
     
     public static interface Listener {

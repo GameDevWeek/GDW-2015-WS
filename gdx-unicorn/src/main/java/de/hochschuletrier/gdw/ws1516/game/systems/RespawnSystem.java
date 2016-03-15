@@ -9,7 +9,7 @@ import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 
-import de.hochschuletrier.gdw.ws1516.events.GameRestartEvent;
+import de.hochschuletrier.gdw.ws1516.events.GameRespawnEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
@@ -17,7 +17,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.StartPointComponent;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.GameLogicTest;
 import de.hochschuletrier.gdw.ws1516.sandbox.maptest.MapTest;
 
-public class RespawnSystem extends EntitySystem implements GameRestartEvent.Listener, EntityListener {
+public class RespawnSystem extends EntitySystem implements GameRespawnEvent.Listener, EntityListener {
 
     private static final Logger logger = LoggerFactory.getLogger(GameLogicTest.class);
     private Entity player;
@@ -40,7 +40,7 @@ public class RespawnSystem extends EntitySystem implements GameRestartEvent.List
     @Override
     public void removedFromEngine(Engine engine) {
         super.removedFromEngine(engine);
-        GameRestartEvent.unregister(this);
+        GameRespawnEvent.unregister(this);
         engine.removeEntityListener(this);
     }
 
@@ -48,7 +48,7 @@ public class RespawnSystem extends EntitySystem implements GameRestartEvent.List
     public void addedToEngine(Engine engine) {
         Family family = Family.one(PlayerComponent.class, StartPointComponent.class).get();
         engine.addEntityListener(this);
-        GameRestartEvent.register(this);
+        GameRespawnEvent.register(this);
     }
 
     @Override

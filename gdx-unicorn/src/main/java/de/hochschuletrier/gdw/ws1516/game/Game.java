@@ -2,10 +2,15 @@ package de.hochschuletrier.gdw.ws1516.game;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -22,27 +27,47 @@ import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixModifierComponent;
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixDebugRenderSystem;
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
+import de.hochschuletrier.gdw.commons.gdx.tiled.TiledMapRendererGdx;
+import de.hochschuletrier.gdw.commons.resourcelocator.CurrentResourceLocator;
+import de.hochschuletrier.gdw.commons.tiled.Layer;
 import de.hochschuletrier.gdw.commons.tiled.LayerObject;
+import de.hochschuletrier.gdw.commons.tiled.TileInfo;
+import de.hochschuletrier.gdw.commons.tiled.TileSet;
 import de.hochschuletrier.gdw.commons.tiled.TiledMap;
+import de.hochschuletrier.gdw.commons.tiled.tmx.TmxImage;
+import de.hochschuletrier.gdw.commons.tiled.utils.RectangleGenerator;
+import de.hochschuletrier.gdw.commons.utils.Rectangle;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ImpactSoundComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.ParticleTestComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.TriggerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.factories.EntityFactoryParam;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.ImpactSoundListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.TriggerListener;
-import de.hochschuletrier.gdw.ws1516.game.systems.AnimationRenderSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.CameraSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.ParticleRenderSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.RenderSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.SimpleAnimationRenderSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.NameSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityCreator;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.MapLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
+
+import java.util.HashMap;
 import java.util.function.Consumer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Game extends InputAdapter {
 
+    private static final Logger logger = LoggerFactory.getLogger(Game.class);
+    
     private final CVarBool physixDebug = new CVarBool("physix_debug", true, 0, "Draw physix debug");
     private final Hotkey togglePhysixDebug = new Hotkey(() -> physixDebug.toggle(false), Input.Keys.F1,
             HotkeyModifier.CTRL);
@@ -55,14 +80,20 @@ public class Game extends InputAdapter {
             GameConstants.VELOCITY_ITERATIONS, GameConstants.POSITION_ITERATIONS, GameConstants.PRIORITY_PHYSIX);
     private final PhysixDebugRenderSystem physixDebugRenderSystem = new PhysixDebugRenderSystem(
             GameConstants.PRIORITY_DEBUG_WORLD);
-    private final AnimationRenderSystem animationRenderSystem = new AnimationRenderSystem(
-            GameConstants.PRIORITY_ANIMATIONS);
+    private final CameraSystem cameraSystem = new CameraSystem(GameConstants.PRIORITY_CAMERA);
+    private final RenderSystem renderSystem = new RenderSystem(GameConstants.PRIORITY_RENDERING);
+    private final SimpleAnimationRenderSystem animationRenderSystem = new SimpleAnimationRenderSystem(GameConstants.PRIORITY_RENDERING);
     private final UpdatePositionSystem updatePositionSystem = new UpdatePositionSystem(
             GameConstants.PRIORITY_PHYSIX + 1);
+    private final NameSystem nameSystem = new NameSystem(GameConstants.PRIORITY_NAME);
 
     private final EntityFactoryParam factoryParam = new EntityFactoryParam();
     private final EntityFactory<EntityFactoryParam> entityFactory = new EntityFactory("data/json/entities.json",
             Game.class);
+    
+    private TiledMap map;
+    private TiledMapRendererGdx mapRenderer;
+    private final HashMap<TileSet, Texture> tilesetImages = new HashMap();
 
     public Game() {
         // If this is a build jar file, disable hotkeys
@@ -100,7 +131,6 @@ public class Game extends InputAdapter {
      */
     private void loadMap(String filename) {
         // Map laden
-        TiledMap map;
         try {
             map = new TiledMap(filename, LayerObject.PolyMode.ABSOLUTE);
         } catch (Exception ex) {
@@ -109,21 +139,39 @@ public class Game extends InputAdapter {
 
         // Wenn map geladen wurde
         if (map != null) {
-
+            
             // Map parsen
             MapLoader[] mapLoaders = { new PhysicsLoader(), new EntityLoader() };
             for (MapLoader mapLoader : mapLoaders) {
                 mapLoader.parseMap(map, this, engine);
             }
+            
+            initialzeRenderer();
         }
-
+    }
+    
+    private void initialzeRenderer()
+    {
+        for (TileSet tileset : map.getTileSets()) {
+            TmxImage img = tileset.getImage();
+            String filename = CurrentResourceLocator.combinePaths(tileset.getFilename(), img.getSource());
+            tilesetImages.put(tileset, new Texture(filename));
+        }
+        mapRenderer = new TiledMapRendererGdx(map, tilesetImages);
+        
+        int totalMapWidth = map.getWidth() * map.getTileWidth();
+        int totalMapHeight = map.getHeight() * map.getTileHeight();
+        cameraSystem.setCameraBounds(0, 0, totalMapWidth, totalMapHeight);
     }
 
     private void addSystems() {
         engine.addSystem(physixSystem);
         engine.addSystem(physixDebugRenderSystem);
+        engine.addSystem(cameraSystem);
+        engine.addSystem(renderSystem);
         engine.addSystem(animationRenderSystem);
         engine.addSystem(updatePositionSystem);
+        engine.addSystem(nameSystem);
     }
 
     private void addContactListeners() {
@@ -147,8 +195,13 @@ public class Game extends InputAdapter {
     }
 
     public void update(float delta) {
-        Main.getInstance().screenCamera.bind();
+        for (Layer layer : map.getLayers()) {
+            mapRenderer.render(0, 0, layer);
+        }
+
         engine.update(delta);
+
+        mapRenderer.update(delta);
     }
 
     public void createTrigger(float x, float y, float width, float height, Consumer<Entity> consumer) {
@@ -170,13 +223,19 @@ public class Game extends InputAdapter {
         });
         engine.addEntity(entity);
     }
+    
+    public ParticleEffect effect;
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        
+        Vector2 screenCoords = new Vector2(screenX, screenY);
+        Vector2 worldCoords = cameraSystem.screenToWorldCoordinates(screenCoords);
+        
         if (button == 0)
-            EntityCreator.createEntity("ball", screenX, screenY);
+            EntityCreator.createEntity("ball", worldCoords.x, worldCoords.y);
         else
-            EntityCreator.createEntity("box", screenX, screenY);
+            EntityCreator.createEntity("box", worldCoords.x, worldCoords.y);
         return true;
     }
 
