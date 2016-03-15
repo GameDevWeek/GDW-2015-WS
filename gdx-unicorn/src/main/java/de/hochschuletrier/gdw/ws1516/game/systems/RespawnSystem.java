@@ -34,11 +34,11 @@ public class RespawnSystem extends EntitySystem implements GameRespawnEvent.List
     @Override
     public void onGameRepawnEvent() {
         PositionComponent currentPlayerPosition = ComponentMappers.position.get(player);
-        StartPointComponent reaspawnPosition = ComponentMappers.startPoint.get(player);
-        if ( currentPlayerPosition != null && reaspawnPosition != null )
+        StartPointComponent respawnPosition = ComponentMappers.startPoint.get(player);
+        if ( currentPlayerPosition != null && respawnPosition != null )
         {
-            currentPlayerPosition.x = reaspawnPosition.x;
-            currentPlayerPosition.y = reaspawnPosition.y;
+            currentPlayerPosition.x = respawnPosition.x;
+            currentPlayerPosition.y = respawnPosition.y;
             HitPointsComponent hitPoints = ComponentMappers.hp.get(player);
             hitPoints.value = hitPoints.max;
         }else

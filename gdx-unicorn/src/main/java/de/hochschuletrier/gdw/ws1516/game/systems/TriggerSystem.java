@@ -11,10 +11,14 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.components.HitPointsComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.StartPointComponent;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.GameLogicTest;
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
+import de.hochschuletrier.gdw.ws1516.events.HealEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
 import de.hochschuletrier.gdw.ws1516.events.TriggerEvent;
@@ -64,9 +68,20 @@ public class TriggerSystem extends EntitySystem implements TriggerEvent.Listener
     public void onTriggerEvent(TriggerEvent.Action type,Entity triggeringEntity) {
         switch( type)
         {
+        case SPAWN_ZONE:
+                StartPointComponent start = ComponentMappers.startPoint.get(unicorn);
+                PositionComponent triggerPos = ComponentMappers.position.get(triggeringEntity);
+                HitPointsComponent health = ComponentMappers.hp.get(unicorn);
+
+                start.x = triggerPos.x;
+                start.y = triggerPos.y;         
+                
+                HealEvent.emit(unicorn, health.max);
+            break;
+       
         case DEATH_ZONE:            
             
-              DeathEvent.emit(triggeringEntity);
+              DeathEvent.emit(unicorn);
              
             break; 
         default:
