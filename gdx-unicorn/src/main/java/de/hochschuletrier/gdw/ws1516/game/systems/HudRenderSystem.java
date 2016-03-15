@@ -60,19 +60,8 @@ public class HudRenderSystem extends IteratingSystem {
         FileHandle handle = Gdx.files.internal("data/dummies/coin.png");
         Texture hearts = new Texture(handle);
         DrawUtil.draw(hearts, 20, 20, 50, 50);
-        
-        
-   //     DrawUtil.draw(texture , 10, 10, 100, 100);
-        
-        
-        
-        
-        
-        
-        
-        
 
-       
+   //     DrawUtil.draw(texture , 10, 10, 100, 100);
 
     }
 
