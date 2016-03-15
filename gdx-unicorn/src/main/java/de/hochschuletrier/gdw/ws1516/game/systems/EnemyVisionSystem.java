@@ -26,7 +26,6 @@ public class EnemyVisionSystem extends IteratingSystem implements EntityListener
         PositionComponent enemyPosition=ComponentMappers.position.get(entity);
         EnemyBehaviourComponent enemyBehaviour=ComponentMappers.enemyBehaviour.get(entity);
         PositionComponent unicornPosition=ComponentMappers.position.get(unicorn);
-        PhysixBodyComponent unicornBody=ComponentMappers.physixBody.get(unicorn);
         float xDist=enemyPosition.x-unicornPosition.x;
         float yDist=enemyPosition.y-unicornPosition.y;
         float dist=(float)Math.sqrt((xDist*xDist)+(yDist*yDist));
