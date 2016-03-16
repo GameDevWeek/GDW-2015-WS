@@ -1,6 +1,5 @@
 package de.hochschuletrier.gdw.ws1516.game;
 
-import com.badlogic.ashley.core.Family;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 
 public class GameConstants {
@@ -12,8 +11,9 @@ public class GameConstants {
     public static final int PRIORITY_INPUT=11;
     public static final int PRIORITY_MOVEMENT=12;
     public static final int PRIORITY_CAMERA = 15;
-    public static final int PRIORITY_MAP_RENDERING = 19;
+    public static final int PRIORITY_MAP_RENDERING = 17;
     public static final int PRIORITY_RENDERING = 20;
+    public static final int PRIORITY_EFFECTS_RENDERING = 25;
     public static final int PRIORITY_DEBUG_WORLD = 30;
     public static final int PRIORITY_HUD = 40;
     public static final int PRIORITY_NAME = 50;
@@ -66,7 +66,9 @@ public class GameConstants {
     public static final int HUNTER_BULLET_OFFSET = 40;
     //shaderParameter
 
+    // Shader parameters
     public static final float RAINBOW_FREQUENCY = 2.0f;
-    public static final float RAINBOW_MODE_ALPHA = 0.4f;
-
+    public static final float RAINBOW_ALPHA = 0.5f;
+    public static final float PAPARAZZI_ALPHA = 0.8f;
+    public static final float PAPARAZZI_INTENSITY = 1.0f;
 }
