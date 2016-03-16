@@ -39,7 +39,7 @@ public class ShootSystem extends EntitySystem implements ShootEvent.Listener {
     public void onShootEvent(Entity player) {
         AnimationComponent animation = ComponentMappers.animation.get(player);
         InputComponent input = ComponentMappers.input.get(player);
-        PositionComponent position = ComponentMappers.position.get(player);
+        Vector2 position = ComponentMappers.position.get(player).pos;
         vector.set(input.lastMoveDirection);
         vector.nor().scl(120);
         float x = position.x;

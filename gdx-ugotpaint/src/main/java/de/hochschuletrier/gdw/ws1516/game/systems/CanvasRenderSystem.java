@@ -6,6 +6,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
@@ -41,10 +42,15 @@ public class CanvasRenderSystem extends IteratingSystem {
     
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        PositionComponent position = ComponentMappers.position.get(entity);
+        final PositionComponent pos = ComponentMappers.position.get(entity);
+        Vector2 position = pos.pos;
         AnimationComponent animation = ComponentMappers.animation.get(entity);
+        PlayerComponent player = ComponentMappers.player.get(entity);
         pixmap.setColor(animation.tint);
         pixmap.fillCircle((int)position.x, Main.WINDOW_HEIGHT - (int)position.y, PAINT_RADIUS);
+        for (Vector2 segment : player.segments) {
+            pixmap.fillCircle((int)segment.x, Main.WINDOW_HEIGHT - (int)segment.y, PAINT_RADIUS);
+        }
     }
 
     @Override

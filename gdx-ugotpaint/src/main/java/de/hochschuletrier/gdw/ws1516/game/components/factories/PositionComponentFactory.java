@@ -15,8 +15,7 @@ public class PositionComponentFactory extends ComponentFactory<EntityFactoryPara
     @Override
     public void run(Entity entity, SafeProperties meta, SafeProperties properties, EntityFactoryParam param) {
         PositionComponent component = engine.createComponent(PositionComponent.class);
-        component.x = param.x;
-        component.y = param.y;
+        component.pos.set(param.x, param.y);
         entity.add(component);
     }
 }

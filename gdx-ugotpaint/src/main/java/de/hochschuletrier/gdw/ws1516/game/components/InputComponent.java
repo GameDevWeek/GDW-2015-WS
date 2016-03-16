@@ -17,11 +17,4 @@ public class InputComponent extends Component implements Pool.Poolable {
         lastMoveDirection.set(0, 1);
         shoot = false;
     }
-    
-    public void setFrom(InputComponent other) {
-        moveDirection.set(other.moveDirection);
-        lastMoveDirection.set(other.lastMoveDirection);
-        shoot = other.shoot;
-        index = other.index;
-    }
 }
