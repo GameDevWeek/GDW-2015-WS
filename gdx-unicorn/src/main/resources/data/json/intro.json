@@ -42,6 +42,21 @@
         }
        },
     "queues" : {
+        "slideBGQ1":{
+            "layer":0,
+            "time":-1,
+            "items":[
+                {"type":"texture","path":"slide","resource":"hunter"}
+            ]  
+        },
+        "slideFGQ1":{
+            "layer":1,
+            "time":-1,
+            "items":[
+                {"type":"texture","path":"trSlide1","resource":"trex"},
+                {"type":"texture","path":"gSlide1","resource":"bubblegum_rainbow"}
+            ]  
+        },
         "trexQ1":{
             "layer" :1,
             "time" : 0,
@@ -49,7 +64,7 @@
                 {"type":"texture","path":"tr1","resource":"trex"}
             ],
             "animations":[
-                {"time":100,"animation":"pause_path","animationTime":4000,"group":"*"}
+                {"time":1000,"animation":"pause_path","animationTime":4000,"group":"*"}
             ],
             "finalNext" : "trexQ2"
         },
@@ -63,17 +78,19 @@
             "animations" : []
         },
         "gumQ1":{
-            "layer" :1,
+            "layer" :2,
             "time" : 2000,
             "items" : [
                 {"type":"texture","path":"g1","resource":"bubblegum_rainbow"}
             ],
             "finalNext" : "unicornQ",
-            "animations" : [],
+            "animations" : [
+                {"time":1400,"animation":"pause_path","animationTime":1000,"group":"*"}
+                ],
             "finalNext":"gumQ2"
         },
         "gumQ2":{
-            "layer" :1,
+            "layer" :2,
             "time" : -1,
             "items" : [
                 {"type":"texture","path":"g2","resource":"bubblegum_rainbow"}
