@@ -61,7 +61,8 @@ public class MovementSystem extends IteratingSystem implements
         // JumpComponent jump = ComponentMappers.jump.get(entity);
         PlayerComponent playerComp = ComponentMappers.player.get(entity);
 
-        movement.lookDirection = input.lookDirection;
+        if (movement != null & input != null)
+            movement.lookDirection = input.lookDirection;
         
         if (movement != null) {
             switch (movement.state) {

@@ -58,7 +58,7 @@ public class BubblegumSpitSystem extends EntitySystem implements BubblegumSpitSp
     }
 
     @Override
-    public void onSpawnBubblegumSpit() {
+    public void onSpawnBubblegumSpit(final float force) {
         
         //Create gum spit entity
         final Entity gumSpitEntity = engine.createEntity();
@@ -112,7 +112,9 @@ public class BubblegumSpitSystem extends EntitySystem implements BubblegumSpitSp
             spitBodyComponent.createFixture(fixtureDef);
             
             //Force gum spit
-            spitBodyComponent.applyImpulse(impulseX * GameConstants.SPIT_FORCE, impulseY * GameConstants.SPIT_FORCE);
+            float spitForceDelta = GameConstants.SPIT_FORCE_MAX - GameConstants.SPIT_FORCE_MIN;
+            float spitForce = GameConstants.SPIT_FORCE_MIN + force * spitForceDelta;
+            spitBodyComponent.applyImpulse(impulseX * spitForce, impulseY * spitForce);
             spitBodyComponent.setGravityScale(1.0f);
             
             //Add body to entity

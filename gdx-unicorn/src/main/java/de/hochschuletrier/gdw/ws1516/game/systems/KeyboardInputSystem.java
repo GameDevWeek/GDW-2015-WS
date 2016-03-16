@@ -10,9 +10,11 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 
+import de.hochschuletrier.gdw.ws1516.events.BubblegumSpitSpawnEvent;
 import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
 import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
 import de.hochschuletrier.gdw.ws1516.game.Game;
+import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
@@ -164,8 +166,29 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
 //        }
         input.hornAttack = hornAttack;
         input.startJump = jump;
+        
+        //Spit button delta
+        input.oldSpit = input.spit;
         input.spit = spit;
          
+        //Spit cooldown
+        input.gumSpitCooldown -= deltaTime;
+        if (input.gumSpitCooldown <= 0)
+            input.gumSpitCooldown = 0;
+        
+        //Charge spit
+        if (input.spit && input.gumSpitCooldown == 0) 
+            input.gumSpitCharge += deltaTime;
+        
+        //Emit spit
+        if (input.gumSpitCooldown == 0 &&
+            (input.oldSpit && !input.spit) || (input.gumSpitCharge > GameConstants.SPIT_CHARGE_TIME_TO_MAX)) {
+            float force = (input.gumSpitCharge > GameConstants.SPIT_CHARGE_TIME_TO_MAX) ? 1.0f : input.gumSpitCharge / GameConstants.SPIT_CHARGE_TIME_TO_MAX;
+            BubblegumSpitSpawnEvent.emit(force);
+            input.gumSpitCooldown = GameConstants.SPIT_COOLDOWN;
+            input.gumSpitCharge = 0.0f;
+        }
+        
         input.lookDirection = lookDirection;
         
     }
