@@ -25,7 +25,7 @@ public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter, S
     private final Hotkey resetSpeed = new Hotkey(this::resetSpeed, Input.Keys.HOME, HotkeyModifier.CTRL);
 
     private MenuManager menuManager;
-    
+
     private SceneAnimator sceneAnimator;
 
     private void increaseSpeed() {
@@ -85,7 +85,7 @@ public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter, S
 
     @Override
     public void onSceneEnd() {
-        // sceneAnimator.reset();
+        sceneAnimator.reset();
         menuManager.popPage();
     }
 }
