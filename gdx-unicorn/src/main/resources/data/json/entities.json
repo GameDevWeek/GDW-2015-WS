@@ -29,7 +29,9 @@
             "EnemyType": {
                 "type" : "hunter"
             },
-            "Behaviour": {},
+            "Behaviour": {
+		"shootingRange": 300
+	    },
             "Animation": {
                 "animation": "unicorn_idle"
             },

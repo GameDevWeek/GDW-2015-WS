@@ -16,14 +16,23 @@ public class EnemyBehaviourComponent extends Component implements Poolable{
 
     public EnemyBaseState currentState;
     public boolean canSeeUnicorn;
+    public boolean canFireRange;
+    
     public int pathIndex;
     public float lastJumped;
+    public float shootingRange;
+    public float shootingCooldown;
     
     
     @Override
     public void reset() {
         currentState=null;
-        
+        canSeeUnicorn=false;
+        canFireRange=false;
+        pathIndex=0;
+        lastJumped=0;
+        shootingRange=0;
+        shootingCooldown=0;
     }
 
 }

@@ -38,6 +38,7 @@ public class EnemyVisionSystem extends IteratingSystem implements EntityListener
         }else{
             enemyBehaviour.canSeeUnicorn=false;
         }
+        enemyBehaviour.canFireRange= dist<=enemyBehaviour.shootingRange;
     }
 
     @Override

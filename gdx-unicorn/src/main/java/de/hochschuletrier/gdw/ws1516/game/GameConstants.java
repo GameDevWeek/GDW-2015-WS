@@ -9,6 +9,7 @@ public class GameConstants {
     public static final int PRIORITY_INPUT=11;
     public static final int PRIORITY_MOVEMENT=12;
     public static final int PRIORITY_CAMERA = 15;
+    public static final int PRIORITY_MAP_RENDERING = 19;
     public static final int PRIORITY_RENDERING = 20;
     public static final int PRIORITY_DEBUG_WORLD = 30;
     public static final int PRIORITY_HUD = 40;
@@ -48,5 +49,10 @@ public class GameConstants {
     
     //EnemyBehaviour
     public static final int ENEMY_FRAME_JUMP_BUFFER = 60;
+    
+    //shaderParameter
+
+    public static final float RAINBOW_FREQUENCY = 2.0f;
+    public static final float RAINBOW_MODE_ALPHA = 0.4f;
 
 }

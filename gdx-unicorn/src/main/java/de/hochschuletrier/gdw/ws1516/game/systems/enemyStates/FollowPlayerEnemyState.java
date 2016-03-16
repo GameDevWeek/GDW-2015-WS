@@ -39,7 +39,12 @@ public class FollowPlayerEnemyState extends EnemyBaseState {
         
         if ( behaviour.canSeeUnicorn )
         {
-            return this;
+            if (behaviour.canFireRange){
+                EnemyActionEvent.emit( entity,Type.MOVE ,0.f); 
+                return new AttackEnemyState();
+            }else{
+                return this;
+            }
         }else
         {  
             return new FollowPathEnemyState();
