@@ -20,6 +20,10 @@ import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
 
 public class LevelSelectionPage extends MenuPage {
 
+    private int level_preview_index=0;
+    private ImageButton level_preview;
+    private Texture[] level_previews;
+    
     public LevelSelectionPage(Skin skin, MenuManager menuManager) {
         super(skin, "menu_bg");
         
@@ -37,32 +41,30 @@ public class LevelSelectionPage extends MenuPage {
         Texture level_preview_texture = new Texture("data/graphics/unicorn_s.png");
         Texture buttonBack_texture = new Texture("data/graphics/blue_gum_s.png");
         Texture buttonNext_texture = new Texture("data/graphics/blue_gum_s.png");
-        Texture[] level_previews = new Texture[5];
-       // level_previews[]
-        addImageButton(level_preview_texture, 450, 250, 50, 50, this::startGame);
-        addImageButton(buttonBack_texture, 430, 230, 50, 50, this::startGame);
-        addImageButton(buttonNext_texture, 450+level_preview_texture.getWidth(), 230, 50, 50, this::startGame);
+        level_previews = new Texture[4];
+      
+        level_previews[0] = new Texture("data/graphics/unicorn_s.png");
+        level_previews[1] = new Texture("data/graphics/enemy_hunter_s.png");
+        level_previews[2] = new Texture("data/graphics/enemy_paparazzi_s.png");
+        level_previews[3] = new Texture("data/graphics/bubble_s.png");
+        
+        level_preview=createImageButton(level_previews[level_preview_index], 450, 250, 20, 20, this::startGame, true);
+               
+     
+        createImageButton(buttonBack_texture, 430, 230, 50, 50, this::startGame, true);
+        createImageButton(buttonNext_texture, 450+level_preview_texture.getWidth(), 230, 50, 50, this::nextLevel, true);
         addLeftAlignedButton(xOffset, yOffset - yStep*(i++), 100, 50, "Menu", () -> menuManager.popPage());
         
     }
     
-    private void addImageButton(Texture texture, float x, float y, float width, float height, Runnable runnable) {
-       ImageButton ib = new ImageButton(new SpriteDrawable(new Sprite(texture)));
-       
-       ib.addListener(new ClickListener() {
-           @Override
-           public void clicked(InputEvent event, float x, float y) {
-               runnable.run();
-           }
-       });
-       ib.setPosition(x, y);
-      // ib.setBounds(x, y, width, height);
-       
-       
-       super.addActor(ib);
-    }
-    
     private void nextLevel() {
+        if(level_preview_index==level_previews.length-1) {
+            level_preview_index=-1;
+        }
+        level_preview.remove();
+        level_preview_index++;
+        level_preview = createImageButton(level_previews[level_preview_index], 450, 250, 50, 50, this::startGame, true);
+        
         
     }
     
