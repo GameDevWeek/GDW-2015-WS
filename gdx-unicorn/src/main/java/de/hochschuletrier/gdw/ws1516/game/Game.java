@@ -71,11 +71,7 @@ import de.hochschuletrier.gdw.ws1516.game.utils.MapLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 
-
 import java.util.HashMap;
-
-
-
 
 import java.util.function.Consumer;
 
@@ -83,11 +79,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Game extends InputAdapter {
-    
-    
 
     private static final Logger logger = LoggerFactory.getLogger(Game.class);
-    
+
     private final CVarBool physixDebug = new CVarBool("physix_debug", true, 0, "Draw physix debug");
     private final Hotkey togglePhysixDebug = new Hotkey(() -> physixDebug.toggle(false), Input.Keys.F1,
             HotkeyModifier.CTRL);
@@ -102,17 +96,15 @@ public class Game extends InputAdapter {
             GameConstants.PRIORITY_DEBUG_WORLD);
     private final CameraSystem cameraSystem = new CameraSystem(GameConstants.PRIORITY_CAMERA);
     private final RenderSystem renderSystem = new RenderSystem(GameConstants.PRIORITY_RENDERING);
-    private final SimpleAnimationRenderSystem animationRenderSystem = new SimpleAnimationRenderSystem(GameConstants.PRIORITY_RENDERING);
+    private final SimpleAnimationRenderSystem animationRenderSystem = new SimpleAnimationRenderSystem(
+            GameConstants.PRIORITY_RENDERING);
     private final UpdatePositionSystem updatePositionSystem = new UpdatePositionSystem(
             GameConstants.PRIORITY_PHYSIX + 1);
 
     private final NameSystem nameSystem = new NameSystem(GameConstants.PRIORITY_NAME);
 
-    private final KeyboardInputSystem keyBoardInputSystem= new KeyboardInputSystem(GameConstants.PRIORITY_INPUT);
-    private final MovementSystem movementSystem=new MovementSystem(GameConstants.PRIORITY_MOVEMENT);
-    
-    
-
+    private final KeyboardInputSystem keyBoardInputSystem = new KeyboardInputSystem(GameConstants.PRIORITY_INPUT);
+    private final MovementSystem movementSystem = new MovementSystem(GameConstants.PRIORITY_MOVEMENT);
 
     //
     private final HudRenderSystem hudRenderSystem = new HudRenderSystem(1001);
@@ -121,20 +113,20 @@ public class Game extends InputAdapter {
     private final EntityFactoryParam factoryParam = new EntityFactoryParam();
     private final EntityFactory<EntityFactoryParam> entityFactory = new EntityFactory("data/json/entities.json",
             Game.class);
-    
+
     private TiledMap map;
     private TiledMapRendererGdx mapRenderer;
     private final HashMap<TileSet, Texture> tilesetImages = new HashMap();
 
     private final TriggerSystem triggerSystem = new TriggerSystem();
     private final BulletSystem bulletSystem = new BulletSystem(engine);
-    
+
     public Game() {
         // If this is a build jar file, disable hotkeys
         if (!Main.IS_RELEASE) {
             togglePhysixDebug.register();
         }
-     
+
     }
 
     public void dispose() {
@@ -145,7 +137,6 @@ public class Game extends InputAdapter {
         Main.getInstance().console.register(physixDebug);
         physixDebug.addListener((CVar) -> physixDebugRenderSystem.setProcessing(physixDebug.get()));
 
-        
         addSystems();
         addContactListeners();
         setupPhysixWorld();
@@ -155,12 +146,11 @@ public class Game extends InputAdapter {
         EntityCreator.setEngine(engine);
         EntityCreator.setGame(this);
         EntityCreator.setEntityFactory(entityFactory);
-       
 
         // Hier Dateipfad zur Map einfuegen
         loadMap("data/maps/demo.tmx");
-        
-        //test:
+
+        // test:
         EntityCreator.createEntity("unicorn", 800, 100);
     }
 
@@ -179,26 +169,25 @@ public class Game extends InputAdapter {
 
         // Wenn map geladen wurde
         if (map != null) {
-            
+
             // Map parsen
             MapLoader[] mapLoaders = { new PhysicsLoader(), new EntityLoader() };
             for (MapLoader mapLoader : mapLoaders) {
                 mapLoader.parseMap(map, this, engine);
             }
-            
+
             initialzeRenderer();
         }
     }
-    
-    private void initialzeRenderer()
-    {
+
+    private void initialzeRenderer() {
         for (TileSet tileset : map.getTileSets()) {
             TmxImage img = tileset.getImage();
             String filename = CurrentResourceLocator.combinePaths(tileset.getFilename(), img.getSource());
             tilesetImages.put(tileset, new Texture(filename));
         }
         mapRenderer = new TiledMapRendererGdx(map, tilesetImages);
-        
+
         int totalMapWidth = map.getWidth() * map.getTileWidth();
         int totalMapHeight = map.getHeight() * map.getTileHeight();
         cameraSystem.setCameraBounds(0, 0, totalMapWidth, totalMapHeight);
@@ -230,20 +219,24 @@ public class Game extends InputAdapter {
 
     private void setupPhysixWorld() {
         physixSystem.setGravity(0, 24);
-        PhysixBodyDef bodyDef = new PhysixBodyDef(BodyDef.BodyType.StaticBody, physixSystem).position(410, 500)
-                .fixedRotation(false);
-        Body body = physixSystem.getWorld().createBody(bodyDef);
-        body.createFixture(new PhysixFixtureDef(physixSystem).density(1).friction(0.5f).shapeBox(800, 20));
-        PhysixUtil.createHollowCircle(physixSystem, 180, 180, 150, 30, 6);
-
-        createTrigger(410, 600, 3200, 40, (Entity entity) -> {
-            engine.removeEntity(entity);
-        });
+        // PhysixBodyDef bodyDef = new
+        // PhysixBodyDef(BodyDef.BodyType.StaticBody,
+        // physixSystem).position(410, 500)
+        // .fixedRotation(false);
+        // Body body = physixSystem.getWorld().createBody(bodyDef);
+        // body.createFixture(new
+        // PhysixFixtureDef(physixSystem).density(1).friction(0.5f).shapeBox(800,
+        // 20));
+        // PhysixUtil.createHollowCircle(physixSystem, 180, 180, 150, 30, 6);
+        //
+        // createTrigger(410, 600, 3200, 40, (Entity entity) -> {
+        // engine.removeEntity(entity);
+        // });
     }
 
     public void update(float delta) {
         cameraSystem.bindCamera();
-        
+
         for (Layer layer : map.getLayers()) {
             mapRenderer.render(0, 0, layer);
         }
@@ -272,15 +265,15 @@ public class Game extends InputAdapter {
         });
         engine.addEntity(entity);
     }
-    
+
     public ParticleEffect effect;
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        
+
         Vector2 screenCoords = new Vector2(screenX, screenY);
         Vector2 worldCoords = cameraSystem.screenToWorldCoordinates(screenCoords);
-        
+
         if (button == 0)
             EntityCreator.createEntity("circle", worldCoords.x, worldCoords.y);
         else

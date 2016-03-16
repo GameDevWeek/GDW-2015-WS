@@ -24,14 +24,16 @@ public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter, S
     private final Hotkey decreaseSpeed = new Hotkey(this::decreaseSpeed, Input.Keys.PAGE_DOWN, HotkeyModifier.CTRL);
     private final Hotkey resetSpeed = new Hotkey(this::resetSpeed, Input.Keys.HOME, HotkeyModifier.CTRL);
 
+    private MenuManager menuManager;
+    
     private SceneAnimator sceneAnimator;
 
     private void increaseSpeed() {
-        sceneAnimator.setTimeFactor(Math.min(10.0f, sceneAnimator.getTimeFactor() + 0.1f));
+        sceneAnimator.setTimeFactor(Math.min(10.0f, sceneAnimator.getTimeFactor() + 1.f));
     }
 
     private void decreaseSpeed() {
-        sceneAnimator.setTimeFactor(Math.max(0.0f, sceneAnimator.getTimeFactor() - 0.1f));
+        sceneAnimator.setTimeFactor(Math.max(0.0f, sceneAnimator.getTimeFactor() - 1.f));
     }
 
     private void resetSpeed() {
@@ -40,7 +42,7 @@ public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter, S
 
     public MenuPageCredits(Skin skin, MenuManager menuManager) {
         super(skin, "menu_bg");
-
+        this.menuManager = menuManager;
         try {
             sceneAnimator = new SceneAnimator(this, "data/json/intro.json");
             sceneAnimator.addListener(this);
@@ -83,6 +85,7 @@ public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter, S
 
     @Override
     public void onSceneEnd() {
-        sceneAnimator.reset();
+        // sceneAnimator.reset();
+        menuManager.popPage();
     }
 }
