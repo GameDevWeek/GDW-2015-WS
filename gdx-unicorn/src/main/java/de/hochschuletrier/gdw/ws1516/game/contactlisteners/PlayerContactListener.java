@@ -10,6 +10,7 @@ import de.hochschuletrier.gdw.commons.gdx.physix.PhysixContact;
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixContactAdapter;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State;
 
 public class PlayerContactListener extends PhysixContactAdapter{
     private static final Logger logger = LoggerFactory.getLogger(PlayerContactListener.class);
@@ -20,7 +21,10 @@ public class PlayerContactListener extends PhysixContactAdapter{
     public void beginContact(PhysixContact contact) {
         Entity player = contact.getMyComponent().getEntity();
         if (contact.getOtherComponent() == null){
-            ComponentMappers.movement.get(player).state=MovementComponent.State.ON_GROUND;
+            if(ComponentMappers.movement.get(player).state==State.FALLING||ComponentMappers.movement.get(player).state==State.JUMPING){
+                ComponentMappers.movement.get(player).state=MovementComponent.State.ON_GROUND;
+            }
+
             return;
         }
         Entity otherEntity = contact.getOtherComponent().getEntity();

@@ -30,6 +30,10 @@ public class GameConstants {
     public static final int BOX2D_SCALE = 40;
     public static final float PLAYER_SPEED = 100.0f;
     public static final float PLAYER_JUMP_IMPULSE = -500.0f;
+    
+    //Effect Times
+    public static final float FLYING_TIME= 10.0f;
+    public static final float RAINBOW_MODE_TIME = 10.0f;
 
     // Bullet system
     public static final float BULLET_SPEED = (50.0f / 43.0f) * 15.0f;
