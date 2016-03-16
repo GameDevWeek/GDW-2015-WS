@@ -13,6 +13,7 @@ public class MovementComponent extends Component implements Pool.Poolable{
     public float jumpImpulse=GameConstants.PLAYER_JUMP_IMPULSE;
     public float velocityX = 0;
     public float velocityY = 0;
+    public float remainingStateTime=0;
     public static enum State{
         ON_GROUND,
         FLYING,

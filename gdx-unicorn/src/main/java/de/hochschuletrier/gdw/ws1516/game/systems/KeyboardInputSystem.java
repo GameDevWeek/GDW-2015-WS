@@ -150,17 +150,18 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
         InputComponent input = entity.getComponent(InputComponent.class);
         input.directionX = directionX;
         input.directionY=directionY;
-        input.fly = fly;
+        input.startFly = fly;
         if(fly){
-            StartFlyEvent.emit(entity);
-        }
-        if(stopflying){
-            EndFlyEvent.emit(entity);
+            StartFlyEvent.emit(entity,10);
             fly=false;
-            stopflying=false;
         }
+//        if(stopflying){
+//            EndFlyEvent.emit(entity);
+//            fly=false;
+//            stopflying=false;
+//        }
         input.hornAttack = hornAttack;
-        input.jump = jump;
+        input.startJump = jump;
         input.spit = spit;
                 
     }
