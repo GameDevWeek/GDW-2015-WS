@@ -2,11 +2,12 @@ attribute vec4 a_position;
 attribute vec4 a_color;
 attribute vec2 a_texCoord0;
 
-uniform vec2 u_frameDimension; 
-uniform bool u_rainbowMode;
+uniform vec2 u_frameDimension;
+uniform float u_startDuration;
+uniform float u_durationLeft;
 uniform float u_rainbowAlpha;
 uniform float u_rainbowFrequency;
-uniform float u_rainbowAmplitude;
+//uniform float u_rainbowAmplitude;
 uniform mat4 u_projTrans;
 uniform float u_time;
 
@@ -15,18 +16,13 @@ varying vec2 v_texCoords;
 
 vec4 calcRainbowColor();
 float getColorOffset();
+float getRainbowAlpha();
 
 void main()
 {
-	if(u_rainbowMode)
-	{
-		vec4 rainbowColor = calcRainbowColor();
-		v_color = a_color * (1.0 - u_rainbowAlpha) + rainbowColor * u_rainbowAlpha;
-	}
-	else
-	{
-		v_color = a_color;
-	}
+	vec4 rainbowColor = calcRainbowColor();
+	float alpha = getRainbowAlpha();
+	v_color = a_color * (1.0 - alpha) + rainbowColor * alpha;
 	v_color.a = v_color.a * (255.0/254.0);
 	v_texCoords = a_texCoord0;
 	gl_Position =  u_projTrans * a_position;
@@ -68,16 +64,34 @@ vec4 calcRainbowColor()
 float getColorOffset()
 {
 	float frequency = u_rainbowFrequency;
-	float amplitude = u_rainbowAmplitude;
+	//float amplitude = u_rainbowAmplitude;
 	if(frequency <= 0.001)
 	{
 		frequency = 1.0;
 	}
-	if(amplitude <= 0.001)
+	//if(amplitude <= 0.001)
+	//{
+	//	amplitude = 1.0;
+	//}
+	
+	return - mod(u_time * u_rainbowFrequency, 1);
+	//return (sin(u_time * u_rainbowFrequency) + 1 ) * 0.5 * amplitude;
+}
+
+float getRainbowAlpha()
+{
+	// Fade rainbow in
+	if(u_startDuration - u_durationLeft <= 0.25)
 	{
-		amplitude = 1.0;
+		return u_rainbowAlpha * (u_startDuration - u_durationLeft) * 4;
 	}
 	
-	return - mod(u_time * u_rainbowFrequency, 1) * amplitude;
-	//return (sin(u_time * u_rainbowFrequency) + 1 ) * 0.5 * amplitude;
+	// Fade rainbow out
+	if(u_durationLeft <= 0.5)
+	{
+		return u_rainbowAlpha * u_durationLeft * 2;
+	}
+	
+	// Default
+	return u_rainbowAlpha;
 }

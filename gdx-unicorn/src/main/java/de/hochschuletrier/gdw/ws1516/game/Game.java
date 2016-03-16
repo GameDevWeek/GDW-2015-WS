@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.utils.TimeUtils;
 
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarBool;
 import de.hochschuletrier.gdw.commons.gdx.ashley.EntityFactory;
@@ -53,6 +55,7 @@ import de.hochschuletrier.gdw.ws1516.game.systems.BulletSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.CameraSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.HudRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.KeyboardInputSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.MapRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.MovementSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.NameSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RenderSystem;
@@ -95,6 +98,8 @@ public class Game extends InputAdapter {
     private final KeyboardInputSystem keyBoardInputSystem= new KeyboardInputSystem(GameConstants.PRIORITY_INPUT);
     private final MovementSystem movementSystem=new MovementSystem(GameConstants.PRIORITY_MOVEMENT);
     
+    private final MapRenderSystem mapRenderSystem = new MapRenderSystem(engine, this, GameConstants.PRIORITY_MAP_RENDERING);
+    
     
 
 
@@ -105,10 +110,6 @@ public class Game extends InputAdapter {
     private final EntityFactoryParam factoryParam = new EntityFactoryParam();
     private final EntityFactory<EntityFactoryParam> entityFactory = new EntityFactory("data/json/entities.json",
             Game.class);
-    
-    private TiledMap map;
-    private TiledMapRendererGdx mapRenderer;
-    private final HashMap<TileSet, Texture> tilesetImages = new HashMap();
 
     private final TriggerSystem triggerSystem = new TriggerSystem();
     private final BulletSystem bulletSystem = new BulletSystem(engine);
@@ -142,53 +143,11 @@ public class Game extends InputAdapter {
         EntityCreator.setEngine(engine);
         EntityCreator.setGame(this);
         EntityCreator.setEntityFactory(entityFactory);
-       
-
-        // Hier Dateipfad zur Map einfuegen
-        loadMap("data/maps/demo.tmx");
+        
+        mapRenderSystem.loadMap("data/maps/demo.tmx", cameraSystem);
         
         //test:
         EntityCreator.createEntity("unicorn", 800, 100);
-    }
-
-    /**
-     * 
-     * @param filename
-     *            filepath to the map that is to be loaded
-     */
-    private void loadMap(String filename) {
-        // Map laden
-        try {
-            map = new TiledMap(filename, LayerObject.PolyMode.ABSOLUTE);
-        } catch (Exception ex) {
-            throw new IllegalArgumentException("Map konnte nicht geladen werden: " + filename);
-        }
-
-        // Wenn map geladen wurde
-        if (map != null) {
-            
-            // Map parsen
-            MapLoader[] mapLoaders = { new PhysicsLoader(), new EntityLoader() };
-            for (MapLoader mapLoader : mapLoaders) {
-                mapLoader.parseMap(map, this, engine);
-            }
-            
-            initialzeRenderer();
-        }
-    }
-    
-    private void initialzeRenderer()
-    {
-        for (TileSet tileset : map.getTileSets()) {
-            TmxImage img = tileset.getImage();
-            String filename = CurrentResourceLocator.combinePaths(tileset.getFilename(), img.getSource());
-            tilesetImages.put(tileset, new Texture(filename));
-        }
-        mapRenderer = new TiledMapRendererGdx(map, tilesetImages);
-        
-        int totalMapWidth = map.getWidth() * map.getTileWidth();
-        int totalMapHeight = map.getHeight() * map.getTileHeight();
-        cameraSystem.setCameraBounds(0, 0, totalMapWidth, totalMapHeight);
     }
 
     private void addSystems() {
@@ -204,6 +163,7 @@ public class Game extends InputAdapter {
         engine.addSystem(hudRenderSystem);
         engine.addSystem(triggerSystem);
         engine.addSystem(bulletSystem);
+        engine.addSystem(mapRenderSystem);
     }
 
     private void addContactListeners() {
@@ -229,17 +189,8 @@ public class Game extends InputAdapter {
     }
 
     public void update(float delta) {
-        cameraSystem.bindCamera();
-        DrawUtil.setShader(ShaderLoader.getRainbowShader());
-        mapRenderer.update(delta);
-        
-        for (Layer layer : map.getLayers()) {
-            mapRenderer.render(0, 0, layer);
-        }
-        
+        cameraSystem.bindCamera();        
         engine.update(delta);
-        DrawUtil.batch.flush();
-        DrawUtil.setShader(null);
     }
 
     public void createTrigger(float x, float y, float width, float height, Consumer<Entity> consumer) {

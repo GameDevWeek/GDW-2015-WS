@@ -73,11 +73,6 @@ public class Main extends StateBasedGame {
     private final CVarEnum<SoundEmitter.Mode> emitterMode = new CVarEnum("snd_mode", SoundEmitter.Mode.STEREO,
             SoundEmitter.Mode.class, 0, "sound mode");
     
-    private long startTime = TimeUtils.millis();
-    private final CVarInt rainbowModeActive = new CVarInt("rainbowMode", 0, 0, 1, 0, "activates rainbowmode");
-    private final CVarFloat rainbowFrequency = new CVarFloat("rainbowFrequency", GameConstants.RAINBOW_FREQUENCY, 0.0f, Float.MAX_VALUE, 0, "");
-    private final CVarFloat rainbowAlpha = new CVarFloat("rainbowFrequency", GameConstants.RAINBOW_MODE_ALPHA, 0.0f, Float.MAX_VALUE, 0, "");
-    
     public Main() {
         super(new BaseGameState());
     }
@@ -145,10 +140,6 @@ public class Main extends StateBasedGame {
 
         this.console.register(emitterMode);
         emitterMode.addListener(this::onEmitterModeChanged);
-        
-        this.console.register(rainbowModeActive);
-        this.console.register(rainbowFrequency);
-        this.console.register(rainbowAlpha);
     }
 
     private void onLoadComplete() {
@@ -177,18 +168,6 @@ public class Main extends StateBasedGame {
         DrawUtil.resetColor();
 
         DrawUtil.batch.begin();
-        
-        ShaderProgram rainbowShader = ShaderLoader.getRainbowShader();
-        if(rainbowShader != null)
-        {
-            float[] dimensions = new float[]{ Gdx.graphics.getWidth(), Gdx.graphics.getHeight() };
-            rainbowShader.setUniform2fv("u_frameDimension", dimensions, 0, 2);
-            rainbowShader.setUniformi("u_rainbowMode", rainbowModeActive.get());
-            rainbowShader.setUniformf("u_rainbowAlpha", rainbowAlpha.get());
-            rainbowShader.setUniformf("u_rainbowFrequency", rainbowFrequency.get());
-            rainbowShader.setUniformf("u_rainbowAmplitude", GameConstants.RAINBOW_AMPLITUDE);
-            rainbowShader.setUniformf("u_time", (float)TimeUtils.timeSinceMillis(startTime) * 0.001f);
-        }
     }
 
     protected void postRender() {

@@ -8,6 +8,7 @@ public class GameConstants {
     public static final int PRIORITY_INPUT=11;
     public static final int PRIORITY_MOVEMENT=12;
     public static final int PRIORITY_CAMERA = 15;
+    public static final int PRIORITY_MAP_RENDERING = 19;
     public static final int PRIORITY_RENDERING = 20;
     public static final int PRIORITY_DEBUG_WORLD = 30;
     public static final int PRIORITY_HUD = 40;
@@ -42,9 +43,8 @@ public class GameConstants {
     public static final int SCORE_HITS = 0;
     
     // Shader parameters
-    public static final float RAINBOW_MODE_ALPHA = 1.0f;
-    public static final float RAINBOW_FREQUENCY = 1.5f;
-    public static final float RAINBOW_AMPLITUDE = 1.0f;
+    public static final float RAINBOW_MODE_ALPHA = 0.6f;
+    public static final float RAINBOW_FREQUENCY = 2.0f;
     
     public static final float TILESIZE_X=64;
     public static final float TILESIZE_Y=64;
