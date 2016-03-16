@@ -14,7 +14,9 @@ import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
 import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.LookDirection;
 
 public class KeyboardInputSystem extends IteratingSystem implements InputProcessor {
     private static final Logger logger = LoggerFactory.getLogger(KeyboardInputSystem.class);
@@ -27,8 +29,7 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
     private boolean stopflying=false;
     
     private float directionX,directionY  = 0.0f;    
-
-
+    public LookDirection lookDirection = MovementComponent.LookDirection.RIGHT;
     
     public KeyboardInputSystem(int priority) {
         super(Family.all(InputComponent.class, PlayerComponent.class).get(),priority);
@@ -51,10 +52,12 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
             case Input.Keys.LEFT:
             case Input.Keys.A:
                 directionX -= 1.0f;
+                lookDirection = MovementComponent.LookDirection.LEFT;
                 break;
             case Input.Keys.RIGHT:
             case Input.Keys.D:
                 directionX += 1.0f;
+                lookDirection = MovementComponent.LookDirection.RIGHT;
                 break;
             case Input.Keys.J:
                 hornAttack = true;
@@ -146,7 +149,6 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        
         InputComponent input = entity.getComponent(InputComponent.class);
         input.directionX = directionX;
         input.directionY=directionY;
@@ -163,7 +165,9 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
         input.hornAttack = hornAttack;
         input.startJump = jump;
         input.spit = spit;
-                
+         
+        input.lookDirection = lookDirection;
+        
     }
 
     
