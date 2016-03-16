@@ -14,7 +14,7 @@ public class ComponentMappers {
     public static final ComponentMapper<AnimationComponent> animation = ComponentMapper.getFor(AnimationComponent.class);
     public static final ComponentMapper<RenderLayerComponent> renderLayer = ComponentMapper.getFor(RenderLayerComponent.class);
     
-    public static final ComponentMapper<ParticleTestComponent> particleTest = ComponentMapper.getFor(ParticleTestComponent.class);
+    public static final ComponentMapper<ParticleComponent> particleTest = ComponentMapper.getFor(ParticleComponent.class);
     public static final ComponentMapper<BackgroundParticleComponent> bgParticle = ComponentMapper.getFor(BackgroundParticleComponent.class);
     public static final ComponentMapper<ScoreComponent> score = ComponentMapper.getFor(ScoreComponent.class);
     public static final ComponentMapper<StartPointComponent> startPoint = ComponentMapper.getFor(StartPointComponent.class);

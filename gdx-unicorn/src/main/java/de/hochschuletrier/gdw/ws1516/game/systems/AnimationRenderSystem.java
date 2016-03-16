@@ -24,37 +24,30 @@ public class AnimationRenderSystem extends SubSystem{
         PositionComponent position = ComponentMappers.position.get(entity);
         
         animation.stateTime += deltaTime;
-        TextureRegion keyFrame = null; //animation.animation.getKeyFrame(animation.stateTime);
+        TextureRegion keyFrame = null;
 
-        if(animation.animationState != AnimationState.none)
+        if(animation.animationState != AnimationState.none && animation.animationMap.get(animation.animationState) != null)
         {
-            keyFrame = animation.animationMap.get(animation.animationState.toString()).getKeyFrame(animation.stateTime);
+            keyFrame = animation.animationMap.get(animation.animationState).getKeyFrame(animation.stateTime);
         }
-        else
+        else if(animation.animationMap.get(AnimationState.none) != null)
         {
-            keyFrame = animation.animationMap.get("animation").getKeyFrame(animation.stateTime);
+            keyFrame = animation.animationMap.get(AnimationState.none).getKeyFrame(animation.stateTime);
         }
         
-        int w = keyFrame.getRegionWidth();
-        int h = keyFrame.getRegionHeight();
-        
-        if(animation.flipHorizontal)
+        if(keyFrame != null)
         {
-            DrawUtil.batch.draw(keyFrame, position.x + w * 0.5f, position.y - h * 0.5f, w * 0.5f, h * 0.5f, -w, h, 1, 1, position.rotation);
+            int w = keyFrame.getRegionWidth();
+            int h = keyFrame.getRegionHeight();
+            
+            if(animation.flipHorizontal)
+            {
+                DrawUtil.batch.draw(keyFrame, position.x + w * 0.5f, position.y - h * 0.5f, w * 0.5f, h * 0.5f, -w, h, 1, 1, position.rotation);
+            }
+            else
+            {
+                DrawUtil.batch.draw(keyFrame, position.x - w * 0.5f, position.y - h * 0.5f, w * 0.5f, h * 0.5f, w, h, 1, 1, position.rotation);
+            }
         }
-        else
-        {
-            DrawUtil.batch.draw(keyFrame, position.x - w * 0.5f, position.y - h * 0.5f, w * 0.5f, h * 0.5f, w, h, 1, 1, position.rotation);
-        }
-
-        
-//        AnimationComponent animation = ComponentMappers.animation.get(entity);
-//        PositionComponent position = ComponentMappers.position.get(entity);
-//
-//        animation.stateTime += deltaTime;
-//        TextureRegion keyFrame = animation.animation.getKeyFrame(animation.stateTime);
-//        int w = keyFrame.getRegionWidth();
-//        int h = keyFrame.getRegionHeight();
-//        DrawUtil.batch.draw(keyFrame, position.x - w * 0.5f, position.y - h * 0.5f, w * 0.5f, h * 0.5f, w, h, 1, 1, position.rotation);
     }
 }

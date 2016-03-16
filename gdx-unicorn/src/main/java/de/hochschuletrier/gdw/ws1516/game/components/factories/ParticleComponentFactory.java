@@ -5,9 +5,9 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 
 import de.hochschuletrier.gdw.commons.gdx.ashley.ComponentFactory;
 import de.hochschuletrier.gdw.commons.utils.SafeProperties;
-import de.hochschuletrier.gdw.ws1516.game.components.ParticleTestComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.ParticleComponent;
 
-public class ParticleTestComponentFactory extends ComponentFactory<EntityFactoryParam> 
+public class ParticleComponentFactory extends ComponentFactory<EntityFactoryParam> 
 {
 
     @Override
@@ -19,7 +19,7 @@ public class ParticleTestComponentFactory extends ComponentFactory<EntityFactory
     @Override
     public void run(Entity entity, SafeProperties meta, SafeProperties properties, EntityFactoryParam param)
     {
-        ParticleTestComponent component = engine.createComponent(ParticleTestComponent.class);
+        ParticleComponent component = engine.createComponent(ParticleComponent.class);
         String var = properties.getString("effect");
         ParticleEffect var2 = assetManager.getParticleEffect(var);
         component.effect = new ParticleEffect(var2);
