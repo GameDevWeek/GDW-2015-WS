@@ -56,8 +56,8 @@ public class MenuPage extends Group {
         }
     }
     
-
-     protected final void addSlider(float min, float max,float stepSize,int x, int y,String text){
+    
+     protected final void addLabeledSlider(float min, float max,float stepSize,int x, int y,String text){
         
         Slider slider = new Slider(min,max,stepSize,false,skin,"default-horizontal");
         Label label = new Label(text,skin,"default");
@@ -80,11 +80,12 @@ public class MenuPage extends Group {
         });
         slider.addListener(new ClickListener(){
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                
                System.out.print("TEST");
+               
             }
         });
-        
         addActor(slider);
         addActor(label);
         addActor(value);
