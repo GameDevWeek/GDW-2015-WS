@@ -8,8 +8,9 @@ public class GameConstants {
     public static final int PRIORITY_INPUT=11;
     public static final int PRIORITY_MOVEMENT=12;
     public static final int PRIORITY_CAMERA = 15;
-    public static final int PRIORITY_MAP_RENDERING = 19;
+    public static final int PRIORITY_MAP_RENDERING = 17;
     public static final int PRIORITY_RENDERING = 20;
+    public static final int PRIORITY_EFFECTS_RENDERING = 25;
     public static final int PRIORITY_DEBUG_WORLD = 30;
     public static final int PRIORITY_HUD = 40;
     public static final int PRIORITY_NAME = 50;

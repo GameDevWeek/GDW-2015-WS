@@ -25,6 +25,7 @@ import de.hochschuletrier.gdw.commons.devcon.cvar.CVarInt;
 import de.hochschuletrier.gdw.commons.gdx.assets.AnimationExtended;
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.assets.loaders.AnimationExtendedLoader;
+import de.hochschuletrier.gdw.commons.gdx.assets.loaders.ShaderProgramLoader;
 import de.hochschuletrier.gdw.commons.gdx.devcon.DevConsoleView;
 import de.hochschuletrier.gdw.commons.gdx.audio.SoundDistanceModel;
 import de.hochschuletrier.gdw.commons.gdx.audio.SoundEmitter;
@@ -98,6 +99,7 @@ public class Main extends StateBasedGame {
         TextureParameter param = new TextureParameter();
         param.minFilter = param.magFilter = Texture.TextureFilter.Linear;
 
+        assetManager.loadAssetListWithParam("data/json/shaders.json", ShaderProgram.class, ShaderProgramLoader.ShaderProgramParameter.class);
         assetManager.loadAssetList("data/json/images.json", Texture.class, param);
         assetManager.loadAssetList("data/json/sounds.json", Sound.class, null);
         assetManager.loadAssetList("data/json/music.json", Music.class, null);

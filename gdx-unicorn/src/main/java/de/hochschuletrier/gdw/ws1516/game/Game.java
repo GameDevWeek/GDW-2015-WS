@@ -42,6 +42,7 @@ import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerContactListener
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.TriggerListener;
 import de.hochschuletrier.gdw.ws1516.game.systems.BulletSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.CameraSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.EffectsRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.HudRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.KeyboardInputSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.MapRenderSystem;
@@ -85,6 +86,8 @@ public class Game extends InputAdapter {
     private final MovementSystem movementSystem=new MovementSystem(GameConstants.PRIORITY_MOVEMENT);
     
     private final MapRenderSystem mapRenderSystem = new MapRenderSystem(GameConstants.PRIORITY_MAP_RENDERING);
+    
+    private final EffectsRenderSystem effectsRenderSystem = new EffectsRenderSystem(GameConstants.PRIORITY_EFFECTS_RENDERING);
     
     //
     private final HudRenderSystem hudRenderSystem = new HudRenderSystem(1001);
@@ -171,6 +174,7 @@ public class Game extends InputAdapter {
         engine.addSystem(triggerSystem);
         engine.addSystem(bulletSystem);
         engine.addSystem(mapRenderSystem);
+        engine.addSystem(effectsRenderSystem);
     }
 
     private void addContactListeners() {

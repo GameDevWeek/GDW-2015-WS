@@ -36,9 +36,6 @@ public class MapRenderSystem extends IteratingSystem {
     private float rainbowDurationLeft;
     private float rainbowStartDuration;
     
-    private float paparazziDurationLeft;
-    private float paparazziStartDuration;
-    
     private final HashMap<TileSet, Texture> tilesetImages = new HashMap<>();
     
     private final CVarBool fancyRainbow = new CVarBool("fancyRainbow", false, 0, "sets fancy rainbowmode");
@@ -46,9 +43,6 @@ public class MapRenderSystem extends IteratingSystem {
     private final CVarFloat rainbowFrequency = new CVarFloat("rainbowFrequency", GameConstants.RAINBOW_FREQUENCY, 0.0f, Float.MAX_VALUE, 0, "");
     private final CVarFloat rainbowAlpha = new CVarFloat("rainbowAlpha", GameConstants.RAINBOW_ALPHA, 0.0f, Float.MAX_VALUE, 0, "");
     
-    private final ConsoleCmd paparazzi = new ConsoleCmd("pap", 0, "Usage: paparazzi [duration] - Activates paparazzi mode for [duration] seconds") { @Override public void execute(List<String> args) { startPaparazzi(args); } };
-    private final CVarFloat paparazziIntensity = new CVarFloat("paparazziIntensity", GameConstants.PAPARAZZI_INTENSITY, 0.0f, Float.MAX_VALUE, 0, "");
-    private final CVarFloat paparazziAlpha = new CVarFloat("paparazziAlpha", GameConstants.PAPARAZZI_ALPHA, 0.0f, Float.MAX_VALUE, 0, "");
     
     @SuppressWarnings("unchecked")
     public MapRenderSystem(int priority) {
@@ -56,7 +50,6 @@ public class MapRenderSystem extends IteratingSystem {
 
         // DEBUG
         Main.getInstance().console.register(paparazzi);
-        
         Main.getInstance().console.register(paparazziIntensity);
         Main.getInstance().console.register(paparazziAlpha);
     }
@@ -74,7 +67,6 @@ public class MapRenderSystem extends IteratingSystem {
     @Override
     public void removedFromEngine(Engine engine) {
         super.removedFromEngine(engine);
-        
         Main.getInstance().console.unregister(rainbow);
         Main.getInstance().console.unregister(rainbowFrequency);
         Main.getInstance().console.unregister(rainbowAlpha);
@@ -100,22 +92,6 @@ public class MapRenderSystem extends IteratingSystem {
                 rainbowShader.setUniformf("u_rainbowFrequency", rainbowFrequency.get());
                 rainbowShader.setUniformf("u_time", (float)TimeUtils.timeSinceMillis(startTime) * 0.001f);
             }
-        } else if (paparazziDurationLeft > 0.0f) {
-            
-            paparazziDurationLeft -= deltaTime;
-            ShaderProgram shader = ShaderLoader.getPaparazziShader();
-            DrawUtil.setShader(shader);
-            if(shader != null)
-            {
-                float[] dimensions = new float[]{ Gdx.graphics.getWidth(), Gdx.graphics.getHeight() };
-                shader.setUniform2fv("u_frameDimension", dimensions, 0, 2);
-                shader.setUniformf("u_startDuration", paparazziStartDuration);
-                shader.setUniformf("u_durationLeft", paparazziDurationLeft);
-                shader.setUniformf("u_paparazziAlpha", paparazziAlpha.get());
-                shader.setUniformf("u_paparazziIntensity", rainbowFrequency.get());
-                shader.setUniformf("u_time", (float)TimeUtils.timeSinceMillis(startTime) * 0.001f);
-            }
-
         }
         
         mapRenderer.update(deltaTime);
@@ -123,8 +99,6 @@ public class MapRenderSystem extends IteratingSystem {
             mapRenderer.render(0, 0, layer);
         }
 
-                
-        
         DrawUtil.setShader(null);
     }
 
@@ -150,26 +124,6 @@ public class MapRenderSystem extends IteratingSystem {
             }
         }
         rainbowDurationLeft = rainbowStartDuration;
-        startTime = TimeUtils.millis();
-    }
-
-    protected void startPaparazzi(List<String> args) {
-        if(args.size() <= 1)
-        {
-            paparazziStartDuration = 5.0f;
-        }
-        else
-        {
-            try
-            {
-                paparazziStartDuration = Float.parseFloat(args.get(1));
-            }
-            catch(Exception e)
-            {
-                paparazziStartDuration = 5.0f;
-            }
-        }
-        paparazziDurationLeft = paparazziStartDuration;
         startTime = TimeUtils.millis();
     }
     
