@@ -12,7 +12,9 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
+import de.hochschuletrier.gdw.commons.gdx.state.BaseGameState;
 import de.hochschuletrier.gdw.ws1516.events.EnemyActionEvent;
+import de.hochschuletrier.gdw.ws1516.events.EnemyStateChangeEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.AttackPatternComponent;
@@ -21,6 +23,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.EnemyBehaviourComponent.Beh
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
+import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.EnemyBaseState;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.SandBoxEventLogger;
 /**
  * @author Tobi
@@ -126,40 +129,13 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
     protected void processEntity(Entity entity, float deltaTime) {
         EnemyBehaviourComponent behaviour = ComponentMappers.enemyBehaviour.get(entity);
         EnemyTypeComponent type = ComponentMappers.enemyType.get(entity);
-        AttackPatternComponent pattern = ComponentMappers.enemyPattern.get(entity);
-
         
-        /**
-         * This part should be handled with normal PositionComponent
-         */
-        PhysixBodyComponent uniBody = ComponentMappers.physixBody.get(unicorn);
-        PhysixBodyComponent entityBody= ComponentMappers.physixBody.get(entity);
+        EnemyBaseState old=behaviour.baseState;
+        behaviour.baseState = behaviour.baseState.compute(entity, unicorn, deltaTime);
         
-//        double distance = Math.sqrt( Math.pow(uniBody.getPosition().x-entityBody.getPosition().x,2) +
-//                        Math.pow(uniBody.getPosition().y-entityBody.getPosition().y,2) );
-//        behaviour.canSeeUnicorn = (distance < GameConstants.ENEMY_SIGHT_DISTANCE);
-
-        
-        if( behaviour.canSeeUnicorn )
-        {
-            behaviour.behaviourState = Behaviour.ATTACK; 
-            int nextIndex = pattern.pattern.get(pattern.currentIndex).apply(entity,unicorn,deltaTime);    
-            if ( pattern.currentIndex != nextIndex)
-            {
-                if ( nextIndex < 0 || nextIndex > pattern.pattern.size() )
-                {
-                    logger.warn("AttackPattern jumped to Step {} wich does not exsist",nextIndex);
-                    nextIndex = 0;
-                }
-                pattern.pattern.get(nextIndex).init();
-                pattern.currentIndex = nextIndex;
-            }
-                    
-        } else
-        {
-            behaviour.behaviourState = Behaviour.FOLLOW_PATH;
+        if (old!=behaviour.baseState){
+           // EnemyStateChangeEvent.emit(entity, old,behaviour.baseState);
         }
-        
     }
 
 
