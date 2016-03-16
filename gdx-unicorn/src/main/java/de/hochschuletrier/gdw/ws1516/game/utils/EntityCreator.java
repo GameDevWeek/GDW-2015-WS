@@ -30,6 +30,7 @@ public class EntityCreator {
         Entity entity = entityFactory.createEntity(name, factoryParam);
 
         engine.addEntity(entity);
+        
         return entity;
     }
 

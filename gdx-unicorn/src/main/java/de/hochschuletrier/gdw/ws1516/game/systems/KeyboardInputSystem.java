@@ -1,16 +1,21 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 
-import de.hochschuletrier.gdw.ws1516.game.components.KeyboardInputComponent;
+import de.hochschuletrier.gdw.ws1516.game.Game;
+import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 
 public class KeyboardInputSystem extends IteratingSystem implements InputProcessor {
-    
+    private static final Logger logger = LoggerFactory.getLogger(KeyboardInputSystem.class);
     private boolean jump = false;
     private boolean spit = false;
     private boolean hornAttack = false;
@@ -18,11 +23,17 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
     
     private float direction = 0.0f;    
 
+
     
-    public KeyboardInputSystem(Family family) {
-        super(Family.all(KeyboardInputComponent.class, PlayerComponent.class).get());
+    public KeyboardInputSystem(int priority) {
+        super(Family.all(InputComponent.class, PlayerComponent.class).get(),priority);
     }
 
+//    @Override
+//    public public void addedToEngine(Engine engine) {
+//        logger.debug("wurde Hinzugefügt{}");
+//    };
+    
     @Override
     public boolean keyDown(int keycode) {
         switch (keycode) {
@@ -114,7 +125,7 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         
-        KeyboardInputComponent input = entity.getComponent(KeyboardInputComponent.class);
+        InputComponent input = entity.getComponent(InputComponent.class);
         input.direction = direction;
         input.fly = fly;
         input.hornAttack = hornAttack;
