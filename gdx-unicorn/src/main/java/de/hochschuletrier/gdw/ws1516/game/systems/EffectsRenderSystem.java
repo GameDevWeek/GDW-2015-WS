@@ -31,9 +31,9 @@ public class EffectsRenderSystem extends IteratingSystem {
     
     private Texture effectsOverlay;
     
-    private final ConsoleCmd paparazzi = new ConsoleCmd("pap", 0, "Usage: paparazzi [duration] - Activates paparazzi mode for [duration] seconds") { @Override public void execute(List<String> args) { startPaparazzi(args); } };
-    private final CVarFloat paparazziIntensity = new CVarFloat("paparazziIntensity", GameConstants.PAPARAZZI_INTENSITY, 0.0f, Float.MAX_VALUE, 0, "");
-    private final CVarFloat paparazziAlpha = new CVarFloat("paparazziAlpha", GameConstants.PAPARAZZI_ALPHA, 0.0f, Float.MAX_VALUE, 0, "");
+    private final ConsoleCmd paparazzi = new ConsoleCmd("pap", 0, "Usage: pap [duration] - Activates paparazzi mode for [duration] seconds") { @Override public void execute(List<String> args) { startPaparazzi(args); } };
+    private final CVarFloat paparazziIntensity = new CVarFloat("paparazziIntensity", 8.0f, 0.0f, Float.MAX_VALUE, 0, "");
+    private float currentPaparazziSeed;
 
     @SuppressWarnings("unchecked")
     public EffectsRenderSystem(int priority) {
@@ -54,7 +54,6 @@ public class EffectsRenderSystem extends IteratingSystem {
         //DEBUG
         Main.getInstance().console.register(paparazzi);
         Main.getInstance().console.register(paparazziIntensity);
-        Main.getInstance().console.register(paparazziAlpha);
         
         super.addedToEngine(engine);
     }
@@ -65,7 +64,6 @@ public class EffectsRenderSystem extends IteratingSystem {
         //DEBUG
         Main.getInstance().console.unregister(paparazzi);
         Main.getInstance().console.unregister(paparazziIntensity);
-        Main.getInstance().console.unregister(paparazziAlpha);
         
         super.removedFromEngine(engine);
     }
@@ -82,10 +80,19 @@ public class EffectsRenderSystem extends IteratingSystem {
             {
                 float[] dimensions = new float[]{ Gdx.graphics.getWidth(), Gdx.graphics.getHeight() };
                 shader.setUniform2fv("u_frameDimension", dimensions, 0, 2);
+                
                 shader.setUniformf("u_startDuration", paparazziStartDuration);
                 shader.setUniformf("u_durationLeft", paparazziDurationLeft);
-                shader.setUniformf("u_paparazziAlpha", paparazziAlpha.get());
+
+                //float[] paparazziRange = new float[]{ Gdx.graphics.getWidth()/8, Gdx.graphics.getWidth()/6 };
+                float[] paparazziCircleRadiusRange = new float[]{ 60.0f, 120.0f };
+                shader.setUniform2fv("u_paparazziCircleRadiusRange", paparazziCircleRadiusRange, 0, 2);
+                float[] paparazziColor = new float[]{ 1.0f, 1.0f, 1.0f };
+                shader.setUniform3fv("u_paparazziColor", paparazziColor, 0, 3);
+                float[] paparazziSeed = new float[]{ currentPaparazziSeed, currentPaparazziSeed };
+                shader.setUniform2fv("u_paparazziSeed", paparazziSeed, 0, 2);
                 shader.setUniformf("u_paparazziIntensity", paparazziIntensity.get());
+                
                 shader.setUniformf("u_time", (float)TimeUtils.timeSinceMillis(startTime) * 0.001f);
             }
             
@@ -99,9 +106,10 @@ public class EffectsRenderSystem extends IteratingSystem {
     }
 
     protected void startPaparazzi(List<String> args) {
+        final float stdDuration = 2.0f;
         if(args.size() <= 1)
         {
-            paparazziStartDuration = 5.0f;
+            paparazziStartDuration = stdDuration;
         }
         else
         {
@@ -111,11 +119,14 @@ public class EffectsRenderSystem extends IteratingSystem {
             }
             catch(Exception e)
             {
-                paparazziStartDuration = 5.0f;
+                paparazziStartDuration = stdDuration;
             }
         }
         paparazziDurationLeft = paparazziStartDuration;
         startTime = TimeUtils.millis();
+        
+        currentPaparazziSeed += 0.2;
+        currentPaparazziSeed = currentPaparazziSeed % Float.MAX_VALUE;
     }
 
 }

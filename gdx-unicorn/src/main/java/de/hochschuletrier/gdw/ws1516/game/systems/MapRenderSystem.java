@@ -45,11 +45,6 @@ public class MapRenderSystem extends IteratingSystem {
     @SuppressWarnings("unchecked")
     public MapRenderSystem(int priority) {
         super(Family.all().get(), priority);
-
-        // DEBUG
-        Main.getInstance().console.register(paparazzi);
-        Main.getInstance().console.register(paparazziIntensity);
-        Main.getInstance().console.register(paparazziAlpha);
     }
     
     @Override
