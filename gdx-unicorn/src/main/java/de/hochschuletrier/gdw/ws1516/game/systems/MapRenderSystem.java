@@ -3,9 +3,9 @@ package de.hochschuletrier.gdw.ws1516.game.systems;
 import java.util.HashMap;
 import java.util.List;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,16 +18,11 @@ import de.hochschuletrier.gdw.commons.gdx.tiled.TiledMapRendererGdx;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.commons.resourcelocator.CurrentResourceLocator;
 import de.hochschuletrier.gdw.commons.tiled.Layer;
-import de.hochschuletrier.gdw.commons.tiled.LayerObject;
 import de.hochschuletrier.gdw.commons.tiled.TileSet;
 import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.commons.tiled.tmx.TmxImage;
 import de.hochschuletrier.gdw.ws1516.Main;
-import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
-import de.hochschuletrier.gdw.ws1516.game.utils.EntityLoader;
-import de.hochschuletrier.gdw.ws1516.game.utils.MapLoader;
-import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 
 public class MapRenderSystem extends IteratingSystem {
@@ -58,13 +53,28 @@ public class MapRenderSystem extends IteratingSystem {
         super(Family.all().get(), priority);
 
         // DEBUG
-        Main.getInstance().console.register(rainbow);
-        Main.getInstance().console.register(rainbowFrequency);
-        Main.getInstance().console.register(rainbowAlpha);
         Main.getInstance().console.register(paparazzi);
         
         Main.getInstance().console.register(paparazziIntensity);
         Main.getInstance().console.register(paparazziAlpha);
+    }
+    
+    @Override
+    public void addedToEngine(Engine engine) {
+        super.addedToEngine(engine);
+        
+        Main.getInstance().console.register(rainbow);
+        Main.getInstance().console.register(rainbowFrequency);
+        Main.getInstance().console.register(rainbowAlpha);
+    }
+    
+    @Override
+    public void removedFromEngine(Engine engine) {
+        super.removedFromEngine(engine);
+        
+        Main.getInstance().console.unregister(rainbow);
+        Main.getInstance().console.unregister(rainbowFrequency);
+        Main.getInstance().console.unregister(rainbowAlpha);
     }
 
     @Override
