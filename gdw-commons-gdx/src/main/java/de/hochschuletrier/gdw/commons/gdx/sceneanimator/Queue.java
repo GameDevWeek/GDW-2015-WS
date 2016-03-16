@@ -40,6 +40,7 @@ public class Queue {
 
     public void start() {
         startTime = 0;
+        update(0);
     }
 
     public void render() {
@@ -89,5 +90,11 @@ public class Queue {
         if (startTime == 0)
             return done;
         return false;
+    }
+
+    void abortPausePaths() {
+        for (Item item : items) {
+            item.abortPausePath();
+        }
     }
 }

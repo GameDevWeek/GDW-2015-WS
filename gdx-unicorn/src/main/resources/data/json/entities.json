@@ -195,9 +195,11 @@
                 "layer": 0
             },
             "ParticleTest": {
-                "effect": "test"
+                "effect": "test2"
             },
-            "CameraTarget": {}
+            "BackgroundParticle": {
+                "bgEffect": "test"
+            }
         }
     },
     "box": {
