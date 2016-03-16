@@ -92,12 +92,12 @@ public class MusicManager {
             music.play();
         }
         currentMusic = music;
-<<<<<<< HEAD
+
        
        }
-=======
-    }
->>>>>>> 20120775739d6f8bd975c428af68ec941c8ba0ec
+
+    
+
 
     public static void stop() {
         for (Fade fade : fades) {
