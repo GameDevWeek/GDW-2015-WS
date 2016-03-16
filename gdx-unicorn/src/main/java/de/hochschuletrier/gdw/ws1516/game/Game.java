@@ -1,15 +1,18 @@
 package de.hochschuletrier.gdw.ws1516.game;
 
+import java.util.HashMap;
+import java.util.function.Consumer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -18,7 +21,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarBool;
 import de.hochschuletrier.gdw.commons.gdx.ashley.EntityFactory;
-import de.hochschuletrier.gdw.commons.gdx.assets.AnimationExtended;
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.Hotkey;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.HotkeyModifier;
@@ -34,19 +36,13 @@ import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.commons.resourcelocator.CurrentResourceLocator;
 import de.hochschuletrier.gdw.commons.tiled.Layer;
 import de.hochschuletrier.gdw.commons.tiled.LayerObject;
-import de.hochschuletrier.gdw.commons.tiled.TileInfo;
 import de.hochschuletrier.gdw.commons.tiled.TileSet;
 import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.commons.tiled.tmx.TmxImage;
-import de.hochschuletrier.gdw.commons.tiled.utils.RectangleGenerator;
-import de.hochschuletrier.gdw.commons.utils.Rectangle;
 import de.hochschuletrier.gdw.ws1516.Main;
-import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.BulletComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ImpactSoundComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.ParticleTestComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.TriggerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.factories.EntityFactoryParam;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BulletListener;
@@ -55,17 +51,13 @@ import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerContactListener
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.TriggerListener;
 import de.hochschuletrier.gdw.ws1516.game.systems.BulletSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.CameraSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.HudRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.KeyboardInputSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.MovementSystem;
-import de.hochschuletrier.gdw.ws1516.game.systems.ParticleRenderSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.NameSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.SimpleAnimationRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.TriggerSystem;
-import de.hochschuletrier.gdw.ws1516.game.systems.NameSystem;
-
-import de.hochschuletrier.gdw.ws1516.game.systems.AnimationRenderSystem;
-import de.hochschuletrier.gdw.ws1516.game.systems.HudRenderSystem;
-
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityCreator;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityLoader;
@@ -73,17 +65,6 @@ import de.hochschuletrier.gdw.ws1516.game.utils.MapLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
-
-
-import java.util.HashMap;
-
-
-
-
-import java.util.function.Consumer;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Game extends InputAdapter {
     

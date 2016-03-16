@@ -28,11 +28,6 @@ public class CameraSystem extends IteratingSystem {
         this.targetX = this.targetY = 0.0f;
     }
     
-    public void bind(){
-        camera.bind();
-    }
-    
-    
     @Override
     public void addedToEngine(Engine engine) {
         
