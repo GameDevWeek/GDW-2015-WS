@@ -1,43 +1,105 @@
 {
     "timeFactor": 1.0,
-    "textStyles" :{},
+    "textStyles" : {
+       "name": { "color": "FFFFFF", "font": "verdana_32", "align": "center" }
+    },
     "paths" : {
-        "unicorn":{
+        "story":{
+            "type": "linear",
+            "destinations": [
+            {"x":500,"y":400,"speed":0.2},
+            {"x":500,"y":401,"speed":1}
+            ]
+        },
+        "leftToMidT":{
             "type": "linear",
             "destinations":[
-            {"x": -500, "y":250, "speed":750},
-            {"x": 1500, "y":250, "speed":750},
-            {"x": -500, "y":250, "speed":750},
-            {"x": 1500, "y":250, "speed":750},
-            {"x": -500, "y":250, "speed":750},
-            {"x": 500, "y":200, "speed":750}
+            {"x":-100,"y":200,"speed":"100"},
+            {"x":460,"y":200,"speed":"100"}
+            ]
+        },
+        "leftToMidU":{
+            "type": "linear",
+            "destinations":[
+            {"x":-100,"y":200,"speed":"300"},
+            {"x":500,"y":200,"speed":"300"}
+            ]
+        },
+        "midToRightT":{
+            "type": "linear",
+            "destinations":[
+            {"x":460,"y":200,"speed":"100"},
+            {"x":1200,"y":200,"speed":"100"}
+            ]
+        },
+        "leftToRight":{
+            "type": "linear",
+            "destinations":[
+            {"x":-200,"y":200,"speed":"300"},
+            {"x":1200,"y":200,"speed":"300"}
             ]
         },
         "stay":{
             "type":"linear",
             "destinations":[
-                {"x":500,"y":200 ,"speed":0.000000000001},
-                {"x":500,"y":202 ,"speed":0.000000000001}
+                {"x":500,"y":200 ,"speed":0.15},
+                {"x":500,"y":202 ,"speed":0.2}
+            ]
+        },
+        "stayT":{
+            "type":"linear",
+            "destinations":[
+                {"x":460,"y":200 ,"speed":1},
+                {"x":462,"y":200 ,"speed":1}
             ]
         },
         "bubblegum":{
             "type": "linear",
                 "destinations":[
-                    {"x": 500, "y":750, "speed":50},
-                    {"x": 500, "y":200, "speed":50},
+                    {"x": 500, "y":750, "speed":100},
+                    {"x": 500, "y":200, "speed":100},
                     {"x": 500, "y":200, "speed":0}
                 ]
             }
        },
     "queues" : {
-        "unicornQ":{
-            "layer" :0,
+        "trexQ":{
+            "layer" :1,
             "time" : 0,
             "items" : [
-                {"type":"texture","path":"unicorn","resource":"coin"}
+                {"type":"texture","path":"leftToMidT","resource":"trex"}
             ],
-            "finalNext" : "unicornQ2",
+            "finalNext" : "trexQP"
+        },
+        "trexQP":{
+            "layer" :1,
+            "time" : -1,
+            "items" : [
+                {"type":"texture","path":"stayT","resource":"trex"}
+            ],
+            "finalNext" : "trexQ2",
             "animations" : []
+        },
+        "trexQ2":{
+            "layer" :1,
+            "time" : -1,
+            "items" : [
+                {"type":"texture","path":"midToRightT","resource":"trex"}
+            ],
+            "finalNext" : "unicornQ",
+            "animations" : []
+        },
+        
+        "unicornQ":{
+            "layer" :1,
+            "time" : -1,
+            "items" : [
+                {"type":"texture","path":"leftToRight","resource":"unicorn"}
+            ],
+            "next":"pressStartQ",
+            "animations" : [
+                { "time": 2350, "animation": "pause_path", "animationTime": 2000, "group": "*" }
+            ]
         },
         "bubblegumQ":{
             "layer" :0,
@@ -48,14 +110,6 @@
             "finalNext" : "bubblegumQ2",
             "animations" : []
         },
-        "unicornQ2":{
-            "layer" :0,
-            "time" : -1,
-            "items" : [
-                {"type":"texture","path":"stay","resource":"coin"}
-            ],
-            "animations" : []
-        },
         "bubblegumQ2":{
             "layer" :0,
             "time" : -1,
@@ -63,6 +117,19 @@
                 {"type":"texture","path":"stay","resource":"bubblegum_rainbow"}
             ],
             "animations" : []
-        }
+        },
+        "story1Q" :{
+            "layer": 2,
+            "time": 0,
+            "items" : [
+                {"type":"text","x":500, "y": 400,"style":"name","text":"The T-Rex can't reach the bubblegum"},
+                {"type":"text","x":500, "y": 400,"style":"name","delay":10000,"text":"You have to help him!"}
+            ],
+            "animations" : [
+                {"time":0, "animation":"untype_instant"},
+                {"animation":"type","animationTime":100},
+                {"time":6000, "animation":"untype","animationTime":25}
+            ]
+        }   
     }
 }
