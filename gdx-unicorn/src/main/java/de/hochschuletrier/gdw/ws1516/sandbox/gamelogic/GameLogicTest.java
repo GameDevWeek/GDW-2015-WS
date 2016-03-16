@@ -45,9 +45,11 @@ import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.SoundEmitterComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.StartPointComponent;
 import de.hochschuletrier.gdw.ws1516.game.systems.EnemyHandlingSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.EnemyVisionSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.HitPointManagementSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RespawnSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.SoundSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
 import de.hochschuletrier.gdw.ws1516.sandbox.SandboxGame;
 import java.util.HashMap;
 import org.slf4j.Logger;
@@ -106,6 +108,11 @@ public class GameLogicTest extends SandboxGame {
     private final DummyEnemyExecutionSystem dummyEnemySystem = new DummyEnemyExecutionSystem();
     
     private final EnemyHandlingSystem enemyHandlingSystem = new EnemyHandlingSystem();
+
+    private final EntitySystem enemyVisionSystem = new EnemyVisionSystem();
+
+
+    private final EntitySystem updatePositionSystem = new UpdatePositionSystem();
     
     public GameLogicTest() {
         engine.addSystem(physixSystem);
@@ -115,6 +122,8 @@ public class GameLogicTest extends SandboxGame {
         engine.addSystem(hitPointSystem);
         engine.addSystem(enemyHandlingSystem);
         engine.addSystem(dummyEnemySystem);
+        engine.addSystem(enemyVisionSystem );
+        engine.addSystem(updatePositionSystem );
     }
 
     @Override
@@ -273,9 +282,12 @@ public class GameLogicTest extends SandboxGame {
     private void createDummyEnemy() {
 
         Entity enemy = engine.createEntity();
-        
+
         StartPointComponent startComp = engine.createComponent(StartPointComponent.class);
         enemy.add(startComp);
+        
+        PositionComponent posComp = engine.createComponent(PositionComponent.class);
+        enemy.add(posComp);
 
         EnemyBehaviourComponent behaviour = engine.createComponent(EnemyBehaviourComponent.class);
         enemy.add(behaviour);
