@@ -22,4 +22,7 @@ public class GameConstants {
     public static final int BOX2D_SCALE = 40;
     
     public static float MUSIC_FADE_TIME = 2;
+    public static final float COLLISION_DISTANCE = 12;
+    public static final float SEGMENT_DISTANCE = 18;
+    public static final int PAINT_RADIUS = 6;
 }

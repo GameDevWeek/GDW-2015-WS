@@ -10,12 +10,12 @@ import com.badlogic.gdx.math.Vector2;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 
 public class CanvasRenderSystem extends IteratingSystem {
-    private static final int PAINT_RADIUS = 6;
     
     Pixmap pixmap = new Pixmap(Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT, Pixmap.Format.RGBA8888);
     private final Color drawTint = new Color(1,1,1,0.5f);
@@ -47,9 +47,9 @@ public class CanvasRenderSystem extends IteratingSystem {
         AnimationComponent animation = ComponentMappers.animation.get(entity);
         PlayerComponent player = ComponentMappers.player.get(entity);
         pixmap.setColor(animation.tint);
-        pixmap.fillCircle((int)position.x, Main.WINDOW_HEIGHT - (int)position.y, PAINT_RADIUS);
+        pixmap.fillCircle((int)position.x, Main.WINDOW_HEIGHT - (int)position.y, GameConstants.PAINT_RADIUS);
         for (Vector2 segment : player.segments) {
-            pixmap.fillCircle((int)segment.x, Main.WINDOW_HEIGHT - (int)segment.y, PAINT_RADIUS);
+            pixmap.fillCircle((int)segment.x, Main.WINDOW_HEIGHT - (int)segment.y, GameConstants.PAINT_RADIUS);
         }
     }
 

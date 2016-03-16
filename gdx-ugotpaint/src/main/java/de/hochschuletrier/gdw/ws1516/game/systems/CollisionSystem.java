@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import de.hochschuletrier.gdw.ws1516.events.PickupEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
@@ -17,8 +18,6 @@ import de.hochschuletrier.gdw.ws1516.game.components.ProjectileComponent;
 
 public class CollisionSystem extends IteratingSystem {
 
-    public static final float COLLISION_DISTANCE = 12;
-    public static final float SEGMENT_DISTANCE = 18;
     private Engine engine;
     private final Vector2 delta = new Vector2();
     private ImmutableArray<Entity> otherEntitites;
@@ -50,7 +49,7 @@ public class CollisionSystem extends IteratingSystem {
         PositionComponent posA = ComponentMappers.position.get(self);
         PositionComponent posB = ComponentMappers.position.get(other);
         final Vector2 vposA = posA.pos;
-        if(self != other && vposA.dst(posB.pos) < COLLISION_DISTANCE) {
+        if(self != other && vposA.dst(posB.pos) < GameConstants.COLLISION_DISTANCE) {
             if(ComponentMappers.pickup.has(other))
                 pickupHit(self, other);
             else if(ComponentMappers.player.has(other))
@@ -60,7 +59,7 @@ public class CollisionSystem extends IteratingSystem {
             if(playerB != null) {
                 int index = 0;
                 for (Vector2 vposB2 : playerB.segments) {
-                    if((self != other || index > 1) && vposA.dst(vposB2) < COLLISION_DISTANCE) {
+                    if((self != other || index > 1) && vposA.dst(vposB2) < GameConstants.COLLISION_DISTANCE) {
                         segmentHit(self, other, index);
                         return;
                     }
@@ -78,7 +77,7 @@ public class CollisionSystem extends IteratingSystem {
             PositionComponent otherPos = ComponentMappers.position.get(victim);
             InputComponent input = ComponentMappers.input.get(attacker);
             player.segments.addFirst(pos.pos.cpy());
-            delta.set(input.lastMoveDirection).nor().scl(SEGMENT_DISTANCE);
+            delta.set(input.lastMoveDirection).nor().scl(GameConstants.SEGMENT_DISTANCE);
             pos.pos.add(delta);
             engine.removeEntity(victim);
         }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import de.hochschuletrier.gdw.ws1516.events.ShootEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.Game;
+import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
@@ -41,8 +42,8 @@ public class ShootSystem extends EntitySystem implements ShootEvent.Listener {
             InputComponent input = ComponentMappers.input.get(playerEntity);
             final PositionComponent pos = ComponentMappers.position.get(playerEntity);
 
-            float x = pos.pos.x + input.lastMoveDirection.x * CollisionSystem.SEGMENT_DISTANCE;
-            float y = pos.pos.y + input.lastMoveDirection.y * CollisionSystem.SEGMENT_DISTANCE;
+            float x = pos.pos.x + input.lastMoveDirection.x * GameConstants.SEGMENT_DISTANCE;
+            float y = pos.pos.y + input.lastMoveDirection.y * GameConstants.SEGMENT_DISTANCE;
             Entity entity = game.createEntity("projectile", x, y, animation.tint);
             ProjectileComponent projectile = ComponentMappers.projectile.get(entity);
             projectile.velocity.set(input.lastMoveDirection).nor().scl(120);
