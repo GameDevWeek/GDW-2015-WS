@@ -135,9 +135,9 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
         PhysixBodyComponent uniBody = ComponentMappers.physixBody.get(unicorn);
         PhysixBodyComponent entityBody= ComponentMappers.physixBody.get(entity);
         
-        double distance = Math.sqrt( Math.pow(uniBody.getPosition().x-entityBody.getPosition().x,2) +
-                        Math.pow(uniBody.getPosition().y-entityBody.getPosition().y,2) );
-        behaviour.canSeeUnicorn = (distance < GameConstants.ENEMY_SIGHT_DISTANCE);
+//        double distance = Math.sqrt( Math.pow(uniBody.getPosition().x-entityBody.getPosition().x,2) +
+//                        Math.pow(uniBody.getPosition().y-entityBody.getPosition().y,2) );
+//        behaviour.canSeeUnicorn = (distance < GameConstants.ENEMY_SIGHT_DISTANCE);
 
         
         if( behaviour.canSeeUnicorn )

@@ -38,7 +38,5 @@ public class GameConstants {
     public static final int GLOBAL_VISION=5;
     public static final int UNICORN_SIZE=128;
     
-    // GameLogic
-    public static final double ENEMY_SIGHT_DISTANCE = 400.0;
     
 }
