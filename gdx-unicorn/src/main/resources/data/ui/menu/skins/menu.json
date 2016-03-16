@@ -1,7 +1,8 @@
 {
     "com.badlogic.gdx.graphics.g2d.BitmapFont": {
         "default-font": {"file": "data/fonts/verdana_32.fnt"},
-        "verdana_32": {"file": "data/fonts/verdana_32.fnt"}
+        "verdana_32": {"file": "data/fonts/verdana_32.fnt"},
+        "open_sans_24": {"file": "data/fonts/open_sans_24.fnt"}
     },
     "com.badlogic.gdx.graphics.Color": {
         "green": {"a": 1, "b": 0, "g": 1, "r": 0},
@@ -22,7 +23,7 @@
         "toggle": {"down": "default-round-down", "checked": "default-round-down", "up": "default-round"}
     },
     "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
-        "default": { "font": "default-font", "fontColor": "pink", "overFontColor":"white"},
+        "default": { "font": "open_sans_24", "fontColor": "pink", "overFontColor":"white"},
         "toggle": {"down": "default-round-down", "up": "default-round", "checked": "default-round-down", "font": "default-font", "fontColor": "white", "downFontColor": "cyan", "overFontColor": "softOrange"},
         "error": {"down": "default-round-down", "up": "default-round", "font": "default-font", "fontColor": "red"}
     },

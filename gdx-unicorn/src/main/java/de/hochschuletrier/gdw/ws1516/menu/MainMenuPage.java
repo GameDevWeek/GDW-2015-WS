@@ -26,16 +26,10 @@ public class MainMenuPage extends MenuPage {
         int yOffset = 370;
         int yStep = 55;
         
-        
-    
-        
-        
-        
-        
-        
-        
         if(type==Type.MENU) {
-        addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 150, 50, "Start Game", this::startGame);
+            
+          addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Start Game", new LevelSelectionPage(skin, menuManager));  
+        //addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 150, 50, "Start Game", this::startGame);
         }
         else if(type==Type.PAUSED) {
             addLeftAlignedButton(xOffset, yOffset - yStep * (i++), 150, 50, "Continue", () -> menuManager.popPage());
