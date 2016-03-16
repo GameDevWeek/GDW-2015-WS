@@ -77,7 +77,6 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
 
     @Override
     public void onScoreEvent(ScoreType type, int value) {
-        logger.info("scoreevent");
         switch( type)
         {
         case CHOCO_COIN:
