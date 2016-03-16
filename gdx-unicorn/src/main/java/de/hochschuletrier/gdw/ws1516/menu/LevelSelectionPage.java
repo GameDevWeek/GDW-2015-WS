@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
+import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
 import de.hochschuletrier.gdw.commons.gdx.state.transition.SplitHorizontalTransition;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
@@ -39,6 +40,7 @@ public class LevelSelectionPage extends MenuPage {
         
         
         Main.getInstance().screenCamera.bind();
+        AssetManagerX assetManager = Main.getInstance().getAssetManager();
         Texture level_preview_texture = new Texture("data/graphics/unicorn_s.png");
         Texture buttonBack_texture = new Texture("data/graphics/blue_gum_s.png");
         Texture buttonNext_texture = new Texture("data/graphics/blue_gum_s.png");
