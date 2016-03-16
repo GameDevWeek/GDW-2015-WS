@@ -48,7 +48,7 @@
                 "animation": "unicorn_idle"
             },
             "PhysixBody": {
-                "type": "circle",
+                "type": "enemy",
                 "size": 30,
                 "density": 5,
                 "friction": 0.2,
@@ -74,7 +74,7 @@
                 "animation": "unicorn_idle"
             },
             "PhysixBody": {
-                "type": "circle",
+                "type": "enemy",
                 "size": 30,
                 "density": 5,
                 "friction": 0.2,

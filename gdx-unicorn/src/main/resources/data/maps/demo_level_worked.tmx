@@ -16,92 +16,10 @@
   </data>
  </layer>
  <objectgroup name="object_layer">
-  <object id="3" type="safepoint" x="2151" y="1099" width="49" height="51">
-   <properties>
-    <property name="entity_type" value="safe_point"/>
-   </properties>
-  </object>
-  <object id="4" x="2878" y="1408">
-   <properties>
-    <property name="entity_type" value="physics_line"/>
-   </properties>
-   <polyline points="0,0 196,-193"/>
-  </object>
-  <object id="6" type="trigger" x="3137" y="1073" width="191" height="141">
-   <properties>
-    <property name="action" value="goal"/>
-    <property name="entity_type" value="trigger"/>
-   </properties>
-  </object>
   <object id="9" type="trigger_death" x="1408" y="708" width="191" height="59">
    <properties>
     <property name="action" value="death_zone"/>
     <property name="entity_type" value="trigger"/>
-   </properties>
-  </object>
-  <object id="11" gid="2" x="1124" y="738" width="64" height="64">
-   <properties>
-    <property name="entity_type" value="blue_bubblegum"/>
-   </properties>
-  </object>
-  <object id="12" gid="2" x="473" y="355" width="64" height="64">
-   <properties>
-    <property name="entity_type" value="blue_bubblegum"/>
-   </properties>
-  </object>
-  <object id="13" gid="2" x="1894" y="735" width="64" height="64">
-   <properties>
-    <property name="entity_type" value="blue_bubblegum"/>
-   </properties>
-  </object>
-  <object id="14" gid="3" x="1267" y="1034" width="64" height="64">
-   <properties>
-    <property name="entity_type" value="rainbow_bubblegum"/>
-   </properties>
-  </object>
-  <object id="17" gid="4" x="545" y="1143" width="64" height="64">
-   <properties>
-    <property name="entity_type" value="chocolate"/>
-   </properties>
-  </object>
-  <object id="18" x="88" y="1328" width="122" height="60">
-   <properties>
-    <property name="entity_type" value="player_start"/>
-   </properties>
-  </object>
-  <object id="19" gid="7" x="833" y="1403" width="64" height="64">
-   <properties>
-    <property name="entity_type" value="hunter"/>
-   </properties>
-  </object>
-  <object id="20" gid="6" x="1792" y="1403" width="64" height="64">
-   <properties>
-    <property name="entity_type" value="tourist"/>
-   </properties>
-  </object>
-  <object id="21" gid="6" x="1856" y="1404" width="64" height="64">
-   <properties>
-    <property name="entity_type" value="tourist"/>
-   </properties>
-  </object>
-  <object id="22" gid="6" x="1920" y="1403" width="64" height="64">
-   <properties>
-    <property name="entity_type" value="tourist"/>
-   </properties>
-  </object>
-  <object id="23" gid="7" x="2750" y="1214" width="64" height="64">
-   <properties>
-    <property name="entity_type" value="hunter"/>
-   </properties>
-  </object>
-  <object id="24" gid="6" x="2689" y="1403" width="64" height="64">
-   <properties>
-    <property name="entity_type" value="tourist"/>
-   </properties>
-  </object>
-  <object id="25" gid="6" x="2751" y="1401" width="64" height="64">
-   <properties>
-    <property name="entity_type" value="tourist"/>
    </properties>
   </object>
  </objectgroup>

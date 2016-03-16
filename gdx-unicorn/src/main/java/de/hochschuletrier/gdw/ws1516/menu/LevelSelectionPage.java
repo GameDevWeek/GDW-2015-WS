@@ -28,34 +28,25 @@ public class LevelSelectionPage extends MenuPage {
     
     public LevelSelectionPage(Skin skin, MenuManager menuManager) {
         super(skin, "menu_bg");
-        
-        int i = 0;
-        int xOffset = 55;
-        int yOffset = 370;
-        int yStep = 55;
-        
-        
-        addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 150, 50, "Start Game", this::startGame);
-        
-        
-        
+                   
         Main.getInstance().screenCamera.bind();
         AssetManagerX assetManager = Main.getInstance().getAssetManager();
-        Texture level_preview_texture = new Texture("data/graphics/unicorn_s.png");
-        Texture buttonBack_texture = new Texture("data/graphics/blue_gum_s.png");
-        Texture buttonNext_texture = new Texture("data/graphics/blue_gum_s.png");
+        
+        Texture level_preview_texture = assetManager.getTexture("unicorn");
+        Texture buttonBack_texture = assetManager.getTexture("bubblegum_blue");
+        Texture buttonNext_texture = assetManager.getTexture("bubblegum_blue");
         level_previews = new Texture[level_preview_count];
       
-        level_previews[0] = new Texture("data/graphics/unicorn_s.png");
-        level_previews[1] = new Texture("data/graphics/enemy_hunter_s.png");
-        level_previews[2] = new Texture("data/graphics/enemy_paparazzi_s.png");
-        level_previews[3] = new Texture("data/graphics/bubble_s.png");
+        level_previews[0] = assetManager.getTexture("unicorn");
+        level_previews[1] = assetManager.getTexture("hunter");
+        level_previews[2] = assetManager.getTexture("paparazzi");
+        level_previews[3] = assetManager.getTexture("bubble");
         
         level_preview = createImageButton(level_previews[level_preview_index], 450, 250, 50, 50, this::startGame, true);
                     
         createImageButton(buttonBack_texture, 430, 230, 50, 50, this::previousLevel, true);
         createImageButton(buttonNext_texture, 450+level_preview_texture.getWidth(), 230, 50, 50, this::nextLevel, true);
-        addLeftAlignedButton(xOffset, yOffset - yStep*(i++), 100, 50, "Menu", () -> menuManager.popPage());
+        addLeftAlignedButton(55, 40, 100, 50, "Menu", () -> menuManager.popPage());
         
     }
     
@@ -68,9 +59,7 @@ public class LevelSelectionPage extends MenuPage {
         level_preview_index++;
         level_preview_index %= level_preview_count;
         setLevel(level_preview_index);
-        
-        
-    
+                    
     }
     
     private void previousLevel() {
@@ -92,16 +81,14 @@ public class LevelSelectionPage extends MenuPage {
         }
     }
     
-    private void stopGame() {
-        if (!main.isTransitioning()) {
-            main.changeState(main.getPersistentState(MainMenuState.class));
-        }
-    }
-    
+       
     protected final void addPageEntry(MenuManager menuManager, int x, int y, String text, MenuPage page) {
         menuManager.addLayer(page);
         
         addLeftAlignedButton(x, y, 150, 40, text, () -> menuManager.pushPage(page));
     }
-
+    
+    public int getIndexOfSelectedLevel() {
+        return level_preview_index;
+    }
 }
