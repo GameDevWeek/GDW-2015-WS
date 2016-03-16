@@ -24,6 +24,7 @@ public abstract class Item {
     protected float opacity;
     public final ArrayList<Animation> animations = new ArrayList();
     protected boolean oriented;
+    private float pausePath;
 
     public Item(String group, float startTime, float angle, boolean oriented, float opacity) {
         this.group = group;
@@ -41,7 +42,12 @@ public abstract class Item {
         });
         startTime = originalStartTime;
         pathTime = 0;
+        pausePath = 0;
         //Fixme: angle, opacity
+    }
+    
+    public void abortPausePath() {
+        pausePath = 0;
     }
 
     public void setPosition(float x, float y) {
@@ -64,17 +70,28 @@ public abstract class Item {
                 startTime = 0;
             }
         }
-        if (startTime == 0 && path != null) {
-            pathTime += deltaTime;
-            if (oriented) {
-                setAngle(path.derivativeAt(temp, pathTime).angle());
+        if (startTime == 0) {
+            if(pausePath < 0)
+                return;
+            if(pausePath > 0) {
+                pausePath -= deltaTime;
+                if(pausePath <= 0)
+                    pausePath = 0;
+                else
+                    return;
             }
-            setPosition(path.valueAt(temp, pathTime));
+            pathTime += deltaTime;
+            if(path != null) {
+                if (oriented) {
+                    setAngle(path.derivativeAt(temp, pathTime).angle());
+                }
+                setPosition(path.valueAt(temp, pathTime));
+            }
 
             Iterator<Animation> it = animations.iterator();
             while (it.hasNext()) {
                 Animation animation = it.next();
-                if (animation.time < pathTime) {
+                if (animation.time <= pathTime) {
                     startAnimation(animation);
                     it.remove();
                 }
@@ -88,10 +105,21 @@ public abstract class Item {
         return group.equals("*") || this.group.equalsIgnoreCase(group);
     }
 
-    public abstract void startAnimation(Animation animation);
+    public boolean startAnimation(Animation animation) {
+        if(animation.animation.toLowerCase().equals("pause_path")) {
+            pausePath = animation.animationTime;
+            return true;
+        }
+        return false;
+    }
+
+    protected abstract boolean isAnimationDone();
 
     boolean isDone() {
-        return path == null || pathTime > path.getTotalTime();
+        if(path == null) {
+            return animations.isEmpty() && isAnimationDone();
+        }
+        return pathTime > path.getTotalTime();
     }
     
     boolean isStarted() {

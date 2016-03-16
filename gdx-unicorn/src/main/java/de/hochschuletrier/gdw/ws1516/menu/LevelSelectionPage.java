@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
+import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
 import de.hochschuletrier.gdw.commons.gdx.state.transition.SplitHorizontalTransition;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
@@ -21,6 +22,7 @@ import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
 public class LevelSelectionPage extends MenuPage {
 
     private int level_preview_index=0;
+    private int level_preview_count=4;
     private ImageButton level_preview;
     private Texture[] level_previews;
     
@@ -38,34 +40,47 @@ public class LevelSelectionPage extends MenuPage {
         
         
         Main.getInstance().screenCamera.bind();
+        AssetManagerX assetManager = Main.getInstance().getAssetManager();
         Texture level_preview_texture = new Texture("data/graphics/unicorn_s.png");
         Texture buttonBack_texture = new Texture("data/graphics/blue_gum_s.png");
         Texture buttonNext_texture = new Texture("data/graphics/blue_gum_s.png");
-        level_previews = new Texture[4];
+        level_previews = new Texture[level_preview_count];
       
         level_previews[0] = new Texture("data/graphics/unicorn_s.png");
         level_previews[1] = new Texture("data/graphics/enemy_hunter_s.png");
         level_previews[2] = new Texture("data/graphics/enemy_paparazzi_s.png");
         level_previews[3] = new Texture("data/graphics/bubble_s.png");
         
-        level_preview=createImageButton(level_previews[level_preview_index], 450, 250, 20, 20, this::startGame, true);
-               
-     
-        createImageButton(buttonBack_texture, 430, 230, 50, 50, this::startGame, true);
+        level_preview = createImageButton(level_previews[level_preview_index], 450, 250, 50, 50, this::startGame, true);
+                    
+        createImageButton(buttonBack_texture, 430, 230, 50, 50, this::previousLevel, true);
         createImageButton(buttonNext_texture, 450+level_preview_texture.getWidth(), 230, 50, 50, this::nextLevel, true);
         addLeftAlignedButton(xOffset, yOffset - yStep*(i++), 100, 50, "Menu", () -> menuManager.popPage());
         
     }
     
+    private void setLevel(int index) {
+        level_preview.remove();
+        level_preview = createImageButton(level_previews[index], 450, 250, 50, 50, this::startGame, true);
+    }
     private void nextLevel() {
-        if(level_preview_index==level_previews.length-1) {
-            level_preview_index=-1;
-        }
         level_preview.remove();
         level_preview_index++;
-        level_preview = createImageButton(level_previews[level_preview_index], 450, 250, 50, 50, this::startGame, true);
+        level_preview_index %= level_preview_count;
+        setLevel(level_preview_index);
         
         
+    
+    }
+    
+    private void previousLevel() {
+        level_preview.remove();
+        level_preview_index--;
+        
+        if(level_preview_index==-1) {
+            level_preview_index=level_preview_count-1;
+        }
+        setLevel(level_preview_index);
     }
     
     private void startGame() {

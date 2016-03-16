@@ -67,7 +67,17 @@ import de.hochschuletrier.gdw.ws1516.game.utils.EntityLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.MapLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
+<<<<<<< HEAD
+
+import java.util.HashMap;
+
+import java.util.function.Consumer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+=======
 import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
+>>>>>>> develop
 
 public class Game extends InputAdapter {
 
@@ -94,22 +104,41 @@ public class Game extends InputAdapter {
 
     private final NameSystem nameSystem = new NameSystem(GameConstants.PRIORITY_NAME);
 
+<<<<<<< HEAD
+    private final KeyboardInputSystem keyBoardInputSystem = new KeyboardInputSystem(GameConstants.PRIORITY_INPUT);
+    private final MovementSystem movementSystem = new MovementSystem(GameConstants.PRIORITY_MOVEMENT);
+
+    private final HudRenderSystem hudRenderSystem = new HudRenderSystem(1001);
+=======
     private final KeyboardInputSystem keyBoardInputSystem= new KeyboardInputSystem(GameConstants.PRIORITY_INPUT);
     private final MovementSystem movementSystem=new MovementSystem(GameConstants.PRIORITY_MOVEMENT);
     
-    private final HudRenderSystem hudRenderSystem = new HudRenderSystem(GameConstants.PRIORITY_HUD);
-    
     private final MapRenderSystem mapRenderSystem = new MapRenderSystem(GameConstants.PRIORITY_MAP_RENDERING);
+    
+    //
+    private final HudRenderSystem hudRenderSystem = new HudRenderSystem(1001);
+    //
+>>>>>>> develop
 
     private final EntityFactoryParam factoryParam = new EntityFactoryParam();
     private final EntityFactory<EntityFactoryParam> entityFactory = new EntityFactory("data/json/entities.json",
             Game.class);
+<<<<<<< HEAD
 
+    private TiledMap map;
+    private TiledMapRendererGdx mapRenderer;
+    private final HashMap<TileSet, Texture> tilesetImages = new HashMap();
+=======
+>>>>>>> develop
 
     private final TriggerSystem triggerSystem = new TriggerSystem();
     private final BulletSystem bulletSystem = new BulletSystem(engine);
+
+<<<<<<< HEAD
+=======
     private TiledMap map;
     
+>>>>>>> develop
     public Game() {
         // If this is a build jar file, disable hotkeys
         if (!Main.IS_RELEASE) {
@@ -138,11 +167,19 @@ public class Game extends InputAdapter {
         EntityCreator.setEngine(engine);
         EntityCreator.setGame(this);
         EntityCreator.setEntityFactory(entityFactory);
+<<<<<<< HEAD
+
+        // Hier Dateipfad zur Map einfuegen
+        loadMap("data/maps/demo.tmx");
+
+        // test:
+=======
         
         loadMap("data/maps/demo.tmx");
         mapRenderSystem.initialzeRenderer(map, cameraSystem);
         
         //test:
+>>>>>>> develop
         EntityCreator.createEntity("unicorn", 800, 100);
     }
 
@@ -168,7 +205,26 @@ public class Game extends InputAdapter {
             for (MapLoader mapLoader : mapLoaders) {
                 mapLoader.parseMap(map, this, engine);
             }
+<<<<<<< HEAD
+
+            initialzeRenderer();
         }
+    }
+
+    private void initialzeRenderer() {
+        for (TileSet tileset : map.getTileSets()) {
+            TmxImage img = tileset.getImage();
+            String filename = CurrentResourceLocator.combinePaths(tileset.getFilename(), img.getSource());
+            tilesetImages.put(tileset, new Texture(filename));
+        }
+        mapRenderer = new TiledMapRendererGdx(map, tilesetImages);
+
+        int totalMapWidth = map.getWidth() * map.getTileWidth();
+        int totalMapHeight = map.getHeight() * map.getTileHeight();
+        cameraSystem.setCameraBounds(0, 0, totalMapWidth, totalMapHeight);
+=======
+        }
+>>>>>>> develop
     }
 
     private void addSystems() {
@@ -214,7 +270,16 @@ public class Game extends InputAdapter {
     }
 
     public void update(float delta) {
+<<<<<<< HEAD
+        cameraSystem.bindCamera();
+
+        for (Layer layer : map.getLayers()) {
+            mapRenderer.render(0, 0, layer);
+        }
+
+=======
         cameraSystem.bindCamera();        
+>>>>>>> develop
         engine.update(delta);
     }
 
