@@ -70,14 +70,16 @@ public class CollisionSystem extends IteratingSystem {
     }
     
     private void pickupHit(Entity attacker, Entity victim) {
-        PickupEvent.emit(attacker, victim);
-        PositionComponent pos = ComponentMappers.position.get(attacker);
-        PositionComponent otherPos = ComponentMappers.position.get(victim);
         PlayerComponent player = ComponentMappers.player.get(attacker);
-        player.segments.addFirst(pos.pos.cpy());
-        delta.set(otherPos.pos).sub(pos.pos).nor().scl(SEGMENT_DISTANCE);
-        pos.pos.add(delta);
-        engine.removeEntity(victim);
+        if(player != null) {
+            PickupEvent.emit(attacker, victim);
+            PositionComponent pos = ComponentMappers.position.get(attacker);
+            PositionComponent otherPos = ComponentMappers.position.get(victim);
+            player.segments.addFirst(pos.pos.cpy());
+            delta.set(otherPos.pos).sub(pos.pos).nor().scl(SEGMENT_DISTANCE);
+            pos.pos.add(delta);
+            engine.removeEntity(victim);
+        }
     }
     
     private void headHit(Entity attacker, Entity victim) {
@@ -88,9 +90,10 @@ public class CollisionSystem extends IteratingSystem {
     }
     
     private void segmentHit(Entity attacker, Entity victim, int segment) {
-        if(ComponentMappers.player.has(attacker)) {
+        if(ComponentMappers.player.has(attacker))
             receiveHeadDamage(attacker);
-        }
+        else if(ComponentMappers.projectile.has(attacker))
+            engine.removeEntity(attacker);
         
         PositionComponent pos = ComponentMappers.position.get(victim);
         AnimationComponent anim = ComponentMappers.animation.get(victim);
@@ -122,5 +125,6 @@ public class CollisionSystem extends IteratingSystem {
     }
 
     private void explodeAt(Vector2 first, Color tint) {
+        System.out.println("boom");
     }
 }

@@ -11,7 +11,6 @@ import java.util.Random;
 
 public class PickupSystem extends EntitySystem implements PickupEvent.Listener {
 
-    private int scheduledPickups;
     private final Random rand = new Random();
     private final Game game;
 
@@ -35,21 +34,13 @@ public class PickupSystem extends EntitySystem implements PickupEvent.Listener {
     }
 
     @Override
-    public void update(float deltaTime) {
-        while (scheduledPickups > 0) {
-            float x = rand.nextFloat() * Main.WINDOW_WIDTH - 1;
-            float y = rand.nextFloat() * Main.WINDOW_HEIGHT - 1;
-            game.createEntity("pickup", x, y, 0, 0, Color.WHITE);
-            scheduledPickups--;
-        }
-    }
-
-    @Override
     public void onPickupEvent(Entity player, Entity pickup) {
-        schedulePickup();
+        createRandomPickup();
     }
 
-    public void schedulePickup() {
-        scheduledPickups++;
+    public void createRandomPickup() {
+        float x = rand.nextFloat() * Main.WINDOW_WIDTH - 1;
+        float y = rand.nextFloat() * Main.WINDOW_HEIGHT - 1;
+        game.createEntity("pickup", x, y, Color.WHITE);
     }
 }

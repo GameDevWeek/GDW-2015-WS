@@ -18,7 +18,8 @@ import de.hochschuletrier.gdw.ws1516.game.systems.CanvasRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.CollisionSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.PickupSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.ShootSystem;
-import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePlayerSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.UpdateProjectileSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.input.InputSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.input.KeyboardInputSystem;
 
@@ -28,8 +29,6 @@ public class Game extends InputAdapter {
             GameConstants.ENTITY_POOL_INITIAL_SIZE, GameConstants.ENTITY_POOL_MAX_SIZE,
             GameConstants.COMPONENT_POOL_INITIAL_SIZE, GameConstants.COMPONENT_POOL_MAX_SIZE
     );
-
-    private final UpdatePositionSystem updatePositionSystem = new UpdatePositionSystem(GameConstants.PRIORITY_PHYSIX + 1);
 
     private final EntityFactoryParam factoryParam = new EntityFactoryParam();
     private final EntityFactory<EntityFactoryParam> entityFactory = new EntityFactory("data/json/entities.json", Game.class);
@@ -47,18 +46,19 @@ public class Game extends InputAdapter {
         inputForwarder.set(engine.getSystem(KeyboardInputSystem.class));
         createSnake(0, 50, 50, Color.RED);
         createSnake(1, 850, 550, Color.BLUE);
-        pickupSystem.schedulePickup();
-        pickupSystem.schedulePickup();
+        pickupSystem.createRandomPickup();
+        pickupSystem.createRandomPickup();
     }
 
     private void addSystems() {
+        engine.addSystem(new ShootSystem(this, GameConstants.PRIORITY_SHOOT));
+        engine.addSystem(new UpdatePlayerSystem(GameConstants.PRIORITY_PHYSIX));
+        engine.addSystem(new UpdateProjectileSystem(GameConstants.PRIORITY_PHYSIX));
+        engine.addSystem(new CollisionSystem(GameConstants.PRIORITY_PHYSIX + 1));
         engine.addSystem(new CanvasRenderSystem(GameConstants.PRIORITY_CANVAS));
         engine.addSystem(new AnimationRenderSystem(GameConstants.PRIORITY_ANIMATIONS));
-        engine.addSystem(updatePositionSystem);
         engine.addSystem(new KeyboardInputSystem());
         engine.addSystem(new InputSystem());
-        engine.addSystem(new CollisionSystem());
-        engine.addSystem(new ShootSystem(this));
         engine.addSystem(pickupSystem);
     }
 
@@ -68,23 +68,23 @@ public class Game extends InputAdapter {
     }
 
     public Entity createSnake(int index, float x, float y, Color tint) {
-        Entity e = createEntity("snake", x, y, 0, 0, tint);
+        Entity e = createEntity("snake", x, y, tint);
         final InputComponent input = engine.createComponent(InputComponent.class);
         input.index = index;
         e.add(input);
         
         final PlayerComponent player = engine.createComponent(PlayerComponent.class);
         player.path.add(new Vector2(x - 100, y));
+        for(int i=0; i<6; i++)
+            player.segments.add(new Vector2());
         e.add(player);
         return e;
     }
     
-    public Entity createEntity(String name, float x, float y, float velX, float velY, Color tint) {
+    public Entity createEntity(String name, float x, float y, Color tint) {
         factoryParam.color = tint;
         factoryParam.x = x;
         factoryParam.y = y;
-        factoryParam.velX = velX;
-        factoryParam.velY = velY;
         Entity entity = entityFactory.createEntity(name, factoryParam);
 
         engine.addEntity(entity);

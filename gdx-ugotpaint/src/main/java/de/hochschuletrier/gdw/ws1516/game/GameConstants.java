@@ -3,8 +3,8 @@ package de.hochschuletrier.gdw.ws1516.game;
 public class GameConstants {
 
     // Priorities for entity systems
-    public static final int PRIORITY_PHYSIX = 0;
-    public static final int PRIORITY_ENTITIES = 10;
+    public static final int PRIORITY_SHOOT = 0;
+    public static final int PRIORITY_PHYSIX = 10;
     public static final int PRIORITY_CANVAS = 20;
     public static final int PRIORITY_ANIMATIONS = 30;
     public static final int PRIORITY_DEBUG_WORLD = 40;

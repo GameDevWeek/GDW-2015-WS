@@ -8,18 +8,17 @@ import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
-import java.util.Iterator;
 
-public class UpdatePositionSystem extends IteratingSystem {
+public class UpdatePlayerSystem extends IteratingSystem {
 
     private static final int PATH_STEP_SIZE = 10;
     private final Vector2 vel = new Vector2();
 
-    public UpdatePositionSystem() {
+    public UpdatePlayerSystem() {
         this(0);
     }
 
-    public UpdatePositionSystem(int priority) {
+    public UpdatePlayerSystem(int priority) {
         super(Family.all(PlayerComponent.class).get(), priority);
     }
 
@@ -28,15 +27,19 @@ public class UpdatePositionSystem extends IteratingSystem {
         InputComponent input = ComponentMappers.input.get(entity);
         PositionComponent position = ComponentMappers.position.get(entity);
         PlayerComponent player = ComponentMappers.player.get(entity);
-        position.oldPos.set(position.pos);
         vel.set(input.moveDirection).nor().scl(80 * deltaTime);
         position.pos.add(vel);
 
+        updatePath(player, position);
+        updateSegmentPositions(position, player);
+    }
+
+    private void updatePath(PlayerComponent player, PositionComponent position) {
         // add a path entry if last pos was set some distance ago
         float dist = player.path.getFirst().dst(position.pos);
         if (dist >= PATH_STEP_SIZE) {
             player.path.addFirst(position.pos.cpy());
-
+            
             // reduce path size afterwards
             float minLength = Math.max(
                     player.segments.size() * CollisionSystem.SEGMENT_DISTANCE * 2,
@@ -56,7 +59,9 @@ public class UpdatePositionSystem extends IteratingSystem {
                 player.path.removeLast();
             }
         }
+    }
 
+    private void updateSegmentPositions(PositionComponent position, PlayerComponent player) {
         // set segment positions based on path
         final Vector2 lastDir = new Vector2();
         final Vector2 lastPoint = position.pos.cpy();
