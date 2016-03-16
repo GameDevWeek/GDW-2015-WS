@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import de.hochschuletrier.gdw.ws1516.events.PickupEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ProjectileComponent;
@@ -75,8 +76,9 @@ public class CollisionSystem extends IteratingSystem {
             PickupEvent.emit(attacker, victim);
             PositionComponent pos = ComponentMappers.position.get(attacker);
             PositionComponent otherPos = ComponentMappers.position.get(victim);
+            InputComponent input = ComponentMappers.input.get(attacker);
             player.segments.addFirst(pos.pos.cpy());
-            delta.set(otherPos.pos).sub(pos.pos).nor().scl(SEGMENT_DISTANCE);
+            delta.set(input.lastMoveDirection).nor().scl(SEGMENT_DISTANCE);
             pos.pos.add(delta);
             engine.removeEntity(victim);
         }
@@ -90,12 +92,13 @@ public class CollisionSystem extends IteratingSystem {
     }
     
     private void segmentHit(Entity attacker, Entity victim, int segment) {
-        if(ComponentMappers.player.has(attacker))
+        if(ComponentMappers.player.has(attacker)) {
             receiveHeadDamage(attacker);
-        else if(ComponentMappers.projectile.has(attacker))
+            segment -= 3;
+        } else if(ComponentMappers.projectile.has(attacker)) {
             engine.removeEntity(attacker);
+        }
         
-        PositionComponent pos = ComponentMappers.position.get(victim);
         AnimationComponent anim = ComponentMappers.animation.get(victim);
         PlayerComponent player = ComponentMappers.player.get(victim);
         while(player.segments.size() > segment) {
@@ -115,16 +118,14 @@ public class CollisionSystem extends IteratingSystem {
             }
             //fixme: die
         } else {
-            Vector2 first = pos.pos;
             for(int i=0; i<3; i++) {
-                explodeAt(first, anim.tint);
-                first = player.segments.removeFirst();
+                explodeAt(player.segments.get(i), anim.tint);
             }
-            pos.pos.set(first);
+            pos.pos.set(player.removeFirstSegments(3));
         }
     }
 
     private void explodeAt(Vector2 first, Color tint) {
-        System.out.println("boom");
+        //todo
     }
 }

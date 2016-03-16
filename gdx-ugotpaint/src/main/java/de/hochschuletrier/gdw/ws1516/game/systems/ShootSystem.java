@@ -47,32 +47,7 @@ public class ShootSystem extends EntitySystem implements ShootEvent.Listener {
             ProjectileComponent projectile = ComponentMappers.projectile.get(entity);
             projectile.velocity.set(input.lastMoveDirection).nor().scl(120);
             
-            // Reduce path
-            Iterator<Vector2> it = player.path.iterator();
-            float toRemove = CollisionSystem.SEGMENT_DISTANCE;
-            if(it.hasNext()) {
-                Vector2 last = it.next();
-                Vector2 delta = new Vector2();
-                while(it.hasNext()) {
-                    Vector2 v = it.next();
-                    float dist = last.dst(v);
-                    if(dist >= toRemove) {
-                        if(dist == toRemove)
-                            it.remove();
-                        else {
-                            delta.set(v).sub(last).nor().scl(toRemove);
-                            last.add(delta);
-                        }
-                        break;
-                    } else {
-                        toRemove -= dist;
-                        last.set(v);
-                        it.remove();
-                    }
-                }
-            }
-            pos.pos.set(player.segments.getFirst());
-            player.segments.removeFirst();
+            pos.pos.set(player.removeFirstSegments(1));
         }
     }
 }
