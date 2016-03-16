@@ -85,22 +85,19 @@ public class PhysixBodyComponentFactory extends
      // Horn
         PhysixFixtureDef fixtureDef = new PhysixFixtureDef(physixSystem)
                 .density(1).friction(0).restitution(0f)
-                .shapeCircle(width * 0.1f, new Vector2(0, -height * 0.4f));
+                .shapeCircle(width * 0.1f, new Vector2(width *0.45f, -height * 0.4f)).sensor(true);
         Fixture fixture = playerBody.createFixture(fixtureDef);
 
+        //mainBody
        fixtureDef = new PhysixFixtureDef(physixSystem)
-        .density(1f).friction(0f).restitution(0f)
-        .shapeBox(width * 0.18f, height * 0.825f, new Vector2(0, 0), 0);
+        .density(0.2f).friction(0f).restitution(0f)
+        .shapeBox(width * 0.9f, height * 0.9f, new Vector2(0, 0), 0);
         fixture = playerBody.createFixture(fixtureDef);
         fixture.setUserData("horn");
 
 
-        //mainBody
-        fixtureDef = new PhysixFixtureDef(physixSystem)
-                .density(1).friction(0f).restitution(0f)
-                .shapeCircle(width * 0.1f, new Vector2(0, height * 0.425f));
-        fixture = playerBody.createFixture(fixtureDef);
-        fixture.setUserData("body");
+
+
         
         //jump contact
         fixtureDef = new PhysixFixtureDef(physixSystem)
