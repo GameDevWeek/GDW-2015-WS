@@ -29,8 +29,8 @@ public class MovementSystem extends IteratingSystem implements
     // }
 
     public MovementSystem(int priority) {
-        super(Family.all(PhysixBodyComponent.class, MovementComponent.class,
-                InputComponent.class).get(), priority);
+        super(Family.all(PhysixBodyComponent.class, MovementComponent.class)
+                .get(), priority);
         StartFlyEvent.register(this);
         EndFlyEvent.register(this);
         JumpEvent.register(this);
@@ -62,40 +62,30 @@ public class MovementSystem extends IteratingSystem implements
         PlayerComponent playerComp = ComponentMappers.player.get(entity);
 
         if (movement != null) {
-            // normal move
-            if (input != null) {
-
-                switch (movement.state) {
-                case ON_GROUND:
-                    moveOnGround(entity);
-                    break;
-                case FLYING:
-                    moveWhileFlying(entity, deltaTime);
-                    break;
-                case FALLING:
-                    break;
-                case JUMPING:
-                    break;
-                default:
-                    break;
-                }
-
+            switch (movement.state) {
+            case FLYING:
+                moveWhileFlying(entity, deltaTime);
+                break;
+            case FALLING:
+            case JUMPING:
+            case ON_GROUND:
+            default:
+                defaultMovement(entity);
+                break;
             }
 
         }
 
     }
 
-    private void moveOnGround(Entity entity) {
+    private void defaultMovement(Entity entity) {
         // get Components
         PhysixBodyComponent physix = ComponentMappers.physixBody.get(entity);
         InputComponent input = ComponentMappers.input.get(entity);
         MovementComponent movement = ComponentMappers.movement.get(entity);
 
         if (input != null) {
-            movement.velocityX = (movement.speed * input.directionX);
-            physix.setLinearVelocityX(movement.velocityX);
-
+            MovementEvent.emit(entity, input.directionX);
             if (input.startJump
                     && movement.state == MovementComponent.State.ON_GROUND) {
                 JumpEvent.emit(entity);
@@ -113,6 +103,9 @@ public class MovementSystem extends IteratingSystem implements
         movement.velocityX = (movement.speed * input.directionX);
         movement.velocityY = (movement.speed * input.directionY);
         physix.setLinearVelocity(movement.velocityX, movement.velocityY);
+        // physix.applyImpulse(movement.velocityX, movement.velocityY);
+
+        // timer:
         movement.remainingStateTime -= delta;
         if (movement.remainingStateTime <= 0) {
             EndFlyEvent.emit(entity);
@@ -150,12 +143,10 @@ public class MovementSystem extends IteratingSystem implements
     @Override
     public void onMovementEvent(Entity entity, float dirX) {
         // TODO Auto-generated method stub
-        PhysixBodyComponent physix = ComponentMappers.physixBody.get(entity);
         MovementComponent movement = ComponentMappers.movement.get(entity);
 
-        if (movement.state == MovementComponent.State.ON_GROUND) {
-            movement.velocityX = (movement.speed * dirX);
-        }
+        movement.velocityX = (movement.speed * dirX);
+
     }
 
 }
