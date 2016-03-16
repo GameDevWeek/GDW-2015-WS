@@ -41,23 +41,23 @@ vec4 calcRainbowColor()
 	float phase = mod(base, 1);
 	float level = mod(base, PART);
 	
-	if(phase < PART)
+	if(phase <= PART)
 	{
 		rainbowColor = vec4(1.0, level * 6, 0.0, 1.0);
 	}
-	else if(phase < PART * 2)
+	else if(phase <= PART * 2)
 	{
 		rainbowColor = vec4(1.0 - level * 6, 1.0, 0.0, 1.0);
 	}
-	else if(phase < PART * 3)
+	else if(phase <= PART * 3)
 	{
 		rainbowColor = vec4(0.0, 1.0, level * 6, 1.0);
 	}
-	else if(phase < PART * 4)
+	else if(phase <= PART * 4)
 	{
 		rainbowColor = vec4(0.0, 1 - level * 6, 1.0, 1.0);
 	}
-	else if(phase < PART * 5)
+	else if(phase <= PART * 5)
 	{
 		rainbowColor = vec4(level * 6, 0.0, 1.0, 1.0);
 	}
