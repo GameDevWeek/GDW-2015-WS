@@ -46,7 +46,6 @@ import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerContactListener
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.TriggerListener;
 import de.hochschuletrier.gdw.ws1516.game.systems.BubbleGlueSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BubblegumSpitSystem;
-import de.hochschuletrier.gdw.ws1516.game.systems.BubblegumUsingSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BulletSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.CameraSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.EffectsRenderSystem;
@@ -121,7 +120,6 @@ public class Game extends InputAdapter {
     private final EnemyHandlingSystem enemyHandlingSystem = new EnemyHandlingSystem();
     private final EntitySystem enemyVisionSystem = new EnemyVisionSystem();
     private final ScoreSystem scoreBoardSystem = new ScoreSystem();
-    private final EntitySystem bubblgumUsingSystem = new BubblegumUsingSystem();
 
     private TiledMap map;
 
@@ -213,7 +211,6 @@ public class Game extends InputAdapter {
         engine.addSystem(scoreBoardSystem);
         engine.addSystem(bubblegumSpitSystem);
         engine.addSystem(bubbleGlueSystem);
-        engine.addSystem(bubblgumUsingSystem);
     }
 
     private void addContactListeners() {
