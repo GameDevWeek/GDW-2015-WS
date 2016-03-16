@@ -12,6 +12,7 @@ import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
 
 public class MainMenuPage extends MenuPage {
 
+    private final MenuManager menuManager;
 
     public enum Type {
         MENU,
@@ -20,6 +21,7 @@ public class MainMenuPage extends MenuPage {
     }
     public MainMenuPage(Skin skin, MenuManager menuManager, Type type) {
         super(skin, "menu_bg");
+        this.menuManager=menuManager;
         
         int i = 0;
         int xOffset = 55;
@@ -42,6 +44,7 @@ public class MainMenuPage extends MenuPage {
         }
         else if (type==Type.PAUSED) {
             addLeftAlignedButton(xOffset, yOffset - yStep*(i++), 100, 50, "Menu", this::stopGame);
+            
         }
         
     }    
@@ -58,7 +61,9 @@ public class MainMenuPage extends MenuPage {
     private void stopGame() {
         if (!main.isTransitioning()) {
             main.changeState(main.getPersistentState(MainMenuState.class));
+            
         }
+        
     }
     
     protected final void addPageEntry(MenuManager menuManager, int x, int y, String text, MenuPage page) {

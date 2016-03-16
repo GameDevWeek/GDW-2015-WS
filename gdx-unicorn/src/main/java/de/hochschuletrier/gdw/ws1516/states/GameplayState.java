@@ -75,7 +75,8 @@ public class GameplayState extends BaseGameState {
                         mainProcessor = menuInputProcessor;                        
                     } else {
                         menuManager.popPage();
-                                            }
+                      
+                    }
                     return true;
                 }
                 return super.keyUp(keycode);
