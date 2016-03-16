@@ -57,7 +57,7 @@ public class HudRenderSystem extends IteratingSystem {
         FileHandle handle = Gdx.files.internal("data/ui/menu/heart3.png");
         Texture hearts = new Texture(handle);
         Texture coins = new Texture(handle);
-        DrawUtil.draw(hearts, 20, 20, 50, 50);
+        DrawUtil.draw(hearts, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 50, 50);
         DrawUtil.draw(coins, 900, 20, 50, 50);
        
   

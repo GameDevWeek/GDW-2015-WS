@@ -6,7 +6,6 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.input.InputForwarder;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
@@ -57,8 +56,8 @@ public class GameplayState extends BaseGameState {
         menuManager.addLayer(new DecoImage(assetManager.getTexture("menu_fg")));
 
         menuManager.pushPage(menuPageRoot);
-
         
+               
  
         
 //        menuManager.getStage().setDebugAll(true);
