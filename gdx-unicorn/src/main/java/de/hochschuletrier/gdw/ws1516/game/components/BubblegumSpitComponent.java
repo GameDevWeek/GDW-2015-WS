@@ -8,21 +8,16 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Pool;
 
 /**
- * A bullet component.
+ * A bubble-gum spit component.
  * @author Eileen
  * @version 1.0
  */
-public class BulletComponent extends Component implements Pool.Poolable {
-    
-    /** Called when the player entity has been hit
-     *  first entity is the bullet entity,
-     *  second entity is the player entity that has been hit */
-    public BiConsumer<Entity, Entity> onPlayerHit;
+public class BubblegumSpitComponent extends Component implements Pool.Poolable {
     
     /** Called when something, except the player, has been hit
-     *  first entity is the bullet entity,
-     *  second entity is the entity that has been hit */
-    public BiConsumer<Entity, Entity> onEntityHit;
+     *  first entity is the spit entity,
+     *  second entity is the enemy that has been hit */
+    public BiConsumer<Entity, Entity> onEnemyHit;
     
     /**
      * Called when something has been hit, including the player or other entity
@@ -32,8 +27,7 @@ public class BulletComponent extends Component implements Pool.Poolable {
     
     @Override
     public void reset() {
-        onPlayerHit = null;
-        onEntityHit = null;
+        onEnemyHit = null;
         onHit = null;
     }
 }

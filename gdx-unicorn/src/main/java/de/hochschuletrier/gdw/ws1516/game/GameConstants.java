@@ -1,6 +1,7 @@
 package de.hochschuletrier.gdw.ws1516.game;
 
 import com.badlogic.ashley.core.Family;
+import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 
 public class GameConstants {
     public static final float TILESIZE_X=64;
@@ -37,6 +38,13 @@ public class GameConstants {
 
     // Bullet system
     public static final float BULLET_SPEED = (50.0f / 43.0f) * 15.0f;
+    
+    // Bubble-gum spit 
+    public static final float SPIT_FORCE = 30.0f;
+    public static final float SPIT_SPAWN_ANGLE = PhysixUtil.DEG2RAD * -20.0f;
+    public static final float SPIT_SPAWN_OFFSET_X = 50.0f;
+    public static final float SPIT_SPANW_OFFSET_Y = 0.0f;
+    public static final float SPIT_GLUE_COOLDOWN = 5.0f;
     
     public static float MUSIC_FADE_TIME = 2;
     
