@@ -190,7 +190,10 @@
                 "layer": 0
             },
             "ParticleTest": {
-                "effect": "test"
+                "effect": "test2"
+            },
+            "BackgroundParticle": {
+                "bgEffect": "test"
             }
         }
     },

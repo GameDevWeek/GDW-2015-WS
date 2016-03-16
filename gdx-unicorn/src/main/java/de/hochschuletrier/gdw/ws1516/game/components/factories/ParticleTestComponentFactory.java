@@ -23,6 +23,7 @@ public class ParticleTestComponentFactory extends ComponentFactory<EntityFactory
         String var = properties.getString("effect");
         ParticleEffect var2 = assetManager.getParticleEffect(var);
         component.effect = new ParticleEffect(var2);
+                
         entity.add(component);
     }
 }
