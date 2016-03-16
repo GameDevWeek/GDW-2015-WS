@@ -24,20 +24,20 @@ public class FollowPlayerEnemyState extends EnemyBaseState {
 
     private static final Logger logger = LoggerFactory
             .getLogger(FollowPlayerEnemyState.class);
-    private LinkedList<Vector2> buffer=new LinkedList<>();
+//    private LinkedList<Vector2> buffer=new LinkedList<>();
     @Override
     public EnemyBaseState _compute(Entity entity, Entity player, float deltaTime) {
     
         EnemyBehaviourComponent behaviour=ComponentMappers.enemyBehaviour.get(entity);
         PositionComponent positionEnemy=ComponentMappers.position.get(entity);
         PositionComponent positionPlayer=ComponentMappers.position.get(player);
-        buffer.add(new Vector2(positionEnemy.x,positionEnemy.y));
-        if (buffer.size()>=GameConstants.ENEMY_FRAME_JUMP_BUFFER){
-            if(Vector2.dst(buffer.get(0).x, buffer.get(0).y, positionEnemy.x, positionEnemy.y)<1f){
-                    JumpEvent.emit(entity);
-            }
-            buffer.removeFirst();
-        }
+//        buffer.add(new Vector2(positionEnemy.x,positionEnemy.y));
+//        if (buffer.size()>=GameConstants.ENEMY_FRAME_JUMP_BUFFER){
+//            if(Vector2.dst(buffer.get(0).x, buffer.get(0).y, positionEnemy.x, positionEnemy.y)<1f){
+//                    JumpEvent.emit(entity);
+//            }
+//            buffer.removeFirst();
+//        }
         if ( positionPlayer.x < positionEnemy.x ){
             MovementEvent.emit(entity, -1.0f);
         }else
@@ -47,12 +47,12 @@ public class FollowPlayerEnemyState extends EnemyBaseState {
         
         if ( behaviour.canSeeUnicorn )
         {
-//            if (behaviour.canFireRange){
-//                MovementEvent.emit(entity, 0.0f);
-//                return new AttackEnemyState();
-//            }else{
+            if (behaviour.cooldown==0){
+                MovementEvent.emit(entity, 0.0f);
+                return new AttackEnemyState();
+            }else{
                 return this;
-//            }
+            }
         }else
         {  
             return new FollowPathEnemyState();

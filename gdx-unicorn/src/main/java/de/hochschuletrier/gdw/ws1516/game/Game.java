@@ -43,9 +43,12 @@ import de.hochschuletrier.gdw.commons.tiled.TileSet;
 import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.commons.tiled.tmx.TmxImage;
 import de.hochschuletrier.gdw.ws1516.Main;
+import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
+import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
 import de.hochschuletrier.gdw.ws1516.game.components.BubblegumSpitComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.BulletComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ImpactSoundComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PathComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.TriggerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.factories.EntityFactoryParam;
@@ -66,6 +69,7 @@ import de.hochschuletrier.gdw.ws1516.game.systems.MovementSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.NameSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RespawnSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.ScoreSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.SimpleAnimationRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.SoundSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.TriggerSystem;
@@ -96,6 +100,8 @@ public class Game extends InputAdapter {
 
     private final CVarBool physixDebug = new CVarBool("physix_debug", true, 0, "Draw physix debug");
     private final Hotkey togglePhysixDebug = new Hotkey(() -> physixDebug.toggle(false), Input.Keys.F1,
+            HotkeyModifier.CTRL);
+    private final Hotkey scoreCheating = new Hotkey(() -> ScoreBoardEvent.emit(ScoreType.BONBON, 1), Input.Keys.F2,
             HotkeyModifier.CTRL);
 
     private final PooledEngine engine = new PooledEngine(GameConstants.ENTITY_POOL_INITIAL_SIZE,
@@ -138,19 +144,23 @@ public class Game extends InputAdapter {
     private final DummyEnemyExecutionSystem dummyEnemySystem = new DummyEnemyExecutionSystem();    
     private final EnemyHandlingSystem enemyHandlingSystem = new EnemyHandlingSystem();
     private final EntitySystem enemyVisionSystem = new EnemyVisionSystem();
+    private final ScoreSystem scoreBoardSystem = new ScoreSystem();
 
     private TiledMap map;
+
     
     public Game() {
         // If this is a build jar file, disable hotkeys
         if (!Main.IS_RELEASE) {
             togglePhysixDebug.register();
+            scoreCheating.register();
         }
 
     }
 
     public void dispose() {
         togglePhysixDebug.unregister();
+        scoreCheating.unregister();
     }
 
     public void init(AssetManagerX assetManager) {
@@ -174,7 +184,10 @@ public class Game extends InputAdapter {
         
         //test:
         EntityCreator.createEntity("unicorn", 700, 100);
-        EntityCreator.createEntity("hunter", 1000, 100);
+        Entity entity=EntityCreator.createEntity("hunter", 1000, 100);
+        PathComponent pathComponent =ComponentMappers.path.get(entity);
+        pathComponent.points.add(new Vector2(1000, 100));
+        pathComponent.points.add(new Vector2(800,100));
     }
 
 
@@ -222,6 +235,7 @@ public class Game extends InputAdapter {
         engine.addSystem(dummyEnemySystem);
         engine.addSystem(enemyVisionSystem );
         engine.addSystem(mapRenderSystem);
+        engine.addSystem(scoreBoardSystem);
         engine.addSystem(bubblegumSpitSystem);
         engine.addSystem(bubbleGlueSystem);
     }
