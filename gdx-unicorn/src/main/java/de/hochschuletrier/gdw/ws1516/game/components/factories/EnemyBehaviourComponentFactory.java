@@ -21,7 +21,7 @@ public class EnemyBehaviourComponentFactory extends ComponentFactory<EntityFacto
     public void run(Entity entity, SafeProperties meta, SafeProperties properties, EntityFactoryParam param) {
         EnemyBehaviourComponent component = engine.createComponent(EnemyBehaviourComponent.class);
 
-        component.shootingRange = properties.getFloat("shootingRange",50);
+        component.maxCooldown=properties.getFloat("cooldown",1);
         component.currentState =  new FollowPathEnemyState();
         
         entity.add(component);

@@ -45,6 +45,7 @@ import de.hochschuletrier.gdw.commons.tiled.tmx.TmxImage;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.components.BulletComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ImpactSoundComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PathComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.TriggerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.factories.EntityFactoryParam;
@@ -159,7 +160,10 @@ public class Game extends InputAdapter {
         
         //test:
         EntityCreator.createEntity("unicorn", 700, 100);
-        EntityCreator.createEntity("hunter", 1000, 100);
+        Entity entity=EntityCreator.createEntity("hunter", 1000, 100);
+        PathComponent pathComponent =ComponentMappers.path.get(entity);
+        pathComponent.points.add(new Vector2(1000, 100));
+        pathComponent.points.add(new Vector2(800,100));
     }
 
 
