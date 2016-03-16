@@ -1,6 +1,5 @@
 package de.hochschuletrier.gdw.ws1516.game;
 
-import com.badlogic.ashley.core.Family;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 
 public class GameConstants {
@@ -70,7 +69,6 @@ public class GameConstants {
     // Shader parameters
     public static final float RAINBOW_FREQUENCY = 2.0f;
     public static final float RAINBOW_ALPHA = 0.5f;
-    public static final float RAINBOW_FREQUENCY = 2f;
     public static final float PAPARAZZI_ALPHA = 0.8f;
     public static final float PAPARAZZI_INTENSITY = 1.0f;
 }
