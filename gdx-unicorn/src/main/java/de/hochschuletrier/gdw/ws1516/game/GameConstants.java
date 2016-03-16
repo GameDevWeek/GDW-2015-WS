@@ -43,7 +43,7 @@ public class GameConstants {
     public static final int SCORE_HITS = 0;
     
     // Shader parameters
-    public static final float RAINBOW_MODE_ALPHA = 0.6f;
+    public static final float RAINBOW_MODE_ALPHA = 0.4f;
     public static final float RAINBOW_FREQUENCY = 2.0f;
     
     public static final float TILESIZE_X=64;

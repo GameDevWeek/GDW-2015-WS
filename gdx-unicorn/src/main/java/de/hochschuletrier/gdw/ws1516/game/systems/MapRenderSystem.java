@@ -73,8 +73,8 @@ public class MapRenderSystem extends IteratingSystem {
                 rainbowShader.setUniformf("u_startDuration", rainbowStartDuration);
                 rainbowShader.setUniformf("u_durationLeft", rainbowDurationLeft);
                 rainbowShader.setUniform2fv("u_frameDimension", dimensions, 0, 2);
-                rainbowShader.setUniformf("u_rainbowAlpha", 0.6f);
-                rainbowShader.setUniformf("u_rainbowFrequency", 2.0f);
+                rainbowShader.setUniformf("u_rainbowAlpha", rainbowAlpha.get());
+                rainbowShader.setUniformf("u_rainbowFrequency", rainbowFrequency.get());
                 rainbowShader.setUniformf("u_time", (float)TimeUtils.timeSinceMillis(startTime) * 0.001f);
             }
         }
