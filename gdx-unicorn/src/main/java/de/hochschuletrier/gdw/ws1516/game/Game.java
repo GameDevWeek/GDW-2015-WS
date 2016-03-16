@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -42,25 +43,44 @@ import de.hochschuletrier.gdw.commons.tiled.TileSet;
 import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.commons.tiled.tmx.TmxImage;
 import de.hochschuletrier.gdw.ws1516.Main;
+import de.hochschuletrier.gdw.ws1516.game.components.BubblegumSpitComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.BulletComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ImpactSoundComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.TriggerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.factories.EntityFactoryParam;
+import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BubblegumSpitListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BulletListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.ImpactSoundListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerContactListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.TriggerListener;
 import de.hochschuletrier.gdw.ws1516.game.systems.BulletSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.CameraSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.EnemyHandlingSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.EnemyVisionSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.HitPointManagementSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.HudRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.KeyboardInputSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.MapRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.MovementSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.NameSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RenderSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.RespawnSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.SimpleAnimationRenderSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.SoundSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.TriggerSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.NameSystem;
+
+import de.hochschuletrier.gdw.ws1516.game.systems.AnimationRenderSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.HudRenderSystem;
+
+import de.hochschuletrier.gdw.ws1516.game.systems.NameSystem;
+
+import de.hochschuletrier.gdw.ws1516.game.systems.AnimationRenderSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.BubbleGlueSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.BubblegumSpitSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.HudRenderSystem;
+
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityCreator;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityLoader;
@@ -68,6 +88,7 @@ import de.hochschuletrier.gdw.ws1516.game.utils.MapLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
+import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.DummyEnemyExecutionSystem;
 
 public class Game extends InputAdapter {
 
@@ -96,7 +117,9 @@ public class Game extends InputAdapter {
 
     private final KeyboardInputSystem keyBoardInputSystem= new KeyboardInputSystem(GameConstants.PRIORITY_INPUT);
     private final MovementSystem movementSystem=new MovementSystem(GameConstants.PRIORITY_MOVEMENT);
-    
+    private final BubblegumSpitSystem bubblegumSpitSystem = new BubblegumSpitSystem(engine);
+    private final BubbleGlueSystem bubbleGlueSystem = new BubbleGlueSystem(engine);
+     
     private final HudRenderSystem hudRenderSystem = new HudRenderSystem(GameConstants.PRIORITY_HUD);
     
     private final MapRenderSystem mapRenderSystem = new MapRenderSystem(GameConstants.PRIORITY_MAP_RENDERING);
@@ -108,6 +131,14 @@ public class Game extends InputAdapter {
 
     private final TriggerSystem triggerSystem = new TriggerSystem();
     private final BulletSystem bulletSystem = new BulletSystem(engine);
+
+    private final EntitySystem respawnSystem = new RespawnSystem();
+    private final SoundSystem soundSystem = new SoundSystem(null);
+    private final HitPointManagementSystem hitPointSystem = new HitPointManagementSystem();
+    private final DummyEnemyExecutionSystem dummyEnemySystem = new DummyEnemyExecutionSystem();    
+    private final EnemyHandlingSystem enemyHandlingSystem = new EnemyHandlingSystem();
+    private final EntitySystem enemyVisionSystem = new EnemyVisionSystem();
+
     private TiledMap map;
     
     public Game() {
@@ -125,7 +156,6 @@ public class Game extends InputAdapter {
     public void init(AssetManagerX assetManager) {
         Main.getInstance().console.register(physixDebug);
         physixDebug.addListener((CVar) -> physixDebugRenderSystem.setProcessing(physixDebug.get()));
-
         addSystems();
         addContactListeners();
         setupPhysixWorld();
@@ -143,7 +173,8 @@ public class Game extends InputAdapter {
         mapRenderSystem.initialzeRenderer(map, cameraSystem);
         
         //test:
-        EntityCreator.createEntity("unicorn", 800, 100);
+        EntityCreator.createEntity("unicorn", 700, 100);
+        EntityCreator.createEntity("hunter", 1000, 100);
     }
 
 
@@ -184,7 +215,15 @@ public class Game extends InputAdapter {
         engine.addSystem(hudRenderSystem);
         engine.addSystem(triggerSystem);
         engine.addSystem(bulletSystem);
+        engine.addSystem(respawnSystem );
+        engine.addSystem(soundSystem);
+        engine.addSystem(hitPointSystem);
+        engine.addSystem(enemyHandlingSystem);
+        engine.addSystem(dummyEnemySystem);
+        engine.addSystem(enemyVisionSystem );
         engine.addSystem(mapRenderSystem);
+        engine.addSystem(bubblegumSpitSystem);
+        engine.addSystem(bubbleGlueSystem);
     }
 
     private void addContactListeners() {
@@ -194,6 +233,7 @@ public class Game extends InputAdapter {
         contactListener.addListener(TriggerComponent.class, new TriggerListener());
         contactListener.addListener(PlayerComponent.class, new PlayerContactListener());
         contactListener.addListener(BulletComponent.class, new BulletListener());
+        contactListener.addListener(BubblegumSpitComponent.class, new BubblegumSpitListener());
     }
 
     private void setupPhysixWorld() {

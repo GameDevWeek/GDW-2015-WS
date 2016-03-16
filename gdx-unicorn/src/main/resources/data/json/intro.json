@@ -4,110 +4,105 @@
        "name": { "color": "FFFFFF", "font": "verdana_32", "align": "center" }
     },
     "paths" : {
-        "story":{
-            "type": "linear",
-            "destinations": [
-            {"x":500,"y":400,"speed":0.2},
-            {"x":500,"y":401,"speed":1}
-            ]
-        },
-        "leftToMidT":{
+        "tr1" : {
             "type": "linear",
             "destinations":[
-            {"x":-100,"y":200,"speed":"100"},
-            {"x":460,"y":200,"speed":"100"}
+                {"x":600, "y":200, "speed":60},
+                {"x":660, "y":200, "speed":60},
+                {"x":661, "y":200, "speed":0.1}
             ]
         },
-        "leftToMidU":{
-            "type": "linear",
-            "destinations":[
-            {"x":-100,"y":200,"speed":"300"},
-            {"x":500,"y":200,"speed":"300"}
-            ]
-        },
-        "midToRightT":{
-            "type": "linear",
-            "destinations":[
-            {"x":460,"y":200,"speed":"100"},
-            {"x":1200,"y":200,"speed":"100"}
-            ]
-        },
-        "leftToRight":{
-            "type": "linear",
-            "destinations":[
-            {"x":-200,"y":200,"speed":"300"},
-            {"x":1200,"y":200,"speed":"300"}
-            ]
-        },
-        "stay":{
+        "g1" : {
             "type":"linear",
             "destinations":[
-                {"x":500,"y":200 ,"speed":0.15},
-                {"x":500,"y":202 ,"speed":0.2}
+                {"x":670,"y":200,"speed":70},
+                {"x":650,"y":300,"speed":70}
             ]
         },
-        "stayT":{
+        "g2" : {
             "type":"linear",
             "destinations":[
-                {"x":460,"y":200 ,"speed":1},
-                {"x":462,"y":200 ,"speed":1}
+                {"x":650,"y":300,"speed":200},
+                {"x":620,"y":200,"speed":200}
             ]
         },
-        "bubblegum":{
-            "type": "linear",
-                "destinations":[
-                    {"x": 500, "y":750, "speed":100},
-                    {"x": 500, "y":200, "speed":100},
-                    {"x": 500, "y":200, "speed":0}
-                ]
-            }
+        "tr2" :{
+            "type":"linear",
+            "destinations":[
+                {"x":661,"y":200,"speed":100},
+                {"x":1400,"y":200,"speed":100}
+            ]
+        },
+        "uc1":{
+            "type":"linear",
+            "destinations":[
+                {"x":0,"y":200,"speed":300},
+                {"x":610,"y":200,"speed":300}
+            ]
+        }
        },
     "queues" : {
-        "trexQ":{
+        "slideBGQ1":{
+            "layer":0,
+            "time":-1,
+            "items":[
+                {"type":"texture","path":"slide","resource":"hunter"}
+            ]  
+        },
+        "slideFGQ1":{
+            "layer":1,
+            "time":-1,
+            "items":[
+                {"type":"texture","path":"trSlide1","resource":"trex"},
+                {"type":"texture","path":"gSlide1","resource":"bubblegum_rainbow"}
+            ]  
+        },
+        "trexQ1":{
             "layer" :1,
             "time" : 0,
             "items" : [
-                {"type":"texture","path":"leftToMidT","resource":"trex"}
+                {"type":"texture","path":"tr1","resource":"trex"}
             ],
-            "finalNext" : "trexQP"
-        },
-        "trexQP":{
-            "layer" :1,
-            "time" : -1,
-            "items" : [
-                {"type":"texture","path":"stayT","resource":"trex"}
+            "animations":[
+                {"time":1000,"animation":"pause_path","animationTime":4000,"group":"*"}
             ],
-            "finalNext" : "trexQ2",
-            "animations" : []
+            "finalNext" : "trexQ2"
         },
         "trexQ2":{
             "layer" :1,
             "time" : -1,
             "items" : [
-                {"type":"texture","path":"midToRightT","resource":"trex"}
+                {"type":"texture","path":"tr2","resource":"trex"}
             ],
-            "finalNext" : "unicornQ",
+            "finalNext" : "unicornQ1",
             "animations" : []
         },
-        
-        "unicornQ":{
+        "gumQ1":{
+            "layer" :2,
+            "time" : 2000,
+            "items" : [
+                {"type":"texture","path":"g1","resource":"bubblegum_rainbow"}
+            ],
+            "finalNext" : "unicornQ",
+            "animations" : [
+                {"time":1400,"animation":"pause_path","animationTime":1000,"group":"*"}
+                ],
+            "finalNext":"gumQ2"
+        },
+        "gumQ2":{
+            "layer" :2,
+            "time" : -1,
+            "items" : [
+                {"type":"texture","path":"g2","resource":"bubblegum_rainbow"}
+            ],
+            "animations" : []
+        },
+        "unicornQ1":{
             "layer" :1,
             "time" : -1,
             "items" : [
-                {"type":"texture","path":"leftToRight","resource":"unicorn"}
+                {"type":"texture", "path":"uc1","resource":"unicorn"}
             ],
-            "next":"pressStartQ",
-            "animations" : [
-                { "time": 2350, "animation": "pause_path", "animationTime": 2000, "group": "*" }
-            ]
-        },
-        "bubblegumQ":{
-            "layer" :0,
-            "time" : 0,
-            "items" : [
-                {"type":"texture", "path":"bubblegum","resource":"bubblegum_rainbow"}
-            ],
-            "finalNext" : "bubblegumQ2",
             "animations" : []
         },
         "bubblegumQ2":{
@@ -130,6 +125,6 @@
                 {"animation":"type","animationTime":100},
                 {"time":6000, "animation":"untype","animationTime":25}
             ]
-        }   
+        }
     }
 }

@@ -2,6 +2,7 @@
     "unicorn": {
         "meta": {},
         "components": {
+            "StartPosition":{},
             "Position": {},
             "Input":{},
             "Player":{},
@@ -25,6 +26,15 @@
         "meta": {},
         "components": {
             "Position": {},
+            "Movable":{
+                "state":"on_ground"
+                },
+            "EnemyType": {
+                "type" : "hunter"
+            },
+            "Behaviour": {
+		"shootingRange": 300
+	    },
             "Animation": {
                 "animation": "unicorn_idle"
             },

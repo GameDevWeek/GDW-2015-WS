@@ -29,8 +29,7 @@ public class MovementSystem extends IteratingSystem implements
     // }
 
     public MovementSystem(int priority) {
-        super(Family.all(PhysixBodyComponent.class, MovementComponent.class)
-                .get(), priority);
+        super(Family.all(PhysixBodyComponent.class, MovementComponent.class).get(), priority);
         StartFlyEvent.register(this);
         EndFlyEvent.register(this);
         JumpEvent.register(this);

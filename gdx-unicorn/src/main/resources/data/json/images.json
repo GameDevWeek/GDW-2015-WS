@@ -12,6 +12,7 @@
     "trex" : "data/graphics/trex.png",
     "cookie" : "data/graphics/cookie_s.png",
     "drop" : "data/graphics/drop.png",
+    "bubble" : "data/graphics/bubble_s.png",
     
     "hunter" : "data/graphics/enemy_hunter_s.png",
     "paparazzi" : "data/graphics/enemy_paparazzi_s.png",

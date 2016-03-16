@@ -1,5 +1,6 @@
 package de.hochschuletrier.gdw.ws1516.menu;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+
 
 
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
@@ -57,12 +59,16 @@ public class MenuPage extends Group {
 
      protected final void addSlider(float min, float max,float stepSize,int x, int y,String text){
         
-        Slider slider = new Slider(min,max,stepSize,false,skin);
+        Slider slider = new Slider(min,max,stepSize,false,skin,"default-horizontal");
         Label label = new Label(text,skin,"default");
-        int size = 250;       
-        label.setBounds(x, y+1, 100, 100);
-        slider.setBounds(x+70,y,size,100);
+        int size = 250; 
         slider.setValue(50);
+//        slider.setColor(Color.PINK);
+        
+
+        label.setBounds(x, y+1,100,100);
+        slider.setBounds(x+70,y,size,100);
+        
         
         Label value= new Label(""+(int)slider.getValue(),skin,"default");
         value.setBounds(x+size+80,y+1,100,100);   
@@ -70,13 +76,18 @@ public class MenuPage extends Group {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 value.setText(""+(int)slider.getValue());
-
             }
         });
+        slider.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+               System.out.print("TEST");
+            }
+        });
+        
         addActor(slider);
         addActor(label);
         addActor(value);
-
     }
 
     protected final void addLeftAlignedButton(int x, int y, int width, int height, String text,Runnable runnable) {
@@ -103,6 +114,8 @@ public class MenuPage extends Group {
     }
     
     protected ImageButton createImageButton(Texture texture, float x, float y, float width, float height, Runnable runnable, boolean add) {
+        
+        // NICHT GUT FÜR PERFORMANCE!!
         ImageButton ib = new ImageButton(new SpriteDrawable(new Sprite(texture)));
         
         ib.addListener(new ClickListener() {

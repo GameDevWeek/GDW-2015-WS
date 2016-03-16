@@ -13,6 +13,7 @@ public class ScoreBoardEvent {
  */
     public static enum ScoreType{
         CHOCO_COIN,
+        BONBON,
         BUBBLE_GUM,
         KILLED_ENEMIE,
         KILLED_OBSTACLE,

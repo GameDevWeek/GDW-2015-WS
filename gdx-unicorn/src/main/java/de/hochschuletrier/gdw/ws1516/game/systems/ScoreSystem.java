@@ -12,6 +12,7 @@ import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
+import de.hochschuletrier.gdw.ws1516.events.FinalScoreEvent;
 import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
@@ -72,6 +73,9 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
         case CHOCO_COIN:
             scoreComponent.chocoCoins += value;
                 break;
+        case BONBON:
+            scoreComponent.bonbons += value;
+                break;
         case BUBBLE_GUM:
             scoreComponent.bubblegums += value;
                 break;
@@ -88,7 +92,7 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
             scoreComponent.killedObstacles += value;
                 break;
         }
-        
+        FinalScoreEvent.emit(getFinalScore());
     }
 
     public long getFinalScore()
