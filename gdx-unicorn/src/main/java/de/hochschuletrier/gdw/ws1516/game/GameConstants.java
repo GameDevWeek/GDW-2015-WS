@@ -43,8 +43,8 @@ public class GameConstants {
     public static final int SCORE_HITS = 0;
     
     // Shader parameters
-    public static final float RAINBOW_ALPHA = 1.0f;
-    public static final float RAINBOW_FREQUENCY = 0.33f;
+    public static final float RAINBOW_ALPHA = 0.5f;
+    public static final float RAINBOW_FREQUENCY = 2f;
     public static final float PAPARAZZI_ALPHA = 0.8f;
     public static final float PAPARAZZI_INTENSITY = 1.0f;
     

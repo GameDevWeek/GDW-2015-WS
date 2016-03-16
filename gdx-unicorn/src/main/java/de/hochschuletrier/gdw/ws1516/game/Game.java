@@ -134,9 +134,6 @@ public class Game extends InputAdapter {
         addContactListeners();
         setupPhysixWorld();
         entityFactory.init(engine, assetManager);
-        
-        ShaderProgram rainbowShader = ShaderLoader.getRainbowShader();
-        DrawUtil.setShader(rainbowShader);
 
         // EntityCreator
         EntityCreator.setEngine(engine);

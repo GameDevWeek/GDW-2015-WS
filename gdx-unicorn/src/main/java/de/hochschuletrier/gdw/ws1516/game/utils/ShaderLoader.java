@@ -5,20 +5,34 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 public class ShaderLoader {
     
-    private static ShaderProgram rainbowShader;
+    private static ShaderProgram fancyRainbowShader;
+    private static ShaderProgram simpleRainbowShader;
     private static ShaderProgram paparazziShader;
     
-    public static ShaderProgram getRainbowShader()
+    public static ShaderProgram getFancyRainbowShader()
     {
-        if(rainbowShader == null)
+        if(fancyRainbowShader == null)
         {
-            String vertexShaderCode = Gdx.files.internal("data/shaders/rainbowVertexShader.glsl").readString();
-            String fragmentShaderCode = Gdx.files.internal("data/shaders/rainbowFragmentShader.glsl").readString();
-            rainbowShader = new ShaderProgram(vertexShaderCode, fragmentShaderCode);
-            System.out.println(rainbowShader.getLog());
+            String vertexShaderCode = Gdx.files.internal("data/shaders/fancyRainbowVertexShader.glsl").readString();
+            String fragmentShaderCode = Gdx.files.internal("data/shaders/fancyRainbowFragmentShader.glsl").readString();
+            fancyRainbowShader = new ShaderProgram(vertexShaderCode, fragmentShaderCode);
+            System.out.println(fancyRainbowShader.getLog());
         }
         
-        return rainbowShader;
+        return fancyRainbowShader;
+    }
+    
+    public static ShaderProgram getSimpleRainbowShader()
+    {
+        if(simpleRainbowShader == null)
+        {
+            String vertexShaderCode = Gdx.files.internal("data/shaders/simpleRainbowVertexShader.glsl").readString();
+            String fragmentShaderCode = Gdx.files.internal("data/shaders/simpleRainbowFragmentShader.glsl").readString();
+            simpleRainbowShader = new ShaderProgram(vertexShaderCode, fragmentShaderCode);
+            System.out.println(simpleRainbowShader.getLog());
+        }
+        
+        return simpleRainbowShader;
     }
     
     public static ShaderProgram getPaparazziShader()
