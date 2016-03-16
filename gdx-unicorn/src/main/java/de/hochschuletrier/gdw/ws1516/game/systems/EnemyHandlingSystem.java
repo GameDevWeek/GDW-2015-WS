@@ -120,7 +120,6 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
         
         behaviour.currentState = behaviour.currentState.compute(entity, unicorn, deltaTime);
         
-   
     }
 
 

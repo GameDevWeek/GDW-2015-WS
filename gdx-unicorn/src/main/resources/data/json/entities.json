@@ -7,6 +7,13 @@
             "Position": {},
             "Input":{},
             "Player":{},
+	    "HP":{
+		"value":3,
+		"max":3
+            },
+            "Lives":{
+		"value":3
+            },
             "Movable":{
                 "state":"on_ground"
                 },
@@ -27,10 +34,16 @@
         "meta": {},
         "components": {
             "Position": {},
+	    "Path":{},
+            "Movable":{
+                "state":"on_ground"
+                },
             "EnemyType": {
                 "type" : "hunter"
             },
-            "Behaviour": {},
+            "Behaviour": {
+		"cooldown":0.5
+	    },
             "Animation": {
                 "animation": "unicorn_idle"
             },
@@ -47,8 +60,18 @@
         "meta": {},
         "components": {
             "Position": {},
+	    "Path":{},
+            "Movable":{
+                "state":"on_ground"
+                },
+            "EnemyType": {
+                "type" : "paparazzi"
+            },
+            "Behaviour": {
+		"cooldown":1.5
+	    },
             "Animation": {
-                "animation": "paparazzi_idle"
+                "animation": "unicorn_idle"
             },
             "PhysixBody": {
                 "type": "circle",

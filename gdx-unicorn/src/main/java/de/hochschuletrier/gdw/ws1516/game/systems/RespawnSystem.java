@@ -12,6 +12,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 
 import de.hochschuletrier.gdw.commons.gdx.ashley.EntityInfo;
+import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.ws1516.events.GameRespawnEvent;
 import de.hochschuletrier.gdw.ws1516.events.TriggerEvent;
 import de.hochschuletrier.gdw.ws1516.events.TriggerEvent.Action;
@@ -33,12 +34,11 @@ public class RespawnSystem extends EntitySystem implements GameRespawnEvent.List
     
     @Override
     public void onGameRepawnEvent() {
-        PositionComponent currentPlayerPosition = ComponentMappers.position.get(player);
+        PhysixBodyComponent physixBody = ComponentMappers.physixBody.get(player);
         StartPointComponent respawnPosition = ComponentMappers.startPoint.get(player);
-        if ( currentPlayerPosition != null && respawnPosition != null )
+        if ( physixBody != null && respawnPosition != null )
         {
-            currentPlayerPosition.x = respawnPosition.x;
-            currentPlayerPosition.y = respawnPosition.y;
+            logger.info("{} , {}",respawnPosition.x,respawnPosition.y);
             HitPointsComponent hitPoints = ComponentMappers.hp.get(player);
             hitPoints.value = hitPoints.max;
         }else

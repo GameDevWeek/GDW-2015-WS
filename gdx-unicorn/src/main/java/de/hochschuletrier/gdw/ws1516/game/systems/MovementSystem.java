@@ -29,8 +29,7 @@ public class MovementSystem extends IteratingSystem implements
     // }
 
     public MovementSystem(int priority) {
-        super(Family.all(PhysixBodyComponent.class, MovementComponent.class,
-                InputComponent.class).get(), priority);
+        super(Family.all(PhysixBodyComponent.class, MovementComponent.class).get(), priority);
         StartFlyEvent.register(this);
         EndFlyEvent.register(this);
         JumpEvent.register(this);
@@ -63,7 +62,6 @@ public class MovementSystem extends IteratingSystem implements
 
         if (movement != null) {
             // normal move
-            if (input != null) {
 
                 switch (movement.state) {
                 case ON_GROUND:
@@ -80,8 +78,6 @@ public class MovementSystem extends IteratingSystem implements
                     break;
                 }
 
-            }
-
         }
 
     }
@@ -93,8 +89,9 @@ public class MovementSystem extends IteratingSystem implements
         MovementComponent movement = ComponentMappers.movement.get(entity);
 
         if (input != null) {
+            
             movement.velocityX = (movement.speed * input.directionX);
-            physix.setLinearVelocityX(movement.velocityX);
+            //physix.setLinearVelocityX(movement.velocityX);
 
             if (input.startJump
                     && movement.state == MovementComponent.State.ON_GROUND) {
