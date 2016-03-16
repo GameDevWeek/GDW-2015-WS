@@ -1,7 +1,7 @@
 package de.hochschuletrier.gdw.ws1516.game.utils;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+
 import de.hochschuletrier.gdw.ws1516.Main;
 
 public class ShaderLoader {
@@ -17,8 +17,8 @@ public class ShaderLoader {
 //            String vertexShaderCode = Gdx.files.internal("data/shaders/fancyRainbowVertexShader.glsl").readString();
 //            String fragmentShaderCode = Gdx.files.internal("data/shaders/fancyRainbowFragmentShader.glsl").readString();
 //            rainbowShader = new ShaderProgram(vertexShaderCode, fragmentShaderCode);
-            rainbowShader = Main.getInstance().getAssetManager().getShaderProgram("fancyRainbow");
-            System.out.println(rainbowShader.getLog());
+            fancyRainbowShader = Main.getInstance().getAssetManager().getShaderProgram("fancyRainbow");
+            System.out.println(fancyRainbowShader.getLog());
         }
         
         return fancyRainbowShader;
@@ -31,7 +31,7 @@ public class ShaderLoader {
 //            String vertexShaderCode = Gdx.files.internal("data/shaders/simpleRainbowVertexShader.glsl").readString();
 //            String fragmentShaderCode = Gdx.files.internal("data/shaders/simpleRainbowFragmentShader.glsl").readString();
 //            simpleRainbowShader = new ShaderProgram(vertexShaderCode, fragmentShaderCode);
-            Main.getInstance().getAssetManager().getShaderProgram("simpleRainbow");
+            simpleRainbowShader = Main.getInstance().getAssetManager().getShaderProgram("simpleRainbow");
             System.out.println(simpleRainbowShader.getLog());
         }
         
