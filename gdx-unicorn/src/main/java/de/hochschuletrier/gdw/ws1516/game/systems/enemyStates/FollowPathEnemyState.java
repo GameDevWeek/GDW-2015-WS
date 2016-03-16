@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import de.hochschuletrier.gdw.ws1516.events.EnemyActionEvent;
 import de.hochschuletrier.gdw.ws1516.events.JumpEvent;
+import de.hochschuletrier.gdw.ws1516.events.MovementEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyBehaviourComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PathComponent;
@@ -36,17 +37,16 @@ public class FollowPathEnemyState extends EnemyBaseState {
             
             if ( nextTarget.x < position.x )
             {
-                EnemyActionEvent.emit(entity, Type.MOVE, -75.0f);
+                MovementEvent.emit(entity, -1.0f);
             }else
             {
-                EnemyActionEvent.emit(entity, Type.MOVE, 75.0f);
+                MovementEvent.emit(entity, 1.0f);
             }
             if ( behaviour.lastJumped + 1.0f < timePassed )
             {
                 if ( Math.abs(nextTarget.x - position.x) < position.y - nextTarget.y   )
                 {
                     JumpEvent.emit(entity);
-                    EnemyActionEvent.emit(entity, Type.JUMP, -200.0f);
                     behaviour.lastJumped = timePassed;
                 } else
                 {
@@ -59,7 +59,7 @@ public class FollowPathEnemyState extends EnemyBaseState {
                 behaviour.pathIndex %= maxIndex;
             }
         }else{
-            EnemyActionEvent.emit( entity,Type.MOVE ,0f); 
+            MovementEvent.emit(entity, 0.0f);
         }
         
         if ( behaviour.canSeeUnicorn )

@@ -26,6 +26,9 @@
         "meta": {},
         "components": {
             "Position": {},
+            "Movable":{
+                "state":"on_ground"
+                },
             "EnemyType": {
                 "type" : "hunter"
             },
