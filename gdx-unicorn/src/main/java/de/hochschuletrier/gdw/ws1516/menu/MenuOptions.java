@@ -23,7 +23,7 @@ public class MenuOptions extends MenuPage {
         addSlider(0,100,1,xOffset,yOffset-yStep*(i++),"Sound");
         addSlider(0,100,1,xOffset,yOffset-yStep*(i++),"Music");
       
-        addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 100, 50,"Zurück", ()->menuManager.popPage());
+        addLeftAlignedButton(30, 40, 100, 50,"Menu", ()->menuManager.popPage());
     }
     
 

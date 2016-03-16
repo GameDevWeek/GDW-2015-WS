@@ -66,7 +66,7 @@ public class MenuPage extends Group {
 //        slider.setColor(Color.PINK);
         
 
-        label.setBounds(x, y+1, 100, 100);
+        label.setBounds(x, y+1,100,100);
         slider.setBounds(x+70,y,size,100);
         
         
@@ -78,6 +78,13 @@ public class MenuPage extends Group {
                 value.setText(""+(int)slider.getValue());
             }
         });
+        slider.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+               System.out.print("TEST");
+            }
+        });
+        
         addActor(slider);
         addActor(label);
         addActor(value);

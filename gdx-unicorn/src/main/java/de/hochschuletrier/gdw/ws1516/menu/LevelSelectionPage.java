@@ -28,12 +28,7 @@ public class LevelSelectionPage extends MenuPage {
     
     public LevelSelectionPage(Skin skin, MenuManager menuManager) {
         super(skin, "menu_bg");
-        
-        int i = 0;
-        int xOffset = 55;
-        int yOffset = 370;
-        int yStep = 55;
-        
+                   
         Main.getInstance().screenCamera.bind();
         AssetManagerX assetManager = Main.getInstance().getAssetManager();
         
@@ -51,7 +46,7 @@ public class LevelSelectionPage extends MenuPage {
                     
         createImageButton(buttonBack_texture, 430, 230, 50, 50, this::previousLevel, true);
         createImageButton(buttonNext_texture, 450+level_preview_texture.getWidth(), 230, 50, 50, this::nextLevel, true);
-        addLeftAlignedButton(xOffset, yOffset - yStep*(i++), 100, 50, "Menu", () -> menuManager.popPage());
+        addLeftAlignedButton(55, 40, 100, 50, "Menu", () -> menuManager.popPage());
         
     }
     
