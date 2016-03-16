@@ -71,7 +71,11 @@
 		"cooldown":1.5
 	    },
             "Animation": {
+<<<<<<< HEAD
                 "animation": "paparazzi_walking"
+=======
+                "animation": "unicorn_idle"
+>>>>>>> develop
             },
             "PhysixBody": {
                 "type": "enemy",

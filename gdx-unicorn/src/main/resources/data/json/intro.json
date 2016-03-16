@@ -39,6 +39,13 @@
                 {"x":0,"y":200,"speed":300},
                 {"x":610,"y":200,"speed":300}
             ]
+        },
+        "uc2":{
+            "type":"linear",
+            "destinations":[
+                {"x":610,"y":200,"speed":300},
+                {"x":1400,"y":200,"speed":300}
+            ]
         }
        },
     "queues" : {
@@ -47,7 +54,7 @@
             "time":-1,
             "items":[
                 {"type":"texture","path":"slide","resource":"hunter"}
-            ]  
+            ]
         },
         "slideFGQ1":{
             "layer":1,
@@ -55,7 +62,7 @@
             "items":[
                 {"type":"texture","path":"trSlide1","resource":"trex"},
                 {"type":"texture","path":"gSlide1","resource":"bubblegum_rainbow"}
-            ]  
+            ]
         },
         "trexQ1":{
             "layer" :1,
@@ -95,7 +102,9 @@
             "items" : [
                 {"type":"texture","path":"g2","resource":"bubblegum_rainbow"}
             ],
-            "animations" : []
+            "animations" : [
+              {"time":500, "animation":"pause_path","animationTime":10000,"group":"*"}
+            ]
         },
         "unicornQ1":{
             "layer" :1,
@@ -103,7 +112,18 @@
             "items" : [
                 {"type":"texture", "path":"uc1","resource":"unicorn"}
             ],
-            "animations" : []
+            "animations" : [],
+            "finalNext":"unicornQ2"
+        },
+        "unicornQ2":{
+            "layer" :1,
+            "time" : -1,
+            "items" : [
+                {"type":"texture", "path":"uc2","resource":"unicorn"}
+            ],
+            "animations" : [
+              {"time":0, "animation":"pause_path","animationTime":1000,"group":"*"}
+            ]
         },
         "bubblegumQ2":{
             "layer" :0,
