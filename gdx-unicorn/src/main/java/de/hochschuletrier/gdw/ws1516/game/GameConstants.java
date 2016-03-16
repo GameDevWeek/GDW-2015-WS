@@ -1,7 +1,10 @@
 package de.hochschuletrier.gdw.ws1516.game;
 
-public class GameConstants {
+import com.badlogic.ashley.core.Family;
 
+public class GameConstants {
+    public static final float TILESIZE_X=64;
+    public static final float TILESIZE_Y=64;
     // Priorities for entity systems
     public static final int PRIORITY_PHYSIX = 0;
     public static final int PRIORITY_ENTITIES = 10;
@@ -38,18 +41,23 @@ public class GameConstants {
     public static float MUSIC_FADE_TIME = 2;
     
     // Scoreborad-Constant
-    public static float SCORE_TIME_POINTS = - 100 / 60;
+    public static final float SCORE_TIME_POINTS = - 100 / 60;
     public static final int SCORE_CHOCOCOINS_POINTS = 1;
     public static final int SCORE_BONBONS_POINTS = 3;
     public static final int SCORE_DEATHS = 0; // negative Points ??
     public static final int SCORE_KILLED_ENEMIES = 0;
     public static final int SCORE_KILLED_OBSTACLES = 0;
     public static final int SCORE_HITS = 0;
+
+    //Vision System
+    public static final int GLOBAL_VISION=5;
+    public static final int UNICORN_SIZE=(int) (TILESIZE_X*2);
     
-    // Shader parameters
-    public static final float RAINBOW_MODE_ALPHA = 0.4f;
+    //EnemyBehaviour
+    public static final int ENEMY_FRAME_JUMP_BUFFER = 60;
+    //shaderParameter
+
     public static final float RAINBOW_FREQUENCY = 2.0f;
-    
-    public static final float TILESIZE_X=64;
-    public static final float TILESIZE_Y=64;
+    public static final float RAINBOW_MODE_ALPHA = 0.4f;
+
 }
