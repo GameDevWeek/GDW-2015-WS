@@ -1,36 +1,26 @@
 package de.hochschuletrier.gdw.ws1516.events;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.SnapshotArray;
 
-import de.hochschuletrier.gdw.ws1516.events.GameRespawnEvent.Listener;
-import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
+import de.hochschuletrier.gdw.ws1516.game.systems.EnemyHandlingSystem;
 
-public class ScoreBoardEvent {
 /**
- * Wich scoreattribute has to be increased
+ * zum bewegen der Gegener wird eines dieser Events aufgerufen
  * @author Tobi
  *
  */
-    public static enum ScoreType{
-        CHOCO_COIN,
-        BONBON,
-        BUBBLE_GUM,
-        KILLED_ENEMIE,
-        KILLED_OBSTACLE,
-        DEATH,
-        HIT;               
-    }
-    
+public class EnemyActionEvent {
     public static interface Listener {
-        void onScoreEvent(ScoreType type,int value);
+        void onEnemyActionEvent(Entity enemy,EnemyHandlingSystem.Action.Type action,float strength);
     }
 
     private static final SnapshotArray<Listener> listeners = new SnapshotArray<Listener>();
 
-    public static void emit(ScoreType type,int value) {
+    public static void emit(Entity enemy,EnemyHandlingSystem.Action.Type action,float strength) {
         Object[] items = listeners.begin();
         for (int i = 0, n = listeners.size; i < n; i++) {
-            ((Listener) items[i]).onScoreEvent(type,value);
+            ((Listener) items[i]).onEnemyActionEvent(enemy,action,strength);
         }
         listeners.end();
     }
@@ -46,5 +36,4 @@ public class ScoreBoardEvent {
     public static void unregisterAll() {
         listeners.clear();
     }
-
 }
