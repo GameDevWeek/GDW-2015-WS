@@ -13,10 +13,15 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.TimeUtils;
+
 import de.hochschuletrier.gdw.commons.devcon.DevConsole;
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVar;
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarEnum;
+import de.hochschuletrier.gdw.commons.devcon.cvar.CVarFloat;
+import de.hochschuletrier.gdw.commons.devcon.cvar.CVarInt;
 import de.hochschuletrier.gdw.commons.gdx.assets.AnimationExtended;
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.assets.loaders.AnimationExtendedLoader;
@@ -32,6 +37,8 @@ import de.hochschuletrier.gdw.commons.gdx.utils.GdxResourceLocator;
 import de.hochschuletrier.gdw.commons.gdx.utils.KeyUtil;
 import de.hochschuletrier.gdw.commons.resourcelocator.CurrentResourceLocator;
 import de.hochschuletrier.gdw.commons.utils.ClassUtils;
+import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 import de.hochschuletrier.gdw.ws1516.sandbox.SandboxCommand;
 import de.hochschuletrier.gdw.ws1516.states.LoadGameState;
 import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
@@ -65,7 +72,12 @@ public class Main extends StateBasedGame {
             SoundDistanceModel.INVERSE, SoundDistanceModel.class, 0, "sound distance model");
     private final CVarEnum<SoundEmitter.Mode> emitterMode = new CVarEnum("snd_mode", SoundEmitter.Mode.STEREO,
             SoundEmitter.Mode.class, 0, "sound mode");
-
+    
+    private long startTime = TimeUtils.millis();
+    private final CVarInt rainbowModeActive = new CVarInt("rainbowMode", 0, 0, 1, 0, "activates rainbowmode");
+    private final CVarFloat rainbowFrequency = new CVarFloat("rainbowFrequency", GameConstants.RAINBOW_FREQUENCY, 0.0f, Float.MAX_VALUE, 0, "");
+    private final CVarFloat rainbowAlpha = new CVarFloat("rainbowFrequency", GameConstants.RAINBOW_MODE_ALPHA, 0.0f, Float.MAX_VALUE, 0, "");
+    
     public Main() {
         super(new BaseGameState());
     }
@@ -133,6 +145,10 @@ public class Main extends StateBasedGame {
 
         this.console.register(emitterMode);
         emitterMode.addListener(this::onEmitterModeChanged);
+        
+        this.console.register(rainbowModeActive);
+        this.console.register(rainbowFrequency);
+        this.console.register(rainbowAlpha);
     }
 
     private void onLoadComplete() {
@@ -161,6 +177,18 @@ public class Main extends StateBasedGame {
         DrawUtil.resetColor();
 
         DrawUtil.batch.begin();
+        
+        ShaderProgram rainbowShader = ShaderLoader.getRainbowShader();
+        if(rainbowShader != null)
+        {
+            float[] dimensions = new float[]{ Gdx.graphics.getWidth(), Gdx.graphics.getHeight() };
+            rainbowShader.setUniform2fv("u_frameDimension", dimensions, 0, 2);
+            rainbowShader.setUniformi("u_rainbowMode", rainbowModeActive.get());
+            rainbowShader.setUniformf("u_rainbowAlpha", rainbowAlpha.get());
+            rainbowShader.setUniformf("u_rainbowFrequency", rainbowFrequency.get());
+            rainbowShader.setUniformf("u_rainbowAmplitude", GameConstants.RAINBOW_AMPLITUDE);
+            rainbowShader.setUniformf("u_time", (float)TimeUtils.timeSinceMillis(startTime) * 0.001f);
+        }
     }
 
     protected void postRender() {

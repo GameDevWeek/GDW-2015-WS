@@ -34,4 +34,8 @@ public class GameConstants {
     public static final int SCORE_KILLED_OBSTACLES = 0;
     public static final int SCORE_HITS = 0;
     
+    // Shader parameters
+    public static final float RAINBOW_MODE_ALPHA = 1.0f;
+    public static final float RAINBOW_FREQUENCY = 1.5f;
+    public static final float RAINBOW_AMPLITUDE = 1.0f;
 }

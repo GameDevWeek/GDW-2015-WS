@@ -10,6 +10,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -28,6 +29,7 @@ import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixModifierCompon
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixDebugRenderSystem;
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
 import de.hochschuletrier.gdw.commons.gdx.tiled.TiledMapRendererGdx;
+import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.commons.resourcelocator.CurrentResourceLocator;
 import de.hochschuletrier.gdw.commons.tiled.Layer;
 import de.hochschuletrier.gdw.commons.tiled.LayerObject;
@@ -57,6 +59,7 @@ import de.hochschuletrier.gdw.ws1516.game.utils.EntityLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.MapLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
+import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 
 import java.util.HashMap;
 import java.util.function.Consumer;
@@ -114,6 +117,9 @@ public class Game extends InputAdapter {
         addContactListeners();
         setupPhysixWorld();
         entityFactory.init(engine, assetManager);
+        
+        ShaderProgram rainbowShader = ShaderLoader.getRainbowShader();
+        DrawUtil.setShader(rainbowShader);
 
         // EntityCreator
         EntityCreator.setEngine(engine);
@@ -195,13 +201,16 @@ public class Game extends InputAdapter {
     }
 
     public void update(float delta) {
+        DrawUtil.setShader(ShaderLoader.getRainbowShader());
+        mapRenderer.update(delta);
+        cameraSystem.bind();
         for (Layer layer : map.getLayers()) {
             mapRenderer.render(0, 0, layer);
         }
-
+        
         engine.update(delta);
-
-        mapRenderer.update(delta);
+        DrawUtil.batch.flush();
+        DrawUtil.setShader(null);
     }
 
     public void createTrigger(float x, float y, float width, float height, Consumer<Entity> consumer) {

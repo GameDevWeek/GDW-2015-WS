@@ -24,6 +24,10 @@ public class CameraSystem extends IteratingSystem {
         this.camera = new LimitedSmoothCamera();
     }
     
+    public void bind(){
+        camera.bind();
+    }
+    
     
     @Override
     public void addedToEngine(Engine engine) {
