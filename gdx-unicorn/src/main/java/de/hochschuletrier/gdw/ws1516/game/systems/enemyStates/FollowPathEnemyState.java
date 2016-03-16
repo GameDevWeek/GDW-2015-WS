@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 
 import de.hochschuletrier.gdw.ws1516.events.EnemyActionEvent;
+import de.hochschuletrier.gdw.ws1516.events.JumpEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyBehaviourComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PathComponent;
@@ -44,6 +45,7 @@ public class FollowPathEnemyState extends EnemyBaseState {
             {
                 if ( Math.abs(nextTarget.x - position.x) < position.y - nextTarget.y   )
                 {
+                    JumpEvent.emit(entity);
                     EnemyActionEvent.emit(entity, Type.JUMP, -200.0f);
                     behaviour.lastJumped = timePassed;
                 } else
@@ -51,7 +53,7 @@ public class FollowPathEnemyState extends EnemyBaseState {
                     // zu lange stillgestanden
                 }
             }
-            if ( nextTarget.dst2(position.x,position.y) < 100 )
+            if ( nextTarget.dst2(position.x,position.y) < 200 )
             {
                 behaviour.pathIndex++;
                 behaviour.pathIndex %= maxIndex;
