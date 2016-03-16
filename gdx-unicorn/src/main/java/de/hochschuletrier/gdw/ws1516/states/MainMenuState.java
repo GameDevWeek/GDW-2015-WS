@@ -32,10 +32,11 @@ public class MainMenuState extends BaseGameState {
     private final InputForwarder inputForwarder;
 
     public MainMenuState(AssetManagerX assetManager) {
-        music = assetManager.getMusic("menu");
+        music = assetManager.getMusic("menutheme");
 
         final MainMenuPage menuPageRoot = new MainMenuPage(skin, menuManager, MainMenuPage.Type.MENU);
         menuManager.addLayer(menuPageRoot);
+        
 
 //        menuManager.addLayer(new DecoImage(assetManager.getTexture("menu_fg")));
         menuManager.pushPage(menuPageRoot);
@@ -74,11 +75,14 @@ public class MainMenuState extends BaseGameState {
         MusicManager.play(music, GameConstants.MUSIC_FADE_TIME);
         inputForwarder.set(menuManager.getInputProcessor());
         menuManager.popAllPages();
+        music.setVolume(0.5F);
+        music.play();
     }
 
     @Override
     public void onLeave(BaseGameState nextState) {
         inputForwarder.set(null);
+        music.stop();
     }
 
     @Override
@@ -92,4 +96,6 @@ public class MainMenuState extends BaseGameState {
     public Skin getSkin() {
         return skin;
     }
+    
+    
 }
