@@ -2,6 +2,7 @@
     "unicorn": {
         "meta": {},
         "components": {
+            "StartPosition":{},
             "Position": {},
             "Input":{},
             "Player":{},
@@ -25,6 +26,10 @@
         "meta": {},
         "components": {
             "Position": {},
+            "EnemyType": {
+                "type" : "hunter"
+            },
+            "Behaviour": {},
             "Animation": {
                 "animation": "unicorn_idle"
             },
