@@ -1,5 +1,8 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
@@ -9,6 +12,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Application;
 
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
@@ -21,6 +25,7 @@ import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
  */
 public class ScoreSystem extends EntitySystem implements EntityListener , ScoreBoardEvent.Listener , PauseGameEvent.Listener{
 
+    private static final Logger logger = LoggerFactory.getLogger(ScoreSystem.class);
     private ScoreComponent scoreComponent;
     private boolean gameIsPaused;
     
@@ -40,6 +45,7 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
     @Override
     public void removedFromEngine(Engine engine) {
         super.removedFromEngine(engine);
+        engine.removeEntityListener(this);
         ScoreBoardEvent.unregister(this);
         PauseGameEvent.unregister(this);
     }
@@ -48,7 +54,10 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
     public void update(float deltaTime) {
         if ( !gameIsPaused  )
         {
-            scoreComponent.playedSeconds += deltaTime;
+            if(scoreComponent != null)
+            {
+                scoreComponent.playedSeconds += deltaTime;
+            }
         }
     }
     @Override

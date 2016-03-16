@@ -59,10 +59,11 @@ public class GameConstants {
 
     //Vision System
     public static final int GLOBAL_VISION=5;
-    public static final int UNICORN_SIZE=(int) (TILESIZE_X*2);
+    public static final int UNICORN_SIZE=(int) (25*2);
     
     //EnemyBehaviour
     public static final int ENEMY_FRAME_JUMP_BUFFER = 60;
+    public static final int HUNTER_BULLET_OFFSET = 40;
     //shaderParameter
 
     public static final float RAINBOW_FREQUENCY = 2.0f;

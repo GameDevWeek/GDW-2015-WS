@@ -10,8 +10,10 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.systems.IteratingSystem;
 
 import de.hochschuletrier.gdw.commons.gdx.ashley.EntityInfo;
+import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.ws1516.events.GameRespawnEvent;
 import de.hochschuletrier.gdw.ws1516.events.TriggerEvent;
 import de.hochschuletrier.gdw.ws1516.events.TriggerEvent.Action;
@@ -23,24 +25,37 @@ import de.hochschuletrier.gdw.ws1516.game.components.StartPointComponent;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.GameLogicTest;
 import de.hochschuletrier.gdw.ws1516.sandbox.maptest.MapTest;
 
-public class RespawnSystem extends EntitySystem implements GameRespawnEvent.Listener, EntityListener {
+public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.Listener, EntityListener {
 
     private static final Logger logger = LoggerFactory.getLogger(GameLogicTest.class);
     private Entity player;
     
-    public RespawnSystem() {
+    public RespawnSystem()
+    {
+        super(Family.all(PlayerComponent.class).get());
+    }
+    
+   @Override
+    protected void processEntity(Entity entity, float deltaTime) {
+
+       PlayerComponent playerComp = ComponentMappers.player.get(player);
+       PhysixBodyComponent physixBody = ComponentMappers.physixBody.get(entity);
+       StartPointComponent respawnPosition = ComponentMappers.startPoint.get(entity);
+       HitPointsComponent hitPoints = ComponentMappers.hp.get(entity);
+       if ( physixBody != null && playerComp.doRespawn)
+       {
+           physixBody.setPosition(respawnPosition.x,respawnPosition.y);
+           hitPoints.value = hitPoints.max;
+           playerComp.doRespawn = false;
+       }
     }
     
     @Override
     public void onGameRepawnEvent() {
-        PositionComponent currentPlayerPosition = ComponentMappers.position.get(player);
-        StartPointComponent respawnPosition = ComponentMappers.startPoint.get(player);
-        if ( currentPlayerPosition != null && respawnPosition != null )
+        PlayerComponent playerComp = ComponentMappers.player.get(player);
+        if ( playerComp != null )
         {
-            currentPlayerPosition.x = respawnPosition.x;
-            currentPlayerPosition.y = respawnPosition.y;
-            HitPointsComponent hitPoints = ComponentMappers.hp.get(player);
-            hitPoints.value = hitPoints.max;
+            playerComp.doRespawn = true;
         }else
         {
             logger.warn("No Player or no RespawnPoint set");
@@ -56,7 +71,8 @@ public class RespawnSystem extends EntitySystem implements GameRespawnEvent.List
 
     @Override
     public void addedToEngine(Engine engine) {
-        Family family = Family.one(PlayerComponent.class, StartPointComponent.class).get();
+       // Family family = Family.one(PlayerComponent.class, StartPointComponent.class).get();
+        super.addedToEngine(engine);
         engine.addEntityListener(this);
         GameRespawnEvent.register(this);
     }
