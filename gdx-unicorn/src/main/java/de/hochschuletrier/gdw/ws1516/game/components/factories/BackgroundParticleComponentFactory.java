@@ -21,7 +21,7 @@ public class BackgroundParticleComponentFactory extends ComponentFactory<EntityF
     {
         BackgroundParticleComponent component = engine.createComponent(BackgroundParticleComponent.class);
         
-        component.bgEffect = new ParticleEffect(assetManager.getParticleEffect(properties.getString("bgEffect")));
+        component.effect = new ParticleEffect(assetManager.getParticleEffect(properties.getString("effect")));
         
         entity.add(component);
     }
