@@ -82,7 +82,6 @@ public class MusicManager {
     }
 
     public static void play(Music music, float fadeTime) {
-
         if (currentMusic != null && currentMusic != music) {
             addFade(currentMusic, fadeTime, true);
         }

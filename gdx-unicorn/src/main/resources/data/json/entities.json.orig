@@ -27,10 +27,7 @@
                 "friction": 0.2,
                 "restitution": 0.4
             },
-            "CameraTarget": {},
-            "RenderLayer": {
-                "layer": 100
-            }
+            "CameraTarget": {}
         }
     },
     "hunter": {
@@ -56,9 +53,6 @@
                 "density": 5,
                 "friction": 0.2,
                 "restitution": 0.4
-            },
-            "RenderLayer": {
-                "layer": 50
             }
         }
     },
@@ -77,7 +71,11 @@
 		"cooldown":1.5
 	    },
             "Animation": {
+<<<<<<< HEAD
                 "animation": "paparazzi_walking"
+=======
+                "animation": "unicorn_idle"
+>>>>>>> develop
             },
             "PhysixBody": {
                 "type": "enemy",
@@ -85,9 +83,6 @@
                 "density": 5,
                 "friction": 0.2,
                 "restitution": 0.4
-            },
-            "RenderLayer": {
-                "layer": 50
             }
         }
     },
@@ -104,9 +99,6 @@
                 "density": 5,
                 "friction": 0.2,
                 "restitution": 0.4
-            },
-            "RenderLayer": {
-                "layer": 60
             }
         }
     },
@@ -123,9 +115,6 @@
                 "density": 5,
                 "friction": 0.2,
                 "restitution": 0.4
-            },
-            "RenderLayer": {
-                "layer": 60
             }
         }
     },
@@ -142,9 +131,6 @@
                 "density": 5,
                 "friction": 0.2,
                 "restitution": 0.4
-            },
-            "RenderLayer": {
-                "layer": 70
             }
         }
     },
@@ -161,9 +147,6 @@
                 "density": 5,
                 "friction": 0.2,
                 "restitution": 0.4
-            },
-            "RenderLayer": {
-                "layer": 59
             }
         }
     },
@@ -243,7 +226,7 @@
                 "effect": "test2"
             },
             "BackgroundParticle": {
-                "effect": "test"
+                "bgEffect": "test"
             }
         }
     },
@@ -266,9 +249,6 @@
                 "density": 10,
                 "friction": 0.5,
                 "restitution": 0.1
-            },
-            "RenderLayer": {
-                "layer": 95
             }
         }
     },
@@ -277,5 +257,15 @@
         "components": {
           "Path" : {}
         }
+    },
+    "particleTest": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "ParticleTest": {
+                "effect": "test"
+            }
+        }
     }
+    
 }

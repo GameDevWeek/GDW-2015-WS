@@ -21,7 +21,6 @@ public class RenderSystem extends SortedSubIteratingSystem {
         addSubSystem(new BackgroundParticleRenderSystem());
         addSubSystem(new AnimationRenderSystem());
         addSubSystem(new ParticleRenderSystem());
-        
     }
 
     @Override

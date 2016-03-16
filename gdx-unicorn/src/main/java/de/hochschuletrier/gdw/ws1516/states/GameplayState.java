@@ -108,14 +108,14 @@ public class GameplayState extends BaseGameState {
     @Override
     public void onEnterComplete() {
         
-        music.setVolume(0.5F);
+      
         Main.inputMultiplexer.addProcessor(inputForwarder);
         inputForwarder.set(gameInputProcessor);
     }
 
     @Override
     public void onLeave(BaseGameState nextState) {
-        music.stop();
+       
         Main.inputMultiplexer.removeProcessor(inputForwarder);
     }
 

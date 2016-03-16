@@ -8,7 +8,7 @@ import de.hochschuletrier.gdw.commons.gdx.ashley.SortedSubIteratingSystem;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.BackgroundParticleComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.ParticleTestComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.ParticleComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 
 public class BackgroundParticleRenderSystem extends SortedSubIteratingSystem.SubSystem 
@@ -25,14 +25,14 @@ public class BackgroundParticleRenderSystem extends SortedSubIteratingSystem.Sub
         
         PositionComponent position = ComponentMappers.position.get(entity);
         
-        for(ParticleEmitter emitter : component.bgEffect.getEmitters())
+        for(ParticleEmitter emitter : component.effect.getEmitters())
         {
             emitter.start();
             emitter.setPosition(position.x, position.y);
             emitter.draw(DrawUtil.batch, deltaTime);
         }
-        component.bgEffect.setPosition(position.x, position.y);
-        component.bgEffect.draw(DrawUtil.batch);
+        component.effect.setPosition(position.x, position.y);
+        component.effect.draw(DrawUtil.batch);
     }
 
 }
