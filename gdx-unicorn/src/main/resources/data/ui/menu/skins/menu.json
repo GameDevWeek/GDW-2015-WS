@@ -47,10 +47,11 @@
         "dialog": {"titleFont": "default-font", "background": "default-window", "titleFontColor": "white", "stageBackground": "dialogDim"}
     },
     "com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle": {
-        "default-horizontal": {"background": "default-slider", "knob": "default-slider-knob"}
+        "default-horizontal": {"background": "default-slider", "knob": "unicorn-knob"}
+
     },
     "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
-        "default": {"font": "default-font", "fontColor": "white"}
+        "default": {"font": "open_sans_24", "fontColor": "pink"}
     },
     "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
         "default": {"selection": "selection", "background": "textfield", "font": "default-font", "fontColor": "white", "cursor": "cursor"}

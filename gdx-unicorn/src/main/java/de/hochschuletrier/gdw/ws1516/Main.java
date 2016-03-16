@@ -27,6 +27,7 @@ import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.assets.loaders.AnimationExtendedLoader;
 import de.hochschuletrier.gdw.commons.gdx.assets.loaders.ShaderProgramLoader;
 import de.hochschuletrier.gdw.commons.gdx.devcon.DevConsoleView;
+import de.hochschuletrier.gdw.commons.gdx.audio.MusicManager;
 import de.hochschuletrier.gdw.commons.gdx.audio.SoundDistanceModel;
 import de.hochschuletrier.gdw.commons.gdx.audio.SoundEmitter;
 import de.hochschuletrier.gdw.commons.gdx.audio.SoundInstance;
@@ -43,6 +44,7 @@ import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 import de.hochschuletrier.gdw.ws1516.sandbox.SandboxCommand;
 import de.hochschuletrier.gdw.ws1516.states.LoadGameState;
 import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.OptionBuilder;
@@ -186,7 +188,8 @@ public class Main extends StateBasedGame {
         }
         console.executeCmdQueue();
         SoundEmitter.updateGlobal();
-
+        MusicManager.update(delta);
+        
         preRender();
     }
 
