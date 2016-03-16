@@ -103,6 +103,8 @@ public class MenuPage extends Group {
     }
     
     protected ImageButton createImageButton(Texture texture, float x, float y, float width, float height, Runnable runnable, boolean add) {
+        
+        // NICHT GUT FÜR PERFORMANCE!!
         ImageButton ib = new ImageButton(new SpriteDrawable(new Sprite(texture)));
         
         ib.addListener(new ClickListener() {
