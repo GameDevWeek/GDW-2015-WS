@@ -1,13 +1,17 @@
 package de.hochschuletrier.gdw.ws1516.menu;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.menu.widgets.DecoImage;
@@ -44,15 +48,31 @@ public class MenuPage extends Group {
     }
     
 
-        protected final Slider addSlider(float min, float max,float stepSize,int x, int y){
+     protected final void addSlider(float min, float max,float stepSize,int x, int y,String text){
+        
         Slider slider = new Slider(min,max,stepSize,false,skin);
-        slider.setBounds(x,y,400,100);
+        Label label = new Label(text,skin,"default");
+        int size = 250;       
+        label.setBounds(x, y+1, 100, 100);
+        slider.setBounds(x+70,y,size,100);
+        slider.setValue(50);
+        
+        Label value= new Label(""+(int)slider.getValue(),skin,"default");
+        value.setBounds(x+size+80,y+1,100,100);   
+        slider.addListener(new ChangeListener(){
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                value.setText(""+(int)slider.getValue());
+
+            }
+        });
         addActor(slider);
-        return slider;
-       
+        addActor(label);
+        addActor(value);
+
     }
 
-    protected final void addLeftAlignedButton(int x, int y, int width, int height, String text, Runnable runnable) {
+    protected final void addLeftAlignedButton(int x, int y, int width, int height, String text,Runnable runnable) {
         TextButton button = addButton(x, y, width, height, text, runnable, "default");
         button.getLabel().setAlignment(Align.left);
     }
