@@ -10,6 +10,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 
+import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
 import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
@@ -21,6 +22,9 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
     private boolean spit = false;
     private boolean hornAttack = false;
     private boolean fly = false;
+    
+    //for testing
+    private boolean stopflying=false;
     
     private float directionX,directionY  = 0.0f;    
 
@@ -86,8 +90,14 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
             case Input.Keys.D:
                 directionX -= 1.0f;
                 break;
+                //for testing reasons
             case Input.Keys.NUM_1:
                 fly=true;
+//                hornAttack = false;
+                break;
+                //for testing reasons
+            case Input.Keys.NUM_2:
+                stopflying=true;
 //                hornAttack = false;
                 break;
             case Input.Keys.K:
@@ -96,6 +106,7 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
             case Input.Keys.L:
                 fly = false;
                 break;
+            case Input.Keys.S:
             case Input.Keys.DOWN:
                 directionY -=1.0f;
                 break;
@@ -142,6 +153,11 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
         input.fly = fly;
         if(fly){
             StartFlyEvent.emit(entity);
+        }
+        if(stopflying){
+            EndFlyEvent.emit(entity);
+            fly=false;
+            stopflying=false;
         }
         input.hornAttack = hornAttack;
         input.jump = jump;
