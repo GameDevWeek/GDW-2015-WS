@@ -1,23 +1,28 @@
 package de.hochschuletrier.gdw.ws1516.game;
 
+import java.util.HashMap;
+import java.util.function.Consumer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.utils.TimeUtils;
 
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarBool;
 import de.hochschuletrier.gdw.commons.gdx.ashley.EntityFactory;
-import de.hochschuletrier.gdw.commons.gdx.assets.AnimationExtended;
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.Hotkey;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.HotkeyModifier;
@@ -29,22 +34,17 @@ import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixModifierCompon
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixDebugRenderSystem;
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
 import de.hochschuletrier.gdw.commons.gdx.tiled.TiledMapRendererGdx;
+import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.commons.resourcelocator.CurrentResourceLocator;
 import de.hochschuletrier.gdw.commons.tiled.Layer;
 import de.hochschuletrier.gdw.commons.tiled.LayerObject;
-import de.hochschuletrier.gdw.commons.tiled.TileInfo;
 import de.hochschuletrier.gdw.commons.tiled.TileSet;
 import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.commons.tiled.tmx.TmxImage;
-import de.hochschuletrier.gdw.commons.tiled.utils.RectangleGenerator;
-import de.hochschuletrier.gdw.commons.utils.Rectangle;
 import de.hochschuletrier.gdw.ws1516.Main;
-import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.BulletComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ImpactSoundComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.ParticleTestComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.TriggerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.factories.EntityFactoryParam;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BulletListener;
@@ -53,30 +53,21 @@ import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerContactListener
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.TriggerListener;
 import de.hochschuletrier.gdw.ws1516.game.systems.BulletSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.CameraSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.HudRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.KeyboardInputSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.MapRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.MovementSystem;
-import de.hochschuletrier.gdw.ws1516.game.systems.ParticleRenderSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.NameSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.SimpleAnimationRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.TriggerSystem;
-import de.hochschuletrier.gdw.ws1516.game.systems.NameSystem;
-
-import de.hochschuletrier.gdw.ws1516.game.systems.AnimationRenderSystem;
-import de.hochschuletrier.gdw.ws1516.game.systems.HudRenderSystem;
-
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityCreator;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.MapLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
-
-import java.util.HashMap;
-
-import java.util.function.Consumer;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 
 public class Game extends InputAdapter {
 
@@ -103,22 +94,22 @@ public class Game extends InputAdapter {
 
     private final NameSystem nameSystem = new NameSystem(GameConstants.PRIORITY_NAME);
 
-    private final KeyboardInputSystem keyBoardInputSystem = new KeyboardInputSystem(GameConstants.PRIORITY_INPUT);
-    private final MovementSystem movementSystem = new MovementSystem(GameConstants.PRIORITY_MOVEMENT);
-
-    private final HudRenderSystem hudRenderSystem = new HudRenderSystem(1001);
+    private final KeyboardInputSystem keyBoardInputSystem= new KeyboardInputSystem(GameConstants.PRIORITY_INPUT);
+    private final MovementSystem movementSystem=new MovementSystem(GameConstants.PRIORITY_MOVEMENT);
+    
+    private final HudRenderSystem hudRenderSystem = new HudRenderSystem(GameConstants.PRIORITY_HUD);
+    
+    private final MapRenderSystem mapRenderSystem = new MapRenderSystem(GameConstants.PRIORITY_MAP_RENDERING);
 
     private final EntityFactoryParam factoryParam = new EntityFactoryParam();
     private final EntityFactory<EntityFactoryParam> entityFactory = new EntityFactory("data/json/entities.json",
             Game.class);
 
-    private TiledMap map;
-    private TiledMapRendererGdx mapRenderer;
-    private final HashMap<TileSet, Texture> tilesetImages = new HashMap();
 
     private final TriggerSystem triggerSystem = new TriggerSystem();
     private final BulletSystem bulletSystem = new BulletSystem(engine);
-
+    private TiledMap map;
+    
     public Game() {
         // If this is a build jar file, disable hotkeys
         if (!Main.IS_RELEASE) {
@@ -139,18 +130,22 @@ public class Game extends InputAdapter {
         addContactListeners();
         setupPhysixWorld();
         entityFactory.init(engine, assetManager);
+        
+        ShaderProgram rainbowShader = ShaderLoader.getRainbowShader();
+        DrawUtil.setShader(rainbowShader);
 
         // EntityCreator
         EntityCreator.setEngine(engine);
         EntityCreator.setGame(this);
         EntityCreator.setEntityFactory(entityFactory);
-
-        // Hier Dateipfad zur Map einfuegen
+        
         loadMap("data/maps/demo.tmx");
-
-        // test:
+        mapRenderSystem.initialzeRenderer(map, cameraSystem);
+        
+        //test:
         EntityCreator.createEntity("unicorn", 800, 100);
     }
+
 
     /**
      * 
@@ -173,22 +168,7 @@ public class Game extends InputAdapter {
             for (MapLoader mapLoader : mapLoaders) {
                 mapLoader.parseMap(map, this, engine);
             }
-
-            initialzeRenderer();
         }
-    }
-
-    private void initialzeRenderer() {
-        for (TileSet tileset : map.getTileSets()) {
-            TmxImage img = tileset.getImage();
-            String filename = CurrentResourceLocator.combinePaths(tileset.getFilename(), img.getSource());
-            tilesetImages.put(tileset, new Texture(filename));
-        }
-        mapRenderer = new TiledMapRendererGdx(map, tilesetImages);
-
-        int totalMapWidth = map.getWidth() * map.getTileWidth();
-        int totalMapHeight = map.getHeight() * map.getTileHeight();
-        cameraSystem.setCameraBounds(0, 0, totalMapWidth, totalMapHeight);
     }
 
     private void addSystems() {
@@ -204,6 +184,7 @@ public class Game extends InputAdapter {
         engine.addSystem(hudRenderSystem);
         engine.addSystem(triggerSystem);
         engine.addSystem(bulletSystem);
+        engine.addSystem(mapRenderSystem);
     }
 
     private void addContactListeners() {
@@ -233,15 +214,8 @@ public class Game extends InputAdapter {
     }
 
     public void update(float delta) {
-        cameraSystem.bindCamera();
-
-        for (Layer layer : map.getLayers()) {
-            mapRenderer.render(0, 0, layer);
-        }
-
+        cameraSystem.bindCamera();        
         engine.update(delta);
-
-        mapRenderer.update(delta);
     }
 
     public void createTrigger(float x, float y, float width, float height, Consumer<Entity> consumer) {
