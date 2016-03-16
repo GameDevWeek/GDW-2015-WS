@@ -19,7 +19,6 @@ import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.SandBoxEventLogger;
 
 public class EnemyVisionSystem extends IteratingSystem implements EntityListener{
 
-    private static final Logger logger = LoggerFactory.getLogger(EnemyVisionSystem.class);
     private Entity unicorn = null;
     
     public EnemyVisionSystem() {
@@ -36,7 +35,6 @@ public class EnemyVisionSystem extends IteratingSystem implements EntityListener
         float dist=(float)Math.sqrt((xDist*xDist)+(yDist*yDist));
         if (dist<=GameConstants.GLOBAL_VISION*GameConstants.UNICORN_SIZE){
             enemyBehaviour.canSeeUnicorn=true;
-            logger.info("Entity saw unicorn");
         }else{
             enemyBehaviour.canSeeUnicorn=false;
         }

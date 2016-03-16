@@ -1,7 +1,8 @@
 package de.hochschuletrier.gdw.ws1516.game;
 
 public class GameConstants {
-
+    public static final float TILESIZE_X=64;
+    public static final float TILESIZE_Y=64;
     // Priorities for entity systems
     public static final int PRIORITY_PHYSIX = 0;
     public static final int PRIORITY_ENTITIES = 10;
@@ -43,10 +44,9 @@ public class GameConstants {
 
     //Vision System
     public static final int GLOBAL_VISION=5;
-    public static final int UNICORN_SIZE=50;
+    public static final int UNICORN_SIZE=(int) (TILESIZE_X*2);
     
-    
-    
-    public static final float TILESIZE_X=64;
-    public static final float TILESIZE_Y=64;
+    //EnemyBehaviour
+    public static final int ENEMY_FRAME_JUMP_BUFFER = 60;
+
 }
