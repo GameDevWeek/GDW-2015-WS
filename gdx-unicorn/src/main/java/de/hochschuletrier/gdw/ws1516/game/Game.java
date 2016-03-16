@@ -40,6 +40,7 @@ import de.hochschuletrier.gdw.commons.tiled.utils.RectangleGenerator;
 import de.hochschuletrier.gdw.commons.utils.Rectangle;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.BubblegumSpitComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.BulletComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ImpactSoundComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ParticleTestComponent;
@@ -47,6 +48,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.TriggerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.factories.EntityFactoryParam;
+import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BubblegumSpitListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BulletListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.ImpactSoundListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerContactListener;
@@ -62,6 +64,8 @@ import de.hochschuletrier.gdw.ws1516.game.systems.TriggerSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.NameSystem;
 
 import de.hochschuletrier.gdw.ws1516.game.systems.AnimationRenderSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.BubbleGlueSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.BubblegumSpitSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.HudRenderSystem;
 
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
@@ -110,7 +114,8 @@ public class Game extends InputAdapter {
 
     private final KeyboardInputSystem keyBoardInputSystem= new KeyboardInputSystem(GameConstants.PRIORITY_INPUT);
     private final MovementSystem movementSystem=new MovementSystem(GameConstants.PRIORITY_MOVEMENT);
-    
+    private final BubblegumSpitSystem bubblegumSpitSystem = new BubblegumSpitSystem(engine);
+    private final BubbleGlueSystem bubbleGlueSystem = new BubbleGlueSystem(engine);
     
 
 
@@ -144,7 +149,6 @@ public class Game extends InputAdapter {
     public void init(AssetManagerX assetManager) {
         Main.getInstance().console.register(physixDebug);
         physixDebug.addListener((CVar) -> physixDebugRenderSystem.setProcessing(physixDebug.get()));
-
         
         addSystems();
         addContactListeners();
@@ -217,6 +221,8 @@ public class Game extends InputAdapter {
         engine.addSystem(hudRenderSystem);
         engine.addSystem(triggerSystem);
         engine.addSystem(bulletSystem);
+        engine.addSystem(bubblegumSpitSystem);
+        engine.addSystem(bubbleGlueSystem);
     }
 
     private void addContactListeners() {
@@ -226,6 +232,7 @@ public class Game extends InputAdapter {
         contactListener.addListener(TriggerComponent.class, new TriggerListener());
         contactListener.addListener(PlayerComponent.class, new PlayerContactListener());
         contactListener.addListener(BulletComponent.class, new BulletListener());
+        contactListener.addListener(BubblegumSpitComponent.class, new BubblegumSpitListener());
     }
 
     private void setupPhysixWorld() {

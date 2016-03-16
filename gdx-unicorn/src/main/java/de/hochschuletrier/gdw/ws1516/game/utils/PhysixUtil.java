@@ -13,6 +13,9 @@ import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
  */
 public class PhysixUtil {
 
+    public static final float DEG2RAD = (float) (Math.PI / 180.0); 
+    public static final float RAD2DEG = (float) (180.0 / Math.PI);
+    
     public static void createHollowCircle(PhysixSystem system, float x, float y, float radius, int sides, float sideStrength) {
         float sideLength = (float) (2 * radius * Math.tan(Math.PI / (float) sides));
         PhysixBodyDef bodyDef = new PhysixBodyDef(BodyDef.BodyType.StaticBody, system).position(x, y);
