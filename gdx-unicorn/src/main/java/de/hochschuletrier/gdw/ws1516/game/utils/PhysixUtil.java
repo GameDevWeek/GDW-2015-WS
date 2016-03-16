@@ -1,11 +1,25 @@
 package de.hochschuletrier.gdw.ws1516.game.utils;
 
+import java.util.concurrent.FutureTask;
+
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Fixture;
+
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixBodyDef;
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixFixtureDef;
+import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
+import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 
 /**
  *
@@ -40,4 +54,22 @@ public class PhysixUtil {
         pos.y += length;
         body.createFixture(fixtureDef.shapeCircle(radius, pos));
     }
+    
+    /**
+     * Throw the entity in the given direction
+     * @param entity the entity to throw
+     * @param forceX the force direction x component
+     * @param forceY the force direction y component
+     * @param forceScale how strong the force shall be
+     */
+    public static void throwBackEntity(Entity entity, float forceX, float forceY, float forceScale) {
+        
+        PhysixBodyComponent entityBody = ComponentMapper.getFor(PhysixBodyComponent.class).get(entity);
+        if (entityBody != null) {
+            float forceScaler = (float) (forceScale / Math.sqrt(forceX * forceX + forceY * forceY));
+            entityBody.applyImpulse(forceX * forceScaler, forceY * forceScaler);
+        }
+        
+    }
+    
 }
