@@ -3,6 +3,7 @@ package de.hochschuletrier.gdw.ws1516.game.systems;
 import java.util.HashMap;
 import java.util.List;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
@@ -46,9 +47,26 @@ public class MapRenderSystem extends IteratingSystem {
         super(Family.all().get(), priority);
 
         // DEBUG
+        Main.getInstance().console.register(paparazzi);
+        Main.getInstance().console.register(paparazziIntensity);
+        Main.getInstance().console.register(paparazziAlpha);
+    }
+    
+    @Override
+    public void addedToEngine(Engine engine) {
+        super.addedToEngine(engine);
+        
         Main.getInstance().console.register(rainbow);
         Main.getInstance().console.register(rainbowFrequency);
         Main.getInstance().console.register(rainbowAlpha);
+    }
+    
+    @Override
+    public void removedFromEngine(Engine engine) {
+        super.removedFromEngine(engine);
+        Main.getInstance().console.unregister(rainbow);
+        Main.getInstance().console.unregister(rainbowFrequency);
+        Main.getInstance().console.unregister(rainbowAlpha);
     }
 
     @Override

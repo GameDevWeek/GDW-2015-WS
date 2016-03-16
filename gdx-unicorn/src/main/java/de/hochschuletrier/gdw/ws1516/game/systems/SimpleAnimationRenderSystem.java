@@ -46,24 +46,24 @@ public class SimpleAnimationRenderSystem extends EntitySystem implements EntityL
         entities.remove(entity);
     }
 
-    @Override
-    public void update(float deltaTime) {
-        if (resort) {
-            entities.sort(comparator);
-            resort = false;
-        }
-
-        for (Entity entity : entities) {
-            AnimationComponent animation = ComponentMappers.animation.get(entity);
-            PositionComponent position = ComponentMappers.position.get(entity);
-
-            animation.stateTime += deltaTime;
-            TextureRegion keyFrame = animation.animation.getKeyFrame(animation.stateTime);
-            int w = keyFrame.getRegionWidth();
-            int h = keyFrame.getRegionHeight();
-            DrawUtil.batch.draw(keyFrame, position.x - w * 0.5f, position.y - h * 0.5f, w * 0.5f, h * 0.5f, w, h, 1, 1, position.rotation);
-        }
-    }
+//    @Override
+//    public void update(float deltaTime) {
+//        if (resort) {
+//            entities.sort(comparator);
+//            resort = false;
+//        }
+//
+//        for (Entity entity : entities) {
+//            AnimationComponent animation = ComponentMappers.animation.get(entity);
+//            PositionComponent position = ComponentMappers.position.get(entity);
+//
+//            animation.stateTime += deltaTime;
+//            TextureRegion keyFrame = animation.animation.getKeyFrame(animation.stateTime);
+//            int w = keyFrame.getRegionWidth();
+//            int h = keyFrame.getRegionHeight();
+//            DrawUtil.batch.draw(keyFrame, position.x - w * 0.5f, position.y - h * 0.5f, w * 0.5f, h * 0.5f, w, h, 1, 1, position.rotation);
+//        }
+//    }
 
     private static class EntityComparator implements Comparator<Entity> {
 
