@@ -201,9 +201,10 @@ public class Game extends InputAdapter {
     }
 
     public void update(float delta) {
+        cameraSystem.bindCamera();
         DrawUtil.setShader(ShaderLoader.getRainbowShader());
         mapRenderer.update(delta);
-        cameraSystem.bind();
+        
         for (Layer layer : map.getLayers()) {
             mapRenderer.render(0, 0, layer);
         }

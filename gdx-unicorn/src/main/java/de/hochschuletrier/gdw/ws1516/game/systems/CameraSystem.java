@@ -17,11 +17,15 @@ public class CameraSystem extends IteratingSystem {
 
     private final LimitedSmoothCamera camera;
     
+    private float targetX;
+    private float targetY;
+    
     @SuppressWarnings("unchecked")
     public CameraSystem(int priority) {
         super(Family.all(CameraTargetComponent.class).get(), priority);
         
         this.camera = new LimitedSmoothCamera();
+        this.targetX = this.targetY = 0.0f;
     }
     
     public void bind(){
@@ -51,12 +55,23 @@ public class CameraSystem extends IteratingSystem {
         camera.updateForced();
     }
     
+    public void bindCamera() {
+        camera.bind();
+    }
+    
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
 
-        PositionComponent playerPos = ComponentMappers.position.get(entity);
+        PositionComponent targetPos = ComponentMappers.position.get(entity);
+        targetX = targetPos.x;
+        targetY = targetPos.y;
+    }
+    
+    @Override
+    public void update(float deltaTime) {
+        super.update(deltaTime);
         
-        camera.setDestination(playerPos.x, playerPos.y);
+        camera.setDestination(targetX, targetY);
         camera.update(deltaTime);
         camera.bind();
     }
