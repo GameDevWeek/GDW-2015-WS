@@ -10,11 +10,12 @@ public class InputComponent extends Component implements Pool.Poolable {
     public boolean hornAttack = false;
     public boolean fly = false;
     
-    public float direction = 0.0f;    
-
+    public float directionX = 0.0f;    
+    public float directionY = 0.0f; 
+    
     @Override
     public void reset() {
         jump = spit = hornAttack = fly = false;
-        direction = 0.0F;        
+        directionX=directionY = 0.0F;        
     }
 }

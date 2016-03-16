@@ -3,24 +3,50 @@ package de.hochschuletrier.gdw.ws1516.game.systems;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.ws1516.events.JumpEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.*;
+import de.hochschuletrier.gdw.ws1516.events.*;
 
-public class MovementSystem extends IteratingSystem {
+public class MovementSystem extends IteratingSystem implements
+        StartFlyEvent.Listener, EndFlyEvent.Listener {
     private static final Logger logger = LoggerFactory
             .getLogger(MovementSystem.class);
 
+    private PooledEngine e;
+
+    // public MovementSystem(){
+    // super(0);
+    // }
+
     public MovementSystem(int priority) {
-        super(Family.all(PhysixBodyComponent.class)
-                .one(MovementComponent.class, PlayerComponent.class).get(),
-                priority);
+        super(Family.all(PhysixBodyComponent.class, MovementComponent.class,
+                InputComponent.class).get(), priority);
+        StartFlyEvent.register(this);
+        EndFlyEvent.register(this);
     }
+
+    // @Override
+    // public void addedToEngine(Engine engine) {
+    // super(engine);
+    // logger.debug("Added to Engine{}");
+    // // StartFlyEvent.register(this);
+    // // EndFlyEvent.register(this);
+    // };
+    @Override
+    public void removedFromEngine(com.badlogic.ashley.core.Engine engine) {
+        // super(engine);
+        StartFlyEvent.unregister(this);
+        EndFlyEvent.unregister(this);
+    };
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
@@ -33,19 +59,70 @@ public class MovementSystem extends IteratingSystem {
         if (movement != null) {
             // normal move
             if (input != null) {
-                movement.velocityX = (movement.speed * input.direction);
-                physix.setLinearVelocityX(movement.velocityX);
 
-                if (input.jump
-                        && movement.state == MovementComponent.State.ON_GROUND) {
-                    JumpEvent.emit(entity);
-                    movement.state = MovementComponent.State.JUMPING;
-                    physix.applyImpulse(0, movement.jumpImpulse);
+                switch (movement.state) {
+                case ON_GROUND:
+                    moveOnGround(entity);
+                    break;
+                case FLYING:
+                    moveWhileFlying(entity);
+                    break;
+                case FALLING:
+                    break;
+                case JUMPING:
+                    break;
+                default:
+                    break;
                 }
+
             }
 
         }
 
+    }
+
+    private void moveOnGround(Entity entity) {
+        // get Components
+        PhysixBodyComponent physix = ComponentMappers.physixBody.get(entity);
+        InputComponent input = ComponentMappers.input.get(entity);
+        MovementComponent movement = ComponentMappers.movement.get(entity);
+
+        movement.velocityX = (movement.speed * input.directionX);
+        physix.setLinearVelocityX(movement.velocityX);
+
+        if (input.jump && movement.state == MovementComponent.State.ON_GROUND) {
+            JumpEvent.emit(entity);
+            movement.state = MovementComponent.State.JUMPING;
+            physix.applyImpulse(0, movement.jumpImpulse);
+        }
+    }
+
+    private void moveWhileFlying(Entity entity) {
+        PhysixBodyComponent physix = ComponentMappers.physixBody.get(entity);
+        InputComponent input = ComponentMappers.input.get(entity);
+        MovementComponent movement = ComponentMappers.movement.get(entity);
+
+        movement.velocityX = (movement.speed * input.directionX);
+        movement.velocityY = (movement.speed * input.directionY);
+        physix.setLinearVelocity(movement.velocityX, movement.velocityY);
+    }
+
+    @Override
+    public void onEndFlyEvent(Entity entity) {
+        // TODO Auto-generated method stub
+        MovementComponent movement = ComponentMappers.movement.get(entity);
+        if (movement != null) {
+            movement.state = MovementComponent.State.ON_GROUND;
+        }
+    }
+
+    @Override
+    public void onStartFlyEvent(Entity entity) {
+        // TODO Auto-generated method stub
+        MovementComponent movement = ComponentMappers.movement.get(entity);
+        if (movement != null) {
+            movement.state = MovementComponent.State.FLYING;
+        }
     }
 
 }

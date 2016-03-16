@@ -10,6 +10,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 
+import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
@@ -21,7 +22,7 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
     private boolean hornAttack = false;
     private boolean fly = false;
     
-    private float direction = 0.0f;    
+    private float directionX,directionY  = 0.0f;    
 
 
     
@@ -40,15 +41,16 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
             case Input.Keys.UP:
             case Input.Keys.SPACE:
             case Input.Keys.W:
+                directionY -= 1.0f;
                 jump = true;
                 break;
             case Input.Keys.LEFT:
             case Input.Keys.A:
-                direction -= 1.0f;
+                directionX -= 1.0f;
                 break;
             case Input.Keys.RIGHT:
             case Input.Keys.D:
-                direction += 1.0f;
+                directionX += 1.0f;
                 break;
             case Input.Keys.J:
                 hornAttack = true;
@@ -58,6 +60,10 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
                 break;
             case Input.Keys.L:
                 fly = true;
+                break;
+            case Input.Keys.S:
+            case Input.Keys.DOWN:
+                directionY +=1.0f;
                 break;
         }
         return true;
@@ -69,24 +75,29 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
             case Input.Keys.UP:
             case Input.Keys.SPACE:
             case Input.Keys.W:
+                directionY +=1.0f;
                 jump = false;
                 break;
             case Input.Keys.LEFT:
             case Input.Keys.A:
-                direction += 1.0f;
+                directionX += 1.0f;
                 break;
             case Input.Keys.RIGHT:
             case Input.Keys.D:
-                direction -= 1.0f;
+                directionX -= 1.0f;
                 break;
-            case Input.Keys.J:
-                hornAttack = false;
+            case Input.Keys.NUM_1:
+                fly=true;
+//                hornAttack = false;
                 break;
             case Input.Keys.K:
                 spit = false;
                 break;
             case Input.Keys.L:
                 fly = false;
+                break;
+            case Input.Keys.DOWN:
+                directionY -=1.0f;
                 break;
         }
         return true;
@@ -126,8 +137,12 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
     protected void processEntity(Entity entity, float deltaTime) {
         
         InputComponent input = entity.getComponent(InputComponent.class);
-        input.direction = direction;
+        input.directionX = directionX;
+        input.directionY=directionY;
         input.fly = fly;
+        if(fly){
+            StartFlyEvent.emit(entity);
+        }
         input.hornAttack = hornAttack;
         input.jump = jump;
         input.spit = spit;
