@@ -1,6 +1,8 @@
 package de.hochschuletrier.gdw.ws1516.menu;
 
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
 
@@ -17,19 +19,10 @@ public class MenuOptions extends MenuPage {
         int yStep = 55;
         
        
-        addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 100, 50, "Video", this::enterVideoOptions);
-        addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 100, 50, "Sound", this::enterSoundOptions);
+        
+        addSlider(0,100,1,200,200);
         addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 100, 50,"Zurück", ()->menuManager.popPage());
     }
-    
-    
-    private void enterSoundOptions(){
-    }
-    
-    private void enterVideoOptions(){
-    }
-   
-    
     
 
     public static void main(String[] args) {

@@ -4,9 +4,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.menu.widgets.DecoImage;
 import de.hochschuletrier.gdw.ws1516.Main;
@@ -42,7 +44,13 @@ public class MenuPage extends Group {
     }
     
 
-    
+        protected final Slider addSlider(float min, float max,float stepSize,int x, int y){
+        Slider slider = new Slider(min,max,stepSize,false,skin);
+        slider.setBounds(x,y,400,100);
+        addActor(slider);
+        return slider;
+       
+    }
 
     protected final void addLeftAlignedButton(int x, int y, int width, int height, String text, Runnable runnable) {
         TextButton button = addButton(x, y, width, height, text, runnable, "default");
