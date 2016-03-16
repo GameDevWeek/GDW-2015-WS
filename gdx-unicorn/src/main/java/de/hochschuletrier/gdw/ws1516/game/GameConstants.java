@@ -1,5 +1,7 @@
 package de.hochschuletrier.gdw.ws1516.game;
 
+import com.badlogic.ashley.core.Family;
+
 public class GameConstants {
     public static final float TILESIZE_X=64;
     public static final float TILESIZE_Y=64;
@@ -9,6 +11,7 @@ public class GameConstants {
     public static final int PRIORITY_INPUT=11;
     public static final int PRIORITY_MOVEMENT=12;
     public static final int PRIORITY_CAMERA = 15;
+    public static final int PRIORITY_MAP_RENDERING = 19;
     public static final int PRIORITY_RENDERING = 20;
     public static final int PRIORITY_DEBUG_WORLD = 30;
     public static final int PRIORITY_HUD = 40;
@@ -48,5 +51,8 @@ public class GameConstants {
     
     //EnemyBehaviour
     public static final int ENEMY_FRAME_JUMP_BUFFER = 60;
-
+    
+    // Shader parameter
+    public static final float RAINBOW_FREQUENCY = 0;
+    public static final float RAINBOW_MODE_ALPHA = 0;
 }
