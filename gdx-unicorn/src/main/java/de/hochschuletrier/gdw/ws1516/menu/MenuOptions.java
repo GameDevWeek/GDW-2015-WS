@@ -2,6 +2,7 @@ package de.hochschuletrier.gdw.ws1516.menu;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
@@ -31,8 +32,30 @@ public class MenuOptions extends MenuPage {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 MusicManager.setGlobalVolume(generalSlider.getValue()/100);
+                System.out.print(" "+generalSlider.getValue()/100);
             }
         });
+        
+        generalSlider.addListener(new ClickListener(){
+            
+          
+            
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            System.out.print("Down");
+           
+             return true;
+          }
+
+        });
+      generalSlider.addListener(new ClickListener(){
+      @Override
+      public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+          System.out.print("Up");
+          
+          
+      }
+  });
         Slider musicSlider = addLabeledSlider(0,100,1,xOffset,yOffset-yStep*(i++),"Music",true);
         musicSlider.addListener(new ChangeListener(){
             @Override
