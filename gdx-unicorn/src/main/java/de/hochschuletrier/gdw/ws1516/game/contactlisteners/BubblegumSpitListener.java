@@ -7,7 +7,7 @@ import de.hochschuletrier.gdw.commons.gdx.physix.PhysixContactAdapter;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.BubblegumSpitComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.EnemyComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
 
 /**
  * Listens to bubble-gum spit collisions
@@ -25,7 +25,7 @@ public class BubblegumSpitListener extends PhysixContactAdapter {
         //Collision handling with entity
         if (otherComponent != null) {
             if (otherComponent.getEntity() != null) {
-                if (otherComponent.getEntity().getComponent(EnemyComponent.class) != null) {   //With enemy       
+                if (otherComponent.getEntity().getComponent(EnemyTypeComponent.class) != null) {   //With enemy       
                     gumSpit.onEnemyHit.accept(myEntity, otherComponent.getEntity());                 
                 }
             }               

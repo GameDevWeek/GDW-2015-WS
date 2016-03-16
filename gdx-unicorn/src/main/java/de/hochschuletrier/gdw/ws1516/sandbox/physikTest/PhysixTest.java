@@ -38,13 +38,16 @@ import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.BubblegumSpitComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.BulletComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.EnemyComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BubblegumSpitListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BulletListener;
 import de.hochschuletrier.gdw.ws1516.game.systems.BubbleGlueSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BubblegumSpitSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BulletSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.KeyboardInputSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.MovementSystem;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
 import de.hochschuletrier.gdw.ws1516.sandbox.SandboxGame;
 
@@ -94,9 +97,9 @@ public class PhysixTest extends SandboxGame {
         engine.addSystem(physixDebugRenderSystem);
         engine.addSystem(new BubblegumSpitSystem(engine));
         engine.addSystem(new BubbleGlueSystem(engine));
-        engine.addSystem(new BulletSystem(engine));
+        engine.addSystem(new BulletSystem(engine));      
     }
-
+    
     @Override
     public void init(final AssetManagerX assetManager) {
         map = loadMap("data/maps/demo.tmx");
@@ -124,7 +127,7 @@ public class PhysixTest extends SandboxGame {
         PhysixModifierComponent modifyComponent = engine.createComponent(PhysixModifierComponent.class);
         player.add(modifyComponent);
         player.add(engine.createComponent(PlayerComponent.class));
-
+            
         modifyComponent.schedule(() -> {
             playerBody = engine.createComponent(PhysixBodyComponent.class);
             PhysixBodyDef bodyDef = new PhysixBodyDef(BodyType.DynamicBody, physixSystem).position(100, 100).fixedRotation(true);
@@ -198,7 +201,7 @@ public class PhysixTest extends SandboxGame {
 
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                 
-                BubblegumSpitSpawnEvent.emit();
+                BubblegumSpitSpawnEvent.emit(50.0f);
                 
             }
             
@@ -218,7 +221,6 @@ public class PhysixTest extends SandboxGame {
                 PhysixModifierComponent modifyComponent = engine.createComponent(PhysixModifierComponent.class);
                 
                 //Bind components
-                gumSpitEntity.add(engine.createComponent(EnemyComponent.class));
                 gumSpitEntity.add(modifyComponent);
 
                 //Build bullet physics
@@ -252,7 +254,7 @@ public class PhysixTest extends SandboxGame {
                     spitBodyComponent.createFixture(fixtureDef);
                     
                     //Force gum spit
-                    spitBodyComponent.applyImpulse(cosine * GameConstants.SPIT_FORCE, sine * GameConstants.SPIT_FORCE);
+                    spitBodyComponent.applyImpulse(cosine * 10.0f, sine * 10.0f);
                     spitBodyComponent.setGravityScale(1.0f);
                     
                     //Add body to entity
@@ -272,6 +274,7 @@ public class PhysixTest extends SandboxGame {
             if(time>0){
                 time-=delta;
             }
+            
             camera.setDestination(playerBody.getPosition());
         }
     }
