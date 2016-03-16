@@ -39,7 +39,7 @@ public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter {
         super(skin, "menu_bg");
 
         try {
-            sceneAnimator = new SceneAnimator(this, "data/json/credits.json");
+            sceneAnimator = new SceneAnimator(this, "data/json/intro.json");
             addActor(new SceneAnimatorActor(sceneAnimator));
 
             // If this is a build jar file, disable hotkeys

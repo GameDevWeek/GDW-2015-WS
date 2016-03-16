@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarBool;
 import de.hochschuletrier.gdw.commons.gdx.ashley.EntityFactory;
 import de.hochschuletrier.gdw.commons.gdx.assets.AnimationExtended;
@@ -41,18 +42,30 @@ import de.hochschuletrier.gdw.commons.tiled.utils.RectangleGenerator;
 import de.hochschuletrier.gdw.commons.utils.Rectangle;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.BulletComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ImpactSoundComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ParticleTestComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.TriggerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.factories.EntityFactoryParam;
+import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BulletListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.ImpactSoundListener;
+import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerContactListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.TriggerListener;
+import de.hochschuletrier.gdw.ws1516.game.systems.BulletSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.CameraSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.KeyboardInputSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.MovementSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.ParticleRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.SimpleAnimationRenderSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.TriggerSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.NameSystem;
+
+import de.hochschuletrier.gdw.ws1516.game.systems.AnimationRenderSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.HudRenderSystem;
+
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityCreator;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityLoader;
@@ -61,13 +74,20 @@ import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 
+
 import java.util.HashMap;
+
+
+
+
 import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Game extends InputAdapter {
+    
+    
 
     private static final Logger logger = LoggerFactory.getLogger(Game.class);
     
@@ -88,7 +108,18 @@ public class Game extends InputAdapter {
     private final SimpleAnimationRenderSystem animationRenderSystem = new SimpleAnimationRenderSystem(GameConstants.PRIORITY_RENDERING);
     private final UpdatePositionSystem updatePositionSystem = new UpdatePositionSystem(
             GameConstants.PRIORITY_PHYSIX + 1);
+
     private final NameSystem nameSystem = new NameSystem(GameConstants.PRIORITY_NAME);
+
+    private final KeyboardInputSystem keyBoardInputSystem= new KeyboardInputSystem(GameConstants.PRIORITY_INPUT);
+    private final MovementSystem movementSystem=new MovementSystem(GameConstants.PRIORITY_MOVEMENT);
+    
+    
+
+
+    //
+    private final HudRenderSystem hudRenderSystem = new HudRenderSystem(1001);
+    //
 
     private final EntityFactoryParam factoryParam = new EntityFactoryParam();
     private final EntityFactory<EntityFactoryParam> entityFactory = new EntityFactory("data/json/entities.json",
@@ -98,11 +129,15 @@ public class Game extends InputAdapter {
     private TiledMapRendererGdx mapRenderer;
     private final HashMap<TileSet, Texture> tilesetImages = new HashMap();
 
+    private final TriggerSystem triggerSystem = new TriggerSystem();
+    private final BulletSystem bulletSystem = new BulletSystem(engine);
+    
     public Game() {
         // If this is a build jar file, disable hotkeys
         if (!Main.IS_RELEASE) {
             togglePhysixDebug.register();
         }
+     
     }
 
     public void dispose() {
@@ -113,6 +148,7 @@ public class Game extends InputAdapter {
         Main.getInstance().console.register(physixDebug);
         physixDebug.addListener((CVar) -> physixDebugRenderSystem.setProcessing(physixDebug.get()));
 
+        
         addSystems();
         addContactListeners();
         setupPhysixWorld();
@@ -125,9 +161,13 @@ public class Game extends InputAdapter {
         EntityCreator.setEngine(engine);
         EntityCreator.setGame(this);
         EntityCreator.setEntityFactory(entityFactory);
+       
 
         // Hier Dateipfad zur Map einfuegen
         loadMap("data/maps/demo.tmx");
+        
+        //test:
+        EntityCreator.createEntity("unicorn", 800, 100);
     }
 
     /**
@@ -178,6 +218,11 @@ public class Game extends InputAdapter {
         engine.addSystem(animationRenderSystem);
         engine.addSystem(updatePositionSystem);
         engine.addSystem(nameSystem);
+        engine.addSystem(keyBoardInputSystem);
+        engine.addSystem(movementSystem);
+        engine.addSystem(hudRenderSystem);
+        engine.addSystem(triggerSystem);
+        engine.addSystem(bulletSystem);
     }
 
     private void addContactListeners() {
@@ -185,6 +230,8 @@ public class Game extends InputAdapter {
         physixSystem.getWorld().setContactListener(contactListener);
         contactListener.addListener(ImpactSoundComponent.class, new ImpactSoundListener());
         contactListener.addListener(TriggerComponent.class, new TriggerListener());
+        contactListener.addListener(PlayerComponent.class, new PlayerContactListener());
+        contactListener.addListener(BulletComponent.class, new BulletListener());
     }
 
     private void setupPhysixWorld() {
@@ -243,13 +290,13 @@ public class Game extends InputAdapter {
         Vector2 worldCoords = cameraSystem.screenToWorldCoordinates(screenCoords);
         
         if (button == 0)
-            EntityCreator.createEntity("ball", worldCoords.x, worldCoords.y);
+            EntityCreator.createEntity("circle", worldCoords.x, worldCoords.y);
         else
             EntityCreator.createEntity("box", worldCoords.x, worldCoords.y);
         return true;
     }
 
     public InputProcessor getInputProcessor() {
-        return this;
+        return keyBoardInputSystem;
     }
 }

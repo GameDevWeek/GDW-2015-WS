@@ -137,10 +137,13 @@ public class GameLogicTest extends SandboxGame {
         player.add(playerComp);
         PositionComponent positionComp = engine.createComponent(PositionComponent.class);
         player.add(positionComp);
+        StartPointComponent startPositionComp = engine.createComponent(StartPointComponent.class);
+        player.add(startPositionComp);
         SoundEmitterComponent soundComponent = engine.createComponent(SoundEmitterComponent.class);
         player.add(soundComponent);
         HitPointsComponent hitPoint = engine.createComponent(HitPointsComponent.class);
-        hitPoint.value = 2;
+        hitPoint.value = 3;
+        hitPoint.max = 3;
         player.add(hitPoint);
         LiveComponent livePoint = engine.createComponent(LiveComponent.class);
         livePoint.value = 2;

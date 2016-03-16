@@ -11,7 +11,8 @@
         "black": {"a": 1, "b": 0, "g": 0, "r": 0},
         "gray": {"a": 1, "b": 0.5, "g": 0.5, "r": 0.5},
         "cyan": {"a": 1, "b": 1, "g": 1, "r": 0},
-        "softOrange": {"a": 1, "b": 0.03, "g": 0.73, "r": 0.97}
+        "softOrange": {"a": 1, "b": 0.03, "g": 0.73, "r": 0.97},
+        "pink" : {"a": 1, "b": 0.86, "g": 0.61, "r": 1} 
     },
     "com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable": {
         "dialogDim": {"name": "white", "color": {"r": 0, "g": 0, "b": 0, "a": 0.45}}
@@ -21,7 +22,7 @@
         "toggle": {"down": "default-round-down", "checked": "default-round-down", "up": "default-round"}
     },
     "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
-        "default": { "font": "default-font", "fontColor": "white", "overFontColor":"softOrange"},
+        "default": { "font": "default-font", "fontColor": "pink", "overFontColor":"white"},
         "toggle": {"down": "default-round-down", "up": "default-round", "checked": "default-round-down", "font": "default-font", "fontColor": "white", "downFontColor": "cyan", "overFontColor": "softOrange"},
         "error": {"down": "default-round-down", "up": "default-round", "font": "default-font", "fontColor": "red"}
     },
