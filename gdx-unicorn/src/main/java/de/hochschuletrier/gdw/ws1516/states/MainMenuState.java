@@ -9,11 +9,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.input.InputForwarder;
+import de.hochschuletrier.gdw.commons.gdx.input.hotkey.Hotkey;
+import de.hochschuletrier.gdw.commons.gdx.input.hotkey.HotkeyModifier;
 import de.hochschuletrier.gdw.commons.gdx.state.BaseGameState;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.commons.gdx.menu.widgets.DecoImage;
 import de.hochschuletrier.gdw.commons.gdx.audio.MusicManager;
 import de.hochschuletrier.gdw.ws1516.Main;
+import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
+import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.menu.MainMenuPage;
 import de.hochschuletrier.gdw.ws1516.menu.MenuPageRoot;
@@ -37,7 +41,10 @@ public class MainMenuState extends BaseGameState {
         final MainMenuPage menuPageRoot = new MainMenuPage(skin, menuManager, MainMenuPage.Type.MENU);
         menuManager.addLayer(menuPageRoot);
         
-
+        Hotkey test = new Hotkey(() -> MusicManager.setGlobalVolume(0.1F), Input.Keys.ALT_LEFT);
+        test.register();
+        
+        
 //        menuManager.addLayer(new DecoImage(assetManager.getTexture("menu_fg")));
         menuManager.pushPage(menuPageRoot);
 //        menuManager.getStage().setDebugAll(true);
@@ -83,7 +90,7 @@ public class MainMenuState extends BaseGameState {
     @Override
     public void onLeave(BaseGameState nextState) {
         inputForwarder.set(null);
-        music.stop();
+       // MusicManager.stop();
     }
 
     @Override

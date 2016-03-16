@@ -7,20 +7,20 @@ import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import de.hochschuletrier.gdw.commons.gdx.ashley.SortedSubIteratingSystem;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
-import de.hochschuletrier.gdw.ws1516.game.components.ParticleTestComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.ParticleComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 
 public class ParticleRenderSystem extends SortedSubIteratingSystem.SubSystem 
 {
     public ParticleRenderSystem() 
     {
-        super(Family.all(PositionComponent.class, ParticleTestComponent.class).get());
+        super(Family.all(PositionComponent.class, ParticleComponent.class).get());
     }
 
     @Override
     public void processEntity(Entity entity, float deltaTime) 
     {
-        ParticleTestComponent component = ComponentMappers.particleTest.get(entity);
+        ParticleComponent component = ComponentMappers.particleTest.get(entity);
         
         PositionComponent position = ComponentMappers.position.get(entity);
         

@@ -6,12 +6,12 @@ import com.badlogic.gdx.utils.Pool;
 
 public class BackgroundParticleComponent extends Component implements Pool.Poolable
 {
-    public ParticleEffect bgEffect;
+    public ParticleEffect effect;
     
     @Override
     public void reset()
     {
-        bgEffect.dispose();
-        bgEffect = null;
+        effect.dispose();
+        effect = null;
     }
 }

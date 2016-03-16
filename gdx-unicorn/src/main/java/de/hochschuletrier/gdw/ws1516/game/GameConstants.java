@@ -1,6 +1,5 @@
 package de.hochschuletrier.gdw.ws1516.game;
 
-import com.badlogic.ashley.core.Family;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 
 public class GameConstants {
@@ -12,8 +11,9 @@ public class GameConstants {
     public static final int PRIORITY_INPUT=11;
     public static final int PRIORITY_MOVEMENT=12;
     public static final int PRIORITY_CAMERA = 15;
-    public static final int PRIORITY_MAP_RENDERING = 19;
+    public static final int PRIORITY_MAP_RENDERING = 17;
     public static final int PRIORITY_RENDERING = 20;
+    public static final int PRIORITY_EFFECTS_RENDERING = 25;
     public static final int PRIORITY_DEBUG_WORLD = 30;
     public static final int PRIORITY_HUD = 40;
     public static final int PRIORITY_NAME = 50;
@@ -40,11 +40,14 @@ public class GameConstants {
     public static final float BULLET_SPEED = (50.0f / 43.0f) * 15.0f;
     
     // Bubble-gum spit 
-    public static final float SPIT_FORCE = 30.0f;
+    public static final float SPIT_FORCE_MAX = 30.0f;
+    public static final float SPIT_FORCE_MIN = 10.0f;
     public static final float SPIT_SPAWN_ANGLE = PhysixUtil.DEG2RAD * -20.0f;
-    public static final float SPIT_SPAWN_OFFSET_X = 50.0f;
-    public static final float SPIT_SPANW_OFFSET_Y = 0.0f;
+    public static final float SPIT_SPAWN_OFFSET_X = 80.0f;
+    public static final float SPIT_SPANW_OFFSET_Y = 20.0f;
     public static final float SPIT_GLUE_COOLDOWN = 5.0f;
+    public static final float SPIT_CHARGE_TIME_TO_MAX = 1.0f;
+    public static final float SPIT_COOLDOWN = 1.0f;
     
     public static float MUSIC_FADE_TIME = 2;
     
@@ -66,7 +69,9 @@ public class GameConstants {
     public static final int HUNTER_BULLET_OFFSET = 40;
     //shaderParameter
 
+    // Shader parameters
     public static final float RAINBOW_FREQUENCY = 2.0f;
-    public static final float RAINBOW_MODE_ALPHA = 0.4f;
-
+    public static final float RAINBOW_ALPHA = 0.5f;
+    public static final float PAPARAZZI_ALPHA = 0.8f;
+    public static final float PAPARAZZI_INTENSITY = 1.0f;
 }
