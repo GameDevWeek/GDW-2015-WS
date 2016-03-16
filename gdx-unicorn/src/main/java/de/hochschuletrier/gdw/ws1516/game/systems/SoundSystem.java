@@ -44,7 +44,7 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener 
 
     @Override
     public void removedFromEngine(Engine engine) {
-        super.addedToEngine(engine);
+        super.removedFromEngine(engine);
         SoundEvent.unregister(this);
     };
     

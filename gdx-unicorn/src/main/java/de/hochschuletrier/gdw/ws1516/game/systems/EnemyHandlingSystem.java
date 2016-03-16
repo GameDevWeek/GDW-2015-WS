@@ -109,7 +109,7 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
     @Override
     public void removedFromEngine(Engine engine) {
         super.removedFromEngine(engine);
-        engine.addEntityListener(this);
+        engine.removeEntityListener(this);
     }
 
 

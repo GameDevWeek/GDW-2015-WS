@@ -30,19 +30,17 @@ public class MovementSystem extends IteratingSystem implements
 
     public MovementSystem(int priority) {
         super(Family.all(PhysixBodyComponent.class, MovementComponent.class).get(), priority);
+    }
+
+    @Override
+    public void addedToEngine(Engine engine) {
+        super.addedToEngine(engine);
         StartFlyEvent.register(this);
         EndFlyEvent.register(this);
         JumpEvent.register(this);
         MovementEvent.register(this);
     }
 
-    // @Override
-    // public void addedToEngine(Engine engine) {
-    // super(engine);
-    // logger.debug("Added to Engine{}");
-    // // StartFlyEvent.register(this);
-    // // EndFlyEvent.register(this);
-    // };
     @Override
     public void removedFromEngine(com.badlogic.ashley.core.Engine engine) {
         // super(engine);
@@ -54,12 +52,16 @@ public class MovementSystem extends IteratingSystem implements
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
+        
         PhysixBodyComponent physix = ComponentMappers.physixBody.get(entity);
         InputComponent input = ComponentMappers.input.get(entity);
         MovementComponent movement = ComponentMappers.movement.get(entity);
         // JumpComponent jump = ComponentMappers.jump.get(entity);
         PlayerComponent playerComp = ComponentMappers.player.get(entity);
 
+        if (movement != null & input != null)
+            movement.lookDirection = input.lookDirection;
+        
         if (movement != null) {
             switch (movement.state) {
             case FLYING:
@@ -75,10 +77,13 @@ public class MovementSystem extends IteratingSystem implements
 
         }
 
+        
+        
     }
 
     private void defaultMovement(Entity entity) {
         // get Components
+        
         PhysixBodyComponent physix = ComponentMappers.physixBody.get(entity);
         InputComponent input = ComponentMappers.input.get(entity);
         MovementComponent movement = ComponentMappers.movement.get(entity);

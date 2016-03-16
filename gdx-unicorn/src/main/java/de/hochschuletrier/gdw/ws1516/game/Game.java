@@ -68,6 +68,8 @@ import de.hochschuletrier.gdw.ws1516.game.utils.EntityLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.MapLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.DummyEnemyExecutionSystem;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Game extends InputAdapter {
 
@@ -136,6 +138,18 @@ public class Game extends InputAdapter {
     public void dispose() {
         togglePhysixDebug.unregister();
         scoreCheating.unregister();
+        Main.getInstance().console.unregister(physixDebug);
+        
+        engine.removeAllEntities();
+        
+        // Stupid Engine does not have a removeAllSystems()
+        ArrayList<EntitySystem> list = new ArrayList<EntitySystem>();
+        for (EntitySystem system : engine.getSystems()) {
+            list.add(system);
+        }
+        for (EntitySystem system : list) {
+            engine.removeSystem(system);
+        }
     }
 
     public void init(AssetManagerX assetManager) {
