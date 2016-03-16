@@ -29,6 +29,11 @@ public class NameSystem extends EntitySystem implements EntityListener {
     }
 
     @Override
+    public void removedFromEngine(Engine engine) {
+        engine.removeEntityListener(this);
+    }
+
+    @Override
     public void entityAdded(Entity entity) {
         entities.put(entity.getComponent(NameComponent.class).name, entity);
     }
