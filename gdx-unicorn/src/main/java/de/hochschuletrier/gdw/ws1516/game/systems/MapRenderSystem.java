@@ -39,19 +39,14 @@ public class MapRenderSystem extends IteratingSystem {
     private float rainbowStartDuration;
     
     private final HashMap<TileSet, Texture> tilesetImages = new HashMap<>();
-    private final PooledEngine engine;
-    private final Game game;
     
     private final ConsoleCmd rainbow = new ConsoleCmd("rainbow", 0, "Usage: rainbowmode [duration] - Activates rainbowmode for [duration] seconds") { @Override public void execute(List<String> args) { startRainbow(args); } };
     private final CVarFloat rainbowFrequency = new CVarFloat("rainbowFrequency", GameConstants.RAINBOW_FREQUENCY, 0.0f, Float.MAX_VALUE, 0, "");
     private final CVarFloat rainbowAlpha = new CVarFloat("rainbowAlpha", GameConstants.RAINBOW_MODE_ALPHA, 0.0f, Float.MAX_VALUE, 0, "");
     
     @SuppressWarnings("unchecked")
-    public MapRenderSystem(PooledEngine engine, Game game, int priority) {
+    public MapRenderSystem(int priority) {
         super(Family.all().get(), priority);
-        
-        this.engine = engine;
-        this.game = game;
 
         Main.getInstance().console.register(rainbow);
         Main.getInstance().console.register(rainbowFrequency);
@@ -87,35 +82,6 @@ public class MapRenderSystem extends IteratingSystem {
         DrawUtil.setShader(null);
     }
 
-
-    /**
-     * 
-     * @param filename
-     *            filepath to the map that is to be loaded
-     * @param cameraSystem
-     *            for updating the bounds of the camera
-     */
-    public void loadMap(String filename, CameraSystem cameraSystem) {
-        // Map laden
-        try {
-            map = new TiledMap(filename, LayerObject.PolyMode.ABSOLUTE);
-        } catch (Exception ex) {
-            throw new IllegalArgumentException("Map konnte nicht geladen werden: " + filename);
-        }
-
-        // Wenn map geladen wurde
-        if (map != null) {
-            
-            // Map parsen
-            MapLoader[] mapLoaders = { new PhysicsLoader(), new EntityLoader() };
-            for (MapLoader mapLoader : mapLoaders) {
-                mapLoader.parseMap(map, game, engine);
-            }
-            
-            initialzeRenderer(cameraSystem);
-        }
-    }
-
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         // No entities to process
@@ -141,8 +107,9 @@ public class MapRenderSystem extends IteratingSystem {
         startTime = TimeUtils.millis();
     }
     
-    private void initialzeRenderer(CameraSystem cameraSystem)
+    public void initialzeRenderer(TiledMap map, CameraSystem cameraSystem)
     {
+        this.map = map;
         for (TileSet tileset : map.getTileSets()) {
             TmxImage img = tileset.getImage();
             String filename = CurrentResourceLocator.combinePaths(tileset.getFilename(), img.getSource());
