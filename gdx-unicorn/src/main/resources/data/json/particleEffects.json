@@ -1,3 +1,4 @@
 {
-    "test": "data/particleEffects/partikelTest.p"
+    "test": "data/particleEffects/partikelTest.p",
+    "test2": "data/particleEffects/sternTest.p"
 }
