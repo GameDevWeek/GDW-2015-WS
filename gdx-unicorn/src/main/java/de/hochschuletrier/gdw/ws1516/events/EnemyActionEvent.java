@@ -3,9 +3,13 @@ package de.hochschuletrier.gdw.ws1516.events;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.SnapshotArray;
 
-import de.hochschuletrier.gdw.ws1516.events.TestEvent.Listener;
 import de.hochschuletrier.gdw.ws1516.game.systems.EnemyHandlingSystem;
 
+/**
+ * zum bewegen der Gegener wird eines dieser Events aufgerufen
+ * @author Tobi
+ *
+ */
 public class EnemyActionEvent {
     public static interface Listener {
         void onEnemyActionEvent(Entity enemy,EnemyHandlingSystem.Action.Type action,float strength);

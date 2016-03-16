@@ -5,6 +5,11 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 
 import de.hochschuletrier.gdw.ws1516.game.systems.EnemyHandlingSystem;
 
+/**
+ * Jeder Enemy hat eine und sagt welcher Gegner vorliegt
+ * @author Tobi
+ *
+ */
 public class EnemyTypeComponent extends Component implements Poolable{
     
     public static enum EnemyType {

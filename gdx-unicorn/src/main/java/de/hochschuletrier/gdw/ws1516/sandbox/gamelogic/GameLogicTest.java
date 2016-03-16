@@ -1,14 +1,21 @@
 package de.hochschuletrier.gdw.ws1516.sandbox.gamelogic;
 
+import java.util.HashMap;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.cameras.orthogonal.LimitedSmoothCamera;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.Hotkey;
@@ -34,11 +41,11 @@ import de.hochschuletrier.gdw.ws1516.events.GameRespawnEvent;
 import de.hochschuletrier.gdw.ws1516.events.HitEvent;
 import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
-import de.hochschuletrier.gdw.ws1516.game.components.AttackPatternComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyBehaviourComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.HitPointsComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.LiveComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PathComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
@@ -50,10 +57,8 @@ import de.hochschuletrier.gdw.ws1516.game.systems.HitPointManagementSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RespawnSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.SoundSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.enemyStates.FollowPathEnemyState;
 import de.hochschuletrier.gdw.ws1516.sandbox.SandboxGame;
-import java.util.HashMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -288,17 +293,18 @@ public class GameLogicTest extends SandboxGame {
         
         PositionComponent posComp = engine.createComponent(PositionComponent.class);
         enemy.add(posComp);
+        
+        PathComponent pathComp = engine.createComponent(PathComponent.class);
+        pathComp.points.add(new Vector2(800,100));
+        pathComp.points.add(new Vector2(200,100));
+        enemy.add(pathComp);
 
         EnemyBehaviourComponent behaviour = engine.createComponent(EnemyBehaviourComponent.class);
+        behaviour.currentState = new FollowPathEnemyState();
         enemy.add(behaviour);
 
         EnemyTypeComponent enemyType = engine.createComponent(EnemyTypeComponent.class);
         enemy.add(enemyType);
-        
-        AttackPatternComponent attackPattern = engine.createComponent(AttackPatternComponent.class);
-        attackPattern.pattern = DummyPatterns.getHunterAttackPattern();
-        enemy.add(attackPattern);
-        
         
         
         PhysixModifierComponent modifyComponent = engine.createComponent(PhysixModifierComponent.class);

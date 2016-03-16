@@ -37,11 +37,11 @@ public class DummyEnemyExecutionSystem extends EntitySystem implements EnemyActi
         
         switch(action)
         {
-        case JUMP:
-            body.applyImpulse(new Vector2(0, strength));
-        break;
         case MOVE:
-            body.applyImpulse(new Vector2(strength, 0));
+            body.setLinearVelocityX(strength);
+        break;
+        case JUMP:
+            body.applyImpulse(0,strength);
         break;
         case SHOOT:
                 /// Fire Bullet

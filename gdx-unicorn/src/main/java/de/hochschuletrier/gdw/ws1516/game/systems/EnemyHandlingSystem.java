@@ -1,7 +1,5 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
-import java.util.ArrayList;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,20 +9,10 @@ import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 
-import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
-import de.hochschuletrier.gdw.commons.gdx.state.BaseGameState;
-import de.hochschuletrier.gdw.ws1516.events.EnemyActionEvent;
-import de.hochschuletrier.gdw.ws1516.events.EnemyStateChangeEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
-import de.hochschuletrier.gdw.ws1516.game.GameConstants;
-import de.hochschuletrier.gdw.ws1516.game.components.AttackPatternComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyBehaviourComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.EnemyBehaviourComponent.Behaviour;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
-import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.EnemyBaseState;
-import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.SandBoxEventLogger;
 /**
  * @author Tobi
  *
@@ -130,12 +118,9 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
         EnemyBehaviourComponent behaviour = ComponentMappers.enemyBehaviour.get(entity);
         EnemyTypeComponent type = ComponentMappers.enemyType.get(entity);
         
-        EnemyBaseState old=behaviour.baseState;
-        behaviour.baseState = behaviour.baseState.compute(entity, unicorn, deltaTime);
+        behaviour.currentState = behaviour.currentState.compute(entity, unicorn, deltaTime);
         
-        if (old!=behaviour.baseState){
-           // EnemyStateChangeEvent.emit(entity, old,behaviour.baseState);
-        }
+   
     }
 
 

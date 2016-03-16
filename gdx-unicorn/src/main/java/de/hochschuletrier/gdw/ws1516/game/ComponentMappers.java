@@ -23,7 +23,6 @@ public class ComponentMappers {
     public static final ComponentMapper<LiveComponent> lives = ComponentMapper.getFor(LiveComponent.class);
     public static final ComponentMapper<EnemyBehaviourComponent> enemyBehaviour = ComponentMapper.getFor(EnemyBehaviourComponent.class);
     public static final ComponentMapper<EnemyTypeComponent> enemyType = ComponentMapper.getFor(EnemyTypeComponent.class);
-    public static final ComponentMapper<AttackPatternComponent> enemyPattern = ComponentMapper.getFor(AttackPatternComponent.class) ;
     public static final ComponentMapper<PlayerComponent> player = ComponentMapper.getFor(PlayerComponent.class) ;
  
 }

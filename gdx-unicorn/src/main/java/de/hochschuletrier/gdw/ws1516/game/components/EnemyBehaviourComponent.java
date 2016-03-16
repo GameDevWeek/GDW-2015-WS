@@ -4,24 +4,26 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 import de.hochschuletrier.gdw.ws1516.game.systems.EnemyHandlingSystem;
-import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.DoNothingState;
-import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.EnemyBaseState;
+import de.hochschuletrier.gdw.ws1516.game.systems.enemyStates.DoNothingState;
+import de.hochschuletrier.gdw.ws1516.game.systems.enemyStates.EnemyBaseState;
 
+/**
+ * Beschreibt das derzeitige verhalten des enemies
+ * @author Tobi
+ *
+ */
 public class EnemyBehaviourComponent extends Component implements Poolable{
 
-    public EnemyBaseState baseState;
-    public static enum Behaviour {
-        FOLLOW_PATH,
-        ATTACK;
-    }
-    
-    public Behaviour behaviourState;
+    public EnemyBaseState currentState;
     public boolean canSeeUnicorn;
+    public int pathIndex;
+    public float lastJumped;
     
     
     @Override
     public void reset() {
-        baseState=null;
+        currentState=null;
+        
     }
 
 }
