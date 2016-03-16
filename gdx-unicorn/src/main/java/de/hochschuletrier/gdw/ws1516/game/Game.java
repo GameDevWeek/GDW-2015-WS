@@ -171,7 +171,7 @@ public class Game extends InputAdapter {
         loadMap("data/maps/demo.tmx");
         
         //test:
-        EntityCreator.createEntity("unicorn", 600, 100);
+        EntityCreator.createEntity("unicorn", 700, 100);
         EntityCreator.createEntity("hunter", 1000, 100);
     }
 
@@ -232,7 +232,7 @@ public class Game extends InputAdapter {
         engine.addSystem(soundSystem);
         engine.addSystem(hitPointSystem);
         engine.addSystem(enemyHandlingSystem);
-  //      engine.addSystem(dummyEnemySystem);
+        engine.addSystem(dummyEnemySystem);
         engine.addSystem(enemyVisionSystem );
     }
 

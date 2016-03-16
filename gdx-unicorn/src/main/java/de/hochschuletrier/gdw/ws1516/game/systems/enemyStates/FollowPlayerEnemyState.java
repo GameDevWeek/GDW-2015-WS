@@ -27,7 +27,7 @@ public class FollowPlayerEnemyState extends EnemyBaseState {
         {
             return this;
         }else
-        {
+        {  
             return new FollowPathEnemyState();
         }
     }

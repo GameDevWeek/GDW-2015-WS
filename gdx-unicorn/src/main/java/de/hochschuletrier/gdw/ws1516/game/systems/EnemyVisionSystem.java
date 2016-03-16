@@ -34,9 +34,9 @@ public class EnemyVisionSystem extends IteratingSystem implements EntityListener
         float xDist=enemyPosition.x-unicornPosition.x;
         float yDist=enemyPosition.y-unicornPosition.y;
         float dist=(float)Math.sqrt((xDist*xDist)+(yDist*yDist));
-        
         if (dist<=GameConstants.GLOBAL_VISION*GameConstants.UNICORN_SIZE){
             enemyBehaviour.canSeeUnicorn=true;
+            logger.info("Entity saw unicorn");
         }else{
             enemyBehaviour.canSeeUnicorn=false;
         }

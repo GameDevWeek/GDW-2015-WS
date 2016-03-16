@@ -56,6 +56,8 @@ public class FollowPathEnemyState extends EnemyBaseState {
                 behaviour.pathIndex++;
                 behaviour.pathIndex %= maxIndex;
             }
+        }else{
+            EnemyActionEvent.emit( entity,Type.MOVE ,0f); 
         }
         
         if ( behaviour.canSeeUnicorn )

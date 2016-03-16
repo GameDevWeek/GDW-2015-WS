@@ -43,7 +43,7 @@ public class GameConstants {
 
     //Vision System
     public static final int GLOBAL_VISION=5;
-    public static final int UNICORN_SIZE=10;
+    public static final int UNICORN_SIZE=50;
     
     
     
