@@ -63,7 +63,7 @@ public class RespawnSystem extends EntitySystem implements GameRespawnEvent.List
 
     @Override
     public void entityAdded(Entity entity) {
-        if (entity.getComponent(PlayerComponent.class) != null) {
+        if (ComponentMappers.player.get(entity) != null ) {
             player = entity;
             StartPointComponent start = player.getComponent(StartPointComponent.class );
             PositionComponent position = player.getComponent(PositionComponent.class );
