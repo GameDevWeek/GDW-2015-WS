@@ -15,13 +15,11 @@ import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixModifierComponent;
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
 import de.hochschuletrier.gdw.ws1516.events.BulletSpawnEvent;
+import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.BulletComponent;
 
 public class BulletSystem extends EntitySystem implements BulletSpawnEvent.Listener {
 
-    /** Speed of a bullet in worldUnits / second (conversion factor = 50/43)*/
-    public static final float BULLET_SPEED = (50.0f / 43.0f) * 15.0f;
-    
     private PooledEngine engine;
     
     public BulletSystem(PooledEngine e) {
@@ -90,7 +88,7 @@ public class BulletSystem extends EntitySystem implements BulletSpawnEvent.Liste
             bulletBody.createFixture(fixtureDef);
             
             //Force bullet
-            bulletBody.applyImpulse(nDirX * BULLET_SPEED, nDirY * BULLET_SPEED);
+            bulletBody.applyImpulse(nDirX * GameConstants.BULLET_SPEED, nDirY * GameConstants.BULLET_SPEED);
             bulletBody.setGravityScale(0.0f);
             
             //Add body to entity

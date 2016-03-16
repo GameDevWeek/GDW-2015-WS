@@ -27,6 +27,9 @@ public class GameConstants {
     public static final float PLAYER_SPEED = 100.0f;
     public static final float PLAYER_JUMP_IMPULSE = -500.0f;
 
+    // Bullet system
+    public static final float BULLET_SPEED = (50.0f / 43.0f) * 15.0f;
+    
     public static float MUSIC_FADE_TIME = 2;
     
     // Scoreborad-Constant
