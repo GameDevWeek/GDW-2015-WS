@@ -20,14 +20,12 @@ public class MenuOptions extends MenuPage {
         
        
         
-        addSlider(0,100,1,200,200);
+        addSlider(0,100,1,xOffset,yOffset-yStep*(i++),"Sound");
+        addSlider(0,100,1,xOffset,yOffset-yStep*(i++),"Music");
+      
         addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 100, 50,"Zurück", ()->menuManager.popPage());
     }
     
 
-    public static void main(String[] args) {
-       
-
-    }
-
+  
 }
