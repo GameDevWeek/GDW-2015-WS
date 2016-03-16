@@ -1,5 +1,7 @@
 package de.hochschuletrier.gdw.ws1516.game;
 
+import com.badlogic.ashley.core.Family;
+
 public class GameConstants {
     public static final float TILESIZE_X=64;
     public static final float TILESIZE_Y=64;
@@ -28,6 +30,10 @@ public class GameConstants {
     public static final int BOX2D_SCALE = 40;
     public static final float PLAYER_SPEED = 100.0f;
     public static final float PLAYER_JUMP_IMPULSE = -500.0f;
+    
+    //Effect Times
+    public static final float FLYING_TIME= 10.0f;
+    public static final float RAINBOW_MODE_TIME = 10.0f;
 
     // Bullet system
     public static final float BULLET_SPEED = (50.0f / 43.0f) * 15.0f;
@@ -49,7 +55,6 @@ public class GameConstants {
     
     //EnemyBehaviour
     public static final int ENEMY_FRAME_JUMP_BUFFER = 60;
-    
     //shaderParameter
 
     public static final float RAINBOW_FREQUENCY = 2.0f;
