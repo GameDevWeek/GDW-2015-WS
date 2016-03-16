@@ -17,6 +17,7 @@ import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.AttackPatternComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyBehaviourComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.EnemyBehaviourComponent.Behaviour;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
@@ -100,14 +101,6 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
         }
     }
 
-    public static enum EnemyType {
-        HUNTER,PAPARAZZI
-    }
-    public static enum Behaviour {
-        STANDING,FOLLOW_PATH,ATTACK_UNICORN
-    }
-
-
     private static final Logger logger = LoggerFactory.getLogger(EnemyHandlingSystem.class);
     private Entity unicorn;
 
@@ -142,14 +135,14 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
         PhysixBodyComponent uniBody = ComponentMappers.physixBody.get(unicorn);
         PhysixBodyComponent entityBody= ComponentMappers.physixBody.get(entity);
         
-        double distance = Math.sqrt( Math.pow(uniBody.getPosition().x-entityBody.getPosition().x,2) +
-                        Math.pow(uniBody.getPosition().y-entityBody.getPosition().y,2) );
-        behaviour.canSeeUnicorn = (distance < GameConstants.ENEMY_SIGHT_DISTANCE);
+//        double distance = Math.sqrt( Math.pow(uniBody.getPosition().x-entityBody.getPosition().x,2) +
+//                        Math.pow(uniBody.getPosition().y-entityBody.getPosition().y,2) );
+//        behaviour.canSeeUnicorn = (distance < GameConstants.ENEMY_SIGHT_DISTANCE);
 
         
         if( behaviour.canSeeUnicorn )
         {
-            behaviour.behaviourState = Behaviour.ATTACK_UNICORN; 
+            behaviour.behaviourState = Behaviour.ATTACK; 
             int nextIndex = pattern.pattern.get(pattern.currentIndex).apply(entity,unicorn,deltaTime);    
             if ( pattern.currentIndex != nextIndex)
             {

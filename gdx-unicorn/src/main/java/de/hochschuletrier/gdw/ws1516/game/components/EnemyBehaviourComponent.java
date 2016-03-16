@@ -10,7 +10,14 @@ import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.EnemyBaseState;
 public class EnemyBehaviourComponent extends Component implements Poolable{
 
     public EnemyBaseState baseState;
+    public static enum Behaviour {
+        FOLLOW_PATH,
+        ATTACK;
+    }
+    
+    public Behaviour behaviourState;
     public boolean canSeeUnicorn;
+    
     
     @Override
     public void reset() {

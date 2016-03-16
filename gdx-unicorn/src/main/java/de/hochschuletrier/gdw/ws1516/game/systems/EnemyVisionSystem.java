@@ -1,5 +1,8 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
@@ -12,9 +15,11 @@ import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyBehaviourComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
+import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.SandBoxEventLogger;
 
 public class EnemyVisionSystem extends IteratingSystem implements EntityListener{
 
+    private static final Logger logger = LoggerFactory.getLogger(EnemyVisionSystem.class);
     private Entity unicorn = null;
     
     public EnemyVisionSystem() {
