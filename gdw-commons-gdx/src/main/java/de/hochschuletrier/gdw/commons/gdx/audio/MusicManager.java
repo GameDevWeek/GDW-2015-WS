@@ -95,7 +95,7 @@ public class MusicManager {
             music.play();
         }
         currentMusic = music;
-        System.out.println(currentMusic.getVolume());
+       
        }
 
     public static void stop() {
