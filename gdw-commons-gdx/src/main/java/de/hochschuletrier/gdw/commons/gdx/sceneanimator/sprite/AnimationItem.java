@@ -49,12 +49,20 @@ public class AnimationItem extends Item {
     }
 
     @Override
-    public void startAnimation(Animation animation) {
+    public boolean startAnimation(Animation animation) {
+        if(super.startAnimation(animation))
+            return true;
         if(animation.animation == null) {
             this.animation = null;
         } else {
             this.animationTime = 0;
             this.animation = getter.getAnimation(animation.animation);
         }
+        return true;
+    }
+    
+    @Override
+    protected boolean isAnimationDone() {
+        return this.animationTime > this.totalAnimationTime;
     }
 }
