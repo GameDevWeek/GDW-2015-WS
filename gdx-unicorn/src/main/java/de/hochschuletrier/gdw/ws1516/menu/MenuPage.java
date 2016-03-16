@@ -57,7 +57,7 @@ public class MenuPage extends Group {
     }
     
     
-     protected final void addLabeledSlider(float min, float max,float stepSize,int x, int y,String text){
+     protected final Slider addLabeledSlider(float min, float max,float stepSize,int x, int y,String text,boolean add){
         
         Slider slider = new Slider(min,max,stepSize,false,skin,"default-horizontal");
         Label label = new Label(text,skin,"default");
@@ -78,17 +78,30 @@ public class MenuPage extends Group {
                 value.setText(""+(int)slider.getValue());
             }
         });
-        slider.addListener(new ClickListener(){
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                
-               System.out.print("TEST");
-               
-            }
-        });
-        addActor(slider);
-        addActor(label);
-        addActor(value);
+//        slider.addListener(new ClickListener(){
+//            @Override
+//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//               System.out.print("Down");
+//             
+//               return true;
+//            }
+//        });
+//        slider.addListener(new ClickListener(){
+//            @Override
+//            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+//                System.out.print("Up");
+//                
+//                
+//            }
+//        });
+        if(add==true)
+        {
+         addActor(slider);
+         addActor(label);
+         addActor(value);
+        }
+        return slider;
+        
     }
 
     protected final void addLeftAlignedButton(int x, int y, int width, int height, String text,Runnable runnable) {
