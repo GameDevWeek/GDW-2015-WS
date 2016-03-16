@@ -34,7 +34,7 @@ public class AnimationRenderSystem extends IteratingSystem {
         drawAnimation(animation, pos.pos);
         
         if(player != null) {
-            for (Vector2 segment : player.path) {
+            for (Vector2 segment : player.segments) {
                 drawAnimation(animation, segment);
             }
         }

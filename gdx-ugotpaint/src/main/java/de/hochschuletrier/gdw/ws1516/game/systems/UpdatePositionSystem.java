@@ -14,7 +14,7 @@ public class UpdatePositionSystem extends IteratingSystem {
 
     private static final int PATH_STEP_SIZE = 10;
     private final Vector2 vel = new Vector2();
-    
+
     public UpdatePositionSystem() {
         this(0);
     }
@@ -31,13 +31,16 @@ public class UpdatePositionSystem extends IteratingSystem {
         position.oldPos.set(position.pos);
         vel.set(input.moveDirection).nor().scl(80 * deltaTime);
         position.pos.add(vel);
-        
+
+        // add a path entry if last pos was set some distance ago
         float dist = player.path.getFirst().dst(position.pos);
-        if(dist >= PATH_STEP_SIZE) {
+        if (dist >= PATH_STEP_SIZE) {
             player.path.addFirst(position.pos.cpy());
+
+            // reduce path size afterwards
             float minLength = Math.max(
                     player.segments.size() * CollisionSystem.SEGMENT_DISTANCE * 2,
-                    CollisionSystem.SEGMENT_DISTANCE*3);
+                    CollisionSystem.SEGMENT_DISTANCE * 3);
             float totalDist = 0;
             Vector2 lastPoint = position.pos;
             int usedCount = 0;
@@ -45,31 +48,34 @@ public class UpdatePositionSystem extends IteratingSystem {
                 totalDist += path.dst(lastPoint);
                 lastPoint = path;
                 usedCount++;
-                if(totalDist >= minLength)
+                if (totalDist >= minLength) {
                     break;
+                }
             }
-            while(player.path.size() > usedCount) {
+            while (player.path.size() > usedCount) {
                 player.path.removeLast();
             }
         }
-        
+
+        // set segment positions based on path
         final Vector2 lastDir = new Vector2();
         final Vector2 lastPoint = position.pos.cpy();
         int pathIndex = 0;
         for (Vector2 seg : player.segments) {
             float toMove = CollisionSystem.SEGMENT_DISTANCE;
-            while(toMove > 0) {
-                if(pathIndex >= player.path.size()) {
+            while (toMove > 0) {
+                if (pathIndex >= player.path.size()) {
                     lastPoint.set(lastDir).scl(toMove).add(lastPoint);
                     break;
                 }
                 Vector2 destination = player.path.get(pathIndex);
                 float possibleDistance = lastPoint.dst(destination);
-                if(possibleDistance >= toMove) {
-                    lastDir.set(destination).sub(lastPoint).nor();
-                    lastPoint.set(lastDir).scl(toMove).add(lastPoint);
-                    if(possibleDistance == toMove)
+                lastDir.set(destination).sub(lastPoint).nor();
+                if (possibleDistance >= toMove) {
+                    lastPoint.add(lastDir.x * toMove, lastDir.y * toMove);
+                    if (possibleDistance == toMove) {
                         pathIndex++;
+                    }
                     break;
                 }
                 toMove -= possibleDistance;
