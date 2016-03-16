@@ -3,9 +3,9 @@ package de.hochschuletrier.gdw.ws1516.game.systems;
 import java.util.HashMap;
 import java.util.List;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,44 +18,63 @@ import de.hochschuletrier.gdw.commons.gdx.tiled.TiledMapRendererGdx;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.commons.resourcelocator.CurrentResourceLocator;
 import de.hochschuletrier.gdw.commons.tiled.Layer;
-import de.hochschuletrier.gdw.commons.tiled.LayerObject;
 import de.hochschuletrier.gdw.commons.tiled.TileSet;
 import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.commons.tiled.tmx.TmxImage;
 import de.hochschuletrier.gdw.ws1516.Main;
-import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
-import de.hochschuletrier.gdw.ws1516.game.utils.EntityLoader;
-import de.hochschuletrier.gdw.ws1516.game.utils.MapLoader;
-import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 
 public class MapRenderSystem extends IteratingSystem {
 
     private TiledMap map;
     private TiledMapRendererGdx mapRenderer;
+    
     private long startTime;
+    
     private float rainbowDurationLeft;
     private float rainbowStartDuration;
     
-    private final HashMap<TileSet, Texture> tilesetImages = new HashMap<>();
-    private final PooledEngine engine;
-    private final Game game;
+    private float paparazziDurationLeft;
+    private float paparazziStartDuration;
     
-    private final ConsoleCmd rainbow = new ConsoleCmd("rainbow", 0, "Usage: rainbowmode [duration] - Activates rainbowmode for [duration] seconds") { @Override public void execute(List<String> args) { startRainbow(args); } };
+    private final HashMap<TileSet, Texture> tilesetImages = new HashMap<>();
+    
+    private final ConsoleCmd rainbow = new ConsoleCmd("rainbow", 0, "Usage: rainbow [duration] - Activates rainbow mode for [duration] seconds") { @Override public void execute(List<String> args) { startRainbow(args); } };
     private final CVarFloat rainbowFrequency = new CVarFloat("rainbowFrequency", GameConstants.RAINBOW_FREQUENCY, 0.0f, Float.MAX_VALUE, 0, "");
-    private final CVarFloat rainbowAlpha = new CVarFloat("rainbowAlpha", GameConstants.RAINBOW_MODE_ALPHA, 0.0f, Float.MAX_VALUE, 0, "");
+    private final CVarFloat rainbowAlpha = new CVarFloat("rainbowAlpha", GameConstants.RAINBOW_ALPHA, 0.0f, Float.MAX_VALUE, 0, "");
+    
+    private final ConsoleCmd paparazzi = new ConsoleCmd("pap", 0, "Usage: paparazzi [duration] - Activates paparazzi mode for [duration] seconds") { @Override public void execute(List<String> args) { startPaparazzi(args); } };
+    private final CVarFloat paparazziIntensity = new CVarFloat("paparazziIntensity", GameConstants.PAPARAZZI_INTENSITY, 0.0f, Float.MAX_VALUE, 0, "");
+    private final CVarFloat paparazziAlpha = new CVarFloat("paparazziAlpha", GameConstants.PAPARAZZI_ALPHA, 0.0f, Float.MAX_VALUE, 0, "");
     
     @SuppressWarnings("unchecked")
-    public MapRenderSystem(PooledEngine engine, Game game, int priority) {
+    public MapRenderSystem(int priority) {
         super(Family.all().get(), priority);
-        
-        this.engine = engine;
-        this.game = game;
 
+        // DEBUG
+        Main.getInstance().console.register(paparazzi);
+        
+        Main.getInstance().console.register(paparazziIntensity);
+        Main.getInstance().console.register(paparazziAlpha);
+    }
+    
+    @Override
+    public void addedToEngine(Engine engine) {
+        super.addedToEngine(engine);
+        
         Main.getInstance().console.register(rainbow);
         Main.getInstance().console.register(rainbowFrequency);
         Main.getInstance().console.register(rainbowAlpha);
+    }
+    
+    @Override
+    public void removedFromEngine(Engine engine) {
+        super.removedFromEngine(engine);
+        
+        Main.getInstance().console.unregister(rainbow);
+        Main.getInstance().console.unregister(rainbowFrequency);
+        Main.getInstance().console.unregister(rainbowAlpha);
     }
 
     @Override
@@ -77,6 +96,22 @@ public class MapRenderSystem extends IteratingSystem {
                 rainbowShader.setUniformf("u_rainbowFrequency", rainbowFrequency.get());
                 rainbowShader.setUniformf("u_time", (float)TimeUtils.timeSinceMillis(startTime) * 0.001f);
             }
+        } else if (paparazziDurationLeft > 0.0f) {
+            
+            paparazziDurationLeft -= deltaTime;
+            ShaderProgram shader = ShaderLoader.getPaparazziShader();
+            DrawUtil.setShader(shader);
+            if(shader != null)
+            {
+                float[] dimensions = new float[]{ Gdx.graphics.getWidth(), Gdx.graphics.getHeight() };
+                shader.setUniform2fv("u_frameDimension", dimensions, 0, 2);
+                shader.setUniformf("u_startDuration", paparazziStartDuration);
+                shader.setUniformf("u_durationLeft", paparazziDurationLeft);
+                shader.setUniformf("u_paparazziAlpha", paparazziAlpha.get());
+                shader.setUniformf("u_paparazziIntensity", rainbowFrequency.get());
+                shader.setUniformf("u_time", (float)TimeUtils.timeSinceMillis(startTime) * 0.001f);
+            }
+
         }
         
         mapRenderer.update(deltaTime);
@@ -84,36 +119,9 @@ public class MapRenderSystem extends IteratingSystem {
             mapRenderer.render(0, 0, layer);
         }
 
+                
+        
         DrawUtil.setShader(null);
-    }
-
-
-    /**
-     * 
-     * @param filename
-     *            filepath to the map that is to be loaded
-     * @param cameraSystem
-     *            for updating the bounds of the camera
-     */
-    public void loadMap(String filename, CameraSystem cameraSystem) {
-        // Map laden
-        try {
-            map = new TiledMap(filename, LayerObject.PolyMode.ABSOLUTE);
-        } catch (Exception ex) {
-            throw new IllegalArgumentException("Map konnte nicht geladen werden: " + filename);
-        }
-
-        // Wenn map geladen wurde
-        if (map != null) {
-            
-            // Map parsen
-            MapLoader[] mapLoaders = { new PhysicsLoader(), new EntityLoader() };
-            for (MapLoader mapLoader : mapLoaders) {
-                mapLoader.parseMap(map, game, engine);
-            }
-            
-            initialzeRenderer(cameraSystem);
-        }
     }
 
     @Override
@@ -140,9 +148,30 @@ public class MapRenderSystem extends IteratingSystem {
         rainbowDurationLeft = rainbowStartDuration;
         startTime = TimeUtils.millis();
     }
+
+    protected void startPaparazzi(List<String> args) {
+        if(args.size() <= 1)
+        {
+            paparazziStartDuration = 5.0f;
+        }
+        else
+        {
+            try
+            {
+                paparazziStartDuration = Float.parseFloat(args.get(1));
+            }
+            catch(Exception e)
+            {
+                paparazziStartDuration = 5.0f;
+            }
+        }
+        paparazziDurationLeft = paparazziStartDuration;
+        startTime = TimeUtils.millis();
+    }
     
-    private void initialzeRenderer(CameraSystem cameraSystem)
+    public void initialzeRenderer(TiledMap map, CameraSystem cameraSystem)
     {
+        this.map = map;
         for (TileSet tileset : map.getTileSets()) {
             TmxImage img = tileset.getImage();
             String filename = CurrentResourceLocator.combinePaths(tileset.getFilename(), img.getSource());

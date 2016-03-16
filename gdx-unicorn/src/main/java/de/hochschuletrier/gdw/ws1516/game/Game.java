@@ -98,11 +98,8 @@ public class Game extends InputAdapter {
     private final KeyboardInputSystem keyBoardInputSystem= new KeyboardInputSystem(GameConstants.PRIORITY_INPUT);
     private final MovementSystem movementSystem=new MovementSystem(GameConstants.PRIORITY_MOVEMENT);
     
-    private final MapRenderSystem mapRenderSystem = new MapRenderSystem(engine, this, GameConstants.PRIORITY_MAP_RENDERING);
+    private final MapRenderSystem mapRenderSystem = new MapRenderSystem(GameConstants.PRIORITY_MAP_RENDERING);
     
-    
-
-
     //
     private final HudRenderSystem hudRenderSystem = new HudRenderSystem(1001);
     //
@@ -113,6 +110,8 @@ public class Game extends InputAdapter {
 
     private final TriggerSystem triggerSystem = new TriggerSystem();
     private final BulletSystem bulletSystem = new BulletSystem(engine);
+
+    private TiledMap map;
     
     public Game() {
         // If this is a build jar file, disable hotkeys
@@ -144,10 +143,36 @@ public class Game extends InputAdapter {
         EntityCreator.setGame(this);
         EntityCreator.setEntityFactory(entityFactory);
         
-        mapRenderSystem.loadMap("data/maps/demo.tmx", cameraSystem);
+        loadMap("data/maps/demo.tmx");
+        mapRenderSystem.initialzeRenderer(map, cameraSystem);
         
         //test:
         EntityCreator.createEntity("unicorn", 800, 100);
+    }
+
+
+    /**
+     * 
+     * @param filename
+     *            filepath to the map that is to be loaded
+     */
+    private void loadMap(String filename) {
+        // Map laden
+        try {
+            map = new TiledMap(filename, LayerObject.PolyMode.ABSOLUTE);
+        } catch (Exception ex) {
+            throw new IllegalArgumentException("Map konnte nicht geladen werden: " + filename);
+        }
+
+        // Wenn map geladen wurde
+        if (map != null) {
+            
+            // Map parsen
+            MapLoader[] mapLoaders = { new PhysicsLoader(), new EntityLoader() };
+            for (MapLoader mapLoader : mapLoaders) {
+                mapLoader.parseMap(map, this, engine);
+            }
+        }
     }
 
     private void addSystems() {
