@@ -17,6 +17,7 @@ public class HitPointsComponentFactory extends ComponentFactory<EntityFactoryPar
     public void run(Entity entity, SafeProperties meta, SafeProperties properties, EntityFactoryParam param) {
         HitPointsComponent hpcomp = engine.createComponent(HitPointsComponent.class);
         hpcomp.value = properties.getInt("value", 3);
+        hpcomp.max = properties.getInt("max", 3);
         entity.add(hpcomp);
     }
 

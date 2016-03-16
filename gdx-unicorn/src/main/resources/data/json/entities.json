@@ -3,11 +3,16 @@
         "meta": {},
         "components": {
             "Position": {},
+            "Input":{},
+            "Player":{},
+            "Movable":{
+                "state":"on_ground"
+                },
             "Animation": {
                 "animation": "unicorn_idle"
             },
             "PhysixBody": {
-                "type": "circle",
+                "type": "player",
                 "size": 30,
                 "density": 5,
                 "friction": 0.2,

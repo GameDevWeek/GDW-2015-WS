@@ -1,0 +1,6 @@
+{
+    "rainbow":{
+        "vertex": "data/shaders/rainbowVertexShader.glsl",
+        "fragment": "data/shaders/rainbowFragmentShader.glsl"
+    }
+}
