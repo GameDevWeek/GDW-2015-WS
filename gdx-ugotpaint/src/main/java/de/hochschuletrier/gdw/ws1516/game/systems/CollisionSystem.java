@@ -93,7 +93,8 @@ public class CollisionSystem extends IteratingSystem {
     private void segmentHit(Entity attacker, Entity victim, int segment) {
         if(ComponentMappers.player.has(attacker)) {
             receiveHeadDamage(attacker);
-            segment -= 3;
+            if(attacker == victim)
+                segment -= 3;
         } else if(ComponentMappers.projectile.has(attacker)) {
             engine.removeEntity(attacker);
         }
