@@ -7,8 +7,14 @@ import de.hochschuletrier.gdw.ws1516.game.systems.EnemyHandlingSystem;
 
 public class EnemyBehaviourComponent extends Component implements Poolable{
 
-    public EnemyHandlingSystem.Behaviour behaviourState;
+    public static enum Behaviour {
+        FOLLOW_PATH,
+        ATTACK;
+    }
+    
+    public Behaviour behaviourState;
     public boolean canSeeUnicorn;
+    
     
     @Override
     public void reset() {

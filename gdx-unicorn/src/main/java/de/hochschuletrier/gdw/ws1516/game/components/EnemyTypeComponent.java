@@ -6,8 +6,13 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import de.hochschuletrier.gdw.ws1516.game.systems.EnemyHandlingSystem;
 
 public class EnemyTypeComponent extends Component implements Poolable{
-
-    public EnemyHandlingSystem.EnemyType type;
+    
+    public static enum EnemyType {
+        HUNTER,
+        PAPARAZZI;
+    }
+    
+    public EnemyType type;
     
     @Override
     public void reset() {
