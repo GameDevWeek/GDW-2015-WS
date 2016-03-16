@@ -5,9 +5,11 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 
 public class PlayerComponent extends Component implements Poolable {
 
+    public boolean doRespawn;
+
     @Override
     public void reset() {
-        
+        doRespawn = false;
     }
 
 }

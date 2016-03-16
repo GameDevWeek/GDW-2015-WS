@@ -37,4 +37,5 @@ public class BulletListener extends PhysixContactAdapter {
         bulletComponent.onHit.accept(myEntity);
         
     }
+    
 }

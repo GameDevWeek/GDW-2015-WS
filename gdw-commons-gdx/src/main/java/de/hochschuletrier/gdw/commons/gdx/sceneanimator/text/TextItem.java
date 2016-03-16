@@ -159,7 +159,10 @@ public class TextItem extends Item {
     }
 
     @Override
-    public void startAnimation(Animation animation) {
+    public boolean startAnimation(Animation animation) {
+        if(super.startAnimation(animation))
+            return true;
+        
         try {
             anim = TextAnimation.valueOf(animation.animation.toUpperCase());
             animationTime = 0;
@@ -172,26 +175,32 @@ public class TextItem extends Item {
                 case CONSTRUCT_TYPE:
                     shownText = "";
                     generateConstructChars(animation);
-                    break;
+                    return true;
                 case TYPE_INSTANT:
                     shownText = originalText;
                     anim = null;
-                    break;
+                    return true;
                 case UNTYPE_INSTANT:
                     shownText = "";
                     anim = null;
-                    break;
+                    return true;
                 case FADE_IN:
                     opacity = 0.0f;
-                    break;
+                    return true;
                 case TYPE:
                     shownText = "";
-                    break;
+                    return true;
                 case UNTYPE:
                     shownText = originalText;
-                    break;
+                    return true;
             }
         } catch (IllegalArgumentException e) {
         }
+        return false;
+    }
+    
+    @Override
+    protected boolean isAnimationDone() {
+        return anim == null;
     }
 }

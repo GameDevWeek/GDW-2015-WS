@@ -34,5 +34,6 @@ public class BulletComponent extends Component implements Pool.Poolable {
     public void reset() {
         onPlayerHit = null;
         onEntityHit = null;
+        onHit = null;
     }
 }

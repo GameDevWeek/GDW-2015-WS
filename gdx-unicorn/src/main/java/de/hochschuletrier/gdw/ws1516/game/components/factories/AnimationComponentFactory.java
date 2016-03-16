@@ -22,20 +22,17 @@ public class AnimationComponentFactory extends ComponentFactory<EntityFactoryPar
         {
             if(properties.getString(animState.toString()) != null)
             {
-                component.animationMap.put(animState.toString(), assetManager.getAnimation(properties.getString(animState.toString())));
+                component.animationMap.put(animState, assetManager.getAnimation(properties.getString(animState.toString())));
             }
         }
         
         if(properties.getString("animation") != null)
         {
-            component.animationMap.put("animation", assetManager.getAnimation(properties.getString("animation")));
+            component.animationMap.put(AnimationState.none, assetManager.getAnimation(properties.getString("animation")));
         }
         
-        entity.add(component);
+        component.flipHorizontal = properties.getBoolean("flipHorizontal", false);
         
-//        component.animation = assetManager.getAnimation(properties.getString("animation"));
-//        component.flipHorizontal = properties.getBoolean("flipHorizontal", false);
-//        assert (component.animation != null);
-//        entity.add(component);
+        entity.add(component);
     }
 }

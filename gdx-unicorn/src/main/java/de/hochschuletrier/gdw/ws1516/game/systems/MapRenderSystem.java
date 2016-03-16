@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import de.hochschuletrier.gdw.commons.devcon.ConsoleCmd;
+import de.hochschuletrier.gdw.commons.devcon.cvar.CVarBool;
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarFloat;
 import de.hochschuletrier.gdw.commons.gdx.tiled.TiledMapRendererGdx;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
@@ -37,6 +38,7 @@ public class MapRenderSystem extends IteratingSystem {
     
     private final HashMap<TileSet, Texture> tilesetImages = new HashMap<>();
     
+    private final CVarBool fancyRainbow = new CVarBool("fancyRainbow", false, 0, "sets fancy rainbowmode");
     private final ConsoleCmd rainbow = new ConsoleCmd("rainbow", 0, "Usage: rainbow [duration] - Activates rainbow mode for [duration] seconds") { @Override public void execute(List<String> args) { startRainbow(args); } };
     private final CVarFloat rainbowFrequency = new CVarFloat("rainbowFrequency", GameConstants.RAINBOW_FREQUENCY, 0.0f, Float.MAX_VALUE, 0, "");
     private final CVarFloat rainbowAlpha = new CVarFloat("rainbowAlpha", GameConstants.RAINBOW_ALPHA, 0.0f, Float.MAX_VALUE, 0, "");
@@ -54,14 +56,17 @@ public class MapRenderSystem extends IteratingSystem {
         Main.getInstance().console.register(rainbow);
         Main.getInstance().console.register(rainbowFrequency);
         Main.getInstance().console.register(rainbowAlpha);
+        Main.getInstance().console.register(fancyRainbow);
     }
     
     @Override
     public void removedFromEngine(Engine engine) {
         super.removedFromEngine(engine);
+        
         Main.getInstance().console.unregister(rainbow);
         Main.getInstance().console.unregister(rainbowFrequency);
         Main.getInstance().console.unregister(rainbowAlpha);
+        Main.getInstance().console.unregister(fancyRainbow);
     }
 
     @Override
@@ -71,7 +76,7 @@ public class MapRenderSystem extends IteratingSystem {
         if(rainbowDurationLeft > 0.0f)
         {
             rainbowDurationLeft -= deltaTime;
-            ShaderProgram rainbowShader = ShaderLoader.getRainbowShader();
+            ShaderProgram rainbowShader = fancyRainbow.get() ? ShaderLoader.getFancyRainbowShader() : ShaderLoader.getSimpleRainbowShader();
             DrawUtil.setShader(rainbowShader);
             if(rainbowShader != null)
             {

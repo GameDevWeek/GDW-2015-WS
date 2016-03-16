@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -31,11 +32,18 @@ import de.hochschuletrier.gdw.commons.tiled.TileSet;
 import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.commons.tiled.tmx.TmxImage;
 import de.hochschuletrier.gdw.ws1516.Main;
+import de.hochschuletrier.gdw.ws1516.events.BubblegumSpitSpawnEvent;
 import de.hochschuletrier.gdw.ws1516.events.BulletSpawnEvent;
+import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.components.BubblegumSpitComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.BulletComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.EnemyComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
+import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BubblegumSpitListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BulletListener;
+import de.hochschuletrier.gdw.ws1516.game.systems.BubbleGlueSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.BubblegumSpitSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BulletSystem;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
 import de.hochschuletrier.gdw.ws1516.sandbox.SandboxGame;
@@ -79,9 +87,13 @@ public class PhysixTest extends SandboxGame {
     private PhysixBodyComponent playerBody;
     private final HashMap<TileSet, Texture> tilesetImages = new HashMap();
 
+    private float spawnEnemyCooldown = 0;
+    
     public PhysixTest() {
         engine.addSystem(physixSystem);
         engine.addSystem(physixDebugRenderSystem);
+        engine.addSystem(new BubblegumSpitSystem(engine));
+        engine.addSystem(new BubbleGlueSystem(engine));
         engine.addSystem(new BulletSystem(engine));
     }
 
@@ -105,6 +117,7 @@ public class PhysixTest extends SandboxGame {
         PhysixComponentAwareContactListener contactListener = new PhysixComponentAwareContactListener();
         physixSystem.getWorld().setContactListener(contactListener);
         contactListener.addListener(BulletComponent.class, new BulletListener());
+        contactListener.addListener(BubblegumSpitComponent.class, new BubblegumSpitListener());
         
         // create a simple player ball
         player = engine.createEntity();
@@ -185,25 +198,67 @@ public class PhysixTest extends SandboxGame {
 
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                 
-                //Bullet movement vector
-                float moveX = (float) Math.cos(player.getComponent(PhysixBodyComponent.class).getAngle());
-                float moveY = (float) Math.sin(player.getComponent(PhysixBodyComponent.class).getAngle());
+                BubblegumSpitSpawnEvent.emit();
                 
-                //TODO : HCV - Good enough for the demo LOL
-                float spawnX = player.getComponent(PhysixBodyComponent.class).getX() + (moveX * (playerSize + 5) * 1.2f);
-                float spawnY = player.getComponent(PhysixBodyComponent.class).getY() + (moveY * (playerSize + 5) * 1.2f);
+            }
+            
+            //------ Spawn a entity containing the enemy component -------
+            spawnEnemyCooldown -= delta;
+            if (spawnEnemyCooldown < 0) {
+                spawnEnemyCooldown = 0;
+            }       
+            if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT) && spawnEnemyCooldown == 0) {
                 
-                BulletSpawnEvent.emit(spawnX, spawnY, moveX, moveY, 
-                           (bullet, player) -> {
-                               logger.debug("impact player");
-                           },
-                           (bullet, entity) -> {
-                               logger.debug("impact entity");
-                           },
-                           (bullet) -> {
-                               logger.debug("impact world");
-                               engine.removeEntity(bullet);
-                           });
+                spawnEnemyCooldown = 1.0f;
+                
+              //Create gum spit entity
+                final Entity gumSpitEntity = engine.createEntity();
+                       
+                //Create physics modifier component
+                PhysixModifierComponent modifyComponent = engine.createComponent(PhysixModifierComponent.class);
+                
+                //Bind components
+                gumSpitEntity.add(engine.createComponent(EnemyComponent.class));
+                gumSpitEntity.add(modifyComponent);
+
+                //Build bullet physics
+                modifyComponent.schedule(() -> {
+                    PhysixSystem physixSystem = engine.getSystem(PhysixSystem.class);
+                    
+                    Entity playerEntity = engine.getEntitiesFor(Family.one(PlayerComponent.class).get()).first();
+                    PhysixBodyComponent playerBody = ComponentMappers.physixBody.get(playerEntity);
+                    
+                    //Magie = Physik / Wollen
+                    float cosine = (float) Math.cos(playerBody.getAngle());
+                    float sine   = (float) Math.sin(playerBody.getAngle());
+                    float spawnOffsetX = GameConstants.SPIT_SPAWN_OFFSET_X * cosine - GameConstants.SPIT_SPANW_OFFSET_Y * sine; 
+                    float spawnOffsetY = GameConstants.SPIT_SPAWN_OFFSET_X * sine   + GameConstants.SPIT_SPANW_OFFSET_Y * cosine;
+                    float spawnX = playerBody.getX() + spawnOffsetX;
+                    float spawnY = playerBody.getY() + spawnOffsetY;
+                              
+                    //Create physic Body component
+                    PhysixBodyComponent spitBodyComponent = engine.createComponent(PhysixBodyComponent.class);
+                    PhysixBodyDef spitBodyDef = new PhysixBodyDef(BodyType.DynamicBody, physixSystem)
+                                                    .position(spawnX, spawnY)
+                                                    .fixedRotation(true);
+                    spitBodyComponent.init(spitBodyDef, physixSystem, gumSpitEntity);
+                    
+                    //Gum spit fixture
+                    PhysixFixtureDef fixtureDef = new PhysixFixtureDef(physixSystem)
+                                                  .density(1.0f)
+                                                  .friction(0.0f)
+                                                  .restitution(0.0f)
+                                                  .shapeCircle(30);
+                    spitBodyComponent.createFixture(fixtureDef);
+                    
+                    //Force gum spit
+                    spitBodyComponent.applyImpulse(cosine * GameConstants.SPIT_FORCE, sine * GameConstants.SPIT_FORCE);
+                    spitBodyComponent.setGravityScale(1.0f);
+                    
+                    //Add body to entity
+                    gumSpitEntity.add(spitBodyComponent);
+                });
+                engine.addEntity(gumSpitEntity);
                 
             }
             
