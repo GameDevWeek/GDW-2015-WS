@@ -38,6 +38,7 @@ public class LevelSelectionPage extends MenuPage {
         Texture buttonBack_texture = new Texture("data/graphics/blue_gum_s.png");
         Texture buttonNext_texture = new Texture("data/graphics/blue_gum_s.png");
         Texture[] level_previews = new Texture[5];
+       // level_previews[]
         addImageButton(level_preview_texture, 450, 250, 50, 50, this::startGame);
         addImageButton(buttonBack_texture, 430, 230, 50, 50, this::startGame);
         addImageButton(buttonNext_texture, 450+level_preview_texture.getWidth(), 230, 50, 50, this::startGame);
