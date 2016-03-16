@@ -54,7 +54,7 @@ public class HudRenderSystem extends IteratingSystem {
         font.draw(DrawUtil.batch, s, 400, 20);
         font.draw(DrawUtil.batch,score, 950,20);
         
-        FileHandle handle = Gdx.files.internal("data/graphics/heart3.png");
+        FileHandle handle = Gdx.files.internal("data/ui/menu/heart3.png");
         Texture hearts = new Texture(handle);
         Texture coins = new Texture(handle);
         DrawUtil.draw(hearts, 20, 20, 50, 50);
