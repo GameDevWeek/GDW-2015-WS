@@ -25,6 +25,7 @@ import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.BubbleGlueComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.BubblegumSpitComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 
 /**
@@ -57,7 +58,7 @@ public class BubblegumSpitSystem extends EntitySystem implements BubblegumSpitSp
     }
 
     @Override
-    public void onSpawnBubblegumSpit() {
+    public void onSpawnBubblegumSpit(final float force) {
         
         //Create gum spit entity
         final Entity gumSpitEntity = engine.createEntity();
@@ -78,12 +79,16 @@ public class BubblegumSpitSystem extends EntitySystem implements BubblegumSpitSp
         modifyComponent.schedule(() -> {
             PhysixSystem physixSystem = engine.getSystem(PhysixSystem.class);
             
-            Entity playerEntity = engine.getEntitiesFor(Family.one(PlayerComponent.class).get()).first();
+            Entity playerEntity = engine.getEntitiesFor(Family.all(PlayerComponent.class,
+                                                                   MovementComponent.class).get()).first();
             PhysixBodyComponent playerBody = ComponentMappers.physixBody.get(playerEntity);
+            MovementComponent movementComponent = ComponentMappers.movement.get(playerEntity);
             
-            //Magie = Physik / Wollen
-            float cosa = (float) Math.cos(playerBody.getAngle());
-            float sina   = (float) Math.sin(playerBody.getAngle());
+            //'Magie = Physik / Wollen'
+            //TODO : Use player orientation (left, right)
+            float playerAngle = movementComponent.lookDirection == MovementComponent.LookDirection.LEFT ? (float) Math.PI : 0.0f;
+            float cosa = (float) Math.cos(playerAngle);
+            float sina   = (float) Math.sin(playerAngle);
             float spawnOffsetX = GameConstants.SPIT_SPAWN_OFFSET_X * cosa - GameConstants.SPIT_SPANW_OFFSET_Y * sina; 
             float spawnOffsetY = GameConstants.SPIT_SPAWN_OFFSET_X * sina   + GameConstants.SPIT_SPANW_OFFSET_Y * cosa;
             float spawnX = playerBody.getX() + spawnOffsetX;
@@ -107,7 +112,9 @@ public class BubblegumSpitSystem extends EntitySystem implements BubblegumSpitSp
             spitBodyComponent.createFixture(fixtureDef);
             
             //Force gum spit
-            spitBodyComponent.applyImpulse(impulseX * GameConstants.SPIT_FORCE, impulseY * GameConstants.SPIT_FORCE);
+            float spitForceDelta = GameConstants.SPIT_FORCE_MAX - GameConstants.SPIT_FORCE_MIN;
+            float spitForce = GameConstants.SPIT_FORCE_MIN + force * spitForceDelta;
+            spitBodyComponent.applyImpulse(impulseX * spitForce, impulseY * spitForce);
             spitBodyComponent.setGravityScale(1.0f);
             
             //Add body to entity

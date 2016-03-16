@@ -54,12 +54,16 @@ public class MovementSystem extends IteratingSystem implements
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
+        
         PhysixBodyComponent physix = ComponentMappers.physixBody.get(entity);
         InputComponent input = ComponentMappers.input.get(entity);
         MovementComponent movement = ComponentMappers.movement.get(entity);
         // JumpComponent jump = ComponentMappers.jump.get(entity);
         PlayerComponent playerComp = ComponentMappers.player.get(entity);
 
+        if (movement != null & input != null)
+            movement.lookDirection = input.lookDirection;
+        
         if (movement != null) {
             switch (movement.state) {
             case FLYING:
@@ -75,10 +79,13 @@ public class MovementSystem extends IteratingSystem implements
 
         }
 
+        
+        
     }
 
     private void defaultMovement(Entity entity) {
         // get Components
+        
         PhysixBodyComponent physix = ComponentMappers.physixBody.get(entity);
         InputComponent input = ComponentMappers.input.get(entity);
         MovementComponent movement = ComponentMappers.movement.get(entity);

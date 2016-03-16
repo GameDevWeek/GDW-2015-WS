@@ -32,7 +32,7 @@ public class BubbleGlueSystem extends EntitySystem {
             BubbleGlueComponent glueComponent = ComponentMapper.getFor(BubbleGlueComponent.class).get(entity);
             PhysixBodyComponent body = ComponentMapper.getFor(PhysixBodyComponent.class).get(glueComponent.gluedEntity);
             
-            //Glue
+            //Glue (evtl modify component)
             body.setX(glueComponent.gluedToPosition.x);
             body.setY(glueComponent.gluedToPosition.y);
             
