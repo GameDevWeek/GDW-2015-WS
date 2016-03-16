@@ -43,11 +43,13 @@ import de.hochschuletrier.gdw.commons.tiled.TileSet;
 import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.commons.tiled.tmx.TmxImage;
 import de.hochschuletrier.gdw.ws1516.Main;
+import de.hochschuletrier.gdw.ws1516.game.components.BubblegumSpitComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.BulletComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ImpactSoundComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.TriggerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.factories.EntityFactoryParam;
+import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BubblegumSpitListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BulletListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.ImpactSoundListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerContactListener;
@@ -67,6 +69,18 @@ import de.hochschuletrier.gdw.ws1516.game.systems.RespawnSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.SimpleAnimationRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.SoundSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.TriggerSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.NameSystem;
+
+import de.hochschuletrier.gdw.ws1516.game.systems.AnimationRenderSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.HudRenderSystem;
+
+import de.hochschuletrier.gdw.ws1516.game.systems.NameSystem;
+
+import de.hochschuletrier.gdw.ws1516.game.systems.AnimationRenderSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.BubbleGlueSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.BubblegumSpitSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.HudRenderSystem;
+
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityCreator;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityLoader;
@@ -103,7 +117,9 @@ public class Game extends InputAdapter {
 
     private final KeyboardInputSystem keyBoardInputSystem= new KeyboardInputSystem(GameConstants.PRIORITY_INPUT);
     private final MovementSystem movementSystem=new MovementSystem(GameConstants.PRIORITY_MOVEMENT);
-    
+    private final BubblegumSpitSystem bubblegumSpitSystem = new BubblegumSpitSystem(engine);
+    private final BubbleGlueSystem bubbleGlueSystem = new BubbleGlueSystem(engine);
+     
     private final HudRenderSystem hudRenderSystem = new HudRenderSystem(GameConstants.PRIORITY_HUD);
     
     private final MapRenderSystem mapRenderSystem = new MapRenderSystem(GameConstants.PRIORITY_MAP_RENDERING);
@@ -140,7 +156,6 @@ public class Game extends InputAdapter {
     public void init(AssetManagerX assetManager) {
         Main.getInstance().console.register(physixDebug);
         physixDebug.addListener((CVar) -> physixDebugRenderSystem.setProcessing(physixDebug.get()));
-
         addSystems();
         addContactListeners();
         setupPhysixWorld();
@@ -154,7 +169,7 @@ public class Game extends InputAdapter {
         EntityCreator.setGame(this);
         EntityCreator.setEntityFactory(entityFactory);
         
-        loadMap("data/maps/demo.tmx");
+        loadMap("data/maps/demo_level_worked_nurMap.tmx");
         mapRenderSystem.initialzeRenderer(map, cameraSystem);
         
         //test:
@@ -207,6 +222,8 @@ public class Game extends InputAdapter {
         engine.addSystem(dummyEnemySystem);
         engine.addSystem(enemyVisionSystem );
         engine.addSystem(mapRenderSystem);
+        engine.addSystem(bubblegumSpitSystem);
+        engine.addSystem(bubbleGlueSystem);
     }
 
     private void addContactListeners() {
@@ -216,6 +233,7 @@ public class Game extends InputAdapter {
         contactListener.addListener(TriggerComponent.class, new TriggerListener());
         contactListener.addListener(PlayerComponent.class, new PlayerContactListener());
         contactListener.addListener(BulletComponent.class, new BulletListener());
+        contactListener.addListener(BubblegumSpitComponent.class, new BubblegumSpitListener());
     }
 
     private void setupPhysixWorld() {

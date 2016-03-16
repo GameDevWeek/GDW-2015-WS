@@ -22,7 +22,15 @@ public class PlayerContactListener extends PhysixContactAdapter{
         Entity player = contact.getMyComponent().getEntity();
         if (contact.getOtherComponent() == null){
             if(ComponentMappers.movement.get(player).state==State.FALLING||ComponentMappers.movement.get(player).state==State.JUMPING){
-                ComponentMappers.movement.get(player).state=MovementComponent.State.ON_GROUND;
+                
+                //for Jumps:
+                if("foot".equals(contact.getMyFixture().getUserData())){       
+
+                    if(!contact.getOtherFixture().isSensor()){
+                        ComponentMappers.movement.get(player).state=MovementComponent.State.ON_GROUND;
+                    }
+                        // TODO: Platfom, killsPlayerOnContact, ...
+                }
             }
 
             return;

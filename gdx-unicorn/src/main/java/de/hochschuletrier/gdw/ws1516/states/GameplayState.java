@@ -41,7 +41,7 @@ public class GameplayState extends BaseGameState {
         this.game = game;
         
 
-        music = assetManager.getMusic("gameplay");
+        music = assetManager.getMusic("gameplaytheme");
 
         Skin skin = ((MainMenuState)Main.getInstance().getPersistentState(MainMenuState.class)).getSkin();
         final MainMenuPage menuPageRoot = new MainMenuPage(skin, menuManager, MainMenuPage.Type.PAUSED);
@@ -100,17 +100,22 @@ public class GameplayState extends BaseGameState {
 
     @Override
     public void onEnter(BaseGameState previousState) {
+       
+       
         MusicManager.play(music, GameConstants.MUSIC_FADE_TIME);
     }
 
     @Override
     public void onEnterComplete() {
+        
+        music.setVolume(0.5F);
         Main.inputMultiplexer.addProcessor(inputForwarder);
         inputForwarder.set(gameInputProcessor);
     }
 
     @Override
     public void onLeave(BaseGameState nextState) {
+        music.stop();
         Main.inputMultiplexer.removeProcessor(inputForwarder);
     }
 
