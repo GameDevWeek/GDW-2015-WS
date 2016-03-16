@@ -2,5 +2,9 @@
     "rainbow":{
         "vertex": "data/shaders/rainbowVertexShader.glsl",
         "fragment": "data/shaders/rainbowFragmentShader.glsl"
+    },
+    "paparazzi":{
+        "vertex": "data/shaders/paparazziVertexShader.glsl",
+        "fragment": "data/shaders/paparazziFragmentShader.glsl"
     }
 }
