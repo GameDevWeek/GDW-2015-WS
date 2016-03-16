@@ -7,6 +7,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
+import de.hochschuletrier.gdw.ws1516.events.PickupEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
@@ -69,7 +70,7 @@ public class CollisionSystem extends IteratingSystem {
     }
     
     private void pickupHit(Entity attacker, Entity victim) {
-        // todo: add segment
+        PickupEvent.emit(attacker, victim);
         PositionComponent pos = ComponentMappers.position.get(attacker);
         PositionComponent otherPos = ComponentMappers.position.get(victim);
         PlayerComponent player = ComponentMappers.player.get(attacker);
