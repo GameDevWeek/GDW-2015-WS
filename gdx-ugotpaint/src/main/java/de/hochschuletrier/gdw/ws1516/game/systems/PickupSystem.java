@@ -9,6 +9,7 @@ import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.events.PickupEvent;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.utils.PlayerColor;
 import java.util.Random;
 
 public class PickupSystem extends EntitySystem implements PickupEvent.Listener {
@@ -44,6 +45,6 @@ public class PickupSystem extends EntitySystem implements PickupEvent.Listener {
         Rectangle b = GameConstants.PICKUP_SPAWN_RECT;
         float x = b.x + (rand.nextFloat() * b.width - 1);
         float y = b.y + (rand.nextFloat() * b.height - 1);
-        game.createEntity("pickup", x, y, Color.WHITE);
+        game.createEntity("pickup", x, y, PlayerColor.NEUTRAL);
     }
 }

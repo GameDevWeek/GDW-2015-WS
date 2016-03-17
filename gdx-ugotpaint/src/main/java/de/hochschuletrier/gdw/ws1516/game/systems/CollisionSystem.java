@@ -15,6 +15,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ProjectileComponent;
+import de.hochschuletrier.gdw.ws1516.game.utils.PlayerColor;
 
 public class CollisionSystem extends IteratingSystem {
 
@@ -103,7 +104,7 @@ public class CollisionSystem extends IteratingSystem {
         PlayerComponent player = ComponentMappers.player.get(victim);
         if(segment > 0) {
             while(player.segments.size() > segment) {
-                explodeAt(player.segments.removeLast(), anim.tint);
+                explodeAt(player.segments.removeLast(), player.color);
             }
         }
     }
@@ -114,20 +115,20 @@ public class CollisionSystem extends IteratingSystem {
         PlayerComponent player = ComponentMappers.player.get(entity);
         final int size = player.segments.size();
         if(size <= 2) {
-            explodeAt(pos.pos, anim.tint);
+            explodeAt(pos.pos, player.color);
             for(int i=0; i<size; i++) {
-                explodeAt(player.segments.removeFirst(), anim.tint);
+                explodeAt(player.segments.removeFirst(), player.color);
             }
             //fixme: die
         } else {
             for(int i=0; i<3; i++) {
-                explodeAt(player.segments.get(i), anim.tint);
+                explodeAt(player.segments.get(i), player.color);
             }
             pos.pos.set(player.removeFirstSegments(3));
         }
     }
 
-    private void explodeAt(Vector2 first, Color tint) {
+    private void explodeAt(Vector2 first, PlayerColor color) {
         //todo
     }
 }

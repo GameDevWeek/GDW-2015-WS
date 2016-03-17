@@ -3,9 +3,7 @@
         "meta": {},
         "components": {
             "Position": {},
-            "Animation": {
-                "animation": "segment"
-            }
+            "Animation": {}
         }
     },
     "pickup": {
@@ -13,9 +11,7 @@
         "components": {
             "Pickup": {},
             "Position": {},
-            "Animation": {
-                "animation": "segment"
-            }
+            "Animation": {}
         }
     },
     "projectile": {
@@ -23,9 +19,15 @@
         "components": {
             "Position": {},
             "Projectile": {},
-            "Animation": {
-                "animation": "projectile"
-            }
+            "Animation": {}
+        }
+    },
+    "splash": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Splash": {},
+            "Animation": {}
         }
     }
 }

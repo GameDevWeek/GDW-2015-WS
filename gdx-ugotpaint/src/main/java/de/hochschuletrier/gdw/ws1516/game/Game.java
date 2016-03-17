@@ -22,6 +22,7 @@ import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePlayerSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdateProjectileSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.input.InputSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.input.KeyboardInputSystem;
+import de.hochschuletrier.gdw.ws1516.game.utils.PlayerColor;
 
 public class Game extends InputAdapter {
 
@@ -43,13 +44,22 @@ public class Game extends InputAdapter {
         addSystems();
         entityFactory.init(engine, assetManager);
         
+        for (PlayerColor color : PlayerColor.values()) {
+            final String colorKey = color.name().toLowerCase();
+            color.animation = assetManager.getAnimation("segment_" + colorKey);
+            if(color != PlayerColor.NEUTRAL) {
+                color.splashAnimation = assetManager.getAnimation("splash_" + colorKey);
+                color.projectileAnimation = assetManager.getAnimation("projectile_" + colorKey);
+            }
+        }
+        
         inputForwarder.set(engine.getSystem(KeyboardInputSystem.class));
         float x = GameConstants.BOUND_LEFT + 3* GameConstants.SEGMENT_DISTANCE;
         float y = GameConstants.BOUND_TOP;
-        createSnake(0, x, y, 1, 0, GameConstants.COLOR_A);
+        createSnake(0, x, y, 1, 0, PlayerColor.RED);
         x = GameConstants.BOUND_RIGHT - 3* GameConstants.SEGMENT_DISTANCE;
         y = GameConstants.BOUND_BOTTOM;
-        createSnake(1, x, y, -1, 0, GameConstants.COLOR_B);
+        createSnake(1, x, y, -1, 0, PlayerColor.BLUE);
         pickupSystem.createRandomPickup();
         pickupSystem.createRandomPickup();
     }
@@ -71,13 +81,14 @@ public class Game extends InputAdapter {
         engine.update(delta);
     }
 
-    public Entity createSnake(int index, float x, float y, float xDir, float yDir, Color tint) {
-        Entity e = createEntity("snake", x, y, tint);
+    public Entity createSnake(int index, float x, float y, float xDir, float yDir, PlayerColor color) {
+        Entity e = createEntity("snake", x, y, color);
         final InputComponent input = engine.createComponent(InputComponent.class);
         input.index = index;
         e.add(input);
         
         final PlayerComponent player = engine.createComponent(PlayerComponent.class);
+        player.color = color;
         player.path.add(new Vector2(-xDir, -yDir).nor().scl(100).add(x, y));
         for(int i=0; i<2; i++)
             player.segments.add(new Vector2());
@@ -85,10 +96,10 @@ public class Game extends InputAdapter {
         return e;
     }
     
-    public Entity createEntity(String name, float x, float y, Color tint) {
-        factoryParam.color = tint;
+    public Entity createEntity(String name, float x, float y, PlayerColor color) {
         factoryParam.x = x;
         factoryParam.y = y;
+        factoryParam.playerColor = color;
         Entity entity = entityFactory.createEntity(name, factoryParam);
 
         engine.addEntity(entity);

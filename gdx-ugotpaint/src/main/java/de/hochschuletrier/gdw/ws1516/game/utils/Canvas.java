@@ -11,7 +11,6 @@ import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 public class Canvas {
     
     Pixmap pixmap = new Pixmap(GameConstants.WINDOW_WIDTH, GameConstants.WINDOW_HEIGHT, Pixmap.Format.RGBA8888);
-    private final Color drawTint = new Color(1,1,1,0.8f);
     private final Color clearColor = new Color(0,0,0,0);
     private final Color pixelColor = new Color();
     private final Texture texture = new Texture(pixmap);
@@ -45,11 +44,10 @@ public class Canvas {
     public void render(Batch batch, Vector2 pos, float scale, boolean flipY) {
         texture.draw(pixmap, 0, 0);
         
+        float bgDiff = flipY ? 0 : scale * (background.getHeight() - texture.getHeight());
         drawTexture(wall, batch, 0, 0, 1, flipY);
-        drawTexture(background, batch, pos.x, pos.y, scale, flipY);
-        batch.setColor(drawTint);
+        drawTexture(background, batch, pos.x, pos.y - bgDiff, scale, flipY);
         drawTexture(texture, batch, pos.x, pos.y, scale, flipY);
-        batch.setColor(Color.WHITE);
     }
 
     private void drawTexture(Texture texture, Batch batch, float x, float y, float scale, boolean flipY) {

@@ -1,34 +1,58 @@
 {
-    "segment": {
-        "filename": "data/animations/segment_soft_border.png",
+    "segment_neutral": {
+        "filename": "data/animations/segment_neutral.png",
         "frames" : 1,
         "frameDuration": [0.15],
         "playType" : "LOOP",
         "columns": 1,
         "rows" : 1
     },
-    "projectile": {
-        "filename": "data/animations/projectile.png",
+    "segment_red": {
+        "filename": "data/animations/segment_red.png",
+        "frames" : 4,
+        "frameDuration": [0.15],
+        "playType" : "LOOP",
+        "columns": 4,
+        "rows" : 1
+    },
+    "segment_blue": {
+        "filename": "data/animations/segment_blue.png",
+        "frames" : 4,
+        "frameDuration": [0.15],
+        "playType" : "LOOP",
+        "columns": 4,
+        "rows" : 1
+    },
+    "projectile_red": {
+        "filename": "data/animations/segment_red.png",
         "frames" : 1,
         "frameDuration": [0.15],
         "playType" : "LOOP",
         "columns": 1,
         "rows" : 1
     },
-    "ball": {
-        "filename": "data/animations/ball.png",
-        "frames" : 2,
-        "frameDuration": [0.5, 0.5],
+    "projectile_blue": {
+        "filename": "data/animations/segment_blue.png",
+        "frames" : 1,
+        "frameDuration": [0.15],
         "playType" : "LOOP",
-        "columns": 2,
+        "columns": 1,
         "rows" : 1
     },
-    "box": {
-        "filename": "data/animations/box.png",
-        "frames" : 2,
-        "frameDuration": [0.5, 0.5],
+    "splash_red": {
+        "filename": "data/animations/splash_red.png",
+        "frames" : 1,
+        "frameDuration": [0.15],
         "playType" : "LOOP",
-        "columns": 2,
+        "columns": 1,
+        "rows" : 1
+    },
+    "splash_blue": {
+        "filename": "data/animations/splash_blue.png",
+        "frames" : 1,
+        "frameDuration": [0.15],
+        "playType" : "LOOP",
+        "columns": 1,
         "rows" : 1
     }
 }

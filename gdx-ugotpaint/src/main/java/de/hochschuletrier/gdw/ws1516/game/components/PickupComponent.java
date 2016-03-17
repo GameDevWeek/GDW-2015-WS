@@ -6,11 +6,8 @@ import com.badlogic.gdx.utils.Pool;
 
 public class PickupComponent extends Component implements Pool.Poolable {
     
-    public Color color = Color.WHITE;
-
     @Override
     public void reset() {
-        color = Color.WHITE;
     }
 
 }

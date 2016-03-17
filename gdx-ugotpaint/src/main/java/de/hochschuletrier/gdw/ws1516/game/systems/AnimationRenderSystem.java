@@ -20,7 +20,6 @@ public class AnimationRenderSystem extends IteratingSystem {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        DrawUtil.resetColor();
     }
 
     @Override
@@ -29,7 +28,6 @@ public class AnimationRenderSystem extends IteratingSystem {
         PositionComponent pos = ComponentMappers.position.get(entity);
         PlayerComponent player = ComponentMappers.player.get(entity);
 
-        DrawUtil.setColor(animation.tint);
         animation.stateTime += deltaTime;
         drawAnimation(animation, pos.pos);
         

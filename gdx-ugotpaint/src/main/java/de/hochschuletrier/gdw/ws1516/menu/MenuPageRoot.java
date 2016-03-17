@@ -70,6 +70,8 @@ public class MenuPageRoot extends MenuPage {
             
             if(invPct > 0.75f) {
                 setColor(1, 1, 1, 1 - (invPct - 0.75f)*4);
+            } else {
+                setColor(1, 1, 1, 1);
             }
             
             float dpct = Math.min(0.75f, invPct) / 0.75f;

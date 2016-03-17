@@ -31,7 +31,7 @@ public class GameConstants {
     public static final int WINDOW_HEIGHT = 600;
     public static final int WINDOW_WIDTH = 1024;
     
-    public static final int PAINT_RADIUS = 14;
+    public static final int PAINT_RADIUS = 10;
     public static final float BORDER_SIZE = 60;
     public static final float BOUND_LEFT = BORDER_SIZE + PAINT_RADIUS;
     public static final float BOUND_TOP = BORDER_SIZE + PAINT_RADIUS;
@@ -41,7 +41,7 @@ public class GameConstants {
     public static final float BOUND_HEIGHT = BOUND_BOTTOM - BOUND_TOP;
     
     public static final float COLLISION_DISTANCE = PAINT_RADIUS * 1.7f;
-    public static final float SEGMENT_DISTANCE = COLLISION_DISTANCE * 1.6f;
+    public static final float SEGMENT_DISTANCE = COLLISION_DISTANCE * 1.9f;
     public static final int PATH_STEP_SIZE = 10;
     public static final Rectangle PICKUP_SPAWN_RECT = new Rectangle(
             BOUND_LEFT + SEGMENT_DISTANCE,
@@ -49,7 +49,4 @@ public class GameConstants {
             BOUND_WIDTH - 2* SEGMENT_DISTANCE,
             BOUND_HEIGHT - 2* SEGMENT_DISTANCE
     );
-    
-    public static final Color COLOR_A = new Color(160/255.0f, 20/255.0f, 20/255.0f, 1);
-    public static final Color COLOR_B = new Color(40/255.0f, 90/255.0f, 170/255.0f, 1);
 }

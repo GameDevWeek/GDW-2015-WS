@@ -44,7 +44,7 @@ public class ShootSystem extends EntitySystem implements ShootEvent.Listener {
 
             float x = pos.pos.x + input.lastMoveDirection.x * GameConstants.SEGMENT_DISTANCE;
             float y = pos.pos.y + input.lastMoveDirection.y * GameConstants.SEGMENT_DISTANCE;
-            Entity entity = game.createEntity("projectile", x, y, animation.tint);
+            Entity entity = game.createEntity("projectile", x, y, player.color);
             ProjectileComponent projectile = ComponentMappers.projectile.get(entity);
             projectile.velocity.set(input.lastMoveDirection).nor().scl(120);
             

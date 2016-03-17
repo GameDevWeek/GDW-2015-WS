@@ -14,8 +14,6 @@ public class PickupComponentFactory extends ComponentFactory<EntityFactoryParam>
 
     @Override
     public void run(Entity entity, SafeProperties meta, SafeProperties properties, EntityFactoryParam param) {
-        PickupComponent component = engine.createComponent(PickupComponent.class);
-        component.color = param.color;
-        entity.add(component);
+        entity.add(engine.createComponent(PickupComponent.class));
     }
 }

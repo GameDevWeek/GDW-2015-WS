@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
-import de.hochschuletrier.gdw.ws1516.game.systems.CollisionSystem;
+import de.hochschuletrier.gdw.ws1516.game.utils.PlayerColor;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -12,11 +12,13 @@ public class PlayerComponent extends Component implements Pool.Poolable {
 
     public final LinkedList<Vector2> segments = new LinkedList();
     public final LinkedList<Vector2> path = new LinkedList();
+    public PlayerColor color;
     
     @Override
     public void reset() {
         segments.clear();
         path.clear();
+        color = null;
     }
     
     public Vector2 removeFirstSegments(int num) {

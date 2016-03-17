@@ -3,15 +3,12 @@ package de.hochschuletrier.gdw.ws1516.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.input.InputForwarder;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
-import de.hochschuletrier.gdw.commons.gdx.menu.widgets.DecoImage;
-import de.hochschuletrier.gdw.commons.gdx.audio.MusicManager;
 import de.hochschuletrier.gdw.commons.gdx.state.BaseGameState;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.commons.utils.FpsCalculator;
@@ -30,7 +27,6 @@ public class GameplayState extends BaseGameState {
     private static final Color OVERLAY_COLOR = new Color(0f, 0f, 0f, 0.5f);
 
     private final Game game;
-    private final Music music;
 
     private final MenuManager menuManager = new MenuManager(GameConstants.WINDOW_WIDTH, GameConstants.WINDOW_HEIGHT, this::onMenuEmptyPop);
     private final InputForwarder inputForwarder;
@@ -43,8 +39,6 @@ public class GameplayState extends BaseGameState {
     public GameplayState(AssetManagerX assetManager, Game game) {
         font = assetManager.getFont("verdana_32");
         this.game = game;
-
-        music = assetManager.getMusic("gameplay");
 
         Skin skin = ((MainMenuState)Main.getInstance().getPersistentState(MainMenuState.class)).getSkin();
         menuPageRoot = new MenuPageRoot(skin, menuManager, MenuPageRoot.Type.INGAME);
@@ -97,7 +91,6 @@ public class GameplayState extends BaseGameState {
 
     @Override
     public void onEnter(BaseGameState previousState) {
-        MusicManager.play(music, GameConstants.MUSIC_FADE_TIME);
         menuPageRoot.fadeToMenu();
     }
 

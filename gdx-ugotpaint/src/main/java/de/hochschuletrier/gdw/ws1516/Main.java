@@ -19,6 +19,7 @@ import de.hochschuletrier.gdw.commons.devcon.cvar.CVarEnum;
 import de.hochschuletrier.gdw.commons.gdx.assets.AnimationExtended;
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.assets.loaders.AnimationExtendedLoader;
+import de.hochschuletrier.gdw.commons.gdx.audio.MusicManager;
 import de.hochschuletrier.gdw.commons.gdx.devcon.DevConsoleView;
 import de.hochschuletrier.gdw.commons.gdx.audio.SoundDistanceModel;
 import de.hochschuletrier.gdw.commons.gdx.audio.SoundEmitter;
@@ -141,6 +142,8 @@ public class Main extends StateBasedGame {
         final MainMenuState mainMenuState = new MainMenuState(assetManager);
         addPersistentState(mainMenuState);
         changeState(mainMenuState, null, null);
+        
+        MusicManager.play(assetManager.getMusic("menu"), GameConstants.MUSIC_FADE_TIME);
     }
 
     @Override
@@ -174,6 +177,7 @@ public class Main extends StateBasedGame {
         }
         console.executeCmdQueue();
         SoundEmitter.updateGlobal();
+        MusicManager.update(delta);
 
         preRender();
     }

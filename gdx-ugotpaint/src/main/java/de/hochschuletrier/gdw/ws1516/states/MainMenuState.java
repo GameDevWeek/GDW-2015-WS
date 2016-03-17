@@ -2,7 +2,6 @@ package de.hochschuletrier.gdw.ws1516.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
@@ -10,8 +9,6 @@ import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.input.InputForwarder;
 import de.hochschuletrier.gdw.commons.gdx.state.BaseGameState;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
-import de.hochschuletrier.gdw.commons.gdx.menu.widgets.DecoImage;
-import de.hochschuletrier.gdw.commons.gdx.audio.MusicManager;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.menu.MenuPageRoot;
@@ -24,14 +21,12 @@ import de.hochschuletrier.gdw.ws1516.menu.MenuPageRoot;
 public class MainMenuState extends BaseGameState {
 
     private final Skin skin = new Skin(Gdx.files.internal("data/ui/menu/skins/menu.json"));
-    private final Music music;
 
     private final MenuManager menuManager = new MenuManager(GameConstants.WINDOW_WIDTH, GameConstants.WINDOW_HEIGHT, null);
     private final InputForwarder inputForwarder;
     private final MenuPageRoot menuPageRoot;
 
     public MainMenuState(AssetManagerX assetManager) {
-        music = assetManager.getMusic("menu");
 
         menuPageRoot = new MenuPageRoot(skin, menuManager, MenuPageRoot.Type.MAINMENU);
         menuManager.addLayer(menuPageRoot);
@@ -74,7 +69,6 @@ public class MainMenuState extends BaseGameState {
     
     @Override
     public void onEnterComplete() {
-        MusicManager.play(music, GameConstants.MUSIC_FADE_TIME);
         inputForwarder.set(menuManager.getInputProcessor());
     }
 
