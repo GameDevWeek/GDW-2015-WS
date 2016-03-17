@@ -32,7 +32,8 @@ public class EnemyVisionSystem extends IteratingSystem implements EntityListener
         PositionComponent unicornPosition=ComponentMappers.position.get(unicorn);
         float xDist=enemyPosition.x-unicornPosition.x;
         float yDist=enemyPosition.y-unicornPosition.y;
-        float dist=(float)Math.sqrt((xDist*xDist)+(yDist*yDist));
+        //Magic number -> 4 = Ovaler Kreis
+        float dist=(float)Math.sqrt((xDist*xDist)+(yDist*yDist)*4);
         if (dist<=GameConstants.GLOBAL_VISION*GameConstants.UNICORN_SIZE){
             enemyBehaviour.canSeeUnicorn=true;
         }else{
