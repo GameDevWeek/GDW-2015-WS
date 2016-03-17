@@ -40,6 +40,7 @@ public class TriggerSystem extends EntitySystem implements TriggerEvent.Listener
         Family family=Family.one(PlayerComponent.class).get();
         engine.addEntityListener(family, this);
         TriggerEvent.register(this);
+        EndContactEvent.register(this);
     }
 
     @Override
@@ -48,6 +49,7 @@ public class TriggerSystem extends EntitySystem implements TriggerEvent.Listener
         super.removedFromEngine(engine);
         engine.removeEntityListener(this);
         TriggerEvent.unregister(this);
+        EndContactEvent.unregister(this);
     }
 
     @Override

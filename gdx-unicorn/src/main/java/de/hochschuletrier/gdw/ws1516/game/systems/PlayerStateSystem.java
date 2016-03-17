@@ -10,6 +10,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 
+import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
 import de.hochschuletrier.gdw.ws1516.events.MovementEvent;
@@ -45,6 +46,7 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
     
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
+        boolean dieLater = false;
         MovementComponent movementComp = ComponentMappers.movement.get(entity);
         PlayerComponent playerComp = ComponentMappers.player.get(entity);
         playerComp.stateTimer = Math.max(playerComp.stateTimer - deltaTime, 0);
@@ -57,8 +59,16 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
             if (playerComp.state==State.RAINBOW){
                 RainbowEvent.end(entity);
                 movementComp.speed=GameConstants.PLAYER_SPEED;
+                if ( playerComp.deathZoneCounter > 0 )
+                {   /// kann hier nicht sterben, da RainbowMode , also dieLater
+                    dieLater = true;
+                }
             } 
             playerComp.state = State.NORMAL;
+            if (dieLater)
+            {
+                DeathEvent.emit(entity);                
+            }
         }
     }
     
