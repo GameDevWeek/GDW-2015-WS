@@ -104,12 +104,14 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
 
         if (playerComp.state!=PlayerComponent.State.RAINBOW){   
             //es handelt sich um das Einhorn, also Leben abziehen.
-            playerComp.lives--;
-            
-            if (playerComp.lives > 0)
-                GameRespawnEvent.emit();
-            else
-                GameOverEvent.emit();
+            if (playerComp.lives>0){
+                playerComp.lives--;
+                
+                if (playerComp.lives > 0)
+                    GameRespawnEvent.emit();
+                else
+                    GameOverEvent.emit();
+            }
         }
     }
 
