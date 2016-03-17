@@ -49,7 +49,6 @@ public class CameraSystem extends IteratingSystem {
     }
     
     public void setCameraBounds(int xMin, int yMin, int xMax, int yMax) {
-        cameraBounds = new float[] { xMin, yMin, xMax, yMax };
         camera.setBounds(xMin, yMin, xMax, yMax);
         camera.updateForced();
     }
