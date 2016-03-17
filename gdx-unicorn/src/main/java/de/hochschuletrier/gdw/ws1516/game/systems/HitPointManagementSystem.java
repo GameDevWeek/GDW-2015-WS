@@ -15,7 +15,10 @@ import de.hochschuletrier.gdw.ws1516.events.HealEvent;
 import de.hochschuletrier.gdw.ws1516.events.HitEvent;
 import de.hochschuletrier.gdw.ws1516.events.HitEvent.HitType;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
+import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.GameLogicTest;
 
 public class HitPointManagementSystem extends EntitySystem implements HitEvent.Listener, DeathEvent.Listener, HealEvent.Listener{
@@ -23,6 +26,7 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
     private static final Logger logger = LoggerFactory.getLogger(GameLogicTest.class);
     
     private ComponentMapper<PlayerComponent> pm = ComponentMapper.getFor(PlayerComponent.class);
+    private ComponentMapper<MovementComponent> mm = ComponentMapper.getFor(MovementComponent.class);
     private Engine engine;
     
     @Override
@@ -47,23 +51,35 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
         {
             PlayerComponent playerComp = pm.get(entity);
             if (playerComp.state!=PlayerComponent.State.RAINBOW){
-                playerComp.hitpoints-= value;
+            playerComp.hitpoints-= value;
+            
+            if (playerComp.hitpoints <= 0)
+                DeathEvent.emit(entity);
+            
+            if (playerComp == null) //wenn es sich um einen Gegner handelt wars das soweit.
+                return;
+            
+            //ansonsten war es das Einhorn => unterschiedliches Verhalten, je nach Art des HitPoints.
+            switch (type) {
+            case TOUCH:
+                //TODO anpassen!
+                //testweise vektoren in abhaengigkeit der Blickrichtung des Einhorns
+                MovementComponent moveComp = mm.get(entity);
+                float forceX = 0.0f;
+                float forceY = -0.5f;
                 
                 if (playerComp.hitpoints <= 0)
                     DeathEvent.emit(entity);
-                
-                if (playerComp == null) //wenn es sich um einen Gegner handelt wars das soweit.
-                    return;
-                
-                //ansonsten war es das Einhorn => unterschiedliches Verhalten, je nach Art des HitPoints.
-                switch (type) {
-                case TOUCH:
-                    //TODO Einhorn ThrowBack? Über ThrowBackEvent?
-                    break;
-                default:
-                    break;
+                if (moveComp.lookDirection == MovementComponent.LookDirection.LEFT) {
+                    forceX = 1.0f;
+                } else {
+                    forceX = -1.0f;
                 }
-            }
+                
+                break;
+            default:
+                break;
+            }}
         } else
         {
 
