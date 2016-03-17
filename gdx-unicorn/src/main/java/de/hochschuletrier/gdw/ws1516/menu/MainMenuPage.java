@@ -34,7 +34,7 @@ public class MainMenuPage extends MenuPage {
         //addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 150, 50, "Start Game", this::startGame);
         }
         else if(type==Type.PAUSED) {
-            addLeftAlignedButton(xOffset, yOffset - yStep * (i++), 150, 50, "Fortsetzen", () -> menuManager.popPage(),"buttonSound");
+            addLeftAlignedButton(xOffset, yOffset - yStep * (i++), 150, 50, "Fortsetzen", () ->{ menuManager.popPage();Game.pauseGame();},"buttonSound");
         }
         addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Optionen", new MenuOptions(skin, menuManager));
         addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Credits", new MenuPageCredits(skin, menuManager));
@@ -82,6 +82,7 @@ public class MainMenuPage extends MenuPage {
         }
         System.exit(-1);
     }
+        
     
 
    

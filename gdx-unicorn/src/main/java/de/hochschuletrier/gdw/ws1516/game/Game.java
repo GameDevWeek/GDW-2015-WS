@@ -86,9 +86,12 @@ public class Game extends InputAdapter {
             HotkeyModifier.CTRL);
     private final Hotkey scoreCheating = new Hotkey(() -> ScoreBoardEvent.emit(ScoreType.BONBON, 1), Input.Keys.F2,
             HotkeyModifier.CTRL);
+    private final Hotkey pauseGame = new Hotkey(()->pauseGame(), Input.Keys.F5,
+            HotkeyModifier.CTRL);
     private Hotkey healCheating = null;
     private Hotkey rainbow=null;
     
+    private static boolean PAUSE_ENGINE = false;
 
     //private final Hotkey rainbowMode = new Hotkey(()->RainbowEvent.start(player),Input.Keys.F3,HotkeyModifier.CTRL);
 
@@ -145,16 +148,14 @@ public class Game extends InputAdapter {
         if (!Main.IS_RELEASE) {
             togglePhysixDebug.register();
             scoreCheating.register();
-
-           
-
+            pauseGame.register();
         }
-
     }
 
     public void dispose() {
         togglePhysixDebug.unregister();
         scoreCheating.unregister();
+        pauseGame.unregister();
         rainbow.unregister();
         healCheating.unregister();
         Main.getInstance().console.unregister(physixDebug);
@@ -172,6 +173,7 @@ public class Game extends InputAdapter {
     }
 
     public void init(AssetManagerX assetManager) {
+        PAUSE_ENGINE = false;
         Main.getInstance().console.register(physixDebug);
         physixDebug.addListener((CVar) -> physixDebugRenderSystem.setProcessing(physixDebug.get()));
         addSystems();
@@ -285,9 +287,25 @@ public class Game extends InputAdapter {
         // });
     }
 
+
+
+    public static void pauseGame() {
+        PAUSE_ENGINE = !PAUSE_ENGINE;
+    }
+    
     public void update(float delta) {
-        cameraSystem.bindCamera();        
-        engine.update(delta);
+        cameraSystem.bindCamera();   
+        if ( !PAUSE_ENGINE )
+        {
+            engine.update(delta);
+        } else
+        {   /* 
+                in der Engine Update Methode wird noch mehr
+                 getan, fehlt noch etwas wichtiges um ein Menü am laufen zu halten ??
+             */
+//            renderSystem.update(delta);
+            hudRenderSystem.update(delta);
+        }
     }
 
     public void createTrigger(Action action,float x, float y, float width, float height, Consumer<Entity> consumer) {

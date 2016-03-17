@@ -78,10 +78,12 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
             public boolean keyUp(int keycode) {
                 if (keycode == Input.Keys.ESCAPE) {
                     if (mainProcessor == gameInputProcessor) {
+                        Game.pauseGame();
                         mainProcessor = menuInputProcessor;                        
                     } else {
+                        Game.pauseGame();
+
                         menuManager.popPage();
-                      
                     }
                     return true;
                 }
