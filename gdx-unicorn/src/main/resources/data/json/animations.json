@@ -16,7 +16,7 @@
         "rows" : 1
     },
     "unicorn_walking": {
-        "filename": "data/graphics/unicorn_s.png",
+        "filename": "data/animations/walking.png",
         "frames" : 1,
         "frameDuration": [0.15],
         "playType" : "LOOP",
