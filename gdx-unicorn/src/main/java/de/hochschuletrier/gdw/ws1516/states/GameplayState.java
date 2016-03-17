@@ -1,5 +1,6 @@
 package de.hochschuletrier.gdw.ws1516.states;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -19,7 +20,9 @@ import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.menu.EndPage;
 import de.hochschuletrier.gdw.ws1516.menu.MainMenuPage;
+import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
 
 
 /**
@@ -27,7 +30,7 @@ import de.hochschuletrier.gdw.ws1516.menu.MainMenuPage;
  * 
  * @author Santo Pfingsten
  */
-public class GameplayState extends BaseGameState {
+public class GameplayState extends BaseGameState implements GameOverEvent.Listener {
 
 
     private static final Color OVERLAY_COLOR = new Color(0f, 0f, 0f, 0.5f);
@@ -43,7 +46,7 @@ public class GameplayState extends BaseGameState {
     public GameplayState(AssetManagerX assetManager, Game game) {
         this.game = game;
         
-
+        
         music = assetManager.getMusic("gameplaytheme");
 
         Skin skin = ((MainMenuState)Main.getInstance().getPersistentState(MainMenuState.class)).getSkin();
@@ -86,9 +89,11 @@ public class GameplayState extends BaseGameState {
         };
     }
 
+    
     private void onMenuEmptyPop() {
         inputForwarder.set(gameInputProcessor);
     }
+    
 
     @Override
     public void update(float delta) {
@@ -104,6 +109,8 @@ public class GameplayState extends BaseGameState {
     @Override
     public void onEnter(BaseGameState previousState) {
         MusicManager.play(music, GameConstants.MUSIC_FADE_TIME);
+        
+        
     }
 
     @Override
@@ -112,16 +119,29 @@ public class GameplayState extends BaseGameState {
       
         Main.inputMultiplexer.addProcessor(inputForwarder);
         inputForwarder.set(gameInputProcessor);
+        GameOverEvent.register(this);
+        MusicManager.setGlobalVolume(0);
     }
 
     @Override
     public void onLeave(BaseGameState nextState) {
        
         Main.inputMultiplexer.removeProcessor(inputForwarder);
+        GameOverEvent.unregister(this);
     }
 
     @Override
     public void dispose() {
         game.dispose();
+    }
+
+    @Override
+    public void onGameOverEvent() {
+        Skin skin = ((MainMenuState)Main.getInstance().getPersistentState(MainMenuState.class)).getSkin();
+        EndPage endPage = new EndPage(skin, menuManager, "transparent_bg", EndPage.Type.GAMEOVER);
+        menuManager.addLayer(endPage);
+        menuManager.pushPage(endPage);
+        inputForwarder.set(menuInputProcessor);
+            
     }
 }
