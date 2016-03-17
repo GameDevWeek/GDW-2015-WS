@@ -6,8 +6,10 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
@@ -33,7 +35,7 @@ public class EffectsRenderSystem extends IteratingSystem {
     
     private Vector2 cameraTargetScreenPos;
     
-    private Texture effectsScreenOverlay;
+    private Texture screenOverlayWhiteRect;
     
     private final ConsoleCmd paparazzi = new ConsoleCmd("pap", 0, "Usage: pap (duration) - Activates paparazzi mode for (duration) seconds") { @Override public void execute(List<String> args) { startPaparazzi(args); } };
     private final CVarFloat paparazziIntensity = new CVarFloat("paparazziIntensity", 1.0f, 0.0f, Float.MAX_VALUE, 0, "");
@@ -45,8 +47,11 @@ public class EffectsRenderSystem extends IteratingSystem {
         
         cameraTargetScreenPos = new Vector2( (float) (Gdx.graphics.getWidth()* 0.5), (float) (Gdx.graphics.getHeight() * 0.5) );
         
-        // DEBUG
-        this.effectsScreenOverlay = new Texture(Gdx.files.getFileHandle("data/graphics/trex.png", FileType.Local));
+        // Create white Rectangle Texture to initiate draw call
+        Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
+        pixmap.setColor(Color.WHITE);
+        pixmap.fill();
+        this.screenOverlayWhiteRect = new Texture(pixmap);
     }
     
     @Override
@@ -98,7 +103,7 @@ public class EffectsRenderSystem extends IteratingSystem {
                 shader.setUniformf("u_effectDuration", paparazziStartDuration);
                 shader.setUniformf("u_remainingEffectDuration", paparazziDurationLeft);
                 
-                float[] paparazziColor = new float[]{ 1.0f, 1.0f, 1.0f, 1.0f };
+                float[] paparazziColor = new float[]{ 0.0f, 0.0f, 1.0f, 1.0f };
                 shader.setUniform4fv("u_paparazziColor", paparazziColor, 0, 4);
                 float[] paparazziSeed = new float[]{ currentPaparazziSeed, currentPaparazziSeed };
                 shader.setUniform2fv("u_paparazziSeed", paparazziSeed, 0, 2);
@@ -110,7 +115,7 @@ public class EffectsRenderSystem extends IteratingSystem {
                 shader.setUniformf("u_time", (float)TimeUtils.timeSinceMillis(startTime) * 0.001f);
             }
             
-            DrawUtil.batch.draw(effectsScreenOverlay, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            DrawUtil.batch.draw(screenOverlayWhiteRect, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             DrawUtil.batch.flush();
         }
         
