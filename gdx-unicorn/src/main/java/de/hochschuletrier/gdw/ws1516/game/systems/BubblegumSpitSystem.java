@@ -31,6 +31,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.TextureComponent;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityCreator;
+import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 
 /**
  * Handles bubble-gum spits
@@ -50,11 +51,13 @@ public class BubblegumSpitSystem extends IteratingSystem implements BubblegumSpi
 
     @Override
     public void addedToEngine(Engine engine) {
+        super.addedToEngine(engine);
         BubblegumSpitSpawnEvent.register(this);
     }   
     
     @Override
     public void removedFromEngine (Engine engine) {
+        super.removedFromEngine(engine);
         BubblegumSpitSpawnEvent.unregister(this);
     }
 
@@ -63,8 +66,13 @@ public class BubblegumSpitSystem extends IteratingSystem implements BubblegumSpi
         PositionComponent position = ComponentMappers.position.get(entity);
         PhysixBodyComponent body = ComponentMappers.physixBody.get(entity);
         
-        if (position != null && body != null) {
-            position.rotation = body.getLinearVelocity().angle();
+        if (position != null && body != null) { 
+            PhysixModifierComponent modifier = engine.createComponent(PhysixModifierComponent.class);
+            modifier.schedule(() -> {
+                logger.debug("angle adaption");
+                body.setAngle(body.getLinearVelocity().angle() * PhysixUtil.DEG2RAD);
+            });
+            entity.add(modifier);
         }
         
     }
@@ -122,17 +130,14 @@ public class BubblegumSpitSystem extends IteratingSystem implements BubblegumSpi
             fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_SPIT;
             spitBodyComponent.createFixture(fixtureDef);
             
+            //Set sprite origin
+            TextureComponent texture = ComponentMappers.texture.get(gumSpitEntity);
+            texture.originX = 16.0f;
+            texture.originY =  8.0f;
+            
             //Force gum spit
             spitBodyComponent.applyImpulse(impulseX * impulseForce, impulseY * impulseForce);
             spitBodyComponent.setGravityScale(1.0f);
-            
-            //Set flip in sprite
-            TextureComponent texture = ComponentMappers.texture.get(gumSpitEntity);
-            if (playerMove.lookDirection == MovementComponent.LookDirection.RIGHT) {
-                texture.flipHorizontal = false;
-            } else {
-                texture.flipHorizontal = true;
-            }
             
             //Add body to entity
             gumSpitEntity.add(spitBodyComponent);
