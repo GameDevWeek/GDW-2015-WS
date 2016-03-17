@@ -1,5 +1,6 @@
 package de.hochschuletrier.gdw.ws1516.menu;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.backends.lwjgl.audio.Wav.Sound;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -12,12 +13,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import de.hochschuletrier.gdw.commons.gdx.audio.MusicManager;
+import de.hochschuletrier.gdw.commons.gdx.input.InputForwarder;
+import de.hochschuletrier.gdw.commons.gdx.input.hotkey.Hotkey;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
 
 
 public class MenuOptions extends MenuPage {
     
-
+    private Sound sound = (Sound)assetManager.getSound("EinhornEmpathy");
+    
 
     public MenuOptions(Skin skin, MenuManager menuManager) {
         super(skin, "menu_bg");
@@ -27,8 +31,10 @@ public class MenuOptions extends MenuPage {
         int xOffset = 55;
         int yOffset = 370;
         int yStep = 55;
-        Sound sound = (Sound)assetManager.getSound("EinhornEmpathy");
-       
+        
+        long id = sound.play();
+        sound.stop();
+        
         Slider generalSlider = addLabeledSlider(0,100,1,xOffset,yOffset-yStep*(i++),"General",true);
         generalSlider.addListener(new ChangeListener(){
             @Override
@@ -37,20 +43,7 @@ public class MenuOptions extends MenuPage {
                // System.out.print(" "+generalSlider.getValue()/100);
             }
         });
-        
-        generalSlider.addListener(new ClickListener(){
-            
-          
-            
-            public void touchDragged(InputEvent event, float x, float y, int pointer){
-                
-                System.out.print("Test");
-            
-                
-          }
 
-        });
- 
         Slider musicSlider = addLabeledSlider(0,100,1,xOffset,yOffset-yStep*(i++),"Music",true);
         musicSlider.addListener(new ChangeListener(){
             @Override
@@ -64,13 +57,18 @@ public class MenuOptions extends MenuPage {
             public void clicked(InputEvent event, float x, float y)  {
                 sound.stop();
                 sound.play(soundSlider.getValue()/100);
-                
-           
-                
+                sound.setVolume(id, soundSlider.getValue()/100);
+                System.out.print(""+id); 
             }
         });
-        addLeftAlignedButton(30, 40, 100, 50,"Menu", ()->menuManager.popPage());
         
+        addLeftAlignedButton(xOffset,yOffset-yStep*(i++), 100, 50,"SoundTest", ()->soundTest());
+        addLeftAlignedButton(30, 40, 100, 50,"Menu", ()->menuManager.popPage());
+       
+    }
+    public void soundTest(){
+        System.out.println("Test");
+        sound.play();
     }
     
     
