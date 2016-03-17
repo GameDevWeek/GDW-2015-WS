@@ -2,6 +2,7 @@
     "snake": {
         "meta": {},
         "components": {
+            "SoundEmitter": {},
             "Position": {},
             "Animation": {}
         }
@@ -17,6 +18,7 @@
     "projectile": {
         "meta": {},
         "components": {
+            "SoundEmitter": {},
             "Position": {},
             "Projectile": {},
             "Animation": {}
@@ -25,6 +27,7 @@
     "splash": {
         "meta": {},
         "components": {
+            "SoundEmitter": {},
             "Position": {},
             "Splash": {},
             "Animation": {}

@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
+import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
 import de.hochschuletrier.gdw.ws1516.events.SplashEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.Game;
@@ -65,5 +66,7 @@ public class SplashSystem extends IteratingSystem implements SplashEvent.Listene
         Entity entity = game.createEntity("splash",first.x,first.y,color);
         AnimationComponent anim = ComponentMappers.animation.get(entity);
         anim.animation = color.splashAnimation;
+        
+        SoundEvent.emit(entity, "splash");
     }
 }

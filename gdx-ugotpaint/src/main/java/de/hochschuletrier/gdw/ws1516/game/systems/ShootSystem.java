@@ -3,8 +3,8 @@ package de.hochschuletrier.gdw.ws1516.game.systems;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.gdx.math.Vector2;
 import de.hochschuletrier.gdw.ws1516.events.ShootEvent;
+import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
@@ -13,7 +13,6 @@ import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ProjectileComponent;
-import java.util.Iterator;
 
 public class ShootSystem extends EntitySystem implements ShootEvent.Listener {
 
@@ -46,6 +45,7 @@ public class ShootSystem extends EntitySystem implements ShootEvent.Listener {
             
             Entity entity = game.createEntity("projectile", x, y, player.color);
             
+            SoundEvent.emit(entity, "shoot");
             ProjectileComponent projectile = ComponentMappers.projectile.get(entity);
             projectile.velocity.set(input.lastMoveDirection).nor().scl(120);
             
