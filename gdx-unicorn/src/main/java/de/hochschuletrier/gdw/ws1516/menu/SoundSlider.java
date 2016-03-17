@@ -16,11 +16,6 @@ public class SoundSlider {
     public static Slider soundSlider = new Slider(0, 100, 1, false, skin, "default-horizontal");
 
     public SoundSlider() {
-       
-        
-       
-        
-
     }
 
     public static Slider getGeneralSlider() {

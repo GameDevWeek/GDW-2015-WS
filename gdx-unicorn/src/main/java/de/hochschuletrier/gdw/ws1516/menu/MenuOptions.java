@@ -32,9 +32,12 @@ public class MenuOptions extends MenuPage {
         int yStep = 55;
         
         generalSound = 5;
-        addLabeledSlider(SoundSlider.getGeneralSlider(),xOffset, yOffset - yStep * (i++), "Allgemein", true);     
-        addLabeledSlider( SoundSlider.getMusicSlider(),xOffset, yOffset - yStep * (i++), "Musik", true);        
+        addLabeledSlider(SoundSlider.getGeneralSlider(),xOffset, yOffset - yStep * (i++), "Allgemein", true);    
+        System.out.println("Test1");
+        addLabeledSlider( SoundSlider.getMusicSlider(),xOffset, yOffset - yStep * (i++), "Musik", true); 
+        System.out.println("Test2");
         addLabeledSlider(SoundSlider.getSoundSlider(),xOffset, yOffset - yStep * (i++), "Sound", true);
+        System.out.println("Test3");
         addLeftAlignedButton(xOffset, yOffset - yStep * (i++), 120, 50, "Zurücksetzen", this::reset, "buttonSound");    
         
         
