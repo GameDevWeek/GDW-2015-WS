@@ -34,6 +34,7 @@ import de.hochschuletrier.gdw.ws1516.events.HealEvent;
 import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
+import de.hochschuletrier.gdw.ws1516.events.TriggerEvent.Action;
 import de.hochschuletrier.gdw.ws1516.game.components.BubblegumSpitComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.BulletComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ImpactSoundComponent;
@@ -286,13 +287,14 @@ public class Game extends InputAdapter {
         engine.update(delta);
     }
 
-    public void createTrigger(float x, float y, float width, float height, Consumer<Entity> consumer) {
+    public void createTrigger(Action action,float x, float y, float width, float height, Consumer<Entity> consumer) {
         Entity entity = engine.createEntity();
         PhysixModifierComponent modifyComponent = engine.createComponent(PhysixModifierComponent.class);
         entity.add(modifyComponent);
 
         TriggerComponent triggerComponent = engine.createComponent(TriggerComponent.class);
         triggerComponent.consumer = consumer;
+        triggerComponent.action = action;
         entity.add(triggerComponent);
 
         modifyComponent.schedule(() -> {

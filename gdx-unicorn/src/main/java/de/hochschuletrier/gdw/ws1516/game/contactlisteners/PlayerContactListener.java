@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.PooledEngine;
 
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixContact;
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixContactAdapter;
+import de.hochschuletrier.gdw.ws1516.events.EndContactEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornCollisionEvent;
 import de.hochschuletrier.gdw.ws1516.events.UnicornEnemyCollisionEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
@@ -83,6 +84,11 @@ public class PlayerContactListener extends PhysixContactAdapter{
         Entity player = contact.getMyComponent().getEntity();
         Entity otherEntity = contact.getOtherComponent().getEntity();
         
+        /**
+         * @author tobi - Gamelogic
+         * ein endContactEvent schmeißen
+         */
+        EndContactEvent.emit(player, otherEntity);
     }
 
 }

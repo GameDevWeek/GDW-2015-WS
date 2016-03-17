@@ -10,6 +10,8 @@ public class PlayerComponent extends Component implements Poolable {
     public int hitpoints;
     public int lives;
     public float invulnerableTimer;
+    /// im Bezug auf Rainbow Mode unverwundbarkeit
+    public int deathZoneCounter;
     
     public static enum State{
         NORMAL,
