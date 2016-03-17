@@ -42,6 +42,7 @@ public class MenuOptions extends MenuPage {
                 - yStep * (i++), "Music", true);
         Slider soundSlider = addLabeledSlider(0, 100, 1, xOffset, yOffset
                 - yStep * (i++), "Sound", true);
+        //addleftAlignedButton(xOffset,yOffset-yStep*(i++), "Voreinstellung");
         generalSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -71,7 +72,7 @@ public class MenuOptions extends MenuPage {
             }
         });
 
-        addLeftAlignedButton(55, 40, 100, 50, "Menu",
+        addLeftAlignedButton(xOffset, 40, 100, 50, "Menu",
                 () -> menuManager.popPage());
     }
     public void soundTest() {
