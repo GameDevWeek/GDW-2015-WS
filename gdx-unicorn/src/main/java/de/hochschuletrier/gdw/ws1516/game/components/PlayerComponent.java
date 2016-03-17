@@ -22,7 +22,6 @@ public class PlayerComponent extends Component implements Poolable {
     public float stateTimer;
     
     public float hornAttackCooldown;
-    public float spuckChargeCooldown;
 
     @Override
     public void reset() {
@@ -33,7 +32,6 @@ public class PlayerComponent extends Component implements Poolable {
         state=State.NORMAL;
         stateTimer=0;
         hornAttackCooldown=0;
-        spuckChargeCooldown=0;
         invulnerableTimer=0;
     }
    
