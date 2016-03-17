@@ -46,7 +46,7 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
     public GameplayState(AssetManagerX assetManager, Game game) {
         this.game = game;
         
-        GameOverEvent.register(this);
+        
         music = assetManager.getMusic("gameplaytheme");
 
         Skin skin = ((MainMenuState)Main.getInstance().getPersistentState(MainMenuState.class)).getSkin();
@@ -119,6 +119,7 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
       
         Main.inputMultiplexer.addProcessor(inputForwarder);
         inputForwarder.set(gameInputProcessor);
+        GameOverEvent.register(this);
         MusicManager.setGlobalVolume(0);
     }
 
@@ -126,6 +127,7 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
     public void onLeave(BaseGameState nextState) {
        
         Main.inputMultiplexer.removeProcessor(inputForwarder);
+        GameOverEvent.unregister(this);
     }
 
     @Override
