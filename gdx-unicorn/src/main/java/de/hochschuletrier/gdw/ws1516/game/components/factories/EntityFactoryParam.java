@@ -9,5 +9,5 @@ public class EntityFactoryParam {
     public String action;
     public float speed;
     public boolean loop;
-    public String path;
+    public String name;
 }
