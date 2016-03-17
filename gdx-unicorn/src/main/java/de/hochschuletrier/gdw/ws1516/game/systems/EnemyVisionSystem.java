@@ -10,16 +10,22 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
+import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyBehaviourComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
+import de.hochschuletrier.gdw.ws1516.game.utils.PlayerRayCaster;
+import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.GameLogicTest;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.SandBoxEventLogger;
 
 public class EnemyVisionSystem extends IteratingSystem implements EntityListener{
+    
+    private static final Logger logger = LoggerFactory.getLogger(EnemyVisionSystem.class);
 
     private Entity unicorn = null;
+    private Engine engine = null;
     
     public EnemyVisionSystem() {
         super(Family.all(EnemyBehaviourComponent.class,PositionComponent.class).get());
@@ -35,7 +41,9 @@ public class EnemyVisionSystem extends IteratingSystem implements EntityListener
         //Magic number -> 4 = Ovaler Kreis
         float dist=(float)Math.sqrt((xDist*xDist)+(yDist*yDist)*4);
         if (dist<=GameConstants.GLOBAL_VISION*GameConstants.UNICORN_SIZE){
-            enemyBehaviour.canSeeUnicorn=true;
+            PlayerRayCaster caster = new PlayerRayCaster(entity, engine, engine.getSystem(PhysixSystem.class));
+            caster.isPlayerVisible();
+            enemyBehaviour.canSeeUnicorn = caster.getRaycastResult();
         }else{
             enemyBehaviour.canSeeUnicorn=false;
         }
@@ -45,11 +53,13 @@ public class EnemyVisionSystem extends IteratingSystem implements EntityListener
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
         engine.addEntityListener(this);
+        this.engine = engine;
     }
     @Override
     public void removedFromEngine(Engine engine) {
         super.removedFromEngine(engine);
         engine.removeEntityListener(this);
+        this.engine = null;
     }
     @Override
     public void entityAdded(Entity entity) {
