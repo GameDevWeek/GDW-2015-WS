@@ -36,6 +36,7 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         playerComp.stateTimer=Math.max(playerComp.stateTimer-deltaTime, 0);
         playerComp.hornAttackCooldown=Math.max(playerComp.hornAttackCooldown-deltaTime, 0);
         playerComp.spuckChargeCooldown=Math.max(playerComp.spuckChargeCooldown-deltaTime, 0);
+        playerComp.invulnerableTimer=Math.max(playerComp.invulnerableTimer-deltaTime, 0);
         if (playerComp.stateTimer<=0.0f){
             if (playerComp.state==State.HORNATTACK){
                 HornAttackEvent.stop();
