@@ -125,6 +125,7 @@ public class Game extends InputAdapter {
 
     private TiledMap map;
 
+
     
     public Game() {
         // If this is a build jar file, disable hotkeys
@@ -174,6 +175,7 @@ public class Game extends InputAdapter {
         PathComponent pathComponent =ComponentMappers.path.get(entity);
         pathComponent.points.add(new Vector2(1000, 100));
         pathComponent.points.add(new Vector2(800,100));
+        Entity papa = EntityCreator.createEntity("tourist", 2000, 100);
     }
 
 
