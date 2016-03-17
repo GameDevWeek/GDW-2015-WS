@@ -5,9 +5,14 @@ precision mediump float;
 #define LOWP 
 #endif
 
+// threshold in px
 #define ANTI_ALIASING_THRESHOLD 2.0
+// random chosen number
 #define SEED_STEP 78.1563
+// duration in seconds
+#define FLASH_DURATION 0.1
 #define CIRCLE_ANIMATION_GROW_FACTOR 0.4
+
 
 varying LOWP vec4 v_color;
 varying vec2 v_texCoords;
@@ -53,7 +58,7 @@ void main()
     
     float finalAlpha = fade(clamp(fragAlpha, 0.0, 1.0));
     
-	gl_FragColor = vec4(u_paparazziColor.r, u_paparazziColor.g, u_paparazziColor.b, finalAlpha);
+    gl_FragColor = vec4(u_paparazziColor.r, u_paparazziColor.g, u_paparazziColor.b, finalAlpha);
 }
 
 vec2 getCircleCenter(vec2 seed)
@@ -87,11 +92,23 @@ float getCircleAlpha(vec2 center, float radius)
 }
 
 float fade(float alpha) {
-    // Fade in
-    if(u_startDuration - u_durationLeft <= 0.25)
+    // Flash in
+    if (u_startDuration - u_durationLeft <= FLASH_DURATION)
     {
-        return alpha * (u_startDuration - u_durationLeft) * 4;
+        return 1.0;
     }
+
+    // Fade flash to normal
+    if(u_startDuration - u_durationLeft <= FLASH_DURATION * 2)
+    {
+        return alpha + (1.0 - alpha) * (1.0 - (((u_startDuration - u_durationLeft) - FLASH_DURATION) / FLASH_DURATION));
+    }
+    
+    // Fade in
+    //if(u_startDuration - u_durationLeft <= 0.25)
+    //{
+    //    return alpha * (u_startDuration - u_durationLeft) * 4;
+    //}
     
     // Fade out
     if(u_durationLeft <= 0.5)

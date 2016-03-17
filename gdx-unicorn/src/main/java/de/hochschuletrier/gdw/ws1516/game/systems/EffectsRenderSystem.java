@@ -87,7 +87,7 @@ public class EffectsRenderSystem extends IteratingSystem {
                 //float[] paparazziRange = new float[]{ Gdx.graphics.getWidth()/8, Gdx.graphics.getWidth()/6 };
                 float[] paparazziCircleRadiusRange = new float[]{ 60.0f, 120.0f };
                 shader.setUniform2fv("u_paparazziCircleRadiusRange", paparazziCircleRadiusRange, 0, 2);
-                float[] paparazziColor = new float[]{ 1.0f, 1.0f, 1.0f };
+                float[] paparazziColor = new float[]{ 0.0f, 0.0f, 0.0f };
                 shader.setUniform3fv("u_paparazziColor", paparazziColor, 0, 3);
                 float[] paparazziSeed = new float[]{ currentPaparazziSeed, currentPaparazziSeed };
                 shader.setUniform2fv("u_paparazziSeed", paparazziSeed, 0, 2);
