@@ -2,10 +2,15 @@ package de.hochschuletrier.gdw.ws1516.game.systems;
 
 import java.util.Comparator;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 
 import de.hochschuletrier.gdw.commons.gdx.ashley.SortedSubIteratingSystem;
+import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
+import de.hochschuletrier.gdw.ws1516.events.JumpEvent;
+import de.hochschuletrier.gdw.ws1516.events.MovementEvent;
+import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.RenderLayerComponent;
@@ -14,13 +19,32 @@ public class RenderSystem extends SortedSubIteratingSystem {
     
     private final static RenderComparator renderComparator = new RenderComparator();
 
+    private BackgroundParticleRenderSystem backgroundParticleRenderSystem;
+    private AnimationRenderSystem animationRenderSystem;
+    private ParticleRenderSystem particleRenderSystem;
+    
     @SuppressWarnings("unchecked")
     public RenderSystem(int priority) {
         super(Family.all(PositionComponent.class, RenderLayerComponent.class).get(), renderComparator, priority);
 
-        addSubSystem(new BackgroundParticleRenderSystem());
-        addSubSystem(new AnimationRenderSystem());
-        addSubSystem(new ParticleRenderSystem());
+        backgroundParticleRenderSystem = new BackgroundParticleRenderSystem();
+        addSubSystem(backgroundParticleRenderSystem);
+        animationRenderSystem = new AnimationRenderSystem();
+        addSubSystem(animationRenderSystem);
+        particleRenderSystem = new ParticleRenderSystem();
+        addSubSystem(particleRenderSystem);
+    }
+    
+    @Override
+    public void addedToEngine(Engine engine) 
+    {
+        // TODO Auto-generated method stub
+        super.addedToEngine(engine);
+        
+        MovementEvent.register(animationRenderSystem);
+        JumpEvent.register(animationRenderSystem);
+        StartFlyEvent.register(animationRenderSystem);
+        EndFlyEvent.register(animationRenderSystem);
     }
 
     @Override
