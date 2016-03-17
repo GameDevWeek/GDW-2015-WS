@@ -42,6 +42,7 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
     private final InputForwarder inputForwarder;
     private final InputProcessor menuInputProcessor;
     private final InputProcessor gameInputProcessor;
+    
 
     public GameplayState(AssetManagerX assetManager, Game game) {
         this.game = game;
@@ -110,6 +111,8 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
 
     @Override
     public void onEnter(BaseGameState previousState) {
+        //MusicManager.setGlobalVolume(0);
+        System.out.println("enterGamestate");
         MusicManager.play(music, GameConstants.MUSIC_FADE_TIME);
         
         
@@ -118,11 +121,13 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
     @Override
     public void onEnterComplete() {
         
-      
+        System.out.println("enterGamestateComplete");
         Main.inputMultiplexer.addProcessor(inputForwarder);
         inputForwarder.set(gameInputProcessor);
+
         GameOverEvent.register(this);
         MusicManager.setGlobalVolume(0);
+
     }
 
     @Override

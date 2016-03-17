@@ -23,6 +23,7 @@ import de.hochschuletrier.gdw.ws1516.menu.EndPage;
 import de.hochschuletrier.gdw.ws1516.menu.MainMenuPage;
 import de.hochschuletrier.gdw.ws1516.menu.MenuOptions;
 import de.hochschuletrier.gdw.ws1516.menu.MenuPageRoot;
+import de.hochschuletrier.gdw.ws1516.menu.SoundSlider;
 
 /**
  * Menu state
@@ -35,10 +36,12 @@ public class MainMenuState extends BaseGameState {
     private final Music music;
     private final MenuManager menuManager = new MenuManager(Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT, null);
     private final InputForwarder inputForwarder;
+    
 
     public MainMenuState(AssetManagerX assetManager) {
         music = assetManager.getMusic("menutheme");
 
+        //soundSlider = new SoundSlider();
         final MainMenuPage menuPageRoot = new MainMenuPage(skin, menuManager, MainMenuPage.Type.MENU);
    //     final EndPage menuPageRoot = new EndPage(skin, menuManager, "transparent_bg");
         menuManager.addLayer(menuPageRoot);
@@ -80,8 +83,8 @@ public class MainMenuState extends BaseGameState {
        
         MusicManager.play(music, GameConstants.MUSIC_FADE_TIME);
         
-        MusicManager.setGlobalVolume(MenuOptions.getMusicSlider());
-        System.out.print(MenuOptions.getMusicSlider());
+        MusicManager.setGlobalVolume(1);
+       
         
         inputForwarder.set(menuManager.getInputProcessor());
       //  music.setVolume(0.5F);
