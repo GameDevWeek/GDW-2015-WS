@@ -12,14 +12,7 @@ import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.factories.EntityFactoryParam;
-import de.hochschuletrier.gdw.ws1516.game.systems.AnimationRenderSystem;
-import de.hochschuletrier.gdw.ws1516.game.systems.CanvasRenderSystem;
-import de.hochschuletrier.gdw.ws1516.game.systems.CollisionSystem;
-import de.hochschuletrier.gdw.ws1516.game.systems.EndgameSystem;
-import de.hochschuletrier.gdw.ws1516.game.systems.PickupSystem;
-import de.hochschuletrier.gdw.ws1516.game.systems.ShootSystem;
-import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePlayerSystem;
-import de.hochschuletrier.gdw.ws1516.game.systems.UpdateProjectileSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.*;
 import de.hochschuletrier.gdw.ws1516.game.systems.input.InputSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.input.KeyboardInputSystem;
 import de.hochschuletrier.gdw.ws1516.game.utils.PlayerColor;
@@ -34,6 +27,8 @@ public class Game extends InputAdapter {
     private final EntityFactoryParam factoryParam = new EntityFactoryParam();
     private final EntityFactory<EntityFactoryParam> entityFactory = new EntityFactory("data/json/entities.json", Game.class);
     private final PickupSystem pickupSystem = new PickupSystem(this);
+    private final SplashSystem splashSystem = new SplashSystem(this);
+
 
     private final InputForwarder inputForwarder = new InputForwarder();
     
@@ -75,6 +70,7 @@ public class Game extends InputAdapter {
         engine.addSystem(new KeyboardInputSystem());
         engine.addSystem(new InputSystem());
         engine.addSystem(pickupSystem);
+        engine.addSystem(splashSystem);
     }
 
     public void update(float delta) {
