@@ -61,39 +61,23 @@ public class MenuPage extends Group {
         
         Slider slider = new Slider(min,max,stepSize,false,skin,"default-horizontal");
         Label label = new Label(text,skin,"default");
+        
         int size = 250; 
         slider.setValue(50);
-//        slider.setColor(Color.PINK);
         
 
-        label.setBounds(x, y+1,100,100);
-        slider.setBounds(x+70,y,size,100);
-        
-        
+        label.setPosition(x, y+7);
+        slider.setBounds(x+75,y,size,35);
         Label value= new Label(""+(int)slider.getValue(),skin,"default");
-        value.setBounds(x+size+80,y+1,100,100);   
+        value.setPosition(x+size+85,y+7);   
+        
         slider.addListener(new ChangeListener(){
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 value.setText(""+(int)slider.getValue());
             }
         });
-//        slider.addListener(new ClickListener(){
-//            @Override
-//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//               System.out.print("Down");
-//             
-//               return true;
-//            }
-//        });
-//        slider.addListener(new ClickListener(){
-//            @Override
-//            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-//                System.out.print("Up");
-//                
-//                
-//            }
-//        });
+
         if(add==true)
         {
          addActor(slider);
