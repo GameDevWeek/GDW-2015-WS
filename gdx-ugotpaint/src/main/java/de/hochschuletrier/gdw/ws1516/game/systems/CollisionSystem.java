@@ -8,6 +8,7 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import de.hochschuletrier.gdw.ws1516.events.PickupEvent;
+import de.hochschuletrier.gdw.ws1516.events.SplashEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
@@ -129,6 +130,6 @@ public class CollisionSystem extends IteratingSystem {
     }
 
     private void explodeAt(Vector2 first, PlayerColor color) {
-        //todo
+        SplashEvent.emit(first,color);
     }
 }

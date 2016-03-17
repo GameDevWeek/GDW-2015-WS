@@ -21,6 +21,7 @@ import de.hochschuletrier.gdw.ws1516.game.systems.ShootSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePlayerSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdateProjectileSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdateSoundEmitterSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.*;
 import de.hochschuletrier.gdw.ws1516.game.systems.input.InputSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.input.KeyboardInputSystem;
 import de.hochschuletrier.gdw.ws1516.game.utils.PlayerColor;
@@ -35,6 +36,8 @@ public class Game extends InputAdapter {
     private final EntityFactoryParam factoryParam = new EntityFactoryParam();
     private final EntityFactory<EntityFactoryParam> entityFactory = new EntityFactory("data/json/entities.json", Game.class);
     private final PickupSystem pickupSystem = new PickupSystem(this);
+    private final SplashSystem splashSystem = new SplashSystem(this);
+
 
     private final InputForwarder inputForwarder = new InputForwarder();
     
@@ -77,6 +80,7 @@ public class Game extends InputAdapter {
         engine.addSystem(new InputSystem());
         engine.addSystem(new UpdateSoundEmitterSystem());
         engine.addSystem(pickupSystem);
+        engine.addSystem(splashSystem);
     }
 
     public void update(float delta) {
