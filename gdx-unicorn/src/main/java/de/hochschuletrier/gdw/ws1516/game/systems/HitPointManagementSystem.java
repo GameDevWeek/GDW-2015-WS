@@ -23,7 +23,7 @@ import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.GameLogicTest;
 
 public class HitPointManagementSystem extends EntitySystem implements HitEvent.Listener, DeathEvent.Listener, HealEvent.Listener{
 
-    private static final Logger logger = LoggerFactory.getLogger(GameLogicTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(HitPointManagementSystem.class);
     
     private ComponentMapper<PlayerComponent> pm = ComponentMapper.getFor(PlayerComponent.class);
     private ComponentMapper<MovementComponent> mm = ComponentMapper.getFor(MovementComponent.class);
@@ -52,8 +52,9 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
             PlayerComponent playerComp = pm.get(entity);
             if (playerComp == null) //wenn es sich um einen Gegner handelt wars das soweit.
                 return;
-            if (playerComp.state!=PlayerComponent.State.RAINBOW){
+            if (playerComp.state!=PlayerComponent.State.RAINBOW && playerComp.invulnerableTimer==0){
                 playerComp.hitpoints-= value;
+                playerComp.invulnerableTimer=GameConstants.INVULNERABLE_TIMER;
                 
                 if (playerComp.hitpoints <= 0)
                     DeathEvent.emit(entity);

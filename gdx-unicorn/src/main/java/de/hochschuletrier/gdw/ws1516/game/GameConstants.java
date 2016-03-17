@@ -40,7 +40,7 @@ public class GameConstants {
     public static final float SPUCK_MODE_TIME = 2.0f;
     public static final float HORN_MODE_COOLDOWN = 5.0f;
     public static final float SPUCK_MODE_COOLDOWN = 2.0f;
-
+    public static final float INVULNERABLE_TIMER = 0.5f;
     //Physic collision groups
     public static final short PHYSIX_COLLISION_SPIT = -1;
     public static final short PHYSIX_COLLISION_UNICORN = -1;

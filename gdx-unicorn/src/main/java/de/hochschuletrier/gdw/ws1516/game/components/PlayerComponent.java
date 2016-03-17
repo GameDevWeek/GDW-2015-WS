@@ -9,6 +9,7 @@ public class PlayerComponent extends Component implements Poolable {
     public int maxHitpoints;
     public int hitpoints;
     public int lives;
+    public float invulnerableTimer;
     
     public static enum State{
         NORMAL,
@@ -33,6 +34,7 @@ public class PlayerComponent extends Component implements Poolable {
         stateTimer=0;
         hornAttackCooldown=0;
         spuckChargeCooldown=0;
+        invulnerableTimer=0;
     }
    
 }
