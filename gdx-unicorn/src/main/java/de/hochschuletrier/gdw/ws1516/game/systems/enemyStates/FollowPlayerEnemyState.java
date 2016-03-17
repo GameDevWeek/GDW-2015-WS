@@ -39,10 +39,10 @@ public class FollowPlayerEnemyState extends EnemyBaseState {
 //            buffer.removeFirst();
 //        }
         if ( positionPlayer.x < positionEnemy.x ){
-            MovementEvent.emit(entity, -1.0f);
+            MovementEvent.emit(entity, -0.7f);
         }else
         {
-            MovementEvent.emit(entity, 1.0f);  
+            MovementEvent.emit(entity, 0.7f);  
         }
         
         if ( behaviour.canSeeUnicorn )
