@@ -40,7 +40,7 @@ public class MainMenuPage extends MenuPage {
         addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Credits", new MenuPageCredits(skin, menuManager));
     
         if(type==Type.MENU) {
-        addLeftAlignedButton(xOffset, yOffset - yStep *( 2* i++), 100, 50, "Ausfahrt", () -> System.exit(-1));
+        addLeftAlignedButton(xOffset, yOffset - yStep *( 2* i++), 100, 50, "Ausfahrt", this::systemExitDelay);
         }
         else if (type==Type.PAUSED) {
             addLeftAlignedButton(xOffset, yOffset - yStep*(2* i++), 100, 50, "Menü", this::stopGame);
@@ -70,6 +70,15 @@ public class MainMenuPage extends MenuPage {
         menuManager.addLayer(page);
         
         addLeftAlignedButton(x, y, 150, 40, text, () -> menuManager.pushPage(page));
+    }
+    
+    private void systemExitDelay(){
+        try {
+            Thread.sleep(1300);                 //1000 milliseconds is one second.
+        } catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+        System.exit(-1);
     }
     
 
