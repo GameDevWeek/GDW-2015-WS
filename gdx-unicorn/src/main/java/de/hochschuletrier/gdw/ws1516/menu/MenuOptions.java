@@ -37,9 +37,9 @@ public class MenuOptions extends MenuPage {
         int yStep = 55;
         generalSound = 5;
         Slider generalSlider = addLabeledSlider(0, 100, 1, xOffset, yOffset
-                - yStep * (i++), "General", true);
+                - yStep * (i++), "Allgemein", true);
         Slider musicSlider = addLabeledSlider(0, 100, 1, xOffset, yOffset
-                - yStep * (i++), "Music", true);
+                - yStep * (i++), "Musik", true);
         Slider soundSlider = addLabeledSlider(0, 100, 1, xOffset, yOffset
                 - yStep * (i++), "Sound", true);
         generalSlider.addListener(new ChangeListener() {

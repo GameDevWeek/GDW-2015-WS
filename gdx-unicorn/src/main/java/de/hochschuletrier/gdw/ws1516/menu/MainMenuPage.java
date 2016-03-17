@@ -30,20 +30,20 @@ public class MainMenuPage extends MenuPage {
         
         if(type==Type.MENU) {
             
-          addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Start Game", new LevelSelectionPage(skin, menuManager));  
+          addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Spiel starten", new LevelSelectionPage(skin, menuManager));  
         //addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 150, 50, "Start Game", this::startGame);
         }
         else if(type==Type.PAUSED) {
-            addLeftAlignedButton(xOffset, yOffset - yStep * (i++), 150, 50, "Continue", () -> menuManager.popPage());
+            addLeftAlignedButton(xOffset, yOffset - yStep * (i++), 150, 50, "Fortsetzen", () -> menuManager.popPage());
         }
-        addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Options", new MenuOptions(skin, menuManager));
+        addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Optionen", new MenuOptions(skin, menuManager));
         addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Credits", new MenuPageCredits(skin, menuManager));
     
         if(type==Type.MENU) {
-        addLeftAlignedButton(xOffset, yOffset - yStep *( 2* i++), 100, 50, "Exit", () -> System.exit(-1));
+        addLeftAlignedButton(xOffset, yOffset - yStep *( 2* i++), 100, 50, "Ausfahrt", () -> System.exit(-1));
         }
         else if (type==Type.PAUSED) {
-            addLeftAlignedButton(xOffset, yOffset - yStep*(2* i++), 100, 50, "Menu", this::stopGame);
+            addLeftAlignedButton(xOffset, yOffset - yStep*(2* i++), 100, 50, "Menü", this::stopGame);
             
         }
         
