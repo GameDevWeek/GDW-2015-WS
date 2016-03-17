@@ -4,13 +4,70 @@ precision mediump float;
 #else
 #define LOWP 
 #endif
+#define M_2PI 6.2831843071795864777252867665590
+#define PART 0.1666666666666666666666666666666
 
 varying LOWP vec4 v_color;
 varying vec2 v_texCoords;
 
+uniform vec2 u_frameDimension;
+uniform float u_rainbowFrequency;
+uniform float u_rainbowAmplitude;
+uniform float u_time;
 uniform sampler2D u_texture;
+
+vec4 calcRainbowColor();
+float getHorizontalOffset();
 
 void main()
 {
-	gl_FragColor = v_color * texture2D(u_texture, v_texCoords);
+	vec4 rainbowColor = v_color * (1.0 - v_color.a) + calcRainbowColor() * v_color.a;
+	
+	gl_FragColor = rainbowColor * texture2D(u_texture, v_texCoords);
+}
+
+vec4 calcRainbowColor()
+{
+	vec4 rainbowColor;
+	
+	float base = getHorizontalOffset() + (gl_FragCoord.y / u_frameDimension.y);
+	float phase = mod(base, 1);
+	float level = mod(base, PART);
+	
+	if(phase <= PART)
+	{
+		rainbowColor = vec4(1.0, level * 6, 0.0, 1.0);
+	}
+	else if(phase <= PART * 2)
+	{
+		rainbowColor = vec4(1.0 - level * 6, 1.0, 0.0, 1.0);
+	}
+	else if(phase <= PART * 3)
+	{
+		rainbowColor = vec4(0.0, 1.0, level * 6, 1.0);
+	}
+	else if(phase <= PART * 4)
+	{
+		rainbowColor = vec4(0.0, 1 - level * 6, 1.0, 1.0);
+	}
+	else if(phase <= PART * 5)
+	{
+		rainbowColor = vec4(level * 6, 0.0, 1.0, 1.0);
+	}
+	else
+	{
+		rainbowColor = vec4(1.0, 0.0, 1.0 - level * 6, 1.0);
+	}
+	
+	return rainbowColor;
+}
+
+float getHorizontalOffset()
+{
+	float amplitude = u_rainbowAmplitude;
+	if(amplitude <= 0.001)
+	{
+		amplitude = 0.25;
+	}
+	return sin(M_2PI * (gl_FragCoord.x / u_frameDimension.x) + u_time * u_rainbowFrequency) * amplitude;
 }
