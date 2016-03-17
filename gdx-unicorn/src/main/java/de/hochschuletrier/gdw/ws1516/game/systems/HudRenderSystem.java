@@ -100,8 +100,11 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         float score_x = cookie_x + 60;
         float score_y = 35;
         
-        int lives = playerComp.lives;
-        String lives_string = String.valueOf(lives);
+        float lives_x = heart_x+50;
+        float lives_y = 40;
+        
+        
+  
               
         int minutes_int = (int) scoreComp.playedSeconds/60;
         String minutes_string = String.valueOf(minutes_int);
@@ -111,15 +114,19 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         if(seconds_string.length()==1) {
             seconds_string = "0"+seconds_string;
         }
+        
+        int lives = playerComp.lives;
                   
         String time = minutes_string+":"+seconds_string;
         String score = String.valueOf(finalScore);
+        String lives_string = "x " + String.valueOf(lives);
         
                        
        
         
         font.draw(DrawUtil.batch, time, time_x, time_y);
         font.draw(DrawUtil.batch,score, score_x, score_y);
+        font.draw(DrawUtil.batch, lives_string, lives_x, lives_y);
         DrawUtil.draw(heart, heart_x, heart_y, 50, 50);
         DrawUtil.draw(cookie, cookie_x, cookie_y, 50, 50);
     }
