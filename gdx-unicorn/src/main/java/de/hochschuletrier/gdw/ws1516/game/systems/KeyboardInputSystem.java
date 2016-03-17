@@ -173,25 +173,10 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
 //            fly=false;
 //            stopflying=false;
 //        }
-        if(hornAttack){
-            logger.debug("sollte horn Starten{}");
-            HornAttackEvent.start();
-            hornAttack=false;
-        // if(stopflying){
-        // EndFlyEvent.emit(entity);
-        // fly=false;
-        // stopflying=false;
-        // }
-        if (hornAttack) {
-            HornAttackEvent.start(entity);
-            hornAttack = false;
-//        if(stopflying){
-//            EndFlyEvent.emit(entity);
-//            fly=false;
-//            stopflying=false;
-//        }
+
+
         if(hornAttack && player.state!=State.RAINBOW && player.hornAttackCooldown<=0.0f){
-                HornAttackEvent.start();
+                HornAttackEvent.start(entity);
             hornAttack=false;
         }
         input.hornAttack = hornAttack;

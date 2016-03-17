@@ -154,9 +154,7 @@ public class Game extends InputAdapter {
     public void dispose() {
         togglePhysixDebug.unregister();
         scoreCheating.unregister();
-        rainbowMode.unregister();
 //        rainbowMode.unregister();
-        rainbowMode.unregister();
         healCheating.unregister();
         Main.getInstance().console.unregister(physixDebug);
         
