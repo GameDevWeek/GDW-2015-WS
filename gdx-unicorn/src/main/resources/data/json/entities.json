@@ -42,7 +42,7 @@
                 "type" : "hunter"
             },
             "Behaviour": {
-		"cooldown":0.5
+		"cooldown":2.0
 	    },
             "Animation": {
                 "animation": "hunter_walking"

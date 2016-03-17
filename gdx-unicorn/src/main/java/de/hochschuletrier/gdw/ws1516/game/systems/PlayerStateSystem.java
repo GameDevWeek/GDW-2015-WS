@@ -9,9 +9,11 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 
 import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
+import de.hochschuletrier.gdw.ws1516.events.MovementEvent;
 import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent.State;
 
@@ -20,7 +22,7 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
 
     private static final Logger logger = LoggerFactory.getLogger(PlayerStateSystem.class);
     public PlayerStateSystem() {
-        super(Family.all(PlayerComponent.class).get());
+        super(Family.all(PlayerComponent.class,MovementComponent.class).get());
     }
 
     @Override
@@ -39,12 +41,17 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         PlayerComponent playerComp=ComponentMappers.player.get(entity);
+        MovementComponent movementComp = ComponentMappers.movement.get(entity);
         playerComp.stateTimer=Math.max(playerComp.stateTimer-deltaTime, 0);
         playerComp.hornAttackCooldown=Math.max(playerComp.hornAttackCooldown-deltaTime, 0);
         playerComp.invulnerableTimer=Math.max(playerComp.invulnerableTimer-deltaTime, 0);
         if (playerComp.stateTimer<=0.0f){
             if (playerComp.state==State.HORNATTACK){
                 HornAttackEvent.stop();
+            }
+            if (playerComp.state==State.RAINBOW){
+
+                movementComp.speed=GameConstants.PLAYER_SPEED;
             }
             playerComp.state=State.NORMAL;
         }
@@ -54,11 +61,13 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
     public void onRainbowCollect() {
         if (getEntities().size()>0){
             PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
+            MovementComponent movementComp = ComponentMappers.movement.get(getEntities().get(0));
             if (playerComp.state==State.HORNATTACK){
                 HornAttackEvent.stop();
             }
             playerComp.state=State.RAINBOW;
             playerComp.stateTimer=GameConstants.RAINBOW_MODE_TIME;
+            movementComp.speed=GameConstants.PLAYER_SPEED*150f;
         }
     }
 
@@ -78,5 +87,6 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
             playerComp.hornAttackCooldown=GameConstants.HORN_MODE_COOLDOWN;
         }
     }
+
     
 }
