@@ -39,6 +39,22 @@
         "columns": 1,
         "rows" : 1
     },
+    "unicorn_flying": {
+        "filename": "data/graphics/unicorn_s.png",
+        "frames": 1,
+        "frameDuration": [0.15],
+        "playType": "LOOP",
+        "columns": 1,
+        "rows": 1
+    },
+    "unicorn_jumping": {
+        "filename": "data/graphics/unicorn_s.png",
+        "frames": 1,
+        "frameDuration": [0.15],
+        "playType": "LOOP",
+        "columns": 1,
+        "rows": 1
+    },
     
     "walking": {
         "filename": "data/animations/walking.png",
