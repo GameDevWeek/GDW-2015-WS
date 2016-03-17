@@ -30,18 +30,18 @@ public class MenuPageRoot extends MenuPage {
         int y = 0;
         int yStep = 55;
         if (type == Type.MAINMENU) {
-            addLeftAlignedButton(x, y - yStep * (i++), 400, 50, "Spiel Starten", this::startGame);
+            addLeftAlignedButton(x, y - yStep * (i++), 400, 50, "Spiel Starten", this::startGame,"buttonSound");
         } else if (type== Type.INGAME) {
-            addLeftAlignedButton(x, y - yStep * (i++), 400, 50, "Fortsetzen", () -> menuManager.popPage());
-            addLeftAlignedButton(x, y - yStep * (i++), 400, 50, "Spiel verlassen", this::stopGame);
-            addCenteredButton(x,y - yStep*(i++),800,800,"was kann man machen", this::stopGame);
+            addLeftAlignedButton(x, y - yStep * (i++), 400, 50, "Fortsetzen", () -> menuManager.popPage(),"buttonSound");
+            addLeftAlignedButton(x, y - yStep * (i++), 400, 50, "Spiel verlassen", this::stopGame,"buttonSound");
+            addCenteredButton(x,y - yStep*(i++),800,800,"was kann man machen", this::stopGame,"buttonSound");
         }
         else if (type == Type.OPTIONS) {
             
         }
         addPageEntry(menuManager, x, y - yStep * (i++), "Credits", new MenuPageCredits(skin, menuManager));
-        addCenteredButton(menuManager.getWidth() - 80, 54, 100, 40, "Exit", () -> System.exit(-1));
-        addCenteredButton(menuManager.getWidth()-200,200,200,200, "Testest", () -> System.exit(-1));
+        addCenteredButton(menuManager.getWidth() - 80, 54, 100, 40, "Exit", () -> System.exit(-1),"buttonSound");
+        addCenteredButton(menuManager.getWidth()-200,200,200,200, "Testest", () -> System.exit(-1),"buttonSound");
         TextButton button = new TextButton("NeuerTestButton",skin,"default");
         button.setBounds(200, 200, 800, 100);
         button.getLabel().setAlignment(Align.center);
@@ -66,6 +66,6 @@ public class MenuPageRoot extends MenuPage {
 
     protected final void addPageEntry(MenuManager menuManager, int x, int y, String text, MenuPage page) {
         menuManager.addLayer(page);
-        addLeftAlignedButton(x, y, 300, 40, text, () -> menuManager.pushPage(page));
+        addLeftAlignedButton(x, y, 300, 40, text, () -> menuManager.pushPage(page),"buttonSound");
     }
 }
