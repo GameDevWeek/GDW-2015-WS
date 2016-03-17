@@ -26,7 +26,7 @@ import de.hochschuletrier.gdw.ws1516.game.systems.SoundSystem;
 public class MenuOptions extends MenuPage {
 
     private float generalSound;
-    private Slider generalSlider;
+    private static Slider generalSlider;
     private Slider musicSlider;
     private Slider soundSlider;
 
@@ -61,11 +61,10 @@ public class MenuOptions extends MenuPage {
             }
         });
 
-        soundSlider.addListener(new ClickListener() {
+        soundSlider.addListener(new ChangeListener() {
 
             @Override
-            public void touchUp(InputEvent event, float x, float y,
-                    int pointer, int button) {
+            public void changed(ChangeEvent event, Actor actor) {
                 SoundSystem.setGlobalVolume(soundSlider.getValue() / 1000 * generalSound);        
                 soundTest();
 
@@ -87,4 +86,17 @@ public class MenuOptions extends MenuPage {
         MusicManager.setGlobalVolume(musicSlider.getValue() / 1000 * generalSound);         
         SoundSystem.setGlobalVolume(soundSlider.getValue() / 1000 * generalSound);
     }
+    public static float getGeneralSliderValue(){
+        return generalSlider.getValue();
+    }
+    public static void setGeneralSliderValue(float x){
+        generalSlider.setValue(x);
+    }
+    public float getMusicSliderValue(){
+        return musicSlider.getValue();
+    }
+    public float getSoundSliderValue(){
+        return soundSlider.getValue();
+    }
+   
 }
