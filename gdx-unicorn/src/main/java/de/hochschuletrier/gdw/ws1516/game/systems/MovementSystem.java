@@ -5,17 +5,19 @@ import org.slf4j.LoggerFactory;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
+import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
 import de.hochschuletrier.gdw.ws1516.events.JumpEvent;
+import de.hochschuletrier.gdw.ws1516.events.MovementEvent;
+import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
-import de.hochschuletrier.gdw.ws1516.game.components.*;
-import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent.AnimationState;
-import de.hochschuletrier.gdw.ws1516.events.*;
+import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 
 public class MovementSystem extends IteratingSystem implements
         StartFlyEvent.Listener, EndFlyEvent.Listener, JumpEvent.Listener,
