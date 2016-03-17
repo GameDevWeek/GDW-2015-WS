@@ -145,7 +145,7 @@ public class Main extends StateBasedGame {
         addPersistentState(mainMenuState);
         changeState(mainMenuState, null, null);
         
-        MusicManager.play(assetManager.getMusic("menu"), GameConstants.MUSIC_FADE_TIME);
+//        MusicManager.play(assetManager.getMusic("menu"), GameConstants.MUSIC_FADE_TIME);
     }
 
     @Override

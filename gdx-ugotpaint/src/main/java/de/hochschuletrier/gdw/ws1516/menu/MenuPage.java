@@ -1,5 +1,6 @@
 package de.hochschuletrier.gdw.ws1516.menu;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -26,11 +27,14 @@ public class MenuPage extends Group {
     protected float canvasScale = 0.715f;
     protected final Canvas canvas = Main.getCanvas();
     protected DecoImage overlayImage;
+    private final Sound clickSound;
 
     public MenuPage(Skin skin) {
         super();
         this.skin = skin;
         setVisible(false);
+        
+        clickSound = assetManager.getSound("click");
     }
     
     protected void addForeground() {
@@ -75,6 +79,7 @@ public class MenuPage extends Group {
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                clickSound.play();
                 runnable.run();
             }
         });

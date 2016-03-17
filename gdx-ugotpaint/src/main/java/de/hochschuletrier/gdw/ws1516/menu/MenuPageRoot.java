@@ -35,12 +35,12 @@ public class MenuPageRoot extends MenuPage {
         int y = 370;
         int yStep = 55;
         if (type == Type.MAINMENU) {
-            addLeftAlignedButton(x, y - yStep * (i++), 300, 50, "Spiel Starten", this::fadeToGame);
+            addLeftAlignedButton(x, y - yStep * (i++), 200, 50, "Spiel Starten", this::fadeToGame);
         } else {
-            addLeftAlignedButton(x, y - yStep * (i++), 300, 50, "Fortsetzen", this::fadeToGame);
-            addLeftAlignedButton(x, y - yStep * (i++), 300, 50, "Spiel verlassen", this::stopGame);
+            addLeftAlignedButton(x, y - yStep * (i++), 200, 50, "Fortsetzen", this::fadeToGame);
+            addLeftAlignedButton(x, y - yStep * (i++), 200, 50, "Spiel verlassen", this::stopGame);
         }
-        addPageEntry(menuManager, x, y - yStep * (i++), "Credits", new MenuPageCredits(skin, menuManager));
+        addPageEntry(menuManager, x, y - yStep * (i++), 150, "Credits", new MenuPageCredits(skin, menuManager));
         addForeground();
     }
 
@@ -116,8 +116,8 @@ public class MenuPageRoot extends MenuPage {
         }
     }
 
-    protected final void addPageEntry(MenuManager menuManager, int x, int y, String text, MenuPage page) {
+    protected final void addPageEntry(MenuManager menuManager, int x, int y, int width, String text, MenuPage page) {
         menuManager.addLayer(page);
-        addLeftAlignedButton(x, y, 300, 40, text, () -> menuManager.pushPage(page));
+        addLeftAlignedButton(x, y, width, 40, text, () -> menuManager.pushPage(page));
     }
 }

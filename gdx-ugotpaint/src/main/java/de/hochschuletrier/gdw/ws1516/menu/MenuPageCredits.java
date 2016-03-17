@@ -52,7 +52,7 @@ public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter {
             logger.error("Error loading credits", ex);
         }
 
-        addCenteredButton(menuManager.getWidth() - 100, 54, 100, 40, "Zurück", () -> menuManager.popPage());
+        addLeftAlignedButton(50, 370, 200, 50, "Zurück", () -> menuManager.popPage());
         addForeground();
     }
 
