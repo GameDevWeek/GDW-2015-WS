@@ -12,20 +12,31 @@ public class MovementComponent extends Component implements Pool.Poolable{
     public float speed = GameConstants.PLAYER_SPEED;
     public float jumpImpulse=GameConstants.PLAYER_JUMP_IMPULSE;
     public float velocityX = 0;
+    public float velocityY = 0;
+    public float remainingStateTime=0;
+    public LookDirection lookDirection = LookDirection.RIGHT;
+    
     public static enum State{
         ON_GROUND,
         FLYING,
         FALLING,
         JUMPING
     }
+    
+    public static enum LookDirection {
+        LEFT,
+        RIGHT;
+    }
+    
     public State state=State.ON_GROUND;
     
     @Override
     public void reset() {
         speed = GameConstants.PLAYER_SPEED;
-        velocityX = 0;
+        velocityX = velocityY=0;
         state = State.ON_GROUND;
         jumpImpulse=GameConstants.PLAYER_JUMP_IMPULSE;
+        lookDirection = LookDirection.RIGHT;
     }
     
     

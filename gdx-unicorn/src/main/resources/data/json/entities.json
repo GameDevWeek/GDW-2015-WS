@@ -2,7 +2,13 @@
     "unicorn": {
         "meta": {},
         "components": {
-            "Position": {},
+            "ScoreBoard":{},
+            "StartPosition":{},
+            "Position": { 
+		"maxHitpoints":3,
+		"hitpoints":3,
+		"lives":3
+            },
             "Input":{},
             "Player":{},
             "Movable":{
@@ -18,22 +24,38 @@
                 "friction": 0.2,
                 "restitution": 0.4
             },
-            "CameraTarget": {}
+            "CameraTarget": {},
+            "RenderLayer": {
+                "layer": 100
+            }
         }
     },
     "hunter": {
         "meta": {},
         "components": {
             "Position": {},
+	    "Path":{},
+            "Movable":{
+                "state":"on_ground"
+                },
+            "EnemyType": {
+                "type" : "hunter"
+            },
+            "Behaviour": {
+		"cooldown":0.5
+	    },
             "Animation": {
-                "animation": "unicorn_idle"
+                "animation": "hunter_walking"
             },
             "PhysixBody": {
-                "type": "circle",
+                "type": "enemy",
                 "size": 30,
                 "density": 5,
                 "friction": 0.2,
                 "restitution": 0.4
+            },
+            "RenderLayer": {
+                "layer": 50
             }
         }
     },
@@ -41,15 +63,28 @@
         "meta": {},
         "components": {
             "Position": {},
+	    "Path":{},
+            "Movable":{
+                "state":"on_ground"
+                },
+            "EnemyType": {
+                "type" : "paparazzi"
+            },
+            "Behaviour": {
+		"cooldown":1.5
+	    },
             "Animation": {
-                "animation": "paparazzi_idle"
+                "animation": "paparazzi_walking"
             },
             "PhysixBody": {
-                "type": "circle",
+                "type": "enemy",
                 "size": 30,
                 "density": 5,
                 "friction": 0.2,
                 "restitution": 0.4
+            },
+            "RenderLayer": {
+                "layer": 50
             }
         }
     },
@@ -66,6 +101,9 @@
                 "density": 5,
                 "friction": 0.2,
                 "restitution": 0.4
+            },
+            "RenderLayer": {
+                "layer": 60
             }
         }
     },
@@ -82,6 +120,9 @@
                 "density": 5,
                 "friction": 0.2,
                 "restitution": 0.4
+            },
+            "RenderLayer": {
+                "layer": 60
             }
         }
     },
@@ -98,6 +139,9 @@
                 "density": 5,
                 "friction": 0.2,
                 "restitution": 0.4
+            },
+            "RenderLayer": {
+                "layer": 70
             }
         }
     },
@@ -114,6 +158,9 @@
                 "density": 5,
                 "friction": 0.2,
                 "restitution": 0.4
+            },
+            "RenderLayer": {
+                "layer": 59
             }
         }
     },
@@ -190,9 +237,11 @@
                 "layer": 0
             },
             "ParticleTest": {
-                "effect": "test"
+                "effect": "test2"
             },
-            "CameraTarget": {}
+            "BackgroundParticle": {
+                "effect": "test"
+            }
         }
     },
     "box": {
@@ -214,6 +263,9 @@
                 "density": 10,
                 "friction": 0.5,
                 "restitution": 0.1
+            },
+            "RenderLayer": {
+                "layer": 95
             }
         }
     },
@@ -222,15 +274,5 @@
         "components": {
           "Path" : {}
         }
-    },
-    "particleTest": {
-        "meta": {},
-        "components": {
-            "Position": {},
-            "ParticleTest": {
-                "effect": "test"
-            }
-        }
     }
-    
 }

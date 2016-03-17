@@ -12,6 +12,7 @@ import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
 
 public class MainMenuPage extends MenuPage {
 
+    private final MenuManager menuManager;
 
     public enum Type {
         MENU,
@@ -20,22 +21,17 @@ public class MainMenuPage extends MenuPage {
     }
     public MainMenuPage(Skin skin, MenuManager menuManager, Type type) {
         super(skin, "menu_bg");
+        this.menuManager=menuManager;
         
         int i = 0;
         int xOffset = 55;
         int yOffset = 370;
         int yStep = 55;
         
-        
-    
-        
-        
-        
-        
-        
-        
         if(type==Type.MENU) {
-        addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 150, 50, "Start Game", this::startGame);
+            
+          addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Start Game", new LevelSelectionPage(skin, menuManager));  
+        //addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 150, 50, "Start Game", this::startGame);
         }
         else if(type==Type.PAUSED) {
             addLeftAlignedButton(xOffset, yOffset - yStep * (i++), 150, 50, "Continue", () -> menuManager.popPage());
@@ -44,10 +40,11 @@ public class MainMenuPage extends MenuPage {
         addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Credits", new MenuPageCredits(skin, menuManager));
     
         if(type==Type.MENU) {
-        addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 100, 50, "Exit", () -> System.exit(-1));
+        addLeftAlignedButton(xOffset, yOffset - yStep *( 2* i++), 100, 50, "Exit", () -> System.exit(-1));
         }
         else if (type==Type.PAUSED) {
-            addLeftAlignedButton(xOffset, yOffset - yStep*(i++), 100, 50, "Menu", this::stopGame);
+            addLeftAlignedButton(xOffset, yOffset - yStep*(2* i++), 100, 50, "Menu", this::stopGame);
+            
         }
         
     }    
@@ -64,7 +61,9 @@ public class MainMenuPage extends MenuPage {
     private void stopGame() {
         if (!main.isTransitioning()) {
             main.changeState(main.getPersistentState(MainMenuState.class));
+            
         }
+        
     }
     
     protected final void addPageEntry(MenuManager menuManager, int x, int y, String text, MenuPage page) {

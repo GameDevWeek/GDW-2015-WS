@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.backends.lwjgl.audio.Wav;
+import com.badlogic.gdx.backends.lwjgl.audio.Wav.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
@@ -42,7 +44,7 @@ public class GameplayState extends BaseGameState {
         this.game = game;
         
 
-        music = assetManager.getMusic("gameplay");
+        music = assetManager.getMusic("gameplaytheme");
 
         Skin skin = ((MainMenuState)Main.getInstance().getPersistentState(MainMenuState.class)).getSkin();
         final MainMenuPage menuPageRoot = new MainMenuPage(skin, menuManager, MainMenuPage.Type.PAUSED);
@@ -57,8 +59,8 @@ public class GameplayState extends BaseGameState {
         menuManager.addLayer(new DecoImage(assetManager.getTexture("menu_fg")));
 
         menuManager.pushPage(menuPageRoot);
-
         
+               
  
         
 //        menuManager.getStage().setDebugAll(true);
@@ -75,7 +77,8 @@ public class GameplayState extends BaseGameState {
                         mainProcessor = menuInputProcessor;                        
                     } else {
                         menuManager.popPage();
-                                            }
+                      
+                    }
                     return true;
                 }
                 return super.keyUp(keycode);
@@ -100,17 +103,22 @@ public class GameplayState extends BaseGameState {
 
     @Override
     public void onEnter(BaseGameState previousState) {
+       
+       
         MusicManager.play(music, GameConstants.MUSIC_FADE_TIME);
     }
 
     @Override
     public void onEnterComplete() {
+        
+      
         Main.inputMultiplexer.addProcessor(inputForwarder);
         inputForwarder.set(gameInputProcessor);
     }
 
     @Override
     public void onLeave(BaseGameState nextState) {
+       
         Main.inputMultiplexer.removeProcessor(inputForwarder);
     }
 

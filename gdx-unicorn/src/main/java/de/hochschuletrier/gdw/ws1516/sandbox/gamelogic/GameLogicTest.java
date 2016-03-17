@@ -1,14 +1,21 @@
 package de.hochschuletrier.gdw.ws1516.sandbox.gamelogic;
 
+import java.util.HashMap;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.cameras.orthogonal.LimitedSmoothCamera;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.Hotkey;
@@ -34,20 +41,22 @@ import de.hochschuletrier.gdw.ws1516.events.GameRespawnEvent;
 import de.hochschuletrier.gdw.ws1516.events.HitEvent;
 import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
-import de.hochschuletrier.gdw.ws1516.game.components.HitPointsComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.LiveComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.EnemyBehaviourComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PathComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.SoundEmitterComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.StartPointComponent;
+import de.hochschuletrier.gdw.ws1516.game.systems.EnemyHandlingSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.EnemyVisionSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.HitPointManagementSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RespawnSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.SoundSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.enemyStates.FollowPathEnemyState;
 import de.hochschuletrier.gdw.ws1516.sandbox.SandboxGame;
-import java.util.HashMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -99,12 +108,25 @@ public class GameLogicTest extends SandboxGame {
 
     private final HitPointManagementSystem hitPointSystem = new HitPointManagementSystem();
 
+    private final DummyEnemyExecutionSystem dummyEnemySystem = new DummyEnemyExecutionSystem();
+    
+    private final EnemyHandlingSystem enemyHandlingSystem = new EnemyHandlingSystem();
+
+    private final EntitySystem enemyVisionSystem = new EnemyVisionSystem();
+
+
+    private final EntitySystem updatePositionSystem = new UpdatePositionSystem();
+    
     public GameLogicTest() {
         engine.addSystem(physixSystem);
         engine.addSystem(physixDebugRenderSystem);
         engine.addSystem(respawnSystem );
-        engine.addSystem(soundSystem );
+        engine.addSystem(soundSystem);
         engine.addSystem(hitPointSystem);
+        engine.addSystem(enemyHandlingSystem);
+        engine.addSystem(dummyEnemySystem);
+        engine.addSystem(enemyVisionSystem );
+        engine.addSystem(updatePositionSystem );
     }
 
     @Override
@@ -128,52 +150,20 @@ public class GameLogicTest extends SandboxGame {
                 (Rectangle rect) -> addShape(rect, tileWidth, tileHeight));
 
         // create a simple player ball
-        Entity player = engine.createEntity();
-        PhysixModifierComponent modifyComponent = engine.createComponent(PhysixModifierComponent.class);
-        player.add(modifyComponent);
-        ScoreComponent scoreComp = engine.createComponent(ScoreComponent.class);
-        player.add(scoreComp);
-        PlayerComponent playerComp = engine.createComponent(PlayerComponent.class);
-        player.add(playerComp);
-        PositionComponent positionComp = engine.createComponent(PositionComponent.class);
-        player.add(positionComp);
-        StartPointComponent startPositionComp = engine.createComponent(StartPointComponent.class);
-        player.add(startPositionComp);
-        SoundEmitterComponent soundComponent = engine.createComponent(SoundEmitterComponent.class);
-        player.add(soundComponent);
-        HitPointsComponent hitPoint = engine.createComponent(HitPointsComponent.class);
-        hitPoint.value = 3;
-        hitPoint.max = 3;
-        player.add(hitPoint);
-        LiveComponent livePoint = engine.createComponent(LiveComponent.class);
-        livePoint.value = 2;
-        player.add(livePoint);
 
         
-        unicorn = player;
+        unicorn = createDummyUnicorn();
         playSound.register();
         stopSound.register();
         restart.register();
         damage.register();       
-        
 
-        
-        modifyComponent.schedule(() -> {
-            playerBody = engine.createComponent(PhysixBodyComponent.class);
-            PhysixBodyDef bodyDef = new PhysixBodyDef(BodyType.DynamicBody, physixSystem).position(100, 100).fixedRotation(true);
-            playerBody.init(bodyDef, physixSystem, player);
-            PhysixFixtureDef fixtureDef = new PhysixFixtureDef(physixSystem).density(5).friction(0.2f).restitution(0.4f).shapeCircle(30);
-            playerBody.createFixture(fixtureDef);
-            player.add(playerBody);
-        });
-        engine.addEntity(player);
+        createDummyStartPoint();
+        createDummyStartPoint();
 
-        
-        
-        Entity start = engine.createEntity();
-        StartPointComponent startComp = engine.createComponent(StartPointComponent.class);
-        start.add(startComp);
-        engine.addEntity(start);
+        createDummyEnemy();
+
+        createDummyStartPoint();
         
         // Setup camera
         camera.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -183,7 +173,6 @@ public class GameLogicTest extends SandboxGame {
         camera.updateForced();
         Main.getInstance().addScreenListener(camera);
     }
-
     private void addShape(Rectangle rect, int tileWidth, int tileHeight) {
         float width = rect.width * tileWidth;
         float height = rect.height * tileHeight;
@@ -242,4 +231,86 @@ public class GameLogicTest extends SandboxGame {
             camera.setDestination(playerBody.getPosition());
         }
     }
+    
+    private Entity createDummyUnicorn()
+    {
+
+        Entity player = engine.createEntity();
+        ScoreComponent scoreComp = engine.createComponent(ScoreComponent.class);
+        player.add(scoreComp);
+        PlayerComponent playerComp = engine.createComponent(PlayerComponent.class);
+        player.add(playerComp);
+        PositionComponent positionComp = engine.createComponent(PositionComponent.class);
+        player.add(positionComp);
+        StartPointComponent startPositionComp = engine.createComponent(StartPointComponent.class);
+        player.add(startPositionComp);
+        SoundEmitterComponent soundComponent = engine.createComponent(SoundEmitterComponent.class);
+        player.add(soundComponent);
+        
+        
+        
+        PhysixModifierComponent modifyComponent = engine.createComponent(PhysixModifierComponent.class);
+        player.add(modifyComponent);        
+        modifyComponent.schedule(() -> {
+            playerBody = engine.createComponent(PhysixBodyComponent.class);
+            PhysixBodyDef bodyDef = new PhysixBodyDef(BodyType.DynamicBody, physixSystem).position(100, 100).fixedRotation(true);
+            playerBody.init(bodyDef, physixSystem, player);
+            PhysixFixtureDef fixtureDef = new PhysixFixtureDef(physixSystem).density(5).friction(0.2f).restitution(0.4f).shapeCircle(30);
+            playerBody.createFixture(fixtureDef);
+            player.add(playerBody);
+        });
+        engine.addEntity(player);
+        
+        
+        return player;
+    }
+
+    private void createDummyStartPoint() {
+
+        Entity start = engine.createEntity();
+        StartPointComponent startComp = engine.createComponent(StartPointComponent.class);
+        start.add(startComp);
+        engine.addEntity(start);
+        
+    }
+
+
+    private void createDummyEnemy() {
+
+        Entity enemy = engine.createEntity();
+
+        StartPointComponent startComp = engine.createComponent(StartPointComponent.class);
+        enemy.add(startComp);
+        
+        PositionComponent posComp = engine.createComponent(PositionComponent.class);
+        enemy.add(posComp);
+        
+        PathComponent pathComp = engine.createComponent(PathComponent.class);
+        pathComp.points.add(new Vector2(800,100));
+        pathComp.points.add(new Vector2(200,100));
+        enemy.add(pathComp);
+
+        EnemyBehaviourComponent behaviour = engine.createComponent(EnemyBehaviourComponent.class);
+        behaviour.currentState = new FollowPathEnemyState();
+        enemy.add(behaviour);
+
+        EnemyTypeComponent enemyType = engine.createComponent(EnemyTypeComponent.class);
+        enemy.add(enemyType);
+        
+        
+        PhysixModifierComponent modifyComponent = engine.createComponent(PhysixModifierComponent.class);
+        enemy.add(modifyComponent);        
+        modifyComponent.schedule(() -> {
+            PhysixBodyComponent enemyBody = engine.createComponent(PhysixBodyComponent.class);
+            PhysixBodyDef bodyDef = new PhysixBodyDef(BodyType.DynamicBody, physixSystem).position(200, 100).fixedRotation(true);
+            enemyBody.init(bodyDef, physixSystem, enemy);
+            PhysixFixtureDef fixtureDef = new PhysixFixtureDef(physixSystem).density(5).friction(0.2f).restitution(0.4f).shapeCircle(30);
+            enemyBody.createFixture(fixtureDef);
+            enemy.add(enemyBody);
+        });
+        
+        engine.addEntity(enemy);
+        
+    }
+
 }

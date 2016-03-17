@@ -19,6 +19,7 @@ public class ScoreComponent extends Component implements Pool.Poolable{
     @Override
     public void reset() {
         playedSeconds = 0;
+        bonbons=0;
         chocoCoins=0;
         bubblegums=0;
         killedEnemies=0;

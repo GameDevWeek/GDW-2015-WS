@@ -1,0 +1,14 @@
+{
+    "simpleRainbow":{
+        "vertex": "data/shaders/simpleRainbowVertexShader.glsl",
+        "fragment": "data/shaders/simpleRainbowFragmentShader.glsl"
+    },
+    "fancyRainbow":{
+        "vertex": "data/shaders/fancyRainbowVertexShader.glsl",
+        "fragment": "data/shaders/fancyRainbowFragmentShader.glsl"
+    },
+    "paparazzi":{
+        "vertex": "data/shaders/paparazziVertexShader.glsl",
+        "fragment": "data/shaders/paparazziFragmentShader.glsl"
+    }
+}

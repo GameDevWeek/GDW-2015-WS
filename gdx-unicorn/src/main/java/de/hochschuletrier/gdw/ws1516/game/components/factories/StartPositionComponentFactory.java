@@ -4,20 +4,21 @@ import com.badlogic.ashley.core.Entity;
 
 import de.hochschuletrier.gdw.commons.gdx.ashley.ComponentFactory;
 import de.hochschuletrier.gdw.commons.utils.SafeProperties;
-import de.hochschuletrier.gdw.ws1516.game.components.LiveComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PathComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.StartPointComponent;
 
-public class LiveComponentFactory extends ComponentFactory<EntityFactoryParam> {
+public class StartPositionComponentFactory extends ComponentFactory<EntityFactoryParam> {
 
     @Override
     public String getType() {
-        return "Lives";
+        return "StartPosition";
     }
 
     @Override
     public void run(Entity entity, SafeProperties meta, SafeProperties properties, EntityFactoryParam param) {
-        LiveComponent liveComp = engine.createComponent(LiveComponent.class);
-        liveComp.value = properties.getInt("value", 3);
-        entity.add(liveComp);
+        StartPointComponent component = engine.createComponent(StartPointComponent.class);
+
+        entity.add(component);
     }
 
 }

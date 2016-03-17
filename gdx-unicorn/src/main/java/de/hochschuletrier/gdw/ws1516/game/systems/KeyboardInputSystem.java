@@ -10,9 +10,15 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 
+import de.hochschuletrier.gdw.ws1516.events.BubblegumSpitSpawnEvent;
+import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
+import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
 import de.hochschuletrier.gdw.ws1516.game.Game;
+import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.LookDirection;
 
 public class KeyboardInputSystem extends IteratingSystem implements InputProcessor {
     private static final Logger logger = LoggerFactory.getLogger(KeyboardInputSystem.class);
@@ -21,9 +27,11 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
     private boolean hornAttack = false;
     private boolean fly = false;
     
-    private float direction = 0.0f;    
-
-
+    //for testing
+    private boolean stopflying=false;
+    
+    private float directionX,directionY  = 0.0f;    
+    public LookDirection lookDirection = MovementComponent.LookDirection.RIGHT;
     
     public KeyboardInputSystem(int priority) {
         super(Family.all(InputComponent.class, PlayerComponent.class).get(),priority);
@@ -40,15 +48,18 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
             case Input.Keys.UP:
             case Input.Keys.SPACE:
             case Input.Keys.W:
+                directionY -= 1.0f;
                 jump = true;
                 break;
             case Input.Keys.LEFT:
             case Input.Keys.A:
-                direction -= 1.0f;
+                directionX -= 1.0f;
+                lookDirection = MovementComponent.LookDirection.LEFT;
                 break;
             case Input.Keys.RIGHT:
             case Input.Keys.D:
-                direction += 1.0f;
+                directionX += 1.0f;
+                lookDirection = MovementComponent.LookDirection.RIGHT;
                 break;
             case Input.Keys.J:
                 hornAttack = true;
@@ -58,6 +69,10 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
                 break;
             case Input.Keys.L:
                 fly = true;
+                break;
+            case Input.Keys.S:
+            case Input.Keys.DOWN:
+                directionY +=1.0f;
                 break;
         }
         return true;
@@ -69,24 +84,36 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
             case Input.Keys.UP:
             case Input.Keys.SPACE:
             case Input.Keys.W:
+                directionY +=1.0f;
                 jump = false;
                 break;
             case Input.Keys.LEFT:
             case Input.Keys.A:
-                direction += 1.0f;
+                directionX += 1.0f;
                 break;
             case Input.Keys.RIGHT:
             case Input.Keys.D:
-                direction -= 1.0f;
+                directionX -= 1.0f;
                 break;
-            case Input.Keys.J:
-                hornAttack = false;
+                //for testing reasons
+            case Input.Keys.NUM_1:
+                fly=true;
+//                hornAttack = false;
+                break;
+                //for testing reasons
+            case Input.Keys.NUM_2:
+                stopflying=true;
+//                hornAttack = false;
                 break;
             case Input.Keys.K:
                 spit = false;
                 break;
             case Input.Keys.L:
                 fly = false;
+                break;
+            case Input.Keys.S:
+            case Input.Keys.DOWN:
+                directionY -=1.0f;
                 break;
         }
         return true;
@@ -124,14 +151,46 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        
         InputComponent input = entity.getComponent(InputComponent.class);
-        input.direction = direction;
-        input.fly = fly;
+        input.directionX = directionX;
+        input.directionY=directionY;
+        input.startFly = fly;
+        if(fly){
+            StartFlyEvent.emit(entity,10);
+            fly=false;
+        }
+//        if(stopflying){
+//            EndFlyEvent.emit(entity);
+//            fly=false;
+//            stopflying=false;
+//        }
         input.hornAttack = hornAttack;
-        input.jump = jump;
+        input.startJump = jump;
+        
+        //Spit button delta
+        input.oldSpit = input.spit;
         input.spit = spit;
-                
+         
+        //Spit cooldown
+        input.gumSpitCooldown -= deltaTime;
+        if (input.gumSpitCooldown <= 0)
+            input.gumSpitCooldown = 0;
+        
+        //Charge spit
+        if (input.spit && input.gumSpitCooldown == 0) 
+            input.gumSpitCharge += deltaTime;
+        
+        //Emit spit
+        if (input.gumSpitCooldown == 0 &&
+            (input.oldSpit && !input.spit) || (input.gumSpitCharge > GameConstants.SPIT_CHARGE_TIME_TO_MAX)) {
+            float force = (input.gumSpitCharge > GameConstants.SPIT_CHARGE_TIME_TO_MAX) ? 1.0f : input.gumSpitCharge / GameConstants.SPIT_CHARGE_TIME_TO_MAX;
+            BubblegumSpitSpawnEvent.emit(force);
+            input.gumSpitCooldown = GameConstants.SPIT_COOLDOWN;
+            input.gumSpitCharge = 0.0f;
+        }
+        
+        input.lookDirection = lookDirection;
+        
     }
 
     
