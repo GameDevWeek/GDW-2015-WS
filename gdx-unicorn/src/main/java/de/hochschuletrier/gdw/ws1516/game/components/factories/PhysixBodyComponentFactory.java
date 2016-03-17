@@ -175,6 +175,7 @@ public class PhysixBodyComponentFactory extends
         bodyComponent.createFixture(fixtureDef);
         bodyComponent.applyImpulse(0, 50000);
         entity.add(bodyComponent);
+        logger.debug("Circle body created");
     }
 
     private void addBox(EntityFactoryParam param, Entity entity,

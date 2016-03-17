@@ -42,7 +42,6 @@ public class BubblegumSpitListener extends PhysixContactAdapter {
         if (otherComponent == null ||
             otherComponent.getEntity() == null ||
             otherComponent.getEntity().getComponent(PlayerComponent.class) == null) {       
-            logger.debug("onHit called");
                 gumSpit.onHit.accept(myEntity);
         }
         
