@@ -30,6 +30,7 @@ import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
 import de.hochschuletrier.gdw.commons.tiled.LayerObject;
 import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.ws1516.Main;
+import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
 import de.hochschuletrier.gdw.ws1516.game.components.BubblegumSpitComponent;
@@ -57,6 +58,7 @@ import de.hochschuletrier.gdw.ws1516.game.systems.KeyboardInputSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.MapRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.MovementSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.NameSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.PlayerStateSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RespawnSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.ScoreSystem;
@@ -67,19 +69,25 @@ import de.hochschuletrier.gdw.ws1516.game.utils.EntityCreator;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.MapLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
+import de.hochschuletrier.gdw.ws1516.menu.MenuOptions;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.DummyEnemyExecutionSystem;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Game extends InputAdapter {
 
     private static final Logger logger = LoggerFactory.getLogger(Game.class);
-
+    
     private final CVarBool physixDebug = new CVarBool("physix_debug", true, 0, "Draw physix debug");
     private final Hotkey togglePhysixDebug = new Hotkey(() -> physixDebug.toggle(false), Input.Keys.F1,
             HotkeyModifier.CTRL);
     private final Hotkey scoreCheating = new Hotkey(() -> ScoreBoardEvent.emit(ScoreType.BONBON, 1), Input.Keys.F2,
             HotkeyModifier.CTRL);
+    
+
+    private final Hotkey rainbowMode = new Hotkey(()->RainbowEvent.emit(),Input.Keys.F3,HotkeyModifier.CTRL);
+
 
     private final PooledEngine engine = new PooledEngine(GameConstants.ENTITY_POOL_INITIAL_SIZE,
             GameConstants.ENTITY_POOL_MAX_SIZE, GameConstants.COMPONENT_POOL_INITIAL_SIZE,
@@ -122,8 +130,10 @@ public class Game extends InputAdapter {
     private final EnemyHandlingSystem enemyHandlingSystem = new EnemyHandlingSystem();
     private final EntitySystem enemyVisionSystem = new EnemyVisionSystem();
     private final ScoreSystem scoreBoardSystem = new ScoreSystem();
+    private final PlayerStateSystem playerStateSystem = new PlayerStateSystem();
 
     private TiledMap map;
+
 
     
     public Game() {
@@ -131,6 +141,11 @@ public class Game extends InputAdapter {
         if (!Main.IS_RELEASE) {
             togglePhysixDebug.register();
             scoreCheating.register();
+
+           
+
+            rainbowMode.register();
+
         }
 
     }
@@ -138,6 +153,7 @@ public class Game extends InputAdapter {
     public void dispose() {
         togglePhysixDebug.unregister();
         scoreCheating.unregister();
+        rainbowMode.unregister();
         Main.getInstance().console.unregister(physixDebug);
         
         engine.removeAllEntities();
@@ -170,10 +186,11 @@ public class Game extends InputAdapter {
         
         //test:
         EntityCreator.createEntity("unicorn", 700, 100);
-//        Entity entity=EntityCreator.createEntity("hunter", 1000, 100);
-//        PathComponent pathComponent =ComponentMappers.path.get(entity);
-//        pathComponent.points.add(new Vector2(1000, 100));
-//        pathComponent.points.add(new Vector2(800,100));
+        Entity entity=EntityCreator.createEntity("hunter", 1000, 100);
+        PathComponent pathComponent =ComponentMappers.path.get(entity);
+        pathComponent.points.add(new Vector2(1000, 100));
+        pathComponent.points.add(new Vector2(800,100));
+        Entity papa = EntityCreator.createEntity("tourist", 2000, 100);
     }
 
 
@@ -224,6 +241,7 @@ public class Game extends InputAdapter {
         engine.addSystem(scoreBoardSystem);
         engine.addSystem(bubblegumSpitSystem);
         engine.addSystem(bubbleGlueSystem);
+        engine.addSystem(playerStateSystem);
     }
 
     private void addContactListeners() {

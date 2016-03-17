@@ -8,20 +8,14 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
 
-import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
-import de.hochschuletrier.gdw.ws1516.game.components.HitPointsComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.StartPointComponent;
-import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.GameLogicTest;
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.HealEvent;
-import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
-import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
 import de.hochschuletrier.gdw.ws1516.events.TriggerEvent;
+import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.StartPointComponent;
 /*
  * TODO listeners für Objekte einsammeln und zählen in diesem hoch
  */
@@ -71,12 +65,12 @@ public class TriggerSystem extends EntitySystem implements TriggerEvent.Listener
         case SPAWN_ZONE:
                 StartPointComponent start = ComponentMappers.startPoint.get(unicorn);
                 PositionComponent triggerPos = ComponentMappers.position.get(triggeringEntity);
-                HitPointsComponent health = ComponentMappers.hp.get(unicorn);
+                PlayerComponent playerComp=ComponentMappers.player.get(unicorn);
 
                 start.x = triggerPos.x;
                 start.y = triggerPos.y;         
                 
-                HealEvent.emit(unicorn, health.max);
+                HealEvent.emit(unicorn, playerComp.maxHitpoints);
             break;
        
         case DEATH_ZONE:            

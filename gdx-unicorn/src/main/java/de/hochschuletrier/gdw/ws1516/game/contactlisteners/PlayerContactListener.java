@@ -8,9 +8,12 @@ import com.badlogic.ashley.core.PooledEngine;
 
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixContact;
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixContactAdapter;
+import de.hochschuletrier.gdw.ws1516.events.HornCollisionEvent;
+import de.hochschuletrier.gdw.ws1516.events.UnicornEnemyCollisionEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State;
+import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 
 public class PlayerContactListener extends PhysixContactAdapter{
     private static final Logger logger = LoggerFactory.getLogger(PlayerContactListener.class);
@@ -19,32 +22,55 @@ public class PlayerContactListener extends PhysixContactAdapter{
 
 
     public void beginContact(PhysixContact contact) {
-        Entity player = contact.getMyComponent().getEntity();
+        Entity myEntity = contact.getMyComponent().getEntity();
+
         if (contact.getOtherComponent() == null){
-            if(ComponentMappers.movement.get(player).state==State.FALLING||ComponentMappers.movement.get(player).state==State.JUMPING){
+            if(ComponentMappers.movement.get(myEntity).state==State.FALLING||ComponentMappers.movement.get(myEntity).state==State.JUMPING){
                 
                 //for Jumps:
-                if("foot".equals(contact.getMyFixture().getUserData())){       
-
+                if("foot".equals(contact.getMyFixture().getUserData())){
                     if(!contact.getOtherFixture().isSensor()){
-                        ComponentMappers.movement.get(player).state=MovementComponent.State.ON_GROUND;
+                        ComponentMappers.movement.get(myEntity).state=MovementComponent.State.ON_GROUND;
                     }
                         // TODO: Platfom, killsPlayerOnContact, ...
                 }
             }
-
             return;
         }
-        Entity otherEntity = contact.getOtherComponent().getEntity();
-        
+        Entity otherEntity=contact.getOtherComponent().getEntity();
         //for Jumps:
         if("foot".equals(contact.getMyFixture().getUserData())){       
 
             if(!contact.getOtherFixture().isSensor()){
-                ComponentMappers.movement.get(player).state=MovementComponent.State.ON_GROUND;
+                ComponentMappers.movement.get(myEntity).state=MovementComponent.State.ON_GROUND;
             }
                 // TODO: Platfom, killsPlayerOnContact, ...
         }
+        
+        //for UnicornEnemyCollision:
+        if(ComponentMappers.player.has(myEntity)&&ComponentMappers.enemyType.has(otherEntity)){
+            //TODO Hornattack
+            PlayerComponent player=myEntity.getComponent(PlayerComponent.class);
+            if(player.state==PlayerComponent.State.HORNATTACK&&"horn".equals(contact.getMyFixture().getUserData())){
+                HornCollisionEvent.emit(myEntity, otherEntity);
+                logger.debug("hornKollision {}");
+            }else{
+                UnicornEnemyCollisionEvent.emit(myEntity, otherEntity);
+                logger.debug("gegnerKollision {}");
+            }
+        }
+        if(ComponentMappers.enemyType.has(myEntity)&&ComponentMappers.player.has(otherEntity)){
+            PlayerComponent player=otherEntity.getComponent(PlayerComponent.class);
+            if(player.state==PlayerComponent.State.HORNATTACK&&"horn".equals(contact.getOtherFixture().getUserData())){
+                HornCollisionEvent.emit(otherEntity, myEntity);
+                logger.debug("hornKollision {}");
+            }else{
+                UnicornEnemyCollisionEvent.emit(myEntity, otherEntity);
+                logger.debug("gegnerKollision {}");
+            }
+        }
+
+        
         return;
     
     }
