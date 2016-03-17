@@ -112,6 +112,8 @@
                 { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Grafik Design", "delay": "2000" },
                 { "type": "text", "path" : "text", "style" : "text_left", "text": "Jeremy Baltat  ", "delay": "675" },
                 { "type": "text", "path" : "text", "style" : "text_right", "text": "  Loni", "delay": "0" },
+                { "type": "text", "path" : "text", "style" : "text_center", "text": "Sandra Weyand", "delay": "675" },
+
 
 
                 { "type": "text", "path" : "thanks", "group" : "title", "style" : "title_center", "text": "Thank you for playing!", "delay": "2000" }
