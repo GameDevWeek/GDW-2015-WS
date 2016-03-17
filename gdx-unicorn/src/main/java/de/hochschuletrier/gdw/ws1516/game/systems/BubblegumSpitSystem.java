@@ -12,9 +12,9 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.Filter;
 
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixBodyDef;
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixFixtureDef;
@@ -24,13 +24,12 @@ import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
 import de.hochschuletrier.gdw.ws1516.events.BubblegumSpitSpawnEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
-import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.BubbleGlueComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.BubblegumSpitComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent.AnimationState;
+import de.hochschuletrier.gdw.ws1516.game.components.TextureComponent;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityCreator;
 
 /**
@@ -38,18 +37,15 @@ import de.hochschuletrier.gdw.ws1516.game.utils.EntityCreator;
  * @author Eileen
  * @version 1.0
  */
-public class BubblegumSpitSystem extends EntitySystem implements BubblegumSpitSpawnEvent.Listener {
+public class BubblegumSpitSystem extends IteratingSystem implements BubblegumSpitSpawnEvent.Listener {
     private static final Logger logger = LoggerFactory.getLogger(BubblegumSpitSystem.class);
-
     private PooledEngine engine;
-    
-    public BubblegumSpitSystem(PooledEngine e) {
-        super(0);
-        this.engine = e;
-    }
 
-    public BubblegumSpitSystem(int priority) {
-        super(priority);
+    public BubblegumSpitSystem(PooledEngine engine) {
+        super(Family.all(BubblegumSpitComponent.class,
+                         PositionComponent.class,
+                         PhysixBodyComponent.class).get());
+        this.engine = engine;
     }
 
     @Override
@@ -62,6 +58,17 @@ public class BubblegumSpitSystem extends EntitySystem implements BubblegumSpitSp
         BubblegumSpitSpawnEvent.unregister(this);
     }
 
+    @Override
+    protected void processEntity(Entity entity, float deltaTime) {
+        PositionComponent position = ComponentMappers.position.get(entity);
+        PhysixBodyComponent body = ComponentMappers.physixBody.get(entity);
+        
+        if (position != null && body != null) {
+            position.rotation = body.getLinearVelocity().angle();
+        }
+        
+    }
+    
     @Override
     public void onSpawnBubblegumSpit(final float force) {
         
@@ -86,7 +93,8 @@ public class BubblegumSpitSystem extends EntitySystem implements BubblegumSpitSp
         spitComponent.onHit = this::removeBubblegumSpit;
         
         //Calculate spit impulse
-        float impulseForce = (1.0f - force) * GameConstants.SPIT_FORCE_MIN + (force * GameConstants.SPIT_FORCE_MAX);
+        float spitForceDelta = GameConstants.SPIT_FORCE_MAX - GameConstants.SPIT_FORCE_MIN;
+        float impulseForce = GameConstants.SPIT_FORCE_MIN + force * spitForceDelta;
         float impulseX = (float) Math.cos(GameConstants.SPIT_SPAWN_ANGLE) * playerLookCosine;
         float impulseY = (float) Math.sin(GameConstants.SPIT_SPAWN_ANGLE);
         
@@ -115,10 +123,16 @@ public class BubblegumSpitSystem extends EntitySystem implements BubblegumSpitSp
             spitBodyComponent.createFixture(fixtureDef);
             
             //Force gum spit
-            float spitForceDelta = GameConstants.SPIT_FORCE_MAX - GameConstants.SPIT_FORCE_MIN;
-            float spitForce = GameConstants.SPIT_FORCE_MIN + force * spitForceDelta;
-            spitBodyComponent.applyImpulse(impulseX * spitForce, impulseY * spitForce);
+            spitBodyComponent.applyImpulse(impulseX * impulseForce, impulseY * impulseForce);
             spitBodyComponent.setGravityScale(1.0f);
+            
+            //Set flip in sprite
+            TextureComponent texture = ComponentMappers.texture.get(gumSpitEntity);
+            if (playerMove.lookDirection == MovementComponent.LookDirection.RIGHT) {
+                texture.flipHorizontal = false;
+            } else {
+                texture.flipHorizontal = true;
+            }
             
             //Add body to entity
             gumSpitEntity.add(spitBodyComponent);
