@@ -13,14 +13,13 @@ import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent.State;
+import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerContactListener;
 import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
 
 public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.Listener,HornAttackEvent.Listener{
 
-    private static final Logger logger = LoggerFactory
-            .getLogger(PlayerStateSystem.class);
-    
+    private static final Logger logger = LoggerFactory.getLogger(PlayerStateSystem.class);
     public PlayerStateSystem() {
         super(Family.all(PlayerComponent.class).get());
     }
@@ -29,12 +28,14 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
         RainbowEvent.register(this);
+        HornAttackEvent.register(this);
     }
     
     @Override
     public void removedFromEngine(Engine engine) {
         super.removedFromEngine(engine);
         RainbowEvent.unregister(this);
+        HornAttackEvent.unregister(this);
     }
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
