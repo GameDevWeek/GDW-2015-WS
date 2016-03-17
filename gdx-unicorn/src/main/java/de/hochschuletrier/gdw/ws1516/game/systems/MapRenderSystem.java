@@ -164,8 +164,6 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
         cameraSystem.setCameraBounds(0, 0, (int)mapWidth, (int)mapHeight);
         
         backgroundTexture = Main.getInstance().getAssetManager().getTexture(backgroundGraphic);
-        horizontalParallaxMultiplier = (mapWidth - backgroundTexture.getWidth())/(mapWidth - Gdx.graphics.getWidth());
-        verticalParallaxMultiplier = (mapHeight - backgroundTexture.getHeight())/(mapHeight - Gdx.graphics.getHeight());
     }
 
     @Override
@@ -180,10 +178,18 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
     
     private void renderBackground(float deltaTime)
     {
+        float textureSizeMultiplier = 1f;
+        while(backgroundTexture.getWidth() * textureSizeMultiplier < Gdx.graphics.getWidth() || backgroundTexture.getHeight() * textureSizeMultiplier < Gdx.graphics.getHeight())
+        {
+            textureSizeMultiplier += 1f;
+        }
+        
+        horizontalParallaxMultiplier = (mapWidth - backgroundTexture.getWidth() * textureSizeMultiplier)/(mapWidth - Gdx.graphics.getWidth());
+        verticalParallaxMultiplier = (mapHeight - backgroundTexture.getHeight() * textureSizeMultiplier)/(mapHeight - Gdx.graphics.getHeight());
         float xPosition = (CameraSystem.getCameraPosition().x - Gdx.graphics.getWidth() * 0.5f) * horizontalParallaxMultiplier;
         float yPosition = (CameraSystem.getCameraPosition().y - Gdx.graphics.getHeight() * 0.5f) * verticalParallaxMultiplier;
 
-        DrawUtil.draw(backgroundTexture, xPosition, yPosition, backgroundTexture.getWidth(), backgroundTexture.getHeight());
+        DrawUtil.draw(backgroundTexture, xPosition, yPosition, backgroundTexture.getWidth() * textureSizeMultiplier, backgroundTexture.getHeight() * textureSizeMultiplier);
         
         if(rainbowDurationLeft > 0.0f)
         {
