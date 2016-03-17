@@ -46,7 +46,7 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         RainbowEvent.unregister(this);
         HornAttackEvent.unregister(this);
         StartFlyEvent.unregister(this);
-        EndFlyEvent.register(this);
+        EndFlyEvent.unregister(this);
     }
     
     @Override
