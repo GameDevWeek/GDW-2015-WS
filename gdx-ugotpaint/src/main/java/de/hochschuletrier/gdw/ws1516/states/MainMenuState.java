@@ -64,7 +64,7 @@ public class MainMenuState extends BaseGameState {
 
     @Override
     public void onEnter(BaseGameState previousState) {
-        menuPageRoot.fadeToMenu();
+        menuPageRoot.fadeToMenuInstant();
     }
     
     @Override
