@@ -31,6 +31,7 @@ public class RenderSystem extends SortedSubIteratingSystem {
         addSubSystem(backgroundParticleRenderSystem);
         animationRenderSystem = new AnimationRenderSystem();
         addSubSystem(animationRenderSystem);
+        addSubSystem(new TextureRenderSystem());
         particleRenderSystem = new ParticleRenderSystem();
         addSubSystem(particleRenderSystem);
     }

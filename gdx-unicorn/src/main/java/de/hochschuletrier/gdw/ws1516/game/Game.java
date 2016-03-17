@@ -306,7 +306,7 @@ public class Game extends InputAdapter {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
         Vector2 screenCoords = new Vector2(screenX, screenY);
-        Vector2 worldCoords = cameraSystem.screenToWorldCoordinates(screenCoords);
+        Vector2 worldCoords = CameraSystem.screenToWorldCoordinates(screenCoords);
 
         if (button == 0)
             EntityCreator.createEntity("circle", worldCoords.x, worldCoords.y);
