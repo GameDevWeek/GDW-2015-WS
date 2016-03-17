@@ -42,26 +42,27 @@ public class EntityLoader implements MapLoader {
     }
 
     private void addEntity(PooledEngine engine, LinkedList<String> names, LayerObject obj) {
-        String name = obj.getProperty("entity_type", null);
+        String entity_type = obj.getProperty("entity_type", null);
 
-        if (name != null) {
-            final String path = obj.getProperty("path", null);
+        if (entity_type != null) {
+            final String name = obj.getProperty("name", null);
             final float x = obj.getX() + obj.getWidth() * 0.5f;
             final float y = obj.getY() - obj.getHeight() * 0.5f;
             final float speed = obj.getFloatProperty("speed", 0.f);
             final boolean loop = obj.getBooleanProperty("loop", false);
-            Entity e = EntityCreator.createEntity(name, path, x, y, speed, loop);
+            final String path = obj.getProperty("path",null);
+            Entity e = EntityCreator.createEntity(entity_type, name, x, y, speed, loop);
             NameComponent nc = engine.createComponent(NameComponent.class);
-            nc.name = path;
+            nc.name = name;
             e.add(nc);
-            if (name.equals("path")) {
+            if (entity_type.equals("path")) {
                 PathComponent pc = ComponentMappers.path.get(e);
                 for (Point p : obj.getPoints()) {
                     pc.points.add(new Vector2(p.x, p.y));
                 }
                 logger.info("{}", e.getComponent(PathComponent.class).points);
             }
-            names.add(name);
+            names.add(entity_type);
         }
     }
 

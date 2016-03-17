@@ -183,23 +183,26 @@ public class Game extends InputAdapter {
         EntityCreator.setGame(this);
         EntityCreator.setEntityFactory(entityFactory);
         
-        loadMap("data/maps/demo_level_worked.tmx");
+        loadMap("data/maps/demo_level_worked_nurMap.tmx");
         mapRenderSystem.initialzeRenderer(map, cameraSystem);
         
         //test:
-        Entity unicorn = EntityCreator.createEntity("unicorn", 1300, 300);
+        Entity unicorn = EntityCreator.createEntity("unicorn", 700, 100);
         Entity entity=EntityCreator.createEntity("hunter", 1000, 100);
         PathComponent pathComponent =ComponentMappers.path.get(entity);
         pathComponent.points.add(new Vector2(1000, 100));
         pathComponent.points.add(new Vector2(800,100));
-        Entity papa = EntityCreator.createEntity("tourist", 1700, 100);
+        Entity papa = EntityCreator.createEntity("tourist", 2000, 100);
+<<<<<<< HEAD
         
         healCheating = new Hotkey(() -> HealEvent.emit(unicorn, 1), Input.Keys.F4,
         HotkeyModifier.CTRL);
         healCheating.register();
+=======
         pathComponent =ComponentMappers.path.get(papa);
         pathComponent.points.add(new Vector2(2000, 100));
         pathComponent.points.add(new Vector2(2200,100));
+>>>>>>> c60d13506fdcb5d0537df8050b690716a43f680a
     }
 
 
