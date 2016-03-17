@@ -47,6 +47,7 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         playerComp.stateTimer = Math.max(playerComp.stateTimer - deltaTime, 0);
         playerComp.hornAttackCooldown = Math.max(playerComp.hornAttackCooldown - deltaTime, 0);
         playerComp.invulnerableTimer = Math.max(playerComp.invulnerableTimer - deltaTime, 0);
+        logger.info(playerComp.state.toString());
         if (playerComp.stateTimer <= 0.0f) {
             if (playerComp.state == State.HORNATTACK) {
                 HornAttackEvent.stop(entity);
@@ -77,9 +78,11 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
     @Override
     public void onHornAttackStart(Entity player) {
         if (getEntities().size()>0){
-        PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
-        playerComp.state = State.HORNATTACK;
-        playerComp.stateTimer = GameConstants.HORN_MODE_TIME;
+            PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
+            playerComp.state = State.HORNATTACK;
+            playerComp.stateTimer = GameConstants.HORN_MODE_TIME;
+            playerComp.hornAttackCooldown = GameConstants.HORN_MODE_TIME;
+            
         }
     }
     
@@ -87,8 +90,8 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
     public void onHornAttackStop(Entity player) {
 
         if (getEntities().size()>0){
-        PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
-        playerComp.hornAttackCooldown = GameConstants.HORN_MODE_COOLDOWN;
+            PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
+            playerComp.hornAttackCooldown = GameConstants.HORN_MODE_COOLDOWN;
         }
     }
     
