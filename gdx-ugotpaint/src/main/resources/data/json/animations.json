@@ -24,7 +24,7 @@
         "rows" : 1
     },
     "projectile_red": {
-        "filename": "data/animations/segment_red.png",
+        "filename": "data/animations/projectile_red.png",
         "frames" : 1,
         "frameDuration": [0.15],
         "playType" : "LOOP",
@@ -32,7 +32,7 @@
         "rows" : 1
     },
     "projectile_blue": {
-        "filename": "data/animations/segment_blue.png",
+        "filename": "data/animations/projectile_blue.png",
         "frames" : 1,
         "frameDuration": [0.15],
         "playType" : "LOOP",
