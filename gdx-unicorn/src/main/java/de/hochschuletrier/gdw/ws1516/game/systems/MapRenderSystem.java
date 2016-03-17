@@ -1,5 +1,6 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -15,6 +17,8 @@ import com.badlogic.gdx.utils.TimeUtils;
 import de.hochschuletrier.gdw.commons.devcon.ConsoleCmd;
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarBool;
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarFloat;
+import de.hochschuletrier.gdw.commons.gdx.input.hotkey.Hotkey;
+import de.hochschuletrier.gdw.commons.gdx.input.hotkey.HotkeyModifier;
 import de.hochschuletrier.gdw.commons.gdx.tiled.TiledMapRendererGdx;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.commons.resourcelocator.CurrentResourceLocator;
@@ -38,8 +42,10 @@ public class MapRenderSystem extends IteratingSystem {
     
     private final HashMap<TileSet, Texture> tilesetImages = new HashMap<>();
     
-    private final CVarBool fancyRainbow = new CVarBool("fancyRainbow", false, 0, "sets fancy rainbowmode");
+    private final CVarBool fancyRainbow = new CVarBool("fancyRainbow", true, 0, "sets fancy rainbowmode");
     private final ConsoleCmd rainbow = new ConsoleCmd("rainbow", 0, "Usage: rainbow [duration] - Activates rainbow mode for [duration] seconds") { @Override public void execute(List<String> args) { startRainbow(args); } };
+    private final Hotkey rainbowHotkey = new Hotkey(() -> startRainbow(), Input.Keys.R, HotkeyModifier.CTRL);
+    private final Hotkey fancyRainbowHotkey = new Hotkey(() -> fancyRainbow.set(!fancyRainbow.get(), true), Input.Keys.T, HotkeyModifier.CTRL);
     private final CVarFloat rainbowFrequency = new CVarFloat("rainbowFrequency", GameConstants.RAINBOW_FREQUENCY, 0.0f, Float.MAX_VALUE, 0, "");
     private final CVarFloat rainbowAlpha = new CVarFloat("rainbowAlpha", GameConstants.RAINBOW_ALPHA, 0.0f, Float.MAX_VALUE, 0, "");
     
@@ -57,6 +63,8 @@ public class MapRenderSystem extends IteratingSystem {
         Main.getInstance().console.register(rainbowFrequency);
         Main.getInstance().console.register(rainbowAlpha);
         Main.getInstance().console.register(fancyRainbow);
+        rainbowHotkey.register();
+        fancyRainbowHotkey.register();
     }
     
     @Override
@@ -67,6 +75,8 @@ public class MapRenderSystem extends IteratingSystem {
         Main.getInstance().console.unregister(rainbowFrequency);
         Main.getInstance().console.unregister(rainbowAlpha);
         Main.getInstance().console.unregister(fancyRainbow);
+        rainbowHotkey.unregister();
+        fancyRainbowHotkey.unregister();
     }
 
     @Override
@@ -101,6 +111,13 @@ public class MapRenderSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         // No entities to process
+    }
+    
+    protected void startRainbow()
+    {
+        List<String> duration = new ArrayList<>();
+        duration.add(GameConstants.RAINBOW_DURATION + "");
+        startRainbow(duration);
     }
 
     protected void startRainbow(List<String> args) {
