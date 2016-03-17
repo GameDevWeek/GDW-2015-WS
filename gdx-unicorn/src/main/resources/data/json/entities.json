@@ -12,10 +12,14 @@
             "Input":{},
             "Player":{},
             "Movable":{
-                "state":"on_ground"
+                "state": "on_ground"
                 },
             "Animation": {
-                "animation": "unicorn_idle"
+                "on_ground_idle": "unicorn_idle",
+                "on_ground_walking": "unicorn_walking",
+                "flying": "unicorn_flying",
+                "falling": "unicorn_falling", 
+                "jumping": "unicorn_jumping"
             },
             "PhysixBody": {
                 "type": "player",
@@ -27,6 +31,9 @@
             "CameraTarget": {},
             "RenderLayer": {
                 "layer": 100
+            },
+            "BackgroundParticle": {
+                "effect": "test"
             }
         }
     },
@@ -45,7 +52,11 @@
 		"cooldown":0.5
 	    },
             "Animation": {
-                "animation": "hunter_walking"
+                "on_ground_idle": "hunter_walking",
+                "on_ground_walking": "hunter_walking",
+                "flying": "hunter_walking",
+                "falling": "hunter_walking",
+                "jumping": "hunter_walking"
             },
             "PhysixBody": {
                 "type": "enemy",
@@ -74,7 +85,11 @@
 		"cooldown":1.5
 	    },
             "Animation": {
-                "animation": "paparazzi_walking"
+                "on_ground_idle": "paparazzi_walking",
+                "on_ground_walking": "paparazzi_walking",
+                "flying": "paparazzi_walking",
+                "falling": "paparazzi_walking",
+                "jumping": "paparazzi_walking"
             },
             "PhysixBody": {
                 "type": "enemy",

@@ -1,4 +1,8 @@
 {
+    "oldRainbow":{
+        "vertex": "data/shaders/oldRainbowVertexShader.glsl",
+        "fragment": "data/shaders/oldRainbowFragmentShader.glsl"
+    },
     "simpleRainbow":{
         "vertex": "data/shaders/simpleRainbowVertexShader.glsl",
         "fragment": "data/shaders/simpleRainbowFragmentShader.glsl"

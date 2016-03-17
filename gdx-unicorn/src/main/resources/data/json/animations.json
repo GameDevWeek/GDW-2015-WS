@@ -16,12 +16,12 @@
         "rows" : 1
     },
     "unicorn_walking": {
-        "filename": "data/graphics/unicorn_s.png",
-        "frames" : 1,
-        "frameDuration": [0.15],
+        "filename": "data/graphics/spritesheets/unicorn_running_pink_spritesheet.png",
+        "frames" : 8,
+        "frameDuration": [0.10],
         "playType" : "LOOP",
-        "columns": 1,
-        "rows" : 1
+        "columns": 4,
+        "rows" : 2
     },
     "unicorn_idle": {
         "filename": "data/graphics/unicorn_s.png",
@@ -38,6 +38,22 @@
         "playType" : "LOOP",
         "columns": 1,
         "rows" : 1
+    },
+    "unicorn_flying": {
+        "filename": "data/graphics/unicorn_s.png",
+        "frames": 1,
+        "frameDuration": [0.15],
+        "playType": "LOOP",
+        "columns": 1,
+        "rows": 1
+    },
+    "unicorn_jumping": {
+        "filename": "data/graphics/unicorn_s.png",
+        "frames": 1,
+        "frameDuration": [0.15],
+        "playType": "LOOP",
+        "columns": 1,
+        "rows": 1
     },
     
     "walking": {
