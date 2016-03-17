@@ -83,7 +83,7 @@ public class BubblegumSpitSystem extends EntitySystem implements BubblegumSpitSp
         //Set callback's
         BubblegumSpitComponent spitComponent = ComponentMappers.bubblegumSpitComponent.get(gumSpitEntity);
         spitComponent.onEnemyHit = this::makeBubbleGlue;
-        spitComponent.onHit = (gum) -> logger.debug("onHitCalled");
+        spitComponent.onHit = this::removeBubblegumSpit;
         
         //Calculate spit impulse
         float impulseForce = (1.0f - force) * GameConstants.SPIT_FORCE_MIN + (force * GameConstants.SPIT_FORCE_MAX);
@@ -148,7 +148,6 @@ public class BubblegumSpitSystem extends EntitySystem implements BubblegumSpitSp
     }
     
     private void removeBubblegumSpit(Entity gum) {
-        logger.debug("removed");
         engine.removeEntity(gum);
     }
     

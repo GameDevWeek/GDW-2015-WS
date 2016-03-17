@@ -130,6 +130,9 @@
         "meta": {},
         "components": {
             "Position": {},
+            "Texture": {
+                "texture": "gum_spit_pink"
+            },
             "BubblegumSpitComponent" : {}
         }
     },
