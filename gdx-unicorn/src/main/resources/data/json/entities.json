@@ -33,7 +33,7 @@
                 "layer": 100
             },
             "BackgroundParticle": {
-                "effect": "test"
+                "effect": "unicornWalking"
             }
         }
     },
