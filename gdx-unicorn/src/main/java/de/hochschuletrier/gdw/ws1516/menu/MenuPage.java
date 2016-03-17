@@ -116,7 +116,7 @@ public class MenuPage extends Group {
         ImageButton ib;
         if(tintable==true) {
             Sprite downSprite = new Sprite(texture);
-            downSprite.setColor(Color.BLUE);
+            downSprite.setColor(Color.MAGENTA);
             // NICHT GUT FÜR PERFORMANCE!!
             ib = new ImageButton(new SpriteDrawable(new Sprite(texture)), new SpriteDrawable(downSprite));
         }
