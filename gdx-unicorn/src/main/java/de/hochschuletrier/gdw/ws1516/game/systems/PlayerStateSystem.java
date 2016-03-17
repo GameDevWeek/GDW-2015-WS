@@ -67,7 +67,7 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
             }
             playerComp.state=State.RAINBOW;
             playerComp.stateTimer=GameConstants.RAINBOW_MODE_TIME;
-            movementComp.speed=GameConstants.PLAYER_SPEED*150f;
+            movementComp.speed=GameConstants.PLAYER_SPEED*GameConstants.RAINBOW_SPEED_MODIFIER;
         }
     }
 
