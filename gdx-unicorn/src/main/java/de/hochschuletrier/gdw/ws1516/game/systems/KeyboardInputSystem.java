@@ -12,12 +12,15 @@ import com.badlogic.gdx.InputProcessor;
 
 import de.hochschuletrier.gdw.ws1516.events.BubblegumSpitSpawnEvent;
 import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
+import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
+import de.hochschuletrier.gdw.ws1516.events.HornCollisionEvent;
 import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent.State;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.LookDirection;
 
 public class KeyboardInputSystem extends IteratingSystem implements InputProcessor {
@@ -105,6 +108,10 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
                 stopflying=true;
 //                hornAttack = false;
                 break;
+            case Input.Keys.NUM_3:
+                hornAttack=true;
+//                hornAttack = false;
+                break;
             case Input.Keys.K:
                 spit = false;
                 break;
@@ -164,6 +171,11 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
 //            fly=false;
 //            stopflying=false;
 //        }
+        if(hornAttack){
+            logger.debug("sollte horn Starten{}");
+            HornAttackEvent.start();
+            hornAttack=false;
+        }
         input.hornAttack = hornAttack;
         input.startJump = jump;
         

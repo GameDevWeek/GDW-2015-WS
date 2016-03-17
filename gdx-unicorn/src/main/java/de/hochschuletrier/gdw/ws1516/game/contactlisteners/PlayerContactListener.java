@@ -8,10 +8,12 @@ import com.badlogic.ashley.core.PooledEngine;
 
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixContact;
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixContactAdapter;
+import de.hochschuletrier.gdw.ws1516.events.HornCollisionEvent;
 import de.hochschuletrier.gdw.ws1516.events.UnicornEnemyCollisionEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State;
+import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 
 public class PlayerContactListener extends PhysixContactAdapter{
     private static final Logger logger = LoggerFactory.getLogger(PlayerContactListener.class);
@@ -47,7 +49,25 @@ public class PlayerContactListener extends PhysixContactAdapter{
         
         //for UnicornEnemyCollision:
         if(ComponentMappers.player.has(myEntity)&&ComponentMappers.enemyType.has(otherEntity)){
-            UnicornEnemyCollisionEvent.emit(myEntity, otherEntity);
+            //TODO Hornattack
+            PlayerComponent player=myEntity.getComponent(PlayerComponent.class);
+            if(player.state==PlayerComponent.State.HORNATTACK&&"horn".equals(contact.getMyFixture().getUserData())){
+                HornCollisionEvent.emit(myEntity, otherEntity);
+                logger.debug("hornKollision {}");
+            }else{
+                UnicornEnemyCollisionEvent.emit(myEntity, otherEntity);
+                logger.debug("gegnerKollision {}");
+            }
+        }
+        if(ComponentMappers.enemyType.has(myEntity)&&ComponentMappers.player.has(otherEntity)){
+            PlayerComponent player=otherEntity.getComponent(PlayerComponent.class);
+            if(player.state==PlayerComponent.State.HORNATTACK&&"horn".equals(contact.getOtherFixture().getUserData())){
+                HornCollisionEvent.emit(otherEntity, myEntity);
+                logger.debug("hornKollision {}");
+            }else{
+                UnicornEnemyCollisionEvent.emit(myEntity, otherEntity);
+                logger.debug("gegnerKollision {}");
+            }
         }
 
         
