@@ -1,5 +1,6 @@
 package de.hochschuletrier.gdw.ws1516.menu;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -19,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+
 
 
 
@@ -114,7 +116,7 @@ public class MenuPage extends Group {
         return button;
     }
     
-    protected ImageButton createImageButton(Texture texture, float x, float y, float width, float height, Runnable runnable, boolean addToActor, boolean tintable) {
+    protected ImageButton createImageButton(Texture texture, float x, float y, float width, float height, Runnable runnable, String sound, boolean addToActor, boolean tintable) {
         
         ImageButton ib;
         if(tintable==true) {
@@ -131,6 +133,7 @@ public class MenuPage extends Group {
         ib.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                SoundEmitter.playGlobal(assetManager.getSound(sound), false);
                 runnable.run();
             }
         });
