@@ -12,6 +12,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.ws1516.events.GameRespawnEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.StartPointComponent;
@@ -44,9 +45,15 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
     @Override
     public void onGameRepawnEvent() {
         PlayerComponent playerComp = ComponentMappers.player.get(player);
+        MovementComponent move= ComponentMappers.movement.get(player);
         if ( playerComp != null )
         {
             playerComp.doRespawn = true;
+            if ( move != null )
+            {
+                move.reset();
+            }
+            
         }else
         {
             logger.warn("No Player or no RespawnPoint set");
