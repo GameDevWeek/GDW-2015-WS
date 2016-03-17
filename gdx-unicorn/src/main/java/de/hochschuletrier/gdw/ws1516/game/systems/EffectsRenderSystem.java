@@ -9,15 +9,17 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.TextureAtlasData.Region;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import de.hochschuletrier.gdw.commons.devcon.ConsoleCmd;
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarFloat;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.Main;
-import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.components.CameraTargetComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 
 
@@ -29,23 +31,30 @@ public class EffectsRenderSystem extends IteratingSystem {
     private float paparazziDurationLeft;
     private float paparazziStartDuration;
     
-    private Texture effectsOverlay;
+    private Vector2 cameraTargetScreenPos;
     
-    private final ConsoleCmd paparazzi = new ConsoleCmd("pap", 0, "Usage: paparazzi [duration] - Activates paparazzi mode for [duration] seconds") { @Override public void execute(List<String> args) { startPaparazzi(args); } };
-    private final CVarFloat paparazziIntensity = new CVarFloat("paparazziIntensity", GameConstants.PAPARAZZI_INTENSITY, 0.0f, Float.MAX_VALUE, 0, "");
-    private final CVarFloat paparazziAlpha = new CVarFloat("paparazziAlpha", GameConstants.PAPARAZZI_ALPHA, 0.0f, Float.MAX_VALUE, 0, "");
+    private Texture effectsScreenOverlay;
+    
+    private final ConsoleCmd paparazzi = new ConsoleCmd("pap", 0, "Usage: pap (duration) - Activates paparazzi mode for (duration) seconds") { @Override public void execute(List<String> args) { startPaparazzi(args); } };
+    private final CVarFloat paparazziIntensity = new CVarFloat("paparazziIntensity", 1.0f, 0.0f, Float.MAX_VALUE, 0, "");
+    private float currentPaparazziSeed;
 
     @SuppressWarnings("unchecked")
     public EffectsRenderSystem(int priority) {
-        super(Family.all().get(), priority);
+        super(Family.all(CameraTargetComponent.class, PositionComponent.class).get(), priority);
+        
+        cameraTargetScreenPos = new Vector2( (float) (Gdx.graphics.getWidth()* 0.5), (float) (Gdx.graphics.getHeight() * 0.5) );
         
         // DEBUG
-        this.effectsOverlay = new Texture(Gdx.files.getFileHandle("data/graphics/trex.png", FileType.Local));
+        this.effectsScreenOverlay = new Texture(Gdx.files.getFileHandle("data/graphics/trex.png", FileType.Local));
     }
     
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-
+        // save camera target position to set paparazzi effect save circle around player        
+        PositionComponent targetPos = ComponentMappers.position.get(entity);
+        cameraTargetScreenPos = CameraSystem.worldToScreenCoordinates(targetPos.x, targetPos.y);
+        //System.out.println("screenX: " + cameraTargetScreenPos.x + " (worldX: " + targetPos.x + ") # screenY: " + cameraTargetScreenPos.y + " worldY: " + targetPos.y);
     }
     
     @Override
@@ -54,7 +63,6 @@ public class EffectsRenderSystem extends IteratingSystem {
         //DEBUG
         Main.getInstance().console.register(paparazzi);
         Main.getInstance().console.register(paparazziIntensity);
-        Main.getInstance().console.register(paparazziAlpha);
         
         super.addedToEngine(engine);
     }
@@ -65,9 +73,13 @@ public class EffectsRenderSystem extends IteratingSystem {
         //DEBUG
         Main.getInstance().console.unregister(paparazzi);
         Main.getInstance().console.unregister(paparazziIntensity);
-        Main.getInstance().console.unregister(paparazziAlpha);
         
         super.removedFromEngine(engine);
+    }
+    
+    private Vector2 cameraScreenToShaderScreenCoords(Vector2 in)
+    {
+        return new Vector2(in.x, Gdx.graphics.getHeight() - in.y);
     }
     
     @Override
@@ -82,14 +94,23 @@ public class EffectsRenderSystem extends IteratingSystem {
             {
                 float[] dimensions = new float[]{ Gdx.graphics.getWidth(), Gdx.graphics.getHeight() };
                 shader.setUniform2fv("u_frameDimension", dimensions, 0, 2);
+                
                 shader.setUniformf("u_startDuration", paparazziStartDuration);
                 shader.setUniformf("u_durationLeft", paparazziDurationLeft);
-                shader.setUniformf("u_paparazziAlpha", paparazziAlpha.get());
+
+                float[] paparazziColor = new float[]{ 1.0f, 0.0f, 0.0f, 1.0f };
+                shader.setUniform4fv("u_paparazziColor", paparazziColor, 0, 4);
+                float[] paparazziSeed = new float[]{ currentPaparazziSeed, currentPaparazziSeed };
+                shader.setUniform2fv("u_paparazziSeed", paparazziSeed, 0, 2);
+                Vector2 shaderCoords = cameraScreenToShaderScreenCoords(cameraTargetScreenPos);
+                float[] paparazziOverlaySafeCircle = new float[]{shaderCoords.x, shaderCoords.y , 100.0f };
+                shader.setUniform3fv("u_paparazziOverlaySafeCircle", paparazziOverlaySafeCircle, 0, 3);
                 shader.setUniformf("u_paparazziIntensity", paparazziIntensity.get());
+                
                 shader.setUniformf("u_time", (float)TimeUtils.timeSinceMillis(startTime) * 0.001f);
             }
             
-            DrawUtil.batch.draw(effectsOverlay, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            DrawUtil.batch.draw(effectsScreenOverlay, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             DrawUtil.batch.flush();
         }
         
@@ -99,9 +120,10 @@ public class EffectsRenderSystem extends IteratingSystem {
     }
 
     protected void startPaparazzi(List<String> args) {
+        final float stdDuration = 2.0f;
         if(args.size() <= 1)
         {
-            paparazziStartDuration = 5.0f;
+            paparazziStartDuration = stdDuration;
         }
         else
         {
@@ -111,11 +133,14 @@ public class EffectsRenderSystem extends IteratingSystem {
             }
             catch(Exception e)
             {
-                paparazziStartDuration = 5.0f;
+                paparazziStartDuration = stdDuration;
             }
         }
         paparazziDurationLeft = paparazziStartDuration;
         startTime = TimeUtils.millis();
+        
+        currentPaparazziSeed += 0.2;
+        currentPaparazziSeed = currentPaparazziSeed % Float.MAX_VALUE;
     }
 
 }

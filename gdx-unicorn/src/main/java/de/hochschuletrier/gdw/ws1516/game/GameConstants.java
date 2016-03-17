@@ -32,6 +32,7 @@ public class GameConstants {
     public static final float PLAYER_SPEED = 250.0f;
     public static final float PLAYER_JUMP_IMPULSE = -1250.0f;
     public static final float THROWBACK_FORCE = 1000.0f;
+    public static final float HORNATTACK_IMPULSE=1500.0f;
     
     //Effect Times
     public static final float FLYING_TIME= 10.0f;
@@ -76,7 +77,6 @@ public class GameConstants {
     //EnemyBehaviour
     public static final int ENEMY_FRAME_JUMP_BUFFER = 60; /// no longer used??
     public static final int HUNTER_BULLET_OFFSET = (int)TILESIZE_X;
-    //shaderParameter
 
     // Shader parameters
     public static final float RAINBOW_FREQUENCY = 2.0f;
