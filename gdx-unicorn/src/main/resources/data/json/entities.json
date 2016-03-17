@@ -4,7 +4,11 @@
         "components": {
             "ScoreBoard":{},
             "StartPosition":{},
-            "Position": {},
+            "Position": { 
+		"maxHitpoints":3,
+		"hitpoints":3,
+		"lives":3
+            },
             "Input":{},
             "Player":{},
             "Movable":{
