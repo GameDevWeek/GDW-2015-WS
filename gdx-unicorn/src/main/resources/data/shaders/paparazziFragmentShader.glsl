@@ -6,6 +6,10 @@ precision mediump float;
 #endif
 
 #define CIRCLE_ANIMATION_GROW_FACTOR 0.4
+#define CIRCLE_MAX_AMOUNT_FACTOR 1.0
+// radius in px
+#define CIRCLE_RADIUS_RANGE_FACTOR_START 1.0 
+#define CIRCLE_RADIUS_RANGE_FACTOR_END 2.0
 // threshold in px
 #define ANTI_ALIASING_THRESHOLD 2.0
 // random chosen number
@@ -16,35 +20,35 @@ precision mediump float;
 #define FADE_OUT_DURATION 0.4
 
 
-varying LOWP vec4 v_color;
-varying vec2 v_texCoords;
+varying LOWP vec4    v_color;
+varying LOWP vec2    v_texCoords;
 
+uniform LOWP vec2    u_frameDimension;
+uniform LOWP float   u_time;
 uniform LOWP float   u_startDuration;
 uniform LOWP float   u_durationLeft;
-uniform vec2         u_paparazziSeed;
+uniform LOWP vec2    u_paparazziSeed;
+// float [0.0, 0.1]
 uniform LOWP float   u_paparazziIntensity;
 // rgb: color to use for overlay. a: max alpha for result overlay
 uniform LOWP vec4    u_paparazziColor;
-uniform LOWP vec2    u_paparazziCircleRadiusRange;
 // xy: circle center screen coordinates. z: circle radius
 uniform LOWP vec3    u_paparazziOverlaySafeCircle;
-uniform LOWP vec2    u_frameDimension;
-uniform LOWP float   u_time;
 
 uniform sampler2D u_texture;
 
 float   getCircleAlpha(vec2 center, float radius);
 vec2    getCircleCenter(vec2 seed);
 float   getCircleRadius(vec2 seed);
+float   getCircleAmount();
+vec2    getRadiusRange();
+float   getAnimProgress();
 float   fade(float alphaIn);
 
 // helper functions
 float   rand(vec2 seed);
 vec2    rand2(vec2 seed);
-
 float   lerp(float a, float b, float t);
-float   getAnimProgress();
-
 vec2    normalizedToScreen(vec2 normalized);
 
 void main()
@@ -54,7 +58,7 @@ void main()
     texture2D(u_texture, v_texCoords);
     
     float fragAlpha;
-    for (int i = 0; i < (u_paparazziIntensity * 2); ++i)
+    for (int i = 0; i < getCircleAmount(); ++i)
     {
         fragAlpha += (u_paparazziColor.a - 0.2) * getCircleAlpha(getCircleCenter(u_paparazziSeed + i * SEED_STEP), getCircleRadius(u_paparazziSeed + i * SEED_STEP));
     }
@@ -71,12 +75,12 @@ vec2 getCircleCenter(vec2 seed)
 
 float getCircleRadius(vec2 seed)
 {
-    // vec2 u_paparazziCircleRadiusRange(minRadius, maxRadius)
-    float radiusInBounds = rand(seed + 87.16854) * (u_paparazziCircleRadiusRange.y - u_paparazziCircleRadiusRange.x) + u_paparazziCircleRadiusRange.x;
+    vec2 radiusRange = getRadiusRange();
+    float radiusInBounds = rand(seed + 87.16854) * (radiusRange.y - radiusRange.x) + radiusRange.x;
     return radiusInBounds *= (1.0 + getAnimProgress() * CIRCLE_ANIMATION_GROW_FACTOR);
 }
 
-// gets distance between circle center and current gl_FragCoord
+// returns distance between circle center and current gl_FragCoord
 float getDistance(vec2 circleCenter)
 {
     return length(gl_FragCoord.xy - circleCenter);
@@ -97,6 +101,30 @@ float getCircleAlpha(vec2 center, float radius)
     }
 
     return 0.0;
+}
+
+float getCircleAmount()
+{
+    return 
+    30 * CIRCLE_MAX_AMOUNT_FACTOR * 
+	    (
+            // u_paparazziIntensity taken into account 20 percent
+	        (1 - clamp(u_paparazziIntensity, 0.0, 1.0)) * 0.2 
+	        + 0.8
+	    );
+} 
+
+// returns vec2(minRadius, maxRadius)
+vec2 getRadiusRange()
+{
+    float  baseFactor = max(u_frameDimension.x, u_frameDimension.y) * 0.0625; // 1/16
+    baseFactor *=
+        (
+            // u_paparazziIntensity taken into account 40 percent
+            (clamp(u_paparazziIntensity, 0.0, 1.0)) * 0.4 
+            + 0.6
+        );
+    return vec2(baseFactor * CIRCLE_RADIUS_RANGE_FACTOR_START, baseFactor * CIRCLE_RADIUS_RANGE_FACTOR_END);
 }
 
 float fade(float alphaIn) {
