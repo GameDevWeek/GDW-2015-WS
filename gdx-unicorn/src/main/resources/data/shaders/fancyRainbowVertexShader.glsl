@@ -19,7 +19,6 @@ varying vec2 v_texCoords;
 
 vec4 calcRainbowColor();
 float getHorizontalOffset();
-float getColorOffset();
 float getRainbowAlpha();
 
 void main()
@@ -36,7 +35,6 @@ vec4 calcRainbowColor()
 {
 	vec4 rainbowColor;
 	
-	float colorOffset = getColorOffset();
 	float base = getHorizontalOffset() + (a_position.y / u_frameDimension.y);
 	float phase = mod(base, 1);
 	float level = mod(base, PART);
@@ -67,18 +65,6 @@ vec4 calcRainbowColor()
 	}
 	
 	return rainbowColor;
-}
-
-float getColorOffset()
-{
-	float frequency = u_rainbowFrequency;
-	
-	if(frequency <= 0.001)
-	{
-		frequency = 1.0;
-	}
-	
-	return - mod(u_time * u_rainbowFrequency, 1);
 }
 
 float getHorizontalOffset()
