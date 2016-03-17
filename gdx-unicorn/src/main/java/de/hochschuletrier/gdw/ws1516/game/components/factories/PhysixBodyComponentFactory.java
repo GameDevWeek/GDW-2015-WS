@@ -85,7 +85,38 @@ public class PhysixBodyComponentFactory extends
 
         playerBody.init(playerDef, physixSystem, entity);
         
-        PhysixBodyComponentFactory.recreatePlayerFixturesForDirection(playerBody, physixSystem, LookDirection.RIGHT);
+     // Horn (sensor)
+        PhysixFixtureDef fixtureDef = new PhysixFixtureDef(physixSystem)
+                .density(1).friction(0).restitution(0f)
+                .shapeCircle(width * 0.04f, new Vector2(width * 0.43f, height * -0.4f)).sensor(true);
+        fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
+        Fixture fixture = playerBody.createFixture(fixtureDef);
+        fixture.setUserData("horn");
+        
+        // mainBody
+           fixtureDef = new PhysixFixtureDef(physixSystem)
+            .density(0.68f).friction(0f).restitution(0f)
+            .shapeCircle(width * 0.25f, new Vector2(1, 0));
+           fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
+            fixture = playerBody.createFixture(fixtureDef);
+            
+        // head
+        fixtureDef = new PhysixFixtureDef(physixSystem)
+         .density(0.2f).friction(0f).restitution(0f)
+         .shapeCircle(width * 0.12f, new Vector2(width * 0.21f, height * -0.3f));
+        fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
+        fixture = playerBody.createFixture(fixtureDef);
+        fixture.setUserData("head");
+        
+        
+        // jump contact (sensor)
+        fixtureDef = new PhysixFixtureDef(physixSystem)
+        
+        .density(1).friction(0f).restitution(0f)
+        .shapeCircle(width * 0.05f, new Vector2(0, height * 0.49f)).sensor(true);
+        fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
+        fixture = playerBody.createFixture(fixtureDef);
+        fixture.setUserData("foot");
 
         entity.add(playerBody);
     }
@@ -181,11 +212,15 @@ public class PhysixBodyComponentFactory extends
     }
     
     public static void recreatePlayerFixturesForDirection(PhysixBodyComponent playerBody, PhysixSystem physixSystem, LookDirection direction) {
-
-        while (playerBody.getBody().getFixtureList().size != 0) {
-            for (Fixture fixture : playerBody.getBody().getFixtureList()) {
-                playerBody.getBody().destroyFixture(fixture);
-            }
+        Fixture horn = playerBody.getFixtureByUserData("horn");
+        Fixture head = playerBody.getFixtureByUserData("head");
+        
+        while (playerBody.getFixtureList().contains(horn, false)) {
+            playerBody.getBody().destroyFixture(horn);
+        }
+        
+        while (playerBody.getFixtureList().contains(head, false)) {
+            playerBody.getBody().destroyFixture(head);
         }
         
         float width = 2*GameConstants.TILESIZE_X;
@@ -206,13 +241,6 @@ public class PhysixBodyComponentFactory extends
         Fixture fixture = playerBody.createFixture(fixtureDef);
         fixture.setUserData("horn");
         
-        // mainBody
-           fixtureDef = new PhysixFixtureDef(physixSystem)
-            .density(0.68f).friction(0f).restitution(0f)
-            .shapeCircle(width * 0.25f, new Vector2(1, 0));
-           fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
-            fixture = playerBody.createFixture(fixtureDef);
-            
         // head
         fixtureDef = new PhysixFixtureDef(physixSystem)
          .density(0.2f).friction(0f).restitution(0f)
@@ -220,16 +248,5 @@ public class PhysixBodyComponentFactory extends
         fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
         fixture = playerBody.createFixture(fixtureDef);
         fixture.setUserData("head");
-        
-        
-        // jump contact (sensor)
-        fixtureDef = new PhysixFixtureDef(physixSystem)
-        
-        .density(1).friction(0f).restitution(0f)
-        .shapeCircle(width * 0.05f, new Vector2(0, height * 0.49f)).sensor(true);
-        fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
-        fixture = playerBody.createFixture(fixtureDef);
-        fixture.setUserData("foot");
-
     }
 }
