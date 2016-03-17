@@ -41,11 +41,6 @@ public class RenderSystem extends SortedSubIteratingSystem {
     {
         // TODO Auto-generated method stub
         super.addedToEngine(engine);
-        
-        MovementEvent.register(animationRenderSystem);
-        JumpEvent.register(animationRenderSystem);
-        StartFlyEvent.register(animationRenderSystem);
-        EndFlyEvent.register(animationRenderSystem);
     }
 
     @Override

@@ -139,7 +139,7 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
     protected void startRainbow()
     {
         List<String> duration = new ArrayList<>();
-        duration.add(GameConstants.RAINBOW_DURATION + "");
+        duration.add(GameConstants.RAINBOW_MODE_TIME + "");
         startRainbow(duration);
     }
 

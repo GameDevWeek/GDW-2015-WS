@@ -8,12 +8,11 @@ import de.hochschuletrier.gdw.commons.gdx.ashley.SortedSubIteratingSystem.SubSys
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent.AnimationState;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.events.*;
 
-public class AnimationRenderSystem extends SubSystem 
-    implements MovementEvent.Listener, JumpEvent.Listener, StartFlyEvent.Listener, EndFlyEvent.Listener
+public class AnimationRenderSystem extends SubSystem
 {
     
     public AnimationRenderSystem() {
@@ -25,18 +24,33 @@ public class AnimationRenderSystem extends SubSystem
                 
         AnimationComponent animation = ComponentMappers.animation.get(entity);
         PositionComponent position = ComponentMappers.position.get(entity);
+        MovementComponent movement = ComponentMappers.movement.get(entity);
         
         animation.stateTime += deltaTime;
         TextureRegion keyFrame = null;
 
-        if(animation.animationState != AnimationState.none && animation.animationMap.get(animation.animationState) != null)
+        if(movement.state == MovementComponent.State.ON_GROUND)
         {
-            keyFrame = animation.animationMap.get(animation.animationState).getKeyFrame(animation.stateTime);
+            String idleString = movement.state.toString().toLowerCase() + "_idle";
+            String walkingString = movement.state.toString().toLowerCase() + "_walking";
+            
+//            System.out.println(idleString + " - " + walkingString + " - " + movement.velocityX + " - " + animation.animationMap.get(idleString));
+            
+            if(Math.abs(movement.velocityX) <= 0.01 && animation.animationMap.get(idleString) != null)
+            {
+                keyFrame = animation.animationMap.get(idleString).getKeyFrame(animation.stateTime);
+            }
+            else if(animation.animationMap.get(walkingString) != null)
+            {
+                keyFrame = animation.animationMap.get(walkingString).getKeyFrame(animation.stateTime);
+            }
         }
-        else if(animation.animationMap.get(AnimationState.none) != null)
+        else if(animation.animationMap.get(MovementComponent.State.ON_GROUND.toString().toLowerCase()) != null)
         {
-            keyFrame = animation.animationMap.get(AnimationState.none).getKeyFrame(animation.stateTime);
+            keyFrame = animation.animationMap.get(MovementComponent.State.ON_GROUND.toString().toLowerCase()).getKeyFrame(animation.stateTime);
         }
+        
+        animation.flipHorizontal = (movement.lookDirection) == (MovementComponent.LookDirection.LEFT);
         
         if(keyFrame != null)
         {
@@ -51,79 +65,77 @@ public class AnimationRenderSystem extends SubSystem
             {
                 DrawUtil.batch.draw(keyFrame, position.x - w * 0.5f, position.y - h * 0.5f, w * 0.5f, h * 0.5f, w, h, 1, 1, position.rotation);
             }
-        }
-        
+        }        
     }
     
-    private boolean move = false;
 
-    @Override
-    public void onMovementEvent(Entity entity, float dirX) 
-    {       
-        AnimationComponent animation = ComponentMappers.animation.get(entity);
-//        System.out.println("Entity " + animation.animationState + " " + animation.animationMap.get(AnimationState.none).getFrameCount());
-        if(animation != null)
-        {
-//            if(Math.abs(dirX) >= 0.01f && AnimationState.walking.compareTo(animation.animationState) < 0)
-//            {
-//                animation.animationState = AnimationState.walking;
-//                animation.flipHorizontal = dirX < 0.0f;
-//            }
-              if(Math.abs(dirX) <= 0.01f)
-              {
-                  animation.animationState = AnimationState.none;
-              }
-              else
-              {
-                  animation.animationState = AnimationState.walking;
-                  animation.flipHorizontal = dirX < 0.0f;
-              }
-        }
-    }
-
-    @Override
-    public void onJumpEvent(Entity entity)
-    {
-//        System.out.println(move);
-        AnimationComponent animation = ComponentMappers.animation.get(entity);
-//        System.out.println(AnimationState.jump.compareTo(animation.animationState) > 0);
-//        if(animation != null && AnimationState.jump.compareTo(animation.animationState) < 0)
+//    @Override
+//    public void onMovementEvent(Entity entity, float dirX) 
+//    {       
+//        AnimationComponent animation = ComponentMappers.animation.get(entity);
+////        System.out.println("Entity " + animation.animationState + " " + animation.animationMap.get(AnimationState.none).getFrameCount());
+//        if(animation != null)
 //        {
-//            animation.animationState = AnimationState.jump;
+////            if(Math.abs(dirX) >= 0.01f && AnimationState.walking.compareTo(animation.animationState) < 0)
+////            {
+////                animation.animationState = AnimationState.walking;
+////                animation.flipHorizontal = dirX < 0.0f;
+////            }
+//              if(Math.abs(dirX) <= 0.01f)
+//              {
+//                  animation.animationState = MovementComponent.State.ON_GROUND;
+//              }
+//              else
+//              {
+//                  animation.animationState = MovementComponent.State.JUMPING;
+//                  animation.flipHorizontal = dirX < 0.0f;
+//              }
 //        }
-        if(animation != null)
-        {
-            animation.animationState = AnimationState.jump;
-        }
-    }
-
-    @Override
-    public void onStartFlyEvent(Entity entity, float time) 
-    {
-        // TODO Auto-generated method stub
-        System.out.println("fly" + time);
-        
-        AnimationComponent animation = ComponentMappers.animation.get(entity);
-        
-        if(animation != null)
-        {
-            animation.animationState = AnimationState.fly;
-        }
-
-    }
-    
-    @Override
-    public void onEndFlyEvent(Entity entity) 
-    {
-        // TODO Auto-generated method stub
-        System.out.println("end fly");
-        
-        AnimationComponent animation = ComponentMappers.animation.get(entity);
-
-        if(animation != null)
-        {
-            animation.animationState = AnimationState.none;
-        }
-        
-    }
+//    }
+//
+//    @Override
+//    public void onJumpEvent(Entity entity)
+//    {
+////        System.out.println(move);
+//        AnimationComponent animation = ComponentMappers.animation.get(entity);
+////        System.out.println(AnimationState.jump.compareTo(animation.animationState) > 0);
+////        if(animation != null && AnimationState.jump.compareTo(animation.animationState) < 0)
+////        {
+////            animation.animationState = AnimationState.jump;
+////        }
+//        if(animation != null)
+//        {
+//            animation.animationState = MovementComponent.State.JUMPING;
+//        }
+//    }
+//
+//    @Override
+//    public void onStartFlyEvent(Entity entity, float time) 
+//    {
+//        // TODO Auto-generated method stub
+//        System.out.println("fly" + time);
+//        
+//        AnimationComponent animation = ComponentMappers.animation.get(entity);
+//        
+//        if(animation != null)
+//        {
+////            animation.animationState = AnimationState.fly;
+//        }
+//
+//    }
+//    
+//    @Override
+//    public void onEndFlyEvent(Entity entity) 
+//    {
+//        // TODO Auto-generated method stub
+//        System.out.println("end fly");
+//        
+//        AnimationComponent animation = ComponentMappers.animation.get(entity);
+//
+//        if(animation != null)
+//        {
+////            animation.animationState = AnimationState.none;
+//        }
+//        
+//    }
 }

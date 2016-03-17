@@ -17,18 +17,23 @@ public class MovementComponentFactory extends ComponentFactory<EntityFactoryPara
     public void run(Entity entity, SafeProperties meta, SafeProperties properties, EntityFactoryParam param) {
         MovementComponent component = engine.createComponent(MovementComponent.class);
         String identifier = properties.getString("state");
-        switch(identifier){
-            case"falling":
-                component.state=MovementComponent.State.FALLING;
-                break;
-            case"flying":
-                component.state=MovementComponent.State.FLYING;
-                break;
-            case"on_ground":
-                //fallthrought intended
-            default:
-                component.state=MovementComponent.State.ON_GROUND;             
-            
+        System.out.println("MovementComponentFactory " + identifier);
+        if(identifier != null)
+        {
+            switch(identifier){
+                case"falling":
+                    component.state=MovementComponent.State.FALLING;
+                    break;
+                case"flying":
+                    component.state=MovementComponent.State.FLYING;
+                    break;
+                case "jumping":
+                    component.state = MovementComponent.State.JUMPING;
+                case"on_ground":
+                    //fallthrough intended
+                default:
+                    component.state=MovementComponent.State.ON_GROUND;             
+            }   
         }
         entity.add(component);
     }

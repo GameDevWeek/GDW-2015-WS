@@ -78,7 +78,8 @@ public class GameConstants {
     public static final int HUNTER_BULLET_OFFSET = (int)TILESIZE_X;
 
     // Shader parameters
-    public static final float RAINBOW_ALPHA = 0.7f;
-    public static final float RAINBOW_FREQUENCY = 6.0f;
-    public static final float RAINBOW_DURATION = 10.0f;
+    public static final float RAINBOW_FREQUENCY = 2.0f;
+    public static final float RAINBOW_ALPHA = 0.5f;
+    public static final float PAPARAZZI_ALPHA = 0.8f;
+    public static final float PAPARAZZI_INTENSITY = 1.0f;
 }
