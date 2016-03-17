@@ -1,5 +1,8 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -15,6 +18,9 @@ import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
 
 public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.Listener,HornAttackEvent.Listener{
 
+    private static final Logger logger = LoggerFactory
+            .getLogger(PlayerStateSystem.class);
+    
     public PlayerStateSystem() {
         super(Family.all(PlayerComponent.class).get());
     }
@@ -60,6 +66,7 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
     @Override
     public void onHornAttackStart() {
         if (getEntities().size()>0){
+            logger.info("hornattack start");
             PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
             playerComp.state=State.HORNATTACK;
             playerComp.stateTimer=GameConstants.HORN_MODE_TIME;
