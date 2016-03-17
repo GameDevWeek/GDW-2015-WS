@@ -34,18 +34,18 @@ public class MainMenuPage extends MenuPage {
         //addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 150, 50, "Start Game", this::startGame);
         }
         else if(type==Type.PAUSED) {
-            addLeftAlignedButton(xOffset, yOffset - yStep * (i++), 150, 50, "Fortsetzen", () -> menuManager.popPage());
+            addLeftAlignedButton(xOffset, yOffset - yStep * (i++), 150, 50, "Fortsetzen", () -> menuManager.popPage(),"buttonSound");
         }
         addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Optionen", new MenuOptions(skin, menuManager));
         addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Credits", new MenuPageCredits(skin, menuManager));
     
         if(type==Type.MENU) {
-  //      addLeftAlignedButton(xOffset, yOffset - yStep *( 2* i++), 100, 50, "Beenden", () -> System.exit(-1));
-        addLeftAlignedButton(xOffset, yOffset - yStep *( 2* i++), 100, 50, "Beenden", this::systemExitDelay);
+       //addLeftAlignedButton(xOffset, yOffset - yStep *( 2* i++), 100, 50, "Beenden", () -> System.exit(-1),"einhornEmpathy");
+        addLeftAlignedButton(xOffset, yOffset - yStep *( 2* i++), 100, 50, "Beenden", this::systemExitDelay,"einhornEmpathy");
 
         }
         else if (type==Type.PAUSED) {
-            addLeftAlignedButton(xOffset, yOffset - yStep*(2* i++), 100, 50, "Menü", this::stopGame);
+            addLeftAlignedButton(xOffset, yOffset - yStep*(2* i++), 100, 50, "Menü", this::stopGame,"buttonSound");
          }
         
     }    
@@ -70,10 +70,11 @@ public class MainMenuPage extends MenuPage {
     protected final void addPageEntry(MenuManager menuManager, int x, int y, String text, MenuPage page) {
         menuManager.addLayer(page);
         
-        addLeftAlignedButton(x, y, 150, 40, text, () -> menuManager.pushPage(page));
+        addLeftAlignedButton(x, y, 150, 40, text, () -> menuManager.pushPage(page),"buttonSound");
     }
     
     private void systemExitDelay(){
+        
         try {
             Thread.sleep(1300);                 //1000 milliseconds is one second.
         } catch(InterruptedException ex) {

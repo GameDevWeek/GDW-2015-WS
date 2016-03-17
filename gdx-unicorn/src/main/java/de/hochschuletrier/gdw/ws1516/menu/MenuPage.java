@@ -92,23 +92,23 @@ public class MenuPage extends Group {
         
     }
 
-    protected final void addLeftAlignedButton(int x, int y, int width, int height, String text,Runnable runnable) {
-        TextButton button = addButton(x, y, width, height, text, runnable, "default");
+    protected final void addLeftAlignedButton(int x, int y, int width, int height, String text,Runnable runnable,String sound) {
+        TextButton button = addButton(x, y, width, height, text, runnable, "default",sound);
         button.getLabel().setAlignment(Align.left);
     }
 
-    protected final void addCenteredButton(int x, int y, int width, int height, String text, Runnable runnable) {
-        TextButton button = addButton(x - width / 2, y - height / 2, width, height, text, runnable, "default");
+    protected final void addCenteredButton(int x, int y, int width, int height, String text, Runnable runnable,String sound) {
+        TextButton button = addButton(x - width / 2, y - height / 2, width, height, text, runnable, "default",sound);
         button.getLabel().setAlignment(Align.center);
     }
 
-    protected final TextButton addButton(int x, int y, int width, int height, String text, Runnable runnable, String style) {
+    protected final TextButton addButton(int x, int y, int width, int height, String text, Runnable runnable, String style,String sound) {
         TextButton button = new TextButton(text, skin, style);
         button.setBounds(x, y, width, height);
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                SoundEmitter.playGlobal(assetManager.getSound("buttonSound"), false);
+                SoundEmitter.playGlobal(assetManager.getSound(sound), false);
                 runnable.run();
             }
         });
