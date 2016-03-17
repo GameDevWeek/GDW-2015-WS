@@ -75,7 +75,7 @@ public class TriggerSystem extends EntitySystem implements TriggerEvent.Listener
        
         case DEATH_ZONE:            
             
-              DeathEvent.emit(unicorn);
+              DeathEvent.emit(triggeringEntity);
              
             break; 
         default:
