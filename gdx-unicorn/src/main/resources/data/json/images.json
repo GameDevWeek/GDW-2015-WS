@@ -25,5 +25,7 @@
     "heart2": "data/ui/menu/heart2.png",
     "heart3": "data/ui/menu/heart3.png",    
     "menu_fg": "data/ui/menu/fg_border.png",
-    "menu_bg": "data/ui/menu/menu_splash.png"
+    "menu_bg": "data/ui/menu/menu_splash.png",
+    "prev_Button": "data/ui/menu/prev_Button.png",
+    "next_Button": "data/ui/menu/next_Button.png"
 }

@@ -66,23 +66,13 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         PlayerComponent playerComp = ComponentMappers.player.get(entity);
         
         Main.getInstance().screenCamera.bind();
-      
-        int minutes_int = (int) scoreComp.playedSeconds/60;
-        String minutes_string = ""+minutes_int;
         
-        int seconds_int = (int) scoreComp.playedSeconds%60;
-        String seconds_string=""+seconds_int;
-
-        if(seconds_string.length()==1) {
-            seconds_string = "0"+seconds_string;
-        }
-                  
-        String time = minutes_string+":"+seconds_string;
-        String score = "x"+finalScore;
-        font.draw(DrawUtil.batch, time, 400, 20);
-        font.draw(DrawUtil.batch,score, 800,20);
-                       
+        int displayWidth = Gdx.graphics.getWidth();
+        int displayHeight = Gdx.graphics.getHeight();
+        
         Texture heart;
+        Texture cookie = assetManager.getTexture("cookie");
+        
         if(playerComp.hitpoints==3) {
             heart = assetManager.getTexture("heart3");
         }
@@ -96,9 +86,41 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
             heart = assetManager.getTexture("heart0");
         }
         
-        Texture coins = assetManager.getTexture("cookie");
-        DrawUtil.draw(heart, 20, 20, 50, 50);
-        DrawUtil.draw(coins, 900, 20, 50, 50);
+        
+        
+        float heart_x =  20;
+        float heart_y = 20;
+        
+        float time_x = 0.5F * displayWidth;
+        float time_y = 20;
+        
+        float cookie_x = displayWidth-100;
+        float cookie_y = 20;
+        
+        float score_x = cookie_x + 30;
+        float score_y = 20;
+        
+        
+              
+        int minutes_int = (int) scoreComp.playedSeconds/60;
+        String minutes_string = String.valueOf(minutes_int);
+        int seconds_int = (int) scoreComp.playedSeconds%60;
+        String seconds_string = String.valueOf(seconds_int);
+
+        if(seconds_string.length()==1) {
+            seconds_string = "0"+seconds_string;
+        }
+                  
+        String time = minutes_string+":"+seconds_string;
+        String score = String.valueOf(finalScore);
+        
+                       
+       
+        
+        font.draw(DrawUtil.batch, time, time_x, time_y);
+        font.draw(DrawUtil.batch,score, score_x, score_y);
+        DrawUtil.draw(heart, heart_x, heart_y, 50, 50);
+        DrawUtil.draw(cookie, cookie_x, cookie_y, 50, 50);
     }
 
     @Override
