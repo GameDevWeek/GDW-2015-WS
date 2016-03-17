@@ -70,7 +70,7 @@ public class MenuPage extends Group {
         slider.setValue(50);
         
 
-        label.setPosition(x-5, y+7);
+        label.setPosition(x, y+7);
         slider.setBounds(x+80,y,size,35);
         Label value= new Label(""+(int)slider.getValue(),skin,"default");
         value.setPosition(x+size+90,y+7);   
