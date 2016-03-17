@@ -82,7 +82,7 @@ public class PhysicsLoader implements MapLoader {
         float boxWorldCenterY = triggerObject.getY() + boxWorldHeight / 2.0f + triggerObject.getHeight() * 0.2f;
         
         //Create trigger entity
-        game.createTrigger(boxWorldCenterX,  boxWorldCenterY,
+        game.createTrigger(action,boxWorldCenterX,  boxWorldCenterY,
                             boxWorldWidth, boxWorldHeight,
                             (entity) -> TriggerEvent.emit(action, entity));
                 

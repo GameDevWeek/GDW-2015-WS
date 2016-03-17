@@ -34,6 +34,7 @@ import de.hochschuletrier.gdw.ws1516.events.HealEvent;
 import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
+import de.hochschuletrier.gdw.ws1516.events.TriggerEvent.Action;
 import de.hochschuletrier.gdw.ws1516.game.components.BubblegumSpitComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.BulletComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ImpactSoundComponent;
@@ -87,6 +88,7 @@ public class Game extends InputAdapter {
     private final Hotkey scoreCheating = new Hotkey(() -> ScoreBoardEvent.emit(ScoreType.BONBON, 1), Input.Keys.F2,
             HotkeyModifier.CTRL);
     private Hotkey healCheating = null;
+    private Hotkey rainbow=null;
     
 
     //private final Hotkey rainbowMode = new Hotkey(()->RainbowEvent.start(player),Input.Keys.F3,HotkeyModifier.CTRL);
@@ -146,7 +148,6 @@ public class Game extends InputAdapter {
             scoreCheating.register();
 
            
-//            rainbowMode.register();
 
         }
 
@@ -155,7 +156,7 @@ public class Game extends InputAdapter {
     public void dispose() {
         togglePhysixDebug.unregister();
         scoreCheating.unregister();
-//        rainbowMode.unregister();
+        rainbow.unregister();
         healCheating.unregister();
         Main.getInstance().console.unregister(physixDebug);
         
@@ -197,6 +198,9 @@ public class Game extends InputAdapter {
         healCheating = new Hotkey(() -> HealEvent.emit(unicorn, 1), Input.Keys.F4,
         HotkeyModifier.CTRL);
         healCheating.register();
+        rainbow = new Hotkey(() -> RainbowEvent.start(unicorn), Input.Keys.F3,
+                HotkeyModifier.CTRL);
+        rainbow.register();
         papa = EntityCreator.createEntity("tourist", 2000, 100);
         pathComponent =ComponentMappers.path.get(papa);
         pathComponent.points.add(new Vector2(2000, 100));
@@ -287,13 +291,14 @@ public class Game extends InputAdapter {
         engine.update(delta);
     }
 
-    public void createTrigger(float x, float y, float width, float height, Consumer<Entity> consumer) {
+    public void createTrigger(Action action,float x, float y, float width, float height, Consumer<Entity> consumer) {
         Entity entity = engine.createEntity();
         PhysixModifierComponent modifyComponent = engine.createComponent(PhysixModifierComponent.class);
         entity.add(modifyComponent);
 
         TriggerComponent triggerComponent = engine.createComponent(TriggerComponent.class);
         triggerComponent.consumer = consumer;
+        triggerComponent.action = action;
         entity.add(triggerComponent);
 
         modifyComponent.schedule(() -> {

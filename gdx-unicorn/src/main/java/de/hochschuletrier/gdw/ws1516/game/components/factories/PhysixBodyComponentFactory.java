@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.utils.Array;
 
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.ashley.ComponentFactory;
@@ -15,6 +16,8 @@ import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixModifierCompon
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
 import de.hochschuletrier.gdw.commons.utils.SafeProperties;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.LookDirection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,33 +84,31 @@ public class PhysixBodyComponentFactory extends
                 .linearDamping(1).angularDamping(1);
 
         playerBody.init(playerDef, physixSystem, entity);
-
-
+        
      // Horn (sensor)
      PhysixFixtureDef fixtureDef = new PhysixFixtureDef(physixSystem)
                 .density(1).friction(0).restitution(0f)
                 .shapeCircle(width * 0.04f, new Vector2(width * 0.43f, height * -0.4f)).sensor(true);
-		fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
+        fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
 		Fixture fixture = playerBody.createFixture(fixtureDef);
         fixture.setUserData("horn");
-
-    // mainBody
-       fixtureDef = new PhysixFixtureDef(physixSystem)
-        .density(0.68f).friction(0f).restitution(0f)
-        .shapeCircle(width * 0.25f, new Vector2(1, 0));
-       fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
-        fixture = playerBody.createFixture(fixtureDef);
         
-    // head
+        // mainBody
+           fixtureDef = new PhysixFixtureDef(physixSystem)
+            .density(0.68f).friction(0f).restitution(0f)
+            .shapeCircle(width * 0.25f, new Vector2(1, 0));
+           fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
+            fixture = playerBody.createFixture(fixtureDef);
+            
+        // head
         fixtureDef = new PhysixFixtureDef(physixSystem)
          .density(0.2f).friction(0f).restitution(0f)
          .shapeCircle(width * 0.12f, new Vector2(width * 0.21f, height * -0.3f));
         fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
         fixture = playerBody.createFixture(fixtureDef);
         fixture.setUserData("head");
-
-
-    // jump contact (sensor)
+        
+        // jump contact (sensor)
         fixtureDef = new PhysixFixtureDef(physixSystem)
         .density(1).friction(0f).restitution(0f)
         .shapeCircle(width * 0.05f, new Vector2(0, height * 0.49f)).sensor(true);
@@ -207,5 +208,44 @@ public class PhysixBodyComponentFactory extends
                 .density(properties.getFloat("density", 5))
                 .friction(properties.getFloat("friction", 5))
                 .restitution(properties.getFloat("restitution", 0));
+    }
+    
+    public static void recreatePlayerFixturesForDirection(PhysixBodyComponent playerBody, PhysixSystem physixSystem, LookDirection direction) {
+        Fixture horn = playerBody.getFixtureByUserData("horn");
+        Fixture head = playerBody.getFixtureByUserData("head");
+        
+        while (playerBody.getFixtureList().contains(horn, false)) {
+            playerBody.getBody().destroyFixture(horn);
+        }
+        
+        while (playerBody.getFixtureList().contains(head, false)) {
+            playerBody.getBody().destroyFixture(head);
+        }
+        
+        float width = 2*GameConstants.TILESIZE_X;
+        float height = 1*GameConstants.TILESIZE_Y;
+        float dir;
+        
+        if (direction == LookDirection.LEFT) {
+            dir = -1;
+        } else {
+            dir = 1;
+        }
+        
+        // Horn (sensor)
+        PhysixFixtureDef fixtureDef = new PhysixFixtureDef(physixSystem)
+                .density(1).friction(0).restitution(0f)
+                .shapeCircle(width * 0.04f, new Vector2(dir * width * 0.43f, height * -0.4f)).sensor(true);
+        fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
+        Fixture fixture = playerBody.createFixture(fixtureDef);
+        fixture.setUserData("horn");
+        
+        // head
+        fixtureDef = new PhysixFixtureDef(physixSystem)
+         .density(0.2f).friction(0f).restitution(0f)
+         .shapeCircle(width * 0.12f, new Vector2(dir * width * 0.21f, height * -0.3f));
+        fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
+        fixture = playerBody.createFixture(fixtureDef);
+        fixture.setUserData("head");
     }
 }

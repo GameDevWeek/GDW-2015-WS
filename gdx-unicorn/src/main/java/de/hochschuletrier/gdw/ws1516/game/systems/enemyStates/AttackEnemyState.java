@@ -30,8 +30,11 @@ public class AttackEnemyState extends EnemyBaseState {
         behaviour.cooldown=behaviour.maxCooldown;
         if (type.type==EnemyType.HUNTER){
             if (timePassed<behaviour.cooldown){
-                MovementEvent.emit(entity, 0.0f);
-                return this;
+                if (behaviour.canSeeUnicorn){
+                    return this;
+                }else{
+                    return new FollowPathEnemyState();
+                }
             }
             int direction = GameConstants.HUNTER_BULLET_OFFSET;
             if (playerPosition.x<enemyPosition.x){
