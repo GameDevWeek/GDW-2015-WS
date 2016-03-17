@@ -8,18 +8,24 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.math.Vector2;
 
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
+import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
 import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
 import de.hochschuletrier.gdw.ws1516.events.JumpEvent;
 import de.hochschuletrier.gdw.ws1516.events.MovementEvent;
 import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.LookDirection;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent.State;
+import de.hochschuletrier.gdw.ws1516.game.components.factories.PhysixBodyComponentFactory;
+import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 
 public class MovementSystem extends IteratingSystem implements
         StartFlyEvent.Listener, EndFlyEvent.Listener, JumpEvent.Listener,
@@ -27,7 +33,7 @@ public class MovementSystem extends IteratingSystem implements
     private static final Logger logger = LoggerFactory
             .getLogger(MovementSystem.class);
 
-    private PooledEngine e;
+    private PhysixSystem physixSystem;
 
     // public MovementSystem(){
     // super(0);
@@ -44,6 +50,7 @@ public class MovementSystem extends IteratingSystem implements
         EndFlyEvent.register(this);
         JumpEvent.register(this);
         MovementEvent.register(this);
+        physixSystem = engine.getSystem(PhysixSystem.class);
     }
 
     @Override
@@ -53,6 +60,7 @@ public class MovementSystem extends IteratingSystem implements
         EndFlyEvent.unregister(this);
         JumpEvent.unregister(this);
         MovementEvent.unregister(this);
+        physixSystem = null;
     };
 
     @Override
@@ -64,8 +72,13 @@ public class MovementSystem extends IteratingSystem implements
         // JumpComponent jump = ComponentMappers.jump.get(entity);
         PlayerComponent playerComp = ComponentMappers.player.get(entity);
 
-        if (movement != null & input != null)
-            movement.lookDirection = input.lookDirection;
+        if (movement != null & input != null) {
+            if (movement.lookDirection != input.lookDirection) { //richtung hat sich geaendert
+                movement.lookDirection = input.lookDirection;
+                PhysixBodyComponentFactory.recreatePlayerFixturesForDirection(physix, physixSystem, movement.lookDirection);
+            }
+        }
+            
         
         if (movement != null) {
             switch (movement.state) {
