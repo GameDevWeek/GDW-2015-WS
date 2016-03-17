@@ -46,7 +46,7 @@ public class LevelSelectionPage extends MenuPage {
                     
         createImageButton(buttonBack_texture, 430, 230, 50, 50, this::previousLevel, true, true);
         createImageButton(buttonNext_texture, 450+level_preview_texture.getWidth(), 230, 50, 50, this::nextLevel, true, true);
-        addLeftAlignedButton(55, 40, 100, 50, "Menu", () -> menuManager.popPage());
+        addLeftAlignedButton(55, 40, 100, 50, "Menü", () -> menuManager.popPage());
         
     }
     

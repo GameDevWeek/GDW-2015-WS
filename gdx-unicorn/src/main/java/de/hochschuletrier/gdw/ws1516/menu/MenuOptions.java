@@ -25,8 +25,10 @@ import de.hochschuletrier.gdw.ws1516.game.systems.SoundSystem;
 
 public class MenuOptions extends MenuPage {
 
-    
     private float generalSound;
+    private Slider generalSlider;
+    private Slider musicSlider;
+    private Slider soundSlider;
 
     public MenuOptions(Skin skin, MenuManager menuManager) {
         super(skin, "menu_bg");
@@ -36,12 +38,14 @@ public class MenuOptions extends MenuPage {
         int yOffset = 370;
         int yStep = 55;
         generalSound = 5;
-        Slider generalSlider = addLabeledSlider(0, 100, 1, xOffset, yOffset
-                - yStep * (i++), "General", true);
-        Slider musicSlider = addLabeledSlider(0, 100, 1, xOffset, yOffset
-                - yStep * (i++), "Music", true);
-        Slider soundSlider = addLabeledSlider(0, 100, 1, xOffset, yOffset
-                - yStep * (i++), "Sound", true);
+        generalSlider = addLabeledSlider(0, 100, 1, xOffset, yOffset - yStep
+                * (i++), "General", true);
+        musicSlider = addLabeledSlider(0, 100, 1, xOffset, yOffset - yStep
+                * (i++), "Music", true);
+        soundSlider = addLabeledSlider(0, 100, 1, xOffset, yOffset - yStep
+                * (i++), "Sound", true);
+        addLeftAlignedButton(xOffset, yOffset - yStep * (i++), 100, 50, "Zurücksetzen",
+                this::reset);
         generalSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -56,25 +60,38 @@ public class MenuOptions extends MenuPage {
             public void changed(ChangeEvent event, Actor actor) {
                 MusicManager.setGlobalVolume(musicSlider.getValue() / 1000
                         * generalSound);
-                
+
             }
         });
 
         soundSlider.addListener(new ClickListener() {
-            
+
             @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button){
+            public void touchUp(InputEvent event, float x, float y,
+                    int pointer, int button) {
                 SoundSystem.setGlobalVolume(soundSlider.getValue() / 1000
                         * generalSound);
                 soundTest();
-               
+
             }
         });
 
-        addLeftAlignedButton(55, 40, 100, 50, "Menu",
+        addLeftAlignedButton(xOffset, 40, 100, 50, "Menu",
                 () -> menuManager.popPage());
     }
+
     public void soundTest() {
-       SoundEmitter.playGlobal(assetManager.getSound("EinhornEmpathy"), false);  
+        SoundEmitter.playGlobal(assetManager.getSound("EinhornEmpathy"), false);
+    }
+
+    public void reset() {
+        generalSlider.setValue(50);
+        musicSlider.setValue(50);
+        soundSlider.setValue(50);
+        MusicManager.setGlobalVolume(musicSlider.getValue() / 1000
+                * generalSound);
+        SoundSystem.setGlobalVolume(soundSlider.getValue() / 1000
+                * generalSound);
+        
     }
 }
