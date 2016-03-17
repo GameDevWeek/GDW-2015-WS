@@ -1,8 +1,8 @@
 {
     
     "bubblegum_blue": "data/graphics/blue_gum_s.png",
-    "bubblegum_rainbow": "data/graphics/rainbow_gum_s.png",
-    "bubblegum_spitting": "data/dummies/bubblegum_spitting.png",
+    "bubblegum_spitting": "data/graphics/gum_spit_pink.png",
+    "bubblegum_spitting_rainbow": "data/graphics/gum_spit_rainbow.png",
     "coin": "data/dummies/coin.png",
     "gum_bubble": "data/dummies/gum_bubble.png",
     "splatter_0": "data/dummies/splatter.png",
