@@ -7,13 +7,6 @@
             "Position": {},
             "Input":{},
             "Player":{},
-	    "HP":{
-		"value":3,
-		"max":3
-            },
-            "Lives":{
-		"value":3
-            },
             "Movable":{
                 "state":"on_ground"
                 },

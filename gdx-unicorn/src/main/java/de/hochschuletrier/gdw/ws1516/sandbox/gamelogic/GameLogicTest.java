@@ -43,8 +43,6 @@ import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyBehaviourComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.HitPointsComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.LiveComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PathComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
@@ -248,13 +246,6 @@ public class GameLogicTest extends SandboxGame {
         player.add(startPositionComp);
         SoundEmitterComponent soundComponent = engine.createComponent(SoundEmitterComponent.class);
         player.add(soundComponent);
-        HitPointsComponent hitPoint = engine.createComponent(HitPointsComponent.class);
-        hitPoint.value = 3;
-        hitPoint.max = 3;
-        player.add(hitPoint);
-        LiveComponent livePoint = engine.createComponent(LiveComponent.class);
-        livePoint.value = 2;
-        player.add(livePoint);
         
         
         
