@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import de.hochschuletrier.gdw.commons.gdx.input.InputForwarder;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
 import de.hochschuletrier.gdw.commons.gdx.state.transition.SplitHorizontalTransition;
+import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.states.GameplayState;
 import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
@@ -34,7 +35,7 @@ public class MainMenuPage extends MenuPage {
         //addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 150, 50, "Start Game", this::startGame);
         }
         else if(type==Type.PAUSED) {
-            addLeftAlignedButton(xOffset, yOffset - yStep * (i++), 150, 50, "Fortsetzen", () ->{ menuManager.popPage();Game.pauseGame();},"buttonSound");
+            addLeftAlignedButton(xOffset, yOffset - yStep * (i++), 150, 50, "Fortsetzen", () ->{ menuManager.popPage();PauseGameEvent.change();},"buttonSound");
         }
         addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Optionen", new MenuOptions(skin, menuManager));
         addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Credits", new MenuPageCredits(skin, menuManager));
