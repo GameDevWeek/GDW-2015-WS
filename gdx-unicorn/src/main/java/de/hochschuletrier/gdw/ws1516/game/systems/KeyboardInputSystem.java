@@ -48,17 +48,17 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
             case Input.Keys.UP:
             case Input.Keys.SPACE:
             case Input.Keys.W:
-                directionY -= 1.0f;
+                directionY = -1.0f;
                 jump = true;
                 break;
             case Input.Keys.LEFT:
             case Input.Keys.A:
-                directionX -= 1.0f;
+                directionX = -1.0f;
                 lookDirection = MovementComponent.LookDirection.LEFT;
                 break;
             case Input.Keys.RIGHT:
             case Input.Keys.D:
-                directionX += 1.0f;
+                directionX = +1.0f;
                 lookDirection = MovementComponent.LookDirection.RIGHT;
                 break;
             case Input.Keys.J:
@@ -72,7 +72,7 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
                 break;
             case Input.Keys.S:
             case Input.Keys.DOWN:
-                directionY +=1.0f;
+                directionY = +1.0f;
                 break;
         }
         return true;
@@ -84,16 +84,16 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
             case Input.Keys.UP:
             case Input.Keys.SPACE:
             case Input.Keys.W:
-                directionY +=1.0f;
+                directionY = 0.0f;
                 jump = false;
                 break;
             case Input.Keys.LEFT:
             case Input.Keys.A:
-                directionX += 1.0f;
+                directionX = 0.0f;
                 break;
             case Input.Keys.RIGHT:
             case Input.Keys.D:
-                directionX -= 1.0f;
+                directionX = 0.0f;
                 break;
                 //for testing reasons
             case Input.Keys.NUM_1:
@@ -113,7 +113,7 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
                 break;
             case Input.Keys.S:
             case Input.Keys.DOWN:
-                directionY -=1.0f;
+                directionY = 0.0f;
                 break;
         }
         return true;
