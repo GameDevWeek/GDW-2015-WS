@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import de.hochschuletrier.gdw.commons.gdx.ashley.EntityFactory;
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
@@ -16,6 +15,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.factories.EntityFactoryPara
 import de.hochschuletrier.gdw.ws1516.game.systems.AnimationRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.CanvasRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.CollisionSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.EndgameSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.PickupSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.ShootSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePlayerSystem;
@@ -65,6 +65,7 @@ public class Game extends InputAdapter {
     }
 
     private void addSystems() {
+        engine.addSystem(new EndgameSystem(GameConstants.PRIORITY_ENDGAME));
         engine.addSystem(new ShootSystem(this, GameConstants.PRIORITY_SHOOT));
         engine.addSystem(new UpdatePlayerSystem(GameConstants.PRIORITY_PHYSIX));
         engine.addSystem(new UpdateProjectileSystem(GameConstants.PRIORITY_PHYSIX));

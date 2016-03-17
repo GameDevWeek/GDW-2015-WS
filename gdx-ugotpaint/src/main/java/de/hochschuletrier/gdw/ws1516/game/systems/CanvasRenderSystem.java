@@ -18,13 +18,10 @@ import de.hochschuletrier.gdw.ws1516.game.utils.Canvas;
 
 public class CanvasRenderSystem extends IteratingSystem {
 
-    private float nextUpdate = 0;
-    private final Canvas canvas;
+    private final Canvas canvas = Main.getCanvas();
 
     public CanvasRenderSystem(int priority) {
         super(Family.all(PositionComponent.class, AnimationComponent.class, PlayerComponent.class).get(), priority);
-
-        this.canvas = Main.getCanvas();
     }
 
     @Override
@@ -44,13 +41,5 @@ public class CanvasRenderSystem extends IteratingSystem {
         super.update(deltaTime);
 
         canvas.render(DrawUtil.batch, Vector2.Zero, 1, true);
-
-        //Fixme: move to different system
-        // Only update pctFilled every second
-        nextUpdate -= deltaTime;
-        if (nextUpdate <= 0) {
-            nextUpdate = 1;
-            canvas.updatePctFilled();
-        }
     }
 }

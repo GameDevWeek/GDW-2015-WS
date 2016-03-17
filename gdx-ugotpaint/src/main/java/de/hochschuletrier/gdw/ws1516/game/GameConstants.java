@@ -6,7 +6,8 @@ import com.badlogic.gdx.math.Rectangle;
 public class GameConstants {
 
     // Priorities for entity systems
-    public static final int PRIORITY_SHOOT = 0;
+    public static final int PRIORITY_ENDGAME = 0;
+    public static final int PRIORITY_SHOOT = 1;
     public static final int PRIORITY_PHYSIX = 10;
     public static final int PRIORITY_CANVAS = 20;
     public static final int PRIORITY_ANIMATIONS = 30;
