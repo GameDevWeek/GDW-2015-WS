@@ -107,7 +107,7 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
 
     public long getFinalScore()
     {
-        long score = scoreComponent.chocoCoins * GameConstants.SCORE_CHOCOCOINS_POINTS
+        long score = 100 + scoreComponent.chocoCoins * GameConstants.SCORE_CHOCOCOINS_POINTS
                 + scoreComponent.bonbons * GameConstants.SCORE_BONBONS_POINTS +
                 (long)(scoreComponent.playedSeconds * GameConstants.SCORE_TIME_POINTS ) +
                 scoreComponent.deaths  * GameConstants.SCORE_DEATHS + 
