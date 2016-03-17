@@ -11,6 +11,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
+import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
 import de.hochschuletrier.gdw.ws1516.events.JumpEvent;
 import de.hochschuletrier.gdw.ws1516.events.MovementEvent;
 import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
@@ -18,6 +19,7 @@ import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent.State;
 
 public class MovementSystem extends IteratingSystem implements
         StartFlyEvent.Listener, EndFlyEvent.Listener, JumpEvent.Listener,

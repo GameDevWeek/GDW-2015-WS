@@ -16,8 +16,11 @@ import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent.State;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerContactListener;
 import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
+import de.hochschuletrier.gdw.ws1516.events.SpuckChargeEvent;
 
-public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.Listener,HornAttackEvent.Listener{
+public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.Listener,
+    HornAttackEvent.Listener,SpuckChargeEvent.Listener{
+
     private static final Logger logger = LoggerFactory.getLogger(PlayerStateSystem.class);
     public PlayerStateSystem() {
         super(Family.all(PlayerComponent.class).get());
@@ -40,9 +43,14 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
     protected void processEntity(Entity entity, float deltaTime) {
         PlayerComponent playerComp=ComponentMappers.player.get(entity);
         playerComp.stateTimer=Math.max(playerComp.stateTimer-deltaTime, 0);
+        playerComp.hornAttackCooldown=Math.max(playerComp.hornAttackCooldown-deltaTime, 0);
+        playerComp.spuckChargeCooldown=Math.max(playerComp.spuckChargeCooldown-deltaTime, 0);
+        playerComp.invulnerableTimer=Math.max(playerComp.invulnerableTimer-deltaTime, 0);
         if (playerComp.stateTimer<=0.0f){
             if (playerComp.state==State.HORNATTACK){
                 HornAttackEvent.stop();
+            }else if (playerComp.state==State.SPUCKCHARGE){
+                SpuckChargeEvent.stop();
             }
             playerComp.state=State.NORMAL;
         }
@@ -63,7 +71,6 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
     @Override
     public void onHornAttackStart() {
         if (getEntities().size()>0){
-            logger.debug("Hornattack startet{}");
             PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
             playerComp.state=State.HORNATTACK;
             playerComp.stateTimer=GameConstants.HORN_MODE_TIME;
@@ -72,7 +79,27 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
 
     @Override
     public void onHornAttackStop() {
-        
+        if (getEntities().size()>0){
+            PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
+            playerComp.hornAttackCooldown=GameConstants.HORN_MODE_COOLDOWN;
+        }
+    }
+
+    @Override
+    public void onSpuckChargeStart() {
+        if (getEntities().size()>0){
+            PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
+            playerComp.state=State.SPUCKCHARGE;
+            playerComp.stateTimer=GameConstants.SPUCK_MODE_TIME;
+        }
+    }
+
+    @Override
+    public void onSpuckChargeStop() {
+        if (getEntities().size()>0){
+            PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
+            playerComp.spuckChargeCooldown=GameConstants.SPUCK_MODE_COOLDOWN;
+        }
     }
     
 }

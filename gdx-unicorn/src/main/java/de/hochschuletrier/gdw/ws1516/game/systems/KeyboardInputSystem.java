@@ -15,6 +15,7 @@ import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornCollisionEvent;
 import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
+import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
@@ -159,6 +160,7 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         InputComponent input = entity.getComponent(InputComponent.class);
+        PlayerComponent player=ComponentMappers.player.get(entity);
         input.directionX = directionX;
         input.directionY=directionY;
         input.startFly = fly;
@@ -171,9 +173,8 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
 //            fly=false;
 //            stopflying=false;
 //        }
-        if(hornAttack){
-            logger.debug("sollte horn Starten{}");
-            HornAttackEvent.start();
+        if(hornAttack && player.state!=State.RAINBOW && player.hornAttackCooldown<=0.0f){
+                HornAttackEvent.start();
             hornAttack=false;
         }
         input.hornAttack = hornAttack;
