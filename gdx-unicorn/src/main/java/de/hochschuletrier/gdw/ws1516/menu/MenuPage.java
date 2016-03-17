@@ -22,7 +22,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
 
 
+
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
+import de.hochschuletrier.gdw.commons.gdx.audio.SoundEmitter;
 import de.hochschuletrier.gdw.commons.gdx.menu.widgets.DecoImage;
 import de.hochschuletrier.gdw.ws1516.Main;
 
@@ -104,6 +106,7 @@ public class MenuPage extends Group {
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                SoundEmitter.playGlobal(assetManager.getSound("EinhornEmpathy"), false);
                 runnable.run();
             }
         });
