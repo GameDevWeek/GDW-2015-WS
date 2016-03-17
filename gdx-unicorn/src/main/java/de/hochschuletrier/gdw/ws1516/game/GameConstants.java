@@ -38,6 +38,8 @@ public class GameConstants {
     public static final float RAINBOW_MODE_TIME = 10.0f;
     public static final float HORN_MODE_TIME = 3.0f;
     public static final float SPUCK_MODE_TIME = 2.0f;
+    public static final float HORN_MODE_COOLDOWN = 5.0f;
+    public static final float SPUCK_MODE_COOLDOWN = 2.0f;
 
     //Physic collision groups
     public static final short PHYSIX_COLLISION_SPIT = -1;

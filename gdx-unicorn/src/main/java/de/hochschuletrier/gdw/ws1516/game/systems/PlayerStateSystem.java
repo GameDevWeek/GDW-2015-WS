@@ -34,6 +34,8 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
     protected void processEntity(Entity entity, float deltaTime) {
         PlayerComponent playerComp=ComponentMappers.player.get(entity);
         playerComp.stateTimer=Math.max(playerComp.stateTimer-deltaTime, 0);
+        playerComp.hornAttackCooldown=Math.max(playerComp.hornAttackCooldown-deltaTime, 0);
+        playerComp.spuckChargeCooldown=Math.max(playerComp.spuckChargeCooldown-deltaTime, 0);
         if (playerComp.stateTimer<=0.0f){
             if (playerComp.state==State.HORNATTACK){
                 HornAttackEvent.stop();
@@ -60,6 +62,7 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
             PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
             playerComp.state=State.HORNATTACK;
             playerComp.stateTimer=GameConstants.HORN_MODE_TIME;
+            playerComp.hornAttackCooldown=GameConstants.HORN_MODE_COOLDOWN;
         }
     }
 
