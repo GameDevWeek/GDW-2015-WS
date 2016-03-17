@@ -77,14 +77,14 @@ public class PhysicsLoader implements MapLoader {
         
         //Size and position of the triangle are in 'tile-units' so we have to convert them back into world units
         float boxWorldWidth  = triggerObject.getWidth();
-        float boxWorldHeight = triggerObject.getHeight();
+        float boxWorldHeight = triggerObject.getHeight() - triggerObject.getHeight() * 0.2f;
         float boxWorldCenterX = triggerObject.getX()  + boxWorldWidth / 2.0f;
-        float boxWorldCenterY = triggerObject.getY() + boxWorldHeight / 2.0f;
+        float boxWorldCenterY = triggerObject.getY() + boxWorldHeight / 2.0f + triggerObject.getHeight() * 0.2f;
         
         //Create trigger entity
         game.createTrigger(boxWorldCenterX,  boxWorldCenterY,
-                boxWorldWidth, boxWorldHeight,
-                           (entity) -> TriggerEvent.emit(action, entity));
+                            boxWorldWidth, boxWorldHeight,
+                            (entity) -> TriggerEvent.emit(action, entity));
                 
         
     }

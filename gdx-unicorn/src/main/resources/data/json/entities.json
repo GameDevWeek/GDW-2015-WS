@@ -12,10 +12,14 @@
             "Input":{},
             "Player":{},
             "Movable":{
-                "state":"on_ground"
+                "state": "on_ground"
                 },
             "Animation": {
-                "animation": "unicorn_idle"
+                "on_ground_idle": "unicorn_idle",
+                "on_ground_walking": "unicorn_walking",
+                "flying": "unicorn_walking",
+                "falling": "ball", 
+                "jumping": "box"
             },
             "PhysixBody": {
                 "type": "player",
@@ -27,6 +31,9 @@
             "CameraTarget": {},
             "RenderLayer": {
                 "layer": 100
+            },
+            "BackgroundParticle": {
+                "effect": "test"
             }
         }
     },
@@ -42,10 +49,12 @@
                 "type" : "hunter"
             },
             "Behaviour": {
-		"cooldown":0.5
+		"cooldown":2.0
 	    },
             "Animation": {
-                "animation": "hunter_walking"
+                "none": "unicorn_idle",
+                "walking": "walking",
+                "jump": "ball"
             },
             "PhysixBody": {
                 "type": "enemy",

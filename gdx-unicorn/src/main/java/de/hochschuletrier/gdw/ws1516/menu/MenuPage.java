@@ -1,5 +1,6 @@
 package de.hochschuletrier.gdw.ws1516.menu;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -22,7 +23,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
 
 
+
+
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
+import de.hochschuletrier.gdw.commons.gdx.audio.SoundEmitter;
 import de.hochschuletrier.gdw.commons.gdx.menu.widgets.DecoImage;
 import de.hochschuletrier.gdw.ws1516.Main;
 
@@ -66,10 +70,10 @@ public class MenuPage extends Group {
         slider.setValue(50);
         
 
-        label.setPosition(x, y+7);
-        slider.setBounds(x+75,y,size,35);
+        label.setPosition(x-5, y+7);
+        slider.setBounds(x+80,y,size,35);
         Label value= new Label(""+(int)slider.getValue(),skin,"default");
-        value.setPosition(x+size+85,y+7);   
+        value.setPosition(x+size+90,y+7);   
         
         slider.addListener(new ChangeListener(){
             @Override
@@ -104,6 +108,7 @@ public class MenuPage extends Group {
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                SoundEmitter.playGlobal(assetManager.getSound("buttonSound"), false);
                 runnable.run();
             }
         });
@@ -111,7 +116,7 @@ public class MenuPage extends Group {
         return button;
     }
     
-    protected ImageButton createImageButton(Texture texture, float x, float y, float width, float height, Runnable runnable, boolean addToActor, boolean tintable) {
+    protected ImageButton createImageButton(Texture texture, float x, float y, float width, float height, Runnable runnable, String sound, boolean addToActor, boolean tintable) {
         
         ImageButton ib;
         if(tintable==true) {
@@ -128,6 +133,7 @@ public class MenuPage extends Group {
         ib.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                SoundEmitter.playGlobal(assetManager.getSound(sound), false);
                 runnable.run();
             }
         });

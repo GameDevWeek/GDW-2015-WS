@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.Entity;
 import de.hochschuletrier.gdw.ws1516.events.BulletSpawnEvent;
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.HitEvent;
+import de.hochschuletrier.gdw.ws1516.events.MovementEvent;
 import de.hochschuletrier.gdw.ws1516.events.HitEvent.HitType;
 import de.hochschuletrier.gdw.ws1516.events.PaparazziShootEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
@@ -28,6 +29,13 @@ public class AttackEnemyState extends EnemyBaseState {
         EnemyTypeComponent type=ComponentMappers.enemyType.get(entity);
         behaviour.cooldown=behaviour.maxCooldown;
         if (type.type==EnemyType.HUNTER){
+            if (timePassed<behaviour.cooldown){
+                if (behaviour.canSeeUnicorn){
+                    return this;
+                }else{
+                    return new FollowPathEnemyState();
+                }
+            }
             int direction = GameConstants.HUNTER_BULLET_OFFSET;
             if (playerPosition.x<enemyPosition.x){
                 direction=-direction;
