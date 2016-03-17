@@ -76,7 +76,7 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener 
      * @param volume
      *      neue Lautstärke
      */
-    public void setGlobalVolume(float volume)
+    public static void setGlobalVolume(float volume)
     {
         SoundEmitter.setGlobalVolume(volume);
     }
