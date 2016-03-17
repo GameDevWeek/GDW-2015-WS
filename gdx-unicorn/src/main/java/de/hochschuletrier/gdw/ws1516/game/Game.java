@@ -173,7 +173,7 @@ public class Game extends InputAdapter {
         EntityCreator.setGame(this);
         EntityCreator.setEntityFactory(entityFactory);
         
-        loadMap("data/maps/demo_level_worked_nurMap.tmx");
+        loadMap("data/maps/demo_level_worked.tmx");
         mapRenderSystem.initialzeRenderer(map, cameraSystem);
         
         //test:
