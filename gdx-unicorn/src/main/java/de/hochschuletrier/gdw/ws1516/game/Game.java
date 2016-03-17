@@ -186,14 +186,11 @@ public class Game extends InputAdapter {
         
         //test:
         EntityCreator.createEntity("unicorn", 700, 100);
-//        Entity entity=EntityCreator.createEntity("hunter", 1000, 100);
-//        PathComponent pathComponent =ComponentMappers.path.get(entity);
-//        pathComponent.points.add(new Vector2(1000, 100));
-//        pathComponent.points.add(new Vector2(800,100));
-//        Entity papa = EntityCreator.createEntity("tourist", 2000, 100);
-        
-        EntityCreator.createEntity("unicorn", 1000, 100);
-
+        Entity entity=EntityCreator.createEntity("hunter", 1000, 100);
+        PathComponent pathComponent =ComponentMappers.path.get(entity);
+        pathComponent.points.add(new Vector2(1000, 100));
+        pathComponent.points.add(new Vector2(800,100));
+        Entity papa = EntityCreator.createEntity("tourist", 2000, 100);
         
     }
 
