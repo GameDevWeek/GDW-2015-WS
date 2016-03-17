@@ -3,7 +3,6 @@ package de.hochschuletrier.gdw.ws1516.game.systems;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;

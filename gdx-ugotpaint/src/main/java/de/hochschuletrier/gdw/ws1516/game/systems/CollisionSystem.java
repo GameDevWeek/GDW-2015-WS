@@ -5,17 +5,12 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import de.hochschuletrier.gdw.ws1516.events.PickupEvent;
 import de.hochschuletrier.gdw.ws1516.events.SplashEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
-import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.ProjectileComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.*;
 import de.hochschuletrier.gdw.ws1516.game.utils.PlayerColor;
 
 public class CollisionSystem extends IteratingSystem {
