@@ -89,6 +89,7 @@ public class PhysixBodyComponentFactory extends
                 .shapeCircle(width * 0.04f, new Vector2(width * 0.43f, height * -0.4f)).sensor(true);
 		fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
         Fixture fixture = playerBody.createFixture(fixtureDef);
+        fixture.setUserData("horn");
 
     // mainBody
        fixtureDef = new PhysixFixtureDef(physixSystem)
@@ -96,7 +97,6 @@ public class PhysixBodyComponentFactory extends
         .shapeCircle(width * 0.25f, new Vector2(1, 0));
        fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
         fixture = playerBody.createFixture(fixtureDef);
-        fixture.setUserData("horn");
         
     // head
         fixtureDef = new PhysixFixtureDef(physixSystem)
