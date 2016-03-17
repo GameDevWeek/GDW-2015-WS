@@ -30,19 +30,17 @@ public class MovementSystem extends IteratingSystem implements
 
     public MovementSystem(int priority) {
         super(Family.all(PhysixBodyComponent.class, MovementComponent.class).get(), priority);
+    }
+
+    @Override
+    public void addedToEngine(Engine engine) {
+        super.addedToEngine(engine);
         StartFlyEvent.register(this);
         EndFlyEvent.register(this);
         JumpEvent.register(this);
         MovementEvent.register(this);
     }
 
-    // @Override
-    // public void addedToEngine(Engine engine) {
-    // super(engine);
-    // logger.debug("Added to Engine{}");
-    // // StartFlyEvent.register(this);
-    // // EndFlyEvent.register(this);
-    // };
     @Override
     public void removedFromEngine(com.badlogic.ashley.core.Engine engine) {
         // super(engine);
