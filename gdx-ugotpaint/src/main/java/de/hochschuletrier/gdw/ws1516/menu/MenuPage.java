@@ -1,6 +1,7 @@
 package de.hochschuletrier.gdw.ws1516.menu;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -10,20 +11,37 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.menu.widgets.DecoImage;
 import de.hochschuletrier.gdw.ws1516.Main;
+import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.utils.Canvas;
 
 public class MenuPage extends Group {
 
     protected Main main = Main.getInstance();
     protected AssetManagerX assetManager = main.getAssetManager();
     protected final Skin skin;
+    protected final Vector2 canvasPosition = new Vector2(
+            GameConstants.WINDOW_WIDTH * GameConstants.CANVAS_SCALE_MENU_REST,
+            GameConstants.WINDOW_HEIGHT * GameConstants.CANVAS_SCALE_MENU_REST
+    );
+    protected float canvasScale = 0.715f;
+    protected final Canvas canvas = Main.getCanvas();
+    protected DecoImage overlayImage;
 
-    public MenuPage(Skin skin, String background) {
+    public MenuPage(Skin skin) {
         super();
         this.skin = skin;
-
-        addActor(new DecoImage(assetManager.getTexture(background)));
-
         setVisible(false);
+    }
+    
+    protected void addForeground() {
+        overlayImage = new DecoImage(assetManager.getTexture("overlay"));
+        addActor(overlayImage);
+    }
+    
+    @Override
+    public void draw (Batch batch, float parentAlpha) {
+        canvas.render(batch, canvasPosition, canvasScale, false);
+        super.draw(batch, parentAlpha);
     }
 
     @Override

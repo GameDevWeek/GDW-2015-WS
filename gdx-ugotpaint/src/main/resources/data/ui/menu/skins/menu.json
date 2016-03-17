@@ -4,7 +4,7 @@
         "verdana_32": {"file": "data/fonts/verdana_32.fnt"}
     },
     "com.badlogic.gdx.graphics.Color": {
-        "green": {"a": 1, "b": 0, "g": 1, "r": 0},
+        "blue": {"a": 1, "b": 0.667, "g": 0.35, "r": 0.157},
         "white": {"a": 1, "b": 1, "g": 1, "r": 1},
         "red": {"a": 1, "b": 0, "g": 0, "r": 1},
         "yellow": {"a": 1, "b": 0, "g": 0.85, "r": 1},
@@ -21,7 +21,7 @@
         "toggle": {"down": "default-round-down", "checked": "default-round-down", "up": "default-round"}
     },
     "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
-        "default": {"down": "default-round-down", "up": "default-round", "font": "default-font", "fontColor": "white"},
+        "default": {"font": "default-font", "fontColor": "white", "overFontColor": "blue"},
         "toggle": {"down": "default-round-down", "up": "default-round", "checked": "default-round-down", "font": "default-font", "fontColor": "white", "downFontColor": "cyan", "overFontColor": "softOrange"},
         "error": {"down": "default-round-down", "up": "default-round", "font": "default-font", "fontColor": "red"}
     },

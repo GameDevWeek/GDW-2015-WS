@@ -38,6 +38,7 @@ public class GameplayState extends BaseGameState {
     private final InputProcessor gameInputProcessor;
     private final FpsCalculator fpsCalc = new FpsCalculator(200, 100, 16);
     private final BitmapFont font;
+    private final MenuPageRoot menuPageRoot;
 
     public GameplayState(AssetManagerX assetManager, Game game) {
         font = assetManager.getFont("verdana_32");
@@ -46,12 +47,11 @@ public class GameplayState extends BaseGameState {
         music = assetManager.getMusic("gameplay");
 
         Skin skin = ((MainMenuState)Main.getInstance().getPersistentState(MainMenuState.class)).getSkin();
-        final MenuPageRoot menuPageRoot = new MenuPageRoot(skin, menuManager, MenuPageRoot.Type.INGAME);
+        menuPageRoot = new MenuPageRoot(skin, menuManager, MenuPageRoot.Type.INGAME);
         menuManager.addLayer(menuPageRoot);
         menuInputProcessor = menuManager.getInputProcessor();
         gameInputProcessor = game.getInputProcessor();
 
-        menuManager.addLayer(new DecoImage(assetManager.getTexture("menu_fg")));
         menuManager.pushPage(menuPageRoot);
 //        menuManager.getStage().setDebugAll(true);
 
@@ -64,8 +64,9 @@ public class GameplayState extends BaseGameState {
                 if (keycode == Input.Keys.ESCAPE) {
                     if (mainProcessor == gameInputProcessor) {
                         mainProcessor = menuInputProcessor;
+                        menuPageRoot.fadeToMenu();
                     } else {
-                        menuManager.popPage();
+                        menuPageRoot.fadeToGame();
                     }
                     return true;
                 }
@@ -97,6 +98,7 @@ public class GameplayState extends BaseGameState {
     @Override
     public void onEnter(BaseGameState previousState) {
         MusicManager.play(music, GameConstants.MUSIC_FADE_TIME);
+        menuPageRoot.fadeToMenu();
     }
 
     @Override

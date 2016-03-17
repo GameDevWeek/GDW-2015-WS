@@ -1,5 +1,6 @@
 package de.hochschuletrier.gdw.ws1516.game;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 
 public class GameConstants {
@@ -25,6 +26,8 @@ public class GameConstants {
     
     public static final float MUSIC_FADE_TIME = 2;
     
+    public static final float CANVAS_SCALE_MENU = 0.715f;
+    public static final float CANVAS_SCALE_MENU_REST = 1 - CANVAS_SCALE_MENU;
     public static final int WINDOW_HEIGHT = 600;
     public static final int WINDOW_WIDTH = 1024;
     
@@ -46,4 +49,7 @@ public class GameConstants {
             BOUND_WIDTH - 2* SEGMENT_DISTANCE,
             BOUND_HEIGHT - 2* SEGMENT_DISTANCE
     );
+    
+    public static final Color COLOR_A = new Color(160/255.0f, 20/255.0f, 20/255.0f, 1);
+    public static final Color COLOR_B = new Color(40/255.0f, 90/255.0f, 170/255.0f, 1);
 }

@@ -36,7 +36,7 @@ public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter {
     }
 
     public MenuPageCredits(Skin skin, MenuManager menuManager) {
-        super(skin, "menu_bg");
+        super(skin);
 
         try {
             sceneAnimator = new SceneAnimator(this, "data/json/credits.json");
@@ -53,6 +53,7 @@ public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter {
         }
 
         addCenteredButton(menuManager.getWidth() - 100, 54, 100, 40, "Zurück", () -> menuManager.popPage());
+        addForeground();
     }
 
     @Override

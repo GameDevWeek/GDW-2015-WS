@@ -14,74 +14,43 @@ import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
+import de.hochschuletrier.gdw.ws1516.game.utils.Canvas;
 
 public class CanvasRenderSystem extends IteratingSystem {
-    
-    Pixmap pixmap = new Pixmap(GameConstants.WINDOW_WIDTH, GameConstants.WINDOW_HEIGHT, Pixmap.Format.RGBA8888);
-    private final Color drawTint = new Color(1,1,1,0.5f);
-    private final Color clearColor = new Color(0,0,0,0);
-    private final Color pixelColor = new Color();
-    private final Texture texture = new Texture(pixmap);
-    private float pctFilled;
+
     private float nextUpdate = 0;
-    private final Texture background;
+    private final Canvas canvas;
 
     public CanvasRenderSystem(int priority) {
         super(Family.all(PositionComponent.class, AnimationComponent.class, PlayerComponent.class).get(), priority);
-        
-        this.background = Main.getInstance().getAssetManager().getTexture("canvas");
+
+        this.canvas = Main.getCanvas();
     }
 
-    public float getPctFilled() {
-        return pctFilled;
-    }
-    
-    public void clear() {
-        pctFilled = 0;
-        pixmap.setColor(clearColor);
-        pixmap.fill();
-    }
-
-    
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         final PositionComponent pos = ComponentMappers.position.get(entity);
-        Vector2 position = pos.pos;
         AnimationComponent animation = ComponentMappers.animation.get(entity);
         PlayerComponent player = ComponentMappers.player.get(entity);
-        pixmap.setColor(animation.tint);
-        pixmap.fillCircle((int)position.x, GameConstants.WINDOW_HEIGHT - (int)position.y, GameConstants.PAINT_RADIUS);
+        canvas.setColor(animation.tint);
+        canvas.drawPoint(pos.pos);
         for (Vector2 segment : player.segments) {
-            pixmap.fillCircle((int)segment.x, GameConstants.WINDOW_HEIGHT - (int)segment.y, GameConstants.PAINT_RADIUS);
+            canvas.drawPoint(segment);
         }
     }
 
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        final int w = pixmap.getWidth();
-        final int h = pixmap.getHeight();
-        
-        DrawUtil.batch.draw(background, 0, 0, w, h);
-        texture.draw(pixmap, 0, 0);
-        DrawUtil.setColor(drawTint);
-        DrawUtil.batch.draw(texture, 0, 0, w, h);
-        DrawUtil.resetColor();
-        
+
+        canvas.render(DrawUtil.batch, Vector2.Zero, 1, true);
+
+        //Fixme: move to different system
         // Only update pctFilled every second
         nextUpdate -= deltaTime;
-        if(nextUpdate <= 0) {
+        if (nextUpdate <= 0) {
             nextUpdate = 1;
-            float drawnPixels = 0;
-            float totalPixels = w * h;
-            for(int x=0; x<w; x++) {
-                for(int y=0; y<h; y++) {
-                    pixelColor.set(pixmap.getPixel(x, y));
-                    if(pixelColor.a > 0)
-                        drawnPixels++;
-                }
-            }
-            pctFilled =  drawnPixels / totalPixels;
+            canvas.updatePctFilled();
         }
     }
 }

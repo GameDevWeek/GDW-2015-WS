@@ -32,6 +32,7 @@ import de.hochschuletrier.gdw.commons.gdx.utils.KeyUtil;
 import de.hochschuletrier.gdw.commons.resourcelocator.CurrentResourceLocator;
 import de.hochschuletrier.gdw.commons.utils.ClassUtils;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.utils.Canvas;
 import de.hochschuletrier.gdw.ws1516.states.LoadGameState;
 import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
 import org.apache.commons.cli.CommandLine;
@@ -49,7 +50,7 @@ public class Main extends StateBasedGame {
     public static CommandLine cmdLine;
 
     public static final boolean IS_RELEASE = ClassUtils.getClassUrl(Main.class).getProtocol().equals("jar");
-
+    private static Canvas canvas;
 
     private final AssetManagerX assetManager = new AssetManagerX();
     private static Main instance;
@@ -72,6 +73,10 @@ public class Main extends StateBasedGame {
             instance = new Main();
         }
         return instance;
+    }
+
+    public static Canvas getCanvas() {
+        return canvas;
     }
 
     /**
@@ -132,6 +137,7 @@ public class Main extends StateBasedGame {
     }
 
     private void onLoadComplete() {
+        canvas = new Canvas(assetManager);
         final MainMenuState mainMenuState = new MainMenuState(assetManager);
         addPersistentState(mainMenuState);
         changeState(mainMenuState, null, null);
