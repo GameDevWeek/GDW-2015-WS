@@ -95,15 +95,15 @@ public class EffectsRenderSystem extends IteratingSystem {
                 float[] dimensions = new float[]{ Gdx.graphics.getWidth(), Gdx.graphics.getHeight() };
                 shader.setUniform2fv("u_frameDimension", dimensions, 0, 2);
                 
-                shader.setUniformf("u_startDuration", paparazziStartDuration);
-                shader.setUniformf("u_durationLeft", paparazziDurationLeft);
-
+                shader.setUniformf("u_effectDuration", paparazziStartDuration);
+                shader.setUniformf("u_remainingEffectDuration", paparazziDurationLeft);
+                
                 float[] paparazziColor = new float[]{ 1.0f, 0.0f, 0.0f, 1.0f };
                 shader.setUniform4fv("u_paparazziColor", paparazziColor, 0, 4);
                 float[] paparazziSeed = new float[]{ currentPaparazziSeed, currentPaparazziSeed };
                 shader.setUniform2fv("u_paparazziSeed", paparazziSeed, 0, 2);
                 Vector2 shaderCoords = cameraScreenToShaderScreenCoords(cameraTargetScreenPos);
-                float[] paparazziOverlaySafeCircle = new float[]{shaderCoords.x, shaderCoords.y , 100.0f };
+                float[] paparazziOverlaySafeCircle = new float[]{ shaderCoords.x, shaderCoords.y , 100.0f };
                 shader.setUniform3fv("u_paparazziOverlaySafeCircle", paparazziOverlaySafeCircle, 0, 3);
                 shader.setUniformf("u_paparazziIntensity", paparazziIntensity.get());
                 
