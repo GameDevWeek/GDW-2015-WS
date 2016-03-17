@@ -12,8 +12,6 @@ public class AnimationComponent extends Component implements Pool.Poolable
     public AnimationState animationState = AnimationState.none;
     public float stateTime;
     public boolean flipHorizontal;
-    //
-    public int animationFlags;
 
     @Override
     public void reset() {

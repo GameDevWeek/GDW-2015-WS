@@ -53,8 +53,6 @@ public class AnimationRenderSystem extends SubSystem
             }
         }
         
-        animation.animationFlags = 0;
-        
     }
     
     private boolean move = false;

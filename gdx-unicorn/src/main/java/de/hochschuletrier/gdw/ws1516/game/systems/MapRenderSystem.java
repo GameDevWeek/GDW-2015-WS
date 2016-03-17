@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import de.hochschuletrier.gdw.commons.devcon.ConsoleCmd;
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarBool;
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarFloat;
+import de.hochschuletrier.gdw.commons.devcon.cvar.CVarInt;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.Hotkey;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.HotkeyModifier;
 import de.hochschuletrier.gdw.commons.gdx.tiled.TiledMapRendererGdx;
@@ -42,10 +43,10 @@ public class MapRenderSystem extends IteratingSystem {
     
     private final HashMap<TileSet, Texture> tilesetImages = new HashMap<>();
     
-    private final CVarBool fancyRainbow = new CVarBool("fancyRainbow", true, 0, "sets fancy rainbowmode");
+    private final CVarInt rainbowType = new CVarInt("fancyRainbow", 0, 0, 2, 0, "sets fancy rainbowmode");
     private final ConsoleCmd rainbow = new ConsoleCmd("rainbow", 0, "Usage: rainbow [duration] - Activates rainbow mode for [duration] seconds") { @Override public void execute(List<String> args) { startRainbow(args); } };
     private final Hotkey rainbowHotkey = new Hotkey(() -> startRainbow(), Input.Keys.R, HotkeyModifier.CTRL);
-    private final Hotkey fancyRainbowHotkey = new Hotkey(() -> fancyRainbow.set(!fancyRainbow.get(), true), Input.Keys.T, HotkeyModifier.CTRL);
+    private final Hotkey fancyRainbowHotkey = new Hotkey(() -> rainbowType.set((rainbowType.get() + 1) % 3, true), Input.Keys.T, HotkeyModifier.CTRL);
     private final CVarFloat rainbowFrequency = new CVarFloat("rainbowFrequency", GameConstants.RAINBOW_FREQUENCY, 0.0f, Float.MAX_VALUE, 0, "");
     private final CVarFloat rainbowAlpha = new CVarFloat("rainbowAlpha", GameConstants.RAINBOW_ALPHA, 0.0f, Float.MAX_VALUE, 0, "");
     
@@ -62,7 +63,7 @@ public class MapRenderSystem extends IteratingSystem {
         Main.getInstance().console.register(rainbow);
         Main.getInstance().console.register(rainbowFrequency);
         Main.getInstance().console.register(rainbowAlpha);
-        Main.getInstance().console.register(fancyRainbow);
+        Main.getInstance().console.register(rainbowType);
         rainbowHotkey.register();
         fancyRainbowHotkey.register();
     }
@@ -74,7 +75,7 @@ public class MapRenderSystem extends IteratingSystem {
         Main.getInstance().console.unregister(rainbow);
         Main.getInstance().console.unregister(rainbowFrequency);
         Main.getInstance().console.unregister(rainbowAlpha);
-        Main.getInstance().console.unregister(fancyRainbow);
+        Main.getInstance().console.unregister(rainbowType);
         rainbowHotkey.unregister();
         fancyRainbowHotkey.unregister();
     }
@@ -86,16 +87,34 @@ public class MapRenderSystem extends IteratingSystem {
         if(rainbowDurationLeft > 0.0f)
         {
             rainbowDurationLeft -= deltaTime;
-            ShaderProgram rainbowShader = fancyRainbow.get() ? ShaderLoader.getFancyRainbowShader() : ShaderLoader.getSimpleRainbowShader();
-            DrawUtil.setShader(rainbowShader);
+            ShaderProgram rainbowShader = null;
+            switch(rainbowType.get())
+            {
+            case 0:
+                rainbowShader = ShaderLoader.getFancyRainbowShader();
+                DrawUtil.setShader(rainbowShader);
+                rainbowShader.setUniformf("u_rainbowAlpha", rainbowAlpha.get());
+                rainbowShader.setUniformf("u_rainbowFrequency", rainbowFrequency.get());
+                break;
+            case 1:
+                rainbowShader = ShaderLoader.getSimpleRainbowShader();
+                DrawUtil.setShader(rainbowShader);
+                rainbowShader.setUniformf("u_rainbowAlpha", rainbowAlpha.get());
+                rainbowShader.setUniformf("u_rainbowFrequency", rainbowFrequency.get());
+                break;
+            default:
+                rainbowShader = ShaderLoader.getOldRainbowShader();
+                DrawUtil.setShader(rainbowShader);
+                rainbowShader.setUniformf("u_rainbowAlpha", rainbowAlpha.get());
+                rainbowShader.setUniformf("u_rainbowFrequency", rainbowFrequency.get() * 0.2f);
+                break;
+            }
             if(rainbowShader != null)
             {
                 float[] dimensions = new float[]{ Gdx.graphics.getWidth(), Gdx.graphics.getHeight() };
                 rainbowShader.setUniformf("u_startDuration", rainbowStartDuration);
                 rainbowShader.setUniformf("u_durationLeft", rainbowDurationLeft);
                 rainbowShader.setUniform2fv("u_frameDimension", dimensions, 0, 2);
-                rainbowShader.setUniformf("u_rainbowAlpha", rainbowAlpha.get());
-                rainbowShader.setUniformf("u_rainbowFrequency", rainbowFrequency.get());
                 rainbowShader.setUniformf("u_time", (float)TimeUtils.timeSinceMillis(startTime) * 0.001f);
             }
         }
