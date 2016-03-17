@@ -20,8 +20,6 @@ public class CameraSystem extends IteratingSystem {
     private float targetX;
     private float targetY;
     
-    private float[] cameraBounds;
-    
     static {
         camera = new LimitedSmoothCamera();
     }
@@ -82,6 +80,34 @@ public class CameraSystem extends IteratingSystem {
      */
     public static Vector2 getCameraPosition() {
         return new Vector2(camera.getPosition().x, camera.getPosition().y);
+    }
+    
+    /**
+     * @return camera viewport top left corner in world coordinates
+     */
+    public static Vector2 getViewportTopLeft() {
+        return new Vector2( -camera.getLeftOffset() , -camera.getTopOffset() ).add(getCameraPosition());
+    }
+    
+    /**
+     * @return camera viewport top right corner in world coordinates
+     */
+    public static Vector2 getViewportTopRight() {
+        return new Vector2( +camera.getLeftOffset() , -camera.getTopOffset() ).add(getCameraPosition());
+    }
+    
+    /**
+     * @return camera viewport bottom right corner in world coordinates
+     */
+    public static Vector2 getViewportBottomRight() {
+        return new Vector2( +camera.getLeftOffset() , +camera.getTopOffset() ).add(getCameraPosition());
+    }
+    
+    /**
+     * @return camera viewport bottom left corner in world coordinates
+     */
+    public static Vector2 getViewportBottomLeft() {
+        return new Vector2( -camera.getLeftOffset() , +camera.getTopOffset() ).add(getCameraPosition());
     }
     
     public static Vector2 worldToScreenCoordinates(Vector2 world) {
