@@ -18,7 +18,7 @@ public class PlayerComponent extends Component implements Poolable {
         SPUCKCHARGE
     }
     
-    public State state;
+    public State state = State.NORMAL;
     public float stateTimer;
     
     public float hornAttackCooldown;
