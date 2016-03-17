@@ -303,7 +303,8 @@ public class Game extends InputAdapter {
                 in der Engine Update Methode wird noch mehr
                  getan, fehlt noch etwas wichtiges um ein Menü am laufen zu halten ??
              */
-//            renderSystem.update(delta);
+            renderSystem.update(delta);
+            mapRenderSystem.update(delta);
             hudRenderSystem.update(delta);
         }
     }
