@@ -20,9 +20,10 @@ import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent.State;
+import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
 
 public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.Listener,
-    HornAttackEvent.Listener{
+    HornAttackEvent.Listener, StartFlyEvent.Listener, EndFlyEvent.Listener {
 
     private static final Logger logger = LoggerFactory.getLogger(PlayerStateSystem.class);
     
@@ -35,6 +36,8 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         super.addedToEngine(engine);
         RainbowEvent.register(this);
         HornAttackEvent.register(this);
+        StartFlyEvent.register(this);
+        EndFlyEvent.register(this);
     }
     
     @Override
@@ -42,6 +45,8 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         super.removedFromEngine(engine);
         RainbowEvent.unregister(this);
         HornAttackEvent.unregister(this);
+        StartFlyEvent.unregister(this);
+        EndFlyEvent.register(this);
     }
     
     @Override
@@ -116,9 +121,28 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
     @Override
     public void onRainbowModeEnd(Entity player) {
         if (getEntities().size()>0){
-        PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
-        playerComp.hornAttackCooldown = GameConstants.HORN_MODE_COOLDOWN;
+            PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
+            playerComp.hornAttackCooldown = GameConstants.HORN_MODE_COOLDOWN;
         }
+    }
+
+    @Override
+    public void onStartFlyEvent(Entity entity, float time) {
+
+        if (getEntities().size()>0){
+            MovementComponent move = ComponentMappers.movement.get(getEntities().get(0));
+            move.speed = (float) (GameConstants.PLAYER_SPEED*0.75f);
+        }
+        
+    }
+    
+
+    @Override
+    public void onEndFlyEvent(Entity entity) {
+        if (getEntities().size()>0){
+            MovementComponent move = ComponentMappers.movement.get(getEntities().get(0));
+            move.speed = (float) (GameConstants.PLAYER_SPEED);
+        }     
     }
     
 

@@ -25,6 +25,7 @@
     "heart1": "data/ui/menu/heart1.png",
     "heart2": "data/ui/menu/heart2.png",
     "heart3": "data/ui/menu/heart3.png",    
+    "dead_unicorn_gameover": "data/ui/menu/unicorn_dead.png",
     "menu_fg": "data/ui/menu/fg_border.png",
     "menu_bg": "data/ui/menu/menu_splash.png",
     "transparent_bg": "data/ui/menu/transparent.png",
