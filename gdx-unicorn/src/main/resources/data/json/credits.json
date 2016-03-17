@@ -11,15 +11,39 @@
         "text": {
             "type": "linear",
             "destinations": [
-                {"x": 512, "y": 120, "speed": 30 },
-                {"x": 512, "y": 700, "speed": 30 }
+                {"x": 512, "y": 20, "speed": 75 },
+                {"x": 512, "y": 700, "speed": 75 }
             ]
         },
-        "btw": {
+        "unicorn1": {
             "type": "linear",
             "destinations": [
-                {"x": 200, "y": 120, "speed": 30 },
-                {"x": 200, "y": 700, "speed": 30 }
+                {"x" : 0,"y": 300,"speed": 333},
+                {"x" : 1500, "y": 300 ,"speed": 333}
+            ]
+        },
+        "chase1":{
+            "type":"linear",
+            "destinations": [
+                {"x" : 1500,"y": 600,"speed": 333},
+                {"x" : 0, "y": 100 ,"speed": 333}
+            ]
+        },
+        "chase2":{
+            "type":"linear",
+            "destinations":[
+                {"x":0,"y":0,"speed":333},
+                {"x":300,"y":500,"speed":333},
+                {"x":600,"y":100,"speed":333},
+                {"x":1200,"y":400,"speed":333}
+            ]
+        },
+        "nomnom":{
+            "type":"linear",
+            "destinations":[
+                {"x":1300,"y":100,"speed":70},
+                {"x":1000,"y":100,"speed":50},
+                {"x":1300,"y":100,"speed":50}
             ]
         }
     },
@@ -29,56 +53,56 @@
             "items" : [
 
                 { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Organisation:", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Santo Pfingsten  ", "delay": "1350" },
+                { "type": "text", "path" : "text", "style" : "text_left", "text": "Santo Pfingsten  ", "delay": "675" },
                 { "type": "text", "path" : "text", "style" : "text_right", "text": "  Kore Kaluzynski", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Julia Eiden  ", "delay": "1350" },
+                { "type": "text", "path" : "text", "style" : "text_left", "text": "Julia Eiden  ", "delay": "675" },
                 { "type": "text", "path" : "text", "style" : "text_right", "text": "  Minh Duc Dao", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_center", "text": "Jerome Jähnig", "delay": "1350" },
+                { "type": "text", "path" : "text", "style" : "text_center", "text": "Jerome Jähnig", "delay": "675" },
 
                 { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Game Logik:", "delay": "3300" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Tobias Gepp  ", "delay": "1350" },
+                { "type": "text", "path" : "text", "style" : "text_left", "text": "Tobias Gepp  ", "delay": "675" },
                 { "type": "text", "path" : "text", "style" : "text_right", "text": "  Marwin Rieger", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_center", "text": "Philipp Martschei", "delay": "1350" },
+                { "type": "text", "path" : "text", "style" : "text_center", "text": "Philipp Martschei", "delay": "675" },
 
 
                 { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Physik:", "delay": "3300" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Tobias Thierbach  ", "delay": "1350" },
+                { "type": "text", "path" : "text", "style" : "text_left", "text": "Tobias Thierbach  ", "delay": "675" },
                 { "type": "text", "path" : "text", "style" : "text_right", "text": "  Eileen Neumann", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_center", "text": "Jeremy Merse", "delay": "1350" },
+                { "type": "text", "path" : "text", "style" : "text_center", "text": "Jeremy Merse", "delay": "675" },
 
 
                 { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Rendering:", "delay": "3300" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Armin Willer  ", "delay": "1350" },
+                { "type": "text", "path" : "text", "style" : "text_left", "text": "Armin Willer  ", "delay": "675" },
                 { "type": "text", "path" : "text", "style" : "text_right", "text": "  Daniel Reiners", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_center", "text": "Michael Dahm", "delay": "1350" },
+                { "type": "text", "path" : "text", "style" : "text_center", "text": "Michael Dahm", "delay": "675" },
 
 
                 { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Assets:", "delay": "3300" },
-                { "type": "text", "path" : "text", "style" : "text_center", "text": "David Siepen", "delay": "1350" },
+                { "type": "text", "path" : "text", "style" : "text_center", "text": "David Siepen", "delay": "675" },
 
 
                 { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Eingabeverarbeitung:", "delay": "3300" },
-                { "type": "text", "path" : "text", "style" : "text_center", "text": "Jonathan Jan-Thadeusz Wojcik", "delay": "1350" },
+                { "type": "text", "path" : "text", "style" : "text_center", "text": "Jonathan Jan-Thadeusz Wojcik", "delay": "675" },
 
 
                 { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "UI/Hud:", "delay": "3300" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Mateo Egey  ", "delay": "1350" },
+                { "type": "text", "path" : "text", "style" : "text_left", "text": "Mateo Egey  ", "delay": "675" },
                 { "type": "text", "path" : "text", "style" : "text_right", "text": "  Max Flesh", "delay": "0" },
 
 
                 { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Level Design:", "delay": "3300" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Wera Großner  ", "delay": "1350" },
+                { "type": "text", "path" : "text", "style" : "text_left", "text": "Wera Großner  ", "delay": "675" },
                 { "type": "text", "path" : "text", "style" : "text_right", "text": "  Kristofer Schmitz", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_center", "text": "Tristan-Philip Semmler", "delay": "1350" },
+                { "type": "text", "path" : "text", "style" : "text_center", "text": "Tristan-Philip Semmler", "delay": "675" },
 
 
              { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Sound Design:", "delay": "3300" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Minh Duc Dao  ", "delay": "1350" },
+                { "type": "text", "path" : "text", "style" : "text_left", "text": "Minh Duc Dao  ", "delay": "675" },
                 { "type": "text", "path" : "text", "style" : "text_right", "text": "  Jason Merse", "delay": "0" },
 
 
                 { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Grafik Design:", "delay": "3300" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Jeremy Baltat  ", "delay": "1350" },
+                { "type": "text", "path" : "text", "style" : "text_left", "text": "Jeremy Baltat  ", "delay": "675" },
                 { "type": "text", "path" : "text", "style" : "text_right", "text": "  Loni", "delay": "0" }
 ],
             "animations": [
@@ -108,6 +132,18 @@
 
                 { "time": 14000, "animation": "fade_out", "animationTime": 2000, "group": "*" }
             ]
+        },
+        "stuff": {
+            "time": 3000,
+            "items": [
+                {"type":"texture","path":"unicorn1", "resource":"unicorn","delay":5000},
+                {"type":"texture","path":"chase1", "resource":"bubblegum_rainbow", "oriented":"true", "delay":10000},
+                {"type":"texture","path":"chase1", "resource":"unicorn", "oriented":"true", "delay":250},
+                {"type":"texture","path":"chase2","resource":"bubblegum_rainbow","oriented":"true","delay":10000},
+                {"type":"texture","path":"chase2","resource":"unicorn","oriented":"true","delay":250},
+                {"type":"texture","path":"nomnom","resource":"trex","oriented":"false","delay":0}
+            ],
+            "animations":[]
         }
     }
 }
