@@ -10,22 +10,22 @@ precision mediump float;
 
 varying LOWP vec4 v_color;
 varying float v_rainbowAlpha;
-varying vec2 v_texCoords;
 
 uniform vec2 u_frameDimension;
 uniform float u_rainbowFrequency;
 uniform float u_rainbowAmplitude;
 uniform float u_time;
-uniform sampler2D u_texture;
 
 vec4 calcRainbowColor();
 float getHorizontalOffset();
 
 void main()
 {
-	vec4 rainbowColor = v_color * (1.0 - v_rainbowAlpha) + calcRainbowColor() * v_rainbowAlpha;
+	//vec4 rainbowColor = v_color * (1.0 - v_rainbowAlpha) + calcRainbowColor() * v_rainbowAlpha;
 	
-	gl_FragColor = rainbowColor * texture2D(u_texture, v_texCoords);
+	//gl_FragColor = rainbowColor * texture2D(u_texture, v_texCoords);
+	gl_FragColor = calcRainbowColor();
+	gl_FragColor.a = v_rainbowAlpha;
 }
 
 vec4 calcRainbowColor()
