@@ -107,8 +107,9 @@ public class MovementSystem extends IteratingSystem implements
         InputComponent input = ComponentMappers.input.get(entity);
         MovementComponent movement = ComponentMappers.movement.get(entity);
 
-        movement.velocityX = (movement.speed * input.directionX);
-        movement.velocityY = (movement.speed * input.directionY);
+        movement.velocityX = movement.speed * Math.max(Math.min(input.directionX, 1.0f), -1.0f);
+        movement.velocityY = movement.speed * Math.max(Math.min(input.directionY, 1.0f), -1.0f);
+        
         physix.setLinearVelocity(movement.velocityX, movement.velocityY);
         // physix.applyImpulse(movement.velocityX, movement.velocityY);
 
@@ -124,7 +125,7 @@ public class MovementSystem extends IteratingSystem implements
         // TODO Auto-generated method stub
         MovementComponent movement = ComponentMappers.movement.get(entity);
         if (movement != null) {
-            movement.state = MovementComponent.State.ON_GROUND;
+            movement.state = MovementComponent.State.JUMPING;
         }
     }
 
@@ -149,10 +150,9 @@ public class MovementSystem extends IteratingSystem implements
 
     @Override
     public void onMovementEvent(Entity entity, float dirX) {
-        // TODO Auto-generated method stub
-        MovementComponent movement = ComponentMappers.movement.get(entity);
 
-        movement.velocityX = (movement.speed * dirX);
+        MovementComponent movement = ComponentMappers.movement.get(entity);
+        movement.velocityX = movement.speed * Math.max(Math.min(dirX, 1.0f), -1.0f);
 
     }
 
