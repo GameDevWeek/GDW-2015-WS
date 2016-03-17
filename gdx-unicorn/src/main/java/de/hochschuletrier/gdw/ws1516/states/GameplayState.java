@@ -30,7 +30,7 @@ import de.hochschuletrier.gdw.ws1516.menu.MainMenuPage;
 public class GameplayState extends BaseGameState {
 
 
-    private static final Color OVERLAY_COLOR = new Color(0f, 0f, 0f, 0.0f);
+    private static final Color OVERLAY_COLOR = new Color(0f, 0f, 0f, 0.5f);
 
     private final Game game;
     private final Music music;
@@ -56,7 +56,7 @@ public class GameplayState extends BaseGameState {
 
 //        menuManager.addLayer(new DecoImage(assetManager.getTexture("menu_fg")));
 
-        menuManager.addLayer(new DecoImage(assetManager.getTexture("menu_fg")));
+
 
         menuManager.pushPage(menuPageRoot);
         
@@ -103,8 +103,6 @@ public class GameplayState extends BaseGameState {
 
     @Override
     public void onEnter(BaseGameState previousState) {
-       
-       
         MusicManager.play(music, GameConstants.MUSIC_FADE_TIME);
     }
 

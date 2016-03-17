@@ -15,22 +15,21 @@ import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 
 public class CameraSystem extends IteratingSystem {
 
-    private final LimitedSmoothCamera camera;
+    private static final LimitedSmoothCamera camera;
     
     private float targetX;
     private float targetY;
     
-    private static Vector2 currentCameraPosition;
+    private float[] cameraBounds;
     
     static {
-        currentCameraPosition = new Vector2();
+        camera = new LimitedSmoothCamera();
     }
     
     @SuppressWarnings("unchecked")
     public CameraSystem(int priority) {
         super(Family.all(CameraTargetComponent.class).get(), priority);
         
-        this.camera = new LimitedSmoothCamera();
         this.targetX = this.targetY = 0.0f;
     }
     
@@ -52,6 +51,7 @@ public class CameraSystem extends IteratingSystem {
     }
     
     public void setCameraBounds(int xMin, int yMin, int xMax, int yMax) {
+        cameraBounds = new float[] { xMin, yMin, xMax, yMax };
         camera.setBounds(xMin, yMin, xMax, yMax);
         camera.updateForced();
     }
@@ -75,18 +75,13 @@ public class CameraSystem extends IteratingSystem {
         camera.setDestination(targetX, targetY);
         camera.update(deltaTime);
         camera.bind();
-        
-        setCameraPositionInformation(camera);
-    }
-    
-    private void setCameraPositionInformation(LimitedSmoothCamera camera) {
-        currentCameraPosition.x = camera.getPosition().x;
-        currentCameraPosition.y = camera.getPosition().y;
-        
     }
 
-    private static Vector2 getCameraPosition() {
-        return new Vector2(currentCameraPosition.x , currentCameraPosition.y);
+    /**
+     * @return camera position in world coordinates
+     */
+    public static Vector2 getCameraPosition() {
+        return new Vector2(camera.getPosition().x, camera.getPosition().y);
     }
     
     public static Vector2 worldToScreenCoordinates(Vector2 world) {

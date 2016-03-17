@@ -15,7 +15,6 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import de.hochschuletrier.gdw.commons.devcon.ConsoleCmd;
-import de.hochschuletrier.gdw.commons.devcon.cvar.CVarBool;
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarFloat;
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarInt;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.Hotkey;
@@ -28,10 +27,11 @@ import de.hochschuletrier.gdw.commons.tiled.TileSet;
 import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.commons.tiled.tmx.TmxImage;
 import de.hochschuletrier.gdw.ws1516.Main;
+import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 
-public class MapRenderSystem extends IteratingSystem {
+public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Listener{
 
     private TiledMap map;
     private TiledMapRendererGdx mapRenderer;
@@ -60,6 +60,8 @@ public class MapRenderSystem extends IteratingSystem {
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
         
+        RainbowEvent.register(this);
+        
         Main.getInstance().console.register(rainbow);
         Main.getInstance().console.register(rainbowFrequency);
         Main.getInstance().console.register(rainbowAlpha);
@@ -71,6 +73,8 @@ public class MapRenderSystem extends IteratingSystem {
     @Override
     public void removedFromEngine(Engine engine) {
         super.removedFromEngine(engine);
+        
+        RainbowEvent.unregister(this);
         
         Main.getInstance().console.unregister(rainbow);
         Main.getInstance().console.unregister(rainbowFrequency);
@@ -138,6 +142,13 @@ public class MapRenderSystem extends IteratingSystem {
         duration.add(GameConstants.RAINBOW_MODE_TIME + "");
         startRainbow(duration);
     }
+    
+    protected void endRainbow()
+    {
+        List<String> duration = new ArrayList<>();
+        duration.add(0 + "");
+        startRainbow(duration);
+    }
 
     protected void startRainbow(List<String> args) {
         if(args.size() <= 1)
@@ -172,5 +183,15 @@ public class MapRenderSystem extends IteratingSystem {
         int totalMapWidth = map.getWidth() * map.getTileWidth();
         int totalMapHeight = map.getHeight() * map.getTileHeight();
         cameraSystem.setCameraBounds(0, 0, totalMapWidth, totalMapHeight);
+    }
+
+    @Override
+    public void onRainbowCollect(Entity player) {
+        startRainbow();
+    }
+
+    @Override
+    public void onRainbowModeEnd(Entity player) {
+        endRainbow();
     }
 }

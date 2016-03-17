@@ -30,6 +30,7 @@ import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
 import de.hochschuletrier.gdw.commons.tiled.LayerObject;
 import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.ws1516.Main;
+import de.hochschuletrier.gdw.ws1516.events.HealEvent;
 import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
@@ -84,9 +85,10 @@ public class Game extends InputAdapter {
             HotkeyModifier.CTRL);
     private final Hotkey scoreCheating = new Hotkey(() -> ScoreBoardEvent.emit(ScoreType.BONBON, 1), Input.Keys.F2,
             HotkeyModifier.CTRL);
+    private Hotkey healCheating = null;
     
 
-    private final Hotkey rainbowMode = new Hotkey(()->RainbowEvent.emit(),Input.Keys.F3,HotkeyModifier.CTRL);
+    //private final Hotkey rainbowMode = new Hotkey(()->RainbowEvent.start(player),Input.Keys.F3,HotkeyModifier.CTRL);
 
 
     private final PooledEngine engine = new PooledEngine(GameConstants.ENTITY_POOL_INITIAL_SIZE,
@@ -143,8 +145,7 @@ public class Game extends InputAdapter {
             scoreCheating.register();
 
            
-
-            rainbowMode.register();
+//            rainbowMode.register();
 
         }
 
@@ -153,7 +154,8 @@ public class Game extends InputAdapter {
     public void dispose() {
         togglePhysixDebug.unregister();
         scoreCheating.unregister();
-        rainbowMode.unregister();
+//        rainbowMode.unregister();
+        healCheating.unregister();
         Main.getInstance().console.unregister(physixDebug);
         
         engine.removeAllEntities();
@@ -181,17 +183,24 @@ public class Game extends InputAdapter {
         EntityCreator.setGame(this);
         EntityCreator.setEntityFactory(entityFactory);
         
-        loadMap("data/maps/demo_level_worked_nurMap.tmx");
+        loadMap("data/maps/demo_level_worked.tmx");
         mapRenderSystem.initialzeRenderer(map, cameraSystem);
         
         //test:
-        EntityCreator.createEntity("unicorn", 700, 100);
+        Entity unicorn = EntityCreator.createEntity("unicorn", 1300, 300);
         Entity entity=EntityCreator.createEntity("hunter", 1000, 100);
         PathComponent pathComponent =ComponentMappers.path.get(entity);
         pathComponent.points.add(new Vector2(1000, 100));
         pathComponent.points.add(new Vector2(800,100));
-        Entity papa = EntityCreator.createEntity("tourist", 2000, 100);
-        
+        Entity papa = EntityCreator.createEntity("tourist", 1700, 100);
+        healCheating = new Hotkey(() -> HealEvent.emit(unicorn, 1), Input.Keys.F4,
+        HotkeyModifier.CTRL);
+        healCheating.register();
+        papa = EntityCreator.createEntity("tourist", 2000, 100);
+        pathComponent =ComponentMappers.path.get(papa);
+        pathComponent.points.add(new Vector2(2000, 100));
+        pathComponent.points.add(new Vector2(2200,100));
+
     }
 
 
