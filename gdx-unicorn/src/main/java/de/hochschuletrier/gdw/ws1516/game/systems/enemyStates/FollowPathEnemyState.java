@@ -26,7 +26,18 @@ public class FollowPathEnemyState extends EnemyBaseState {
         EnemyBehaviourComponent behaviour=ComponentMappers.enemyBehaviour.get(entity);
         PositionComponent position = ComponentMappers.position.get(entity);
         EnemyTypeComponent enemyType=ComponentMappers.enemyType.get(entity);
-        
+        if ( behaviour.canSeeUnicorn )
+        {
+            if (enemyType.type==EnemyType.HUNTER){
+                if (behaviour.cooldown==0){
+                    return new AttackEnemyState();
+                }
+                else{
+                    return this;
+                }
+            }
+            return new FollowPlayerEnemyState();
+        }
         if (pathComponent!=null && pathComponent.points.size()>0){
             /// index für den Punkt raszufinden der von 0 - max -  0 pendelt
             int pathIndex;
@@ -58,22 +69,7 @@ public class FollowPathEnemyState extends EnemyBaseState {
         }else{
             MovementEvent.emit(entity, 0.0f);
         }
-        
-        if ( behaviour.canSeeUnicorn )
-        {
-            if (enemyType.type==EnemyType.HUNTER){
-                if (behaviour.cooldown==0){
-                    return new AttackEnemyState();
-                }
-                else{
-                    return this;
-                }
-            }
-            return new FollowPlayerEnemyState();
-        }else
-        {
-            return this;
-        }
+        return this;
     }
 
 }

@@ -197,9 +197,11 @@ public class Game extends InputAdapter {
         healCheating = new Hotkey(() -> HealEvent.emit(unicorn, 1), Input.Keys.F4,
         HotkeyModifier.CTRL);
         healCheating.register();
+        papa = EntityCreator.createEntity("tourist", 2000, 100);
         pathComponent =ComponentMappers.path.get(papa);
         pathComponent.points.add(new Vector2(2000, 100));
         pathComponent.points.add(new Vector2(2200,100));
+
     }
 
 
