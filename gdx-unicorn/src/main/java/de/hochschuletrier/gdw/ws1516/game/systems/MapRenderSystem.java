@@ -142,6 +142,13 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
         duration.add(GameConstants.RAINBOW_MODE_TIME + "");
         startRainbow(duration);
     }
+    
+    protected void endRainbow()
+    {
+        List<String> duration = new ArrayList<>();
+        duration.add(0 + "");
+        startRainbow(duration);
+    }
 
     protected void startRainbow(List<String> args) {
         if(args.size() <= 1)
@@ -179,7 +186,12 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
     }
 
     @Override
-    public void onRainbowCollect() {
+    public void onRainbowCollect(Entity player) {
         startRainbow();
+    }
+
+    @Override
+    public void onRainbowModeEnd(Entity player) {
+        endRainbow();
     }
 }
