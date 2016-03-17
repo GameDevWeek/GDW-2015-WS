@@ -78,6 +78,9 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
             case Input.Keys.DOWN:
                 directionY += 1.0f;
                 break;
+            case Input.Keys.NUM_3:
+                hornAttack = true;
+                break;
         }
         return true;
     }
@@ -110,8 +113,7 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
                 // hornAttack = false;
                 break;
             case Input.Keys.NUM_3:
-                hornAttack = true;
-                // hornAttack = false;
+                hornAttack = false;
                 break;
             case Input.Keys.K:
                 spit = false;
@@ -164,7 +166,7 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
         input.directionX = directionX;
         input.directionY = directionY;
         input.startFly = fly;
-        if (fly) {
+        if (fly && player.state!=State.RAINBOW) {
             StartFlyEvent.emit(entity, GameConstants.FLYING_TIME);
             fly = false;
         }

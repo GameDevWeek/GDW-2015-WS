@@ -1,5 +1,7 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
+import java.awt.FlowLayout;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,6 +10,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 
+import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
 import de.hochschuletrier.gdw.ws1516.events.MovementEvent;
 import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
@@ -52,7 +55,7 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
                 HornAttackEvent.stop(entity);
             }
             if (playerComp.state==State.RAINBOW){
-
+                RainbowEvent.end(entity);
                 movementComp.speed=GameConstants.PLAYER_SPEED;
             } 
             playerComp.state = State.NORMAL;
@@ -67,6 +70,7 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
             if (playerComp.state==State.HORNATTACK){
                 HornAttackEvent.stop(player);
             }
+            EndFlyEvent.emit(player);
             playerComp.state=State.RAINBOW;
             playerComp.stateTimer=GameConstants.RAINBOW_MODE_TIME;
             playerComp.deathZoneCounter = 0;
@@ -82,6 +86,8 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
             PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
             playerComp.state = State.HORNATTACK;
             playerComp.stateTimer = GameConstants.HORN_MODE_TIME;
+            playerComp.hornAttackCooldown = GameConstants.HORN_MODE_TIME;
+            
         }
     }
     
@@ -89,8 +95,8 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
     public void onHornAttackStop(Entity player) {
 
         if (getEntities().size()>0){
-        PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
-        playerComp.hornAttackCooldown = GameConstants.HORN_MODE_COOLDOWN;
+            PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
+            playerComp.hornAttackCooldown = GameConstants.HORN_MODE_COOLDOWN;
         }
     }
     
