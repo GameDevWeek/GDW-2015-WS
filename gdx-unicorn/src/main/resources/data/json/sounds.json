@@ -3,5 +3,5 @@
 	"helicopter": "data/sounds/helicopter.wav",
 	"einhornEmpathy":"data/sounds/EinhornEmpathy.wav",
 	"buttonSound":"data/sounds/click.wav",
-	"einhornMotivated":":data/sounds/EinhornMotivated.wav"
+	"einhornMotivated":"data/sounds/EinhornMotivated.wav"
 }

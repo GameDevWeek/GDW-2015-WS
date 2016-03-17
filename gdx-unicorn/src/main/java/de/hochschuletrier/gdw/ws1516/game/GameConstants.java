@@ -77,7 +77,6 @@ public class GameConstants {
     //EnemyBehaviour
     public static final int ENEMY_FRAME_JUMP_BUFFER = 60; /// no longer used??
     public static final int HUNTER_BULLET_OFFSET = (int)TILESIZE_X;
-    //shaderParameter
 
     // Shader parameters
     public static final float RAINBOW_FREQUENCY = 2.0f;
