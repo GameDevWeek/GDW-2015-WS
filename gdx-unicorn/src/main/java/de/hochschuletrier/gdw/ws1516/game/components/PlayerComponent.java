@@ -6,6 +6,9 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 public class PlayerComponent extends Component implements Poolable {
 
     public boolean doRespawn;
+    public int maxHitpoints;
+    public int hitpoints;
+    public int lives;
 
     @Override
     public void reset() {
