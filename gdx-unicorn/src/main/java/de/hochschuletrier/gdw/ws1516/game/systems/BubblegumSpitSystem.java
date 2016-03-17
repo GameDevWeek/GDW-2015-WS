@@ -69,7 +69,6 @@ public class BubblegumSpitSystem extends IteratingSystem implements BubblegumSpi
         if (position != null && body != null) { 
             PhysixModifierComponent modifier = engine.createComponent(PhysixModifierComponent.class);
             modifier.schedule(() -> {
-                logger.debug("angle adaption");
                 body.setAngle(body.getLinearVelocity().angle() * PhysixUtil.DEG2RAD);
             });
             entity.add(modifier);
