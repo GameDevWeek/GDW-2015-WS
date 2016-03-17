@@ -91,14 +91,14 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         float heart_x =  20;
         float heart_y = 20;
         
-        float time_x = 0.5F * displayWidth;
+        float time_x = 0.45F * displayWidth;
         float time_y = 20;
         
-        float cookie_x = displayWidth-100;
+        float cookie_x = displayWidth-140;
         float cookie_y = 20;
         
-        float score_x = cookie_x + 30;
-        float score_y = 20;
+        float score_x = cookie_x + 60;
+        float score_y = 35;
         
         
               
