@@ -50,36 +50,35 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
         if (value > 0 )
         {
             PlayerComponent playerComp = pm.get(entity);
-            if (playerComp.state!=PlayerComponent.State.RAINBOW){
-            playerComp.hitpoints-= value;
-            
-            if (playerComp.hitpoints <= 0)
-                DeathEvent.emit(entity);
-            
             if (playerComp == null) //wenn es sich um einen Gegner handelt wars das soweit.
                 return;
-            
-            //ansonsten war es das Einhorn => unterschiedliches Verhalten, je nach Art des HitPoints.
-            switch (type) {
-            case TOUCH:
-                //TODO anpassen!
-                //testweise vektoren in abhaengigkeit der Blickrichtung des Einhorns
-                MovementComponent moveComp = mm.get(entity);
-                float forceX = 0.0f;
-                float forceY = -0.5f;
+            if (playerComp.state!=PlayerComponent.State.RAINBOW){
+                playerComp.hitpoints-= value;
                 
                 if (playerComp.hitpoints <= 0)
                     DeathEvent.emit(entity);
-                if (moveComp.lookDirection == MovementComponent.LookDirection.LEFT) {
-                    forceX = 1.0f;
-                } else {
-                    forceX = -1.0f;
-                }
                 
-                break;
-            default:
-                break;
-            }}
+                
+                //ansonsten war es das Einhorn => unterschiedliches Verhalten, je nach Art des HitPoints.
+                switch (type) {
+                case TOUCH:
+                    //TODO anpassen!
+                    //testweise vektoren in abhaengigkeit der Blickrichtung des Einhorns
+                    MovementComponent moveComp = mm.get(entity);
+                    float forceX = 0.0f;
+                    float forceY = -0.5f;
+                    
+                    if (moveComp.lookDirection == MovementComponent.LookDirection.LEFT) {
+                        forceX = 1.0f;
+                    } else {
+                        forceX = -1.0f;
+                    }
+                    
+                    break;
+                default:
+                    break;
+                }
+           }
         } else
         {
 
