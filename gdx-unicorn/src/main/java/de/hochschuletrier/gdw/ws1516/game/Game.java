@@ -88,7 +88,7 @@ public class Game extends InputAdapter {
     private Hotkey healCheating = null;
     
 
-    private final Hotkey rainbowMode = new Hotkey(()->RainbowEvent.emit(),Input.Keys.F3,HotkeyModifier.CTRL);
+    //private final Hotkey rainbowMode = new Hotkey(()->RainbowEvent.start(player),Input.Keys.F3,HotkeyModifier.CTRL);
 
 
     private final PooledEngine engine = new PooledEngine(GameConstants.ENTITY_POOL_INITIAL_SIZE,
@@ -145,7 +145,7 @@ public class Game extends InputAdapter {
             scoreCheating.register();
 
            
-            rainbowMode.register();
+//            rainbowMode.register();
 
         }
 
@@ -154,7 +154,7 @@ public class Game extends InputAdapter {
     public void dispose() {
         togglePhysixDebug.unregister();
         scoreCheating.unregister();
-        rainbowMode.unregister();
+//        rainbowMode.unregister();
         healCheating.unregister();
         Main.getInstance().console.unregister(physixDebug);
         
