@@ -8,30 +8,15 @@ import de.hochschuletrier.gdw.commons.gdx.assets.AnimationExtended;
 
 public class AnimationComponent extends Component implements Pool.Poolable 
 {
-    public HashMap<AnimationState, AnimationExtended> animationMap = new HashMap<>();
-    public AnimationState animationState = AnimationState.none;
+    public HashMap<String, AnimationExtended> animationMap = new HashMap<>();
     public float stateTime;
     public boolean flipHorizontal;
-    //
-    public int animationFlags;
 
+    
     @Override
     public void reset() {
-        animationMap = new HashMap<>();
+        animationMap = null;
         flipHorizontal = false;
-        animationState = AnimationState.none;
         stateTime = 0;
-    }
-    
-    public enum AnimationState 
-    {
-        none,
-        walking,
-        jump,
-        fly,
-        bulletSpawn,
-        death,
-        heal,
-        hit        
     }
 }

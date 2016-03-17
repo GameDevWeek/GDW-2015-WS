@@ -12,13 +12,14 @@
             "Input":{},
             "Player":{},
             "Movable":{
-                "state":"on_ground"
+                "state": "on_ground"
                 },
             "Animation": {
-                "none": "unicorn_idle",
-                "walking": "walking",
-                "jump": "walking",
-                "fly": "ball"
+                "on_ground_idle": "unicorn_idle",
+                "on_ground_walking": "unicorn_walking",
+                "flying": "unicorn_walking",
+                "falling": "ball", 
+                "jumping": "box"
             },
             "PhysixBody": {
                 "type": "player",
