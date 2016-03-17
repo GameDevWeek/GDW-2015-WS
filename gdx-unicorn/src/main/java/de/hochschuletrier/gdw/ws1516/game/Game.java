@@ -86,6 +86,7 @@ public class Game extends InputAdapter {
     private final Hotkey scoreCheating = new Hotkey(() -> ScoreBoardEvent.emit(ScoreType.BONBON, 1), Input.Keys.F2,
             HotkeyModifier.CTRL);
     private Hotkey healCheating = null;
+    private Hotkey rainbow=null;
     
 
     //private final Hotkey rainbowMode = new Hotkey(()->RainbowEvent.start(player),Input.Keys.F3,HotkeyModifier.CTRL);
@@ -145,7 +146,6 @@ public class Game extends InputAdapter {
             scoreCheating.register();
 
            
-//            rainbowMode.register();
 
         }
 
@@ -154,7 +154,7 @@ public class Game extends InputAdapter {
     public void dispose() {
         togglePhysixDebug.unregister();
         scoreCheating.unregister();
-//        rainbowMode.unregister();
+        rainbow.unregister();
         healCheating.unregister();
         Main.getInstance().console.unregister(physixDebug);
         
@@ -196,6 +196,9 @@ public class Game extends InputAdapter {
         healCheating = new Hotkey(() -> HealEvent.emit(unicorn, 1), Input.Keys.F4,
         HotkeyModifier.CTRL);
         healCheating.register();
+        rainbow = new Hotkey(() -> RainbowEvent.start(unicorn), Input.Keys.F3,
+                HotkeyModifier.CTRL);
+        rainbow.register();
         papa = EntityCreator.createEntity("tourist", 2000, 100);
         pathComponent =ComponentMappers.path.get(papa);
         pathComponent.points.add(new Vector2(2000, 100));

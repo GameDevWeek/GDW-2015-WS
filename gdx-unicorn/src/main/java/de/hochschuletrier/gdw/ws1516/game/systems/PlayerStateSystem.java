@@ -1,5 +1,7 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
+import java.awt.FlowLayout;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,6 +10,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 
+import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
 import de.hochschuletrier.gdw.ws1516.events.MovementEvent;
 import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
@@ -47,13 +50,12 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         playerComp.stateTimer = Math.max(playerComp.stateTimer - deltaTime, 0);
         playerComp.hornAttackCooldown = Math.max(playerComp.hornAttackCooldown - deltaTime, 0);
         playerComp.invulnerableTimer = Math.max(playerComp.invulnerableTimer - deltaTime, 0);
-        logger.info(playerComp.state.toString());
         if (playerComp.stateTimer <= 0.0f) {
             if (playerComp.state == State.HORNATTACK) {
                 HornAttackEvent.stop(entity);
             }
             if (playerComp.state==State.RAINBOW){
-
+                RainbowEvent.end(entity);
                 movementComp.speed=GameConstants.PLAYER_SPEED;
             } 
             playerComp.state = State.NORMAL;
@@ -68,6 +70,7 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
             if (playerComp.state==State.HORNATTACK){
                 HornAttackEvent.stop(player);
             }
+            EndFlyEvent.emit(player);
             playerComp.state=State.RAINBOW;
             playerComp.stateTimer=GameConstants.RAINBOW_MODE_TIME;
             movementComp.speed=GameConstants.PLAYER_SPEED*GameConstants.RAINBOW_SPEED_MODIFIER;

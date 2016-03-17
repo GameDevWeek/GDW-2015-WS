@@ -166,7 +166,7 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
         input.directionX = directionX;
         input.directionY = directionY;
         input.startFly = fly;
-        if (fly) {
+        if (fly && player.state!=State.RAINBOW) {
             StartFlyEvent.emit(entity, GameConstants.FLYING_TIME);
             fly = false;
         }
