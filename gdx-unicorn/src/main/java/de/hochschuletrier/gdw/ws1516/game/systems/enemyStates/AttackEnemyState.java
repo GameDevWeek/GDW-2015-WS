@@ -4,23 +4,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.Vector2;
 
 import de.hochschuletrier.gdw.ws1516.events.BulletSpawnEvent;
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
-import de.hochschuletrier.gdw.ws1516.events.EnemyActionEvent;
 import de.hochschuletrier.gdw.ws1516.events.HitEvent;
-import de.hochschuletrier.gdw.ws1516.events.PaparazziShootEvent;
 import de.hochschuletrier.gdw.ws1516.events.HitEvent.HitType;
+import de.hochschuletrier.gdw.ws1516.events.PaparazziShootEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
-import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyBehaviourComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent.EnemyType;
-import de.hochschuletrier.gdw.ws1516.game.systems.BulletSystem;
-import de.hochschuletrier.gdw.ws1516.game.systems.EnemyHandlingSystem.Action.Type;
+import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 
 public class AttackEnemyState extends EnemyBaseState {
     private static final Logger logger = LoggerFactory.getLogger(AttackEnemyState.class);

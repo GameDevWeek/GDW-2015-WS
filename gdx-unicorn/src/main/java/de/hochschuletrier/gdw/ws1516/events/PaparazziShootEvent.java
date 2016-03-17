@@ -20,7 +20,6 @@ public class PaparazziShootEvent {
     private static final SnapshotArray<Listener> listeners = new SnapshotArray<Listener>();
 
     public static void emit(float distance) {
-        logger.debug("papa shot at {}", distance);
         Object[] items = listeners.begin();
         for (int i = 0, n = listeners.size; i < n; i++) {
             ((Listener) items[i]).onPaparazziShootEvent(distance);
