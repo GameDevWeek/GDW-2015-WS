@@ -14,6 +14,7 @@ import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.ws1516.events.JumpEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.*;
+import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent.AnimationState;
 import de.hochschuletrier.gdw.ws1516.events.*;
 
 public class MovementSystem extends IteratingSystem implements
