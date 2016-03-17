@@ -98,7 +98,7 @@ public class EffectsRenderSystem extends IteratingSystem {
                 shader.setUniformf("u_effectDuration", paparazziStartDuration);
                 shader.setUniformf("u_remainingEffectDuration", paparazziDurationLeft);
                 
-                float[] paparazziColor = new float[]{ 1.0f, 0.0f, 0.0f, 1.0f };
+                float[] paparazziColor = new float[]{ 1.0f, 1.0f, 1.0f, 1.0f };
                 shader.setUniform4fv("u_paparazziColor", paparazziColor, 0, 4);
                 float[] paparazziSeed = new float[]{ currentPaparazziSeed, currentPaparazziSeed };
                 shader.setUniform2fv("u_paparazziSeed", paparazziSeed, 0, 2);

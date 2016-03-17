@@ -5,15 +5,15 @@ precision mediump float;
 #define LOWP 
 #endif
 
+#define M_HALF_PI 1.5707963267948966192313216916398
 #define M_PI 3.1415926535897932384626433832795
 #define M_2PI 6.283185307179586476925286766559
 #define M_3PI 9.4247779607693797153879301498385
 
 #define CIRCLE_ANIMATION_GROW_FACTOR 0.1
-#define CIRCLE_MAX_AMOUNT_FACTOR 1.0
-// radius in px
-#define CIRCLE_RADIUS_RANGE_FACTOR_START 1.0 
-#define CIRCLE_RADIUS_RANGE_FACTOR_END 2.0
+#define CIRCLE_MAX_AMOUNT_FACTOR 1.1
+#define CIRCLE_RADIUS_RANGE_FACTOR_START 1.2 
+#define CIRCLE_RADIUS_RANGE_FACTOR_END 2.2
 // threshold in px
 #define ANTI_ALIASING_THRESHOLD 2.0
 // random chosen numbers
@@ -29,6 +29,7 @@ precision mediump float;
 varying LOWP vec4    v_color;
 varying LOWP vec2    v_texCoords;
 
+// standard frame dimensions in unicorn game 1024 x 600
 uniform LOWP vec2    u_frameDimension;
 uniform LOWP float   u_time;
 uniform LOWP float   u_effectDuration;
@@ -46,9 +47,10 @@ uniform sampler2D u_texture;
 vec3    createCircle(vec2 seed);
 float   getAnimatedRadiusFactor();
 float   getCircleAlpha(vec3 circle);
+float   getCircleFade(float alphaIn);
+
 float   getAmountOfCircles();
 vec2    getRadiusRange();
-float   getCircleFade(float alphaIn);
 
 // helper functions
 bool    isModePreIntro();
@@ -97,53 +99,41 @@ vec3 createCircle(vec2 seed)
 float getAnimatedRadiusFactor()
 {
     if (isModeIntro()) {
-        return getIntroModeAnimProgress();
+        return sin(getIntroModeAnimProgress() * M_HALF_PI);
     }
     
     // standard
-    return (1.0 + sin(getStandardModeAnimProgress() * M_2PI) * CIRCLE_ANIMATION_GROW_FACTOR);
+    return (1.0 + sin(getStandardModeAnimProgress() * M_PI) * CIRCLE_ANIMATION_GROW_FACTOR);
 }
 
 // returns alpha value if gl_FragCoord is inside the circle. 0.0 otherwise.
+// blends value from center to border.
 float getCircleAlpha(vec3 circle)
-{   
-    vec2 center = circle.xy;
-    float radius = circle.z;
-    float distance = getDistance(center);
-    if (distance < (radius - ANTI_ALIASING_THRESHOLD))
+{
+    // circle.z = radius of circle
+    float centerDistance = getDistance(circle.xy);
+    // inside the circle
+    if (centerDistance < circle.z)
     {
-        return 1.0;
+        // blend from center to border with sine
+        return sin( (centerDistance / circle.z) * M_HALF_PI + M_HALF_PI );
     }
+    // anti aliasing not needed if blending with sine
     
-    if (distance < radius)
-    {
-        return ((radius - distance) / ANTI_ALIASING_THRESHOLD);
-    }
-
+    // VERSION 1: CIRCLE COMPLETELY FILLED
+    // inside the circle
+    //if (centerDistance < (circle.z - ANTI_ALIASING_THRESHOLD))
+    //{
+    //    return 1.0;
+    //}
+    // circle border (anti aliasing)
+    //if (centerDistance <= circle.z)
+    //{
+    //    return ((circle.z - centerDistance) / ANTI_ALIASING_THRESHOLD);
+    //}
+    
+    // outside the circle
     return 0.0;
-}
-
-float getAmountOfCircles()
-{
-    return 30 * CIRCLE_MAX_AMOUNT_FACTOR * 
-	    (
-            // u_paparazziIntensity taken into account 20 percent
-	        (1 - clamp(u_paparazziIntensity, 0.0, 1.0)) * 0.2 
-	        + 0.8
-	    );
-} 
-
-// returns vec2(minRadius, maxRadius)
-vec2 getRadiusRange()
-{
-    float  baseFactor = max(u_frameDimension.x, u_frameDimension.y) * 0.0625; // 1/16
-    baseFactor *=
-        (
-            // u_paparazziIntensity taken into account 40 percent
-            (clamp(u_paparazziIntensity, 0.0, 1.0)) * 0.4 
-            + 0.6
-        );
-    return vec2(baseFactor * CIRCLE_RADIUS_RANGE_FACTOR_START, baseFactor * CIRCLE_RADIUS_RANGE_FACTOR_END);
 }
 
 float getCircleFade(float alphaIn) {
@@ -161,18 +151,6 @@ float getCircleFade(float alphaIn) {
     {
         return 1.0;
     }
-
-    // Fade flash to normal
-    //if(isModeIntro() && false)
-    //{
-        //return alphaIn + (1.0 - alphaIn) * (1.0 - (((u_effectDuration - getRemainingEffectDuration()) - PRE_INTRO_DURATION) / INTRO_DURATION));
-    //}
-    
-    // Fade in
-    //if(u_effectDuration - getRemainingEffectDuration() <= INTRO_DURATION)
-    //{
-    //    return alphaIn * (u_effectDuration - getRemainingEffectDuration()) * 4;
-    //}
     
     // Fade out
     if(isModeOutro())
@@ -189,6 +167,29 @@ float getCircleFade(float alphaIn) {
     
     // Default
     return alphaIn;
+}
+
+float getAmountOfCircles()
+{
+    return 30 * CIRCLE_MAX_AMOUNT_FACTOR * 
+        (
+            // u_paparazziIntensity taken into account 20 percent
+            (1 - clamp(u_paparazziIntensity, 0.0, 1.0)) * 0.2 
+            + 0.8
+        );
+} 
+
+// returns vec2(minRadius, maxRadius)
+vec2 getRadiusRange()
+{
+    float  baseFactor = max(u_frameDimension.x, u_frameDimension.y) * 0.0625; // 1/16
+    baseFactor *=
+        (
+            // u_paparazziIntensity taken into account 40 percent
+            (clamp(u_paparazziIntensity, 0.0, 1.0)) * 0.4 
+            + 0.6
+        );
+    return vec2(baseFactor * CIRCLE_RADIUS_RANGE_FACTOR_START, baseFactor * CIRCLE_RADIUS_RANGE_FACTOR_END);
 }
 
 // helper functions
