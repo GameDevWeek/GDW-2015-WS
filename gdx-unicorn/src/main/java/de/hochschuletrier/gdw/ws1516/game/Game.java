@@ -85,10 +85,9 @@ public class Game extends InputAdapter {
     private final Hotkey scoreCheating = new Hotkey(() -> ScoreBoardEvent.emit(ScoreType.BONBON, 1), Input.Keys.F2,
             HotkeyModifier.CTRL);
     
-<<<<<<< HEAD
-=======
+
     private final Hotkey rainbowMode = new Hotkey(()->RainbowEvent.emit(),Input.Keys.F3,HotkeyModifier.CTRL);
->>>>>>> 0c4a99c043209a5ea4ad7101083b178e537c94e5
+
 
     private final PooledEngine engine = new PooledEngine(GameConstants.ENTITY_POOL_INITIAL_SIZE,
             GameConstants.ENTITY_POOL_MAX_SIZE, GameConstants.COMPONENT_POOL_INITIAL_SIZE,
