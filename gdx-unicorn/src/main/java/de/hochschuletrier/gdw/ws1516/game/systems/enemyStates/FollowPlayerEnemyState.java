@@ -39,12 +39,15 @@ public class FollowPlayerEnemyState extends EnemyBaseState {
         // }
         // buffer.removeFirst();
         // }
-        if (Math.abs(positionPlayer.x - positionEnemy.x) > GameConstants.TILESIZE_X) {
+        logger.info("{}",Math.abs(positionPlayer.x-positionEnemy.x));
+        if (Math.abs(positionPlayer.x - positionEnemy.x) > GameConstants.TILESIZE_X/2) {
             if (positionPlayer.x < positionEnemy.x) {
                 MovementEvent.emit(entity, -0.7f);
             } else {
                 MovementEvent.emit(entity, 0.7f);
             }
+        }else{
+            MovementEvent.emit(entity, 0.0f);
         }
 
         if (behaviour.canSeeUnicorn) {
