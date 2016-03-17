@@ -27,39 +27,13 @@
         "text": {
             "time": 0,
             "items" : [
-                { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "GameDevWeek Codebase", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Santo Pfingsten  ", "delay": "1350" },
-                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Torsten Scholer", "delay": "0" },
 
-                { "type": "text", "path" : "text", "group" : "title", "style" : "title_left", "text": "Contributions: ", "delay": "3300" },
-                { "type": "text", "path" : "text", "group" : "title", "style" : "title_right", "text": " Torsten Scholer", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "A.I. Behaviourtree  ", "delay": "1350" },
-                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Asset Loaders", "delay": "0" },
-
-                { "type": "text", "path" : "text", "group" : "title", "style" : "title_left", "text": "Contributions: ", "delay": "3300" },
-                { "type": "text", "path" : "text", "group" : "title", "style" : "title_right", "text": " Santo Pfingsten", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Developer Console  ", "delay": "1350" },
-                { "type": "text", "path" : "text", "style" : "text_right", "text": "  JSON Parser", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Network Library  ", "delay": "1350" },
-                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Tiled Map Loader & Renderer", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Asset Loaders  ", "delay": "1350" },
-                { "type": "text", "path" : "text", "style" : "text_right", "text": "  2D Cameras", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Physics Helpers  ", "delay": "1350" },
-                { "type": "text", "path" : "text", "style" : "text_right", "text": "  SceneAnimator", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Settings Helpers  ", "delay": "1350" },
-                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Sound Emitters", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Gamestates & Transitions  ", "delay": "1350" },
-                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Various Utilities", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Maven Setup  ", "delay": "1350" },
-                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Demo Project Setup", "delay": "0" },
-
-                { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Organisation:", "delay": "3300" },
+                { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Organisation:", "delay": "0" },
                 { "type": "text", "path" : "text", "style" : "text_left", "text": "Santo Pfingsten  ", "delay": "1350" },
                 { "type": "text", "path" : "text", "style" : "text_right", "text": "  Kore Kaluzynski", "delay": "0" },
                 { "type": "text", "path" : "text", "style" : "text_left", "text": "Julia Eiden  ", "delay": "1350" },
                 { "type": "text", "path" : "text", "style" : "text_right", "text": "  Minh Duc Dao", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_center", "text": "Jerome Jähnig  ", "delay": "1350" },
-
+                { "type": "text", "path" : "text", "style" : "text_center", "text": "Jerome Jähnig", "delay": "1350" },
 
                 { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Game Logik:", "delay": "3300" },
                 { "type": "text", "path" : "text", "style" : "text_left", "text": "Tobias Gepp  ", "delay": "1350" },
@@ -80,11 +54,11 @@
 
 
                 { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Assets:", "delay": "3300" },
-                { "type": "text", "path" : "text", "style" : "text_center", "text": "David Siepen  ", "delay": "1350" },
+                { "type": "text", "path" : "text", "style" : "text_center", "text": "David Siepen", "delay": "1350" },
 
 
                 { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Eingabeverarbeitung:", "delay": "3300" },
-                { "type": "text", "path" : "text", "style" : "text_center", "text": "Jonathan Jan-Thadeusz Wojcik  ", "delay": "1350" },
+                { "type": "text", "path" : "text", "style" : "text_center", "text": "Jonathan Jan-Thadeusz Wojcik", "delay": "1350" },
 
 
                 { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "UI/Hud:", "delay": "3300" },
@@ -98,7 +72,7 @@
                 { "type": "text", "path" : "text", "style" : "text_center", "text": "Tristan-Philip Semmler", "delay": "1350" },
 
 
-                { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Sound Design:", "delay": "3300" },
+             { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Sound Design:", "delay": "3300" },
                 { "type": "text", "path" : "text", "style" : "text_left", "text": "Minh Duc Dao  ", "delay": "1350" },
                 { "type": "text", "path" : "text", "style" : "text_right", "text": "  Jason Merse", "delay": "0" },
 
