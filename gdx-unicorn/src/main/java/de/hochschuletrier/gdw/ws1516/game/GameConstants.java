@@ -31,10 +31,13 @@ public class GameConstants {
     public static final int BOX2D_SCALE = 40;
     public static final float PLAYER_SPEED = 250.0f;
     public static final float PLAYER_JUMP_IMPULSE = -1250.0f;
+    public static final float THROWBACK_FORCE = 1000.0f;
     
     //Effect Times
     public static final float FLYING_TIME= 10.0f;
     public static final float RAINBOW_MODE_TIME = 10.0f;
+    public static final float HORN_MODE_TIME = 3.0f;
+    public static final float SPUCK_MODE_TIME = 2.0f;
 
     //Physic collision groups
     public static final short PHYSIX_COLLISION_SPIT = -1;
