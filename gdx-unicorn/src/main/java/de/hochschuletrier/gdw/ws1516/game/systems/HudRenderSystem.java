@@ -3,6 +3,7 @@ package de.hochschuletrier.gdw.ws1516.game.systems;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
@@ -27,13 +28,15 @@ import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
 import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
+import de.hochschuletrier.gdw.ws1516.events.FinalScoreEvent;
 
-public class HudRenderSystem extends IteratingSystem {
+public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.Listener {
 
 
 
     private final AssetManagerX assetManager;
     private final BitmapFont font;
+    private long finalScore;
     
     public HudRenderSystem(int priority) {
         super(Family.all(PlayerComponent.class).get(),priority);
@@ -44,22 +47,93 @@ public class HudRenderSystem extends IteratingSystem {
     }
 
     @Override
+    public void addedToEngine(Engine engine) {
+        // TODO Auto-generated method stub
+        super.addedToEngine(engine);
+        FinalScoreEvent.register(this);
+    }
+    
+    @Override
+    public void removedFromEngine(Engine engine) {
+        super.removedFromEngine(engine);
+        FinalScoreEvent.unregister(this);
+    }
+    
+    @Override
     protected void processEntity(Entity entity, float deltaTime) {
         // TODO Auto-generated method stub
-        PositionComponent scoreComp = ComponentMappers.position.get(entity);
+        ScoreComponent scoreComp = ComponentMappers.score.get(entity);
+        PlayerComponent playerComp = ComponentMappers.player.get(entity);
         
         Main.getInstance().screenCamera.bind();
-      
-        String s = "time";
-        String score = "x"+scoreComp.x;
-        font.draw(DrawUtil.batch, s, 400, 20);
-        font.draw(DrawUtil.batch,score, 800,20);
         
-        FileHandle handle = Gdx.files.internal("data/ui/menu/heart3.png");
-        Texture hearts = new Texture(handle);
-        Texture coins = new Texture(handle);
-        DrawUtil.draw(hearts, Gdx.graphics.getWidth()-100, Gdx.graphics.getHeight(), 50, 50);
-        DrawUtil.draw(coins, 900, 20, 50, 50);
+        int displayWidth = Gdx.graphics.getWidth();
+        int displayHeight = Gdx.graphics.getHeight();
+        
+        Texture heart;
+        Texture cookie = assetManager.getTexture("cookie");
+        
+        if(playerComp.hitpoints==3) {
+            heart = assetManager.getTexture("heart3");
+        }
+        else if(playerComp.hitpoints==2) {
+            heart = assetManager.getTexture("heart2");
+        }
+        else if(playerComp.hitpoints==1) {
+            heart = assetManager.getTexture("heart1");
+        }
+        else  {
+            heart = assetManager.getTexture("heart0");
+        }
+        
+        
+        
+        float heart_x =  20;
+        float heart_y = 20;
+        
+        float time_x = 0.45F * displayWidth;
+        float time_y = 20;
+        
+        float cookie_x = displayWidth-140;
+        float cookie_y = 20;
+        
+        float score_x = cookie_x + 60;
+        float score_y = 35;
+        
+        float lives_x = heart_x+50;
+        float lives_y = 40;
+        
+        
+  
+              
+        int minutes_int = (int) scoreComp.playedSeconds/60;
+        String minutes_string = String.valueOf(minutes_int);
+        int seconds_int = (int) scoreComp.playedSeconds%60;
+        String seconds_string = String.valueOf(seconds_int);
+
+        if(seconds_string.length()==1) {
+            seconds_string = "0"+seconds_string;
+        }
+        
+        int lives = playerComp.lives;
+                  
+        String time = minutes_string+":"+seconds_string;
+        String score = String.valueOf(finalScore);
+        String lives_string = "x " + String.valueOf(lives);
+        
+                       
+       
+        
+        font.draw(DrawUtil.batch, time, time_x, time_y);
+        font.draw(DrawUtil.batch,score, score_x, score_y);
+        font.draw(DrawUtil.batch, lives_string, lives_x, lives_y);
+        DrawUtil.draw(heart, heart_x, heart_y, 50, 50);
+        DrawUtil.draw(cookie, cookie_x, cookie_y, 50, 50);
+    }
+
+    @Override
+    public void onFinalScoreChanged(long score) {
+        finalScore = score;
     }
     
 

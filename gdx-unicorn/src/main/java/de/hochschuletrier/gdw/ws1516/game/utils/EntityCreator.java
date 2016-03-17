@@ -24,10 +24,10 @@ public class EntityCreator {
     }
 
     /** Basic Entities */
-    public static Entity createEntity(String name, float x, float y) {
+    public static Entity createEntity(String entity_type, float x, float y) {
         factoryParam.x = x;
         factoryParam.y = y;
-        Entity entity = entityFactory.createEntity(name, factoryParam);
+        Entity entity = entityFactory.createEntity(entity_type, factoryParam);
 
         engine.addEntity(entity);
         
@@ -35,54 +35,54 @@ public class EntityCreator {
     }
 
     /** Master Entities */
-    public static Entity createEntity(String name, String path, float x, float y, float speed, boolean loop,
+    public static Entity createEntity(String entity_type, String name, float x, float y, float speed, boolean loop,
             String action) {
         factoryParam.x = x;
         factoryParam.y = y;
-        factoryParam.path = path;
+        factoryParam.name = name;
         factoryParam.speed = speed;
         factoryParam.loop = loop;
         factoryParam.action = action;
 
-        Entity entity = entityFactory.createEntity(name, factoryParam);
+        Entity entity = entityFactory.createEntity(entity_type, factoryParam);
 
         engine.addEntity(entity);
         return entity;
     }
 
     /** Movable Entities */
-    public static Entity createEntity(String name, String path, float x, float y, float speed, boolean loop) {
+    public static Entity createEntity(String entity_type, String name, float x, float y, float speed, boolean loop) {
         factoryParam.x = x;
         factoryParam.y = y;
-        factoryParam.path = path;
+        factoryParam.name = name;
         factoryParam.speed = speed;
         factoryParam.loop = loop;
 
-        Entity entity = entityFactory.createEntity(name, factoryParam);
+        Entity entity = entityFactory.createEntity(entity_type, factoryParam);
 
         engine.addEntity(entity);
         return entity;
     }
 
     /** Enemy Entities */
-    public static Entity createEntity(String name, String path, float x, float y) {
+    public static Entity createEntity(String entity_type, String name, float x, float y) {
         factoryParam.x = x;
         factoryParam.y = y;
-        factoryParam.path = path;
+        factoryParam.name = name;
 
-        Entity entity = entityFactory.createEntity(name, factoryParam);
+        Entity entity = entityFactory.createEntity(entity_type, factoryParam);
 
         engine.addEntity(entity);
         return entity;
     }
 
     /** Action Entities */
-    public static Entity createEntity(String name, float x, float y, String action) {
+    public static Entity createEntity(String entity_type, float x, float y, String action) {
         factoryParam.x = x;
         factoryParam.y = y;
         factoryParam.action = action;
 
-        Entity entity = entityFactory.createEntity(name, factoryParam);
+        Entity entity = entityFactory.createEntity(entity_type, factoryParam);
 
         engine.addEntity(entity);
         return entity;

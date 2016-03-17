@@ -14,6 +14,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Filter;
 
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixBodyDef;
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixFixtureDef;
@@ -85,16 +86,11 @@ public class BubblegumSpitSystem extends EntitySystem implements BubblegumSpitSp
             MovementComponent movementComponent = ComponentMappers.movement.get(playerEntity);
             
             //'Magie = Physik / Wollen'
-            //TODO : Use player orientation (left, right)
-            float playerAngle = movementComponent.lookDirection == MovementComponent.LookDirection.LEFT ? (float) Math.PI : 0.0f;
-            float cosa = (float) Math.cos(playerAngle);
-            float sina   = (float) Math.sin(playerAngle);
-            float spawnOffsetX = GameConstants.SPIT_SPAWN_OFFSET_X * cosa - GameConstants.SPIT_SPANW_OFFSET_Y * sina; 
-            float spawnOffsetY = GameConstants.SPIT_SPAWN_OFFSET_X * sina   + GameConstants.SPIT_SPANW_OFFSET_Y * cosa;
-            float spawnX = playerBody.getX() + spawnOffsetX;
-            float spawnY = playerBody.getY() + spawnOffsetY;
-            float impulseX = (float) Math.cos(playerBody.getAngle() + GameConstants.SPIT_SPAWN_ANGLE);
-            float impulseY = (float) Math.sin(playerBody.getAngle() + GameConstants.SPIT_SPAWN_ANGLE);
+            float lookDirection = movementComponent.lookDirection == MovementComponent.LookDirection.RIGHT ? 1.0f : -1.0f;
+            float spawnX = playerBody.getX() + (GameConstants.SPIT_SPAWN_OFFSET_X * lookDirection);
+            float spawnY = playerBody.getY() + GameConstants.SPIT_SPAWN_OFFSET_Y;
+            float impulseX = (float) Math.cos(GameConstants.SPIT_SPAWN_ANGLE) * lookDirection;
+            float impulseY = (float) Math.sin(GameConstants.SPIT_SPAWN_ANGLE);
             
             //Create physic Body component
             PhysixBodyComponent spitBodyComponent = engine.createComponent(PhysixBodyComponent.class);
@@ -109,6 +105,7 @@ public class BubblegumSpitSystem extends EntitySystem implements BubblegumSpitSp
                                           .friction(0.0f)
                                           .restitution(0.0f)
                                           .shapeCircle(5);
+            fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_SPIT;
             spitBodyComponent.createFixture(fixtureDef);
             
             //Force gum spit
