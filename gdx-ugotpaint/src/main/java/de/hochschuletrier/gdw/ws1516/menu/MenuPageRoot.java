@@ -88,6 +88,11 @@ public class MenuPageRoot extends MenuPage {
         bigCanvas = false;
         this.setTouchable(Touchable.disabled);
     }
+
+    public void fadeToMenuInstant() {
+        this.fadeToMenu();
+        this.canvasAnimationTime = 0.99f;
+    }
     
     public void fadeToGame() {
         canvasAnimationTime = 0;

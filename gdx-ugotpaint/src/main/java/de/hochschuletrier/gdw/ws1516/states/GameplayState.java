@@ -103,6 +103,7 @@ public class GameplayState extends BaseGameState {
     @Override
     public void onLeave(BaseGameState nextState) {
         Main.inputMultiplexer.removeProcessor(inputForwarder);
+        Main.getCanvas().clear();
     }
 
     @Override
