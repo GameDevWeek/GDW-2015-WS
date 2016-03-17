@@ -20,6 +20,12 @@ public class CameraSystem extends IteratingSystem {
     private float targetX;
     private float targetY;
     
+    private static Vector2 currentCameraPosition;
+    
+    static {
+        currentCameraPosition = new Vector2();
+    }
+    
     @SuppressWarnings("unchecked")
     public CameraSystem(int priority) {
         super(Family.all(CameraTargetComponent.class).get(), priority);
@@ -69,19 +75,35 @@ public class CameraSystem extends IteratingSystem {
         camera.setDestination(targetX, targetY);
         camera.update(deltaTime);
         camera.bind();
+        
+        setCameraPositionInformation(camera);
     }
     
-    private Vector2 getCameraPosition() {
-        return new Vector2(camera.getPosition().x , camera.getPosition().y);
+    private void setCameraPositionInformation(LimitedSmoothCamera camera) {
+        currentCameraPosition.x = camera.getPosition().x;
+        currentCameraPosition.y = camera.getPosition().y;
+        
+    }
+
+    private static Vector2 getCameraPosition() {
+        return new Vector2(currentCameraPosition.x , currentCameraPosition.y);
     }
     
-    public Vector2 worldToScreenCoordinates(Vector2 world) {
+    public static Vector2 worldToScreenCoordinates(Vector2 world) {
         Vector2 out = new Vector2( Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
         return out.sub(getCameraPosition()).add(world);
     }
     
-    public Vector2 screenToWorldCoordinates(Vector2 screen) {
+    public static Vector2 screenToWorldCoordinates(Vector2 screen) {
         Vector2 out = new Vector2(- Gdx.graphics.getWidth() / 2, - Gdx.graphics.getHeight() / 2);
         return out.add(getCameraPosition()).add(screen);
+    }
+    
+    public static Vector2 worldToScreenCoordinates(float worldX, float worldY) {
+        return worldToScreenCoordinates(new Vector2(worldX, worldY));
+    }
+    
+    public static Vector2 screenToWorldCoordinates(float screenX, float screenY) {
+        return worldToScreenCoordinates(new Vector2(screenX, screenY));
     }
 }
