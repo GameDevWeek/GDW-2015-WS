@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
@@ -27,10 +28,10 @@ import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
 public class SoundSystem extends IteratingSystem implements SoundEvent.Listener {
 
     private static final Logger logger = LoggerFactory.getLogger(GameLogicTest.class);
-    private Object camera;
+    private Vector2 camera;
     private AssetManagerX assetManager;
 
-    public SoundSystem(Object camera) {
+    public SoundSystem(Vector2 camera) {
         super(Family.all(SoundEmitterComponent.class, PositionComponent.class).get());
         this.assetManager = Main.getInstance().getAssetManager();
         this.camera = camera;
@@ -40,6 +41,7 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener 
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
         SoundEvent.register(this);
+        
     }
 
     @Override
