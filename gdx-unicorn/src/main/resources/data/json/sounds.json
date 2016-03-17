@@ -1,5 +1,7 @@
 {
 	"click": "data/sounds/click.wav",
 	"helicopter": "data/sounds/helicopter.wav",
-	"EinhornEmpathy":"data/sounds/EinhornEmpathy.wav"
+	"einhornEmpathy":"data/sounds/EinhornEmpathy.wav",
+	"buttonSound":"data/sounds/click.wav",
+	"einhornMotivated":"data/sounds/EinhornMotivated.wav"
 }

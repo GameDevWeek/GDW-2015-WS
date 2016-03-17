@@ -39,9 +39,9 @@ public class MenuOptions extends MenuPage {
         int yStep = 55;
         generalSound = 5;
         generalSlider = addLabeledSlider(0, 100, 1, xOffset, yOffset - yStep
-                * (i++), "General", true);
+                * (i++), "Allgemein", true);
         musicSlider = addLabeledSlider(0, 100, 1, xOffset, yOffset - yStep
-                * (i++), "Music", true);
+                * (i++), "Musik", true);
         soundSlider = addLabeledSlider(0, 100, 1, xOffset, yOffset - yStep
                 * (i++), "Sound", true);
         addLeftAlignedButton(xOffset, yOffset - yStep * (i++), 100, 50, "Zurücksetzen",
@@ -81,7 +81,7 @@ public class MenuOptions extends MenuPage {
     }
 
     public void soundTest() {
-        SoundEmitter.playGlobal(assetManager.getSound("EinhornEmpathy"), false);
+       SoundEmitter.playGlobal(assetManager.getSound("einhornEmpathy"), false);
     }
 
     public void reset() {

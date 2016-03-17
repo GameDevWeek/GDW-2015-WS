@@ -21,10 +21,11 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
     HornAttackEvent.Listener{
 
     private static final Logger logger = LoggerFactory.getLogger(PlayerStateSystem.class);
+    
     public PlayerStateSystem() {
         super(Family.all(PlayerComponent.class,MovementComponent.class).get());
     }
-
+    
     @Override
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
@@ -38,55 +39,70 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         RainbowEvent.unregister(this);
         HornAttackEvent.unregister(this);
     }
+    
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        PlayerComponent playerComp=ComponentMappers.player.get(entity);
         MovementComponent movementComp = ComponentMappers.movement.get(entity);
-        playerComp.stateTimer=Math.max(playerComp.stateTimer-deltaTime, 0);
-        playerComp.hornAttackCooldown=Math.max(playerComp.hornAttackCooldown-deltaTime, 0);
-        playerComp.invulnerableTimer=Math.max(playerComp.invulnerableTimer-deltaTime, 0);
-        if (playerComp.stateTimer<=0.0f){
-            if (playerComp.state==State.HORNATTACK){
-                HornAttackEvent.stop();
+        PlayerComponent playerComp = ComponentMappers.player.get(entity);
+        playerComp.stateTimer = Math.max(playerComp.stateTimer - deltaTime, 0);
+        playerComp.hornAttackCooldown = Math.max(playerComp.hornAttackCooldown - deltaTime, 0);
+        playerComp.invulnerableTimer = Math.max(playerComp.invulnerableTimer - deltaTime, 0);
+        if (playerComp.stateTimer <= 0.0f) {
+            if (playerComp.state == State.HORNATTACK) {
+                HornAttackEvent.stop(entity);
             }
             if (playerComp.state==State.RAINBOW){
 
                 movementComp.speed=GameConstants.PLAYER_SPEED;
-            }
-            playerComp.state=State.NORMAL;
+            } 
+            playerComp.state = State.NORMAL;
         }
     }
-
+    
     @Override
-    public void onRainbowCollect() {
+    public void onRainbowCollect(Entity player) {
         if (getEntities().size()>0){
             PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
             MovementComponent movementComp = ComponentMappers.movement.get(getEntities().get(0));
             if (playerComp.state==State.HORNATTACK){
-                HornAttackEvent.stop();
+                HornAttackEvent.stop(player);
             }
             playerComp.state=State.RAINBOW;
             playerComp.stateTimer=GameConstants.RAINBOW_MODE_TIME;
             movementComp.speed=GameConstants.PLAYER_SPEED*GameConstants.RAINBOW_SPEED_MODIFIER;
         }
+        
     }
-
+    
     @Override
-    public void onHornAttackStart() {
+    public void onHornAttackStart(Entity player) {
         if (getEntities().size()>0){
-            PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
-            playerComp.state=State.HORNATTACK;
-            playerComp.stateTimer=GameConstants.HORN_MODE_TIME;
+        PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
+        playerComp.state = State.HORNATTACK;
+        playerComp.stateTimer = GameConstants.HORN_MODE_TIME;
         }
     }
+    
+     
+    public void onHornAttackStop(Entity player) {
 
-    @Override
-    public void onHornAttackStop() {
         if (getEntities().size()>0){
-            PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
-            playerComp.hornAttackCooldown=GameConstants.HORN_MODE_COOLDOWN;
+        PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
+        playerComp.hornAttackCooldown = GameConstants.HORN_MODE_COOLDOWN;
         }
     }
+    
+
+
+    
+    @Override
+    public void onRainbowModeEnd(Entity player) {
+        if (getEntities().size()>0){
+        PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
+        playerComp.hornAttackCooldown = GameConstants.HORN_MODE_COOLDOWN;
+        }
+    }
+    
 
     
 }
