@@ -57,6 +57,7 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
             if(scoreComponent != null)
             {
                 scoreComponent.playedSeconds += deltaTime;
+                FinalScoreEvent.emit(getFinalScore());
             }
         }
     }
@@ -106,13 +107,14 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
 
     public long getFinalScore()
     {
-        return scoreComponent.chocoCoins * GameConstants.SCORE_CHOCOCOINS_POINTS
+        long score = scoreComponent.chocoCoins * GameConstants.SCORE_CHOCOCOINS_POINTS
                 + scoreComponent.bonbons * GameConstants.SCORE_BONBONS_POINTS +
                 (long)(scoreComponent.playedSeconds * GameConstants.SCORE_TIME_POINTS ) +
                 scoreComponent.deaths  * GameConstants.SCORE_DEATHS + 
                 scoreComponent.killedEnemies * GameConstants.SCORE_KILLED_ENEMIES  +
                 scoreComponent.killedObstacles * GameConstants.SCORE_KILLED_OBSTACLES +
-                scoreComponent.hits * GameConstants.SCORE_HITS;                
+                scoreComponent.hits * GameConstants.SCORE_HITS; 
+        return (score>0)?score:0;
         
     }
 
