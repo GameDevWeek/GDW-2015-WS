@@ -1,6 +1,5 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,7 +9,6 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -18,7 +16,6 @@ import com.badlogic.gdx.utils.TimeUtils;
 import de.hochschuletrier.gdw.commons.devcon.ConsoleCmd;
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarFloat;
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarInt;
-import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.Hotkey;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.HotkeyModifier;
 import de.hochschuletrier.gdw.commons.gdx.tiled.TiledMapRendererGdx;
@@ -91,49 +88,14 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
     public void update(float deltaTime) {
         super.update(deltaTime);
         
-        if(rainbowDurationLeft > 0.0f)
-        {
-            rainbowDurationLeft -= deltaTime;
-            ShaderProgram rainbowShader = null;
-            switch(rainbowType.get())
-            {
-            case 0:
-                rainbowShader = ShaderLoader.getFancyRainbowShader();
-                DrawUtil.setShader(rainbowShader);
-                rainbowShader.setUniformf("u_rainbowAlpha", rainbowAlpha.get());
-                rainbowShader.setUniformf("u_rainbowFrequency", rainbowFrequency.get());
-                break;
-            case 1:
-                rainbowShader = ShaderLoader.getSimpleRainbowShader();
-                DrawUtil.setShader(rainbowShader);
-                rainbowShader.setUniformf("u_rainbowAlpha", rainbowAlpha.get());
-                rainbowShader.setUniformf("u_rainbowFrequency", rainbowFrequency.get());
-                break;
-            default:
-                rainbowShader = ShaderLoader.getOldRainbowShader();
-                DrawUtil.setShader(rainbowShader);
-                rainbowShader.setUniformf("u_rainbowAlpha", rainbowAlpha.get());
-                rainbowShader.setUniformf("u_rainbowFrequency", rainbowFrequency.get() * 0.2f);
-                break;
-            }
-            if(rainbowShader != null)
-            {
-                float[] dimensions = new float[]{ Gdx.graphics.getWidth(), Gdx.graphics.getHeight() };
-                rainbowShader.setUniformf("u_startDuration", rainbowStartDuration);
-                rainbowShader.setUniformf("u_durationLeft", rainbowDurationLeft);
-                rainbowShader.setUniform2fv("u_frameDimension", dimensions, 0, 2);
-                rainbowShader.setUniformf("u_time", (float)TimeUtils.timeSinceMillis(startTime) * 0.001f);
-            }
-        }
-        
-        //DrawUtil.draw(backgroundTexture, 0, 0, backgroundTexture.getWidth(), backgroundTexture.getHeight());
-        
         mapRenderer.update(deltaTime);
         for (Layer layer : map.getLayers()) {
             mapRenderer.render(0, 0, layer);
+            if(layer.getName().equals("background"))
+            {
+                renderBackground(deltaTime);
+            }
         }
-
-        DrawUtil.setShader(null);
     }
 
     @Override
@@ -200,5 +162,76 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
     @Override
     public void onRainbowModeEnd(Entity player) {
         endRainbow();
+    }
+    
+    private void renderBackground(float deltaTime)
+    {
+        
+        if(rainbowDurationLeft > 0.0f)
+        {
+            rainbowDurationLeft -= deltaTime;
+            ShaderProgram rainbowShader = null;
+            switch(rainbowType.get())
+            {
+            case 0:
+                rainbowShader = ShaderLoader.getFancyRainbowShader();
+                DrawUtil.setShader(rainbowShader);
+                rainbowShader.setUniformf("u_rainbowAlpha", rainbowAlpha.get());
+                rainbowShader.setUniformf("u_rainbowFrequency", rainbowFrequency.get());
+                break;
+            case 1:
+                rainbowShader = ShaderLoader.getSimpleRainbowShader();
+                DrawUtil.setShader(rainbowShader);
+                rainbowShader.setUniformf("u_rainbowAlpha", rainbowAlpha.get());
+                rainbowShader.setUniformf("u_rainbowFrequency", rainbowFrequency.get());
+                break;
+            default:
+                rainbowShader = ShaderLoader.getOldRainbowShader();
+                DrawUtil.setShader(rainbowShader);
+                rainbowShader.setUniformf("u_rainbowAlpha", rainbowAlpha.get());
+                rainbowShader.setUniformf("u_rainbowFrequency", rainbowFrequency.get() * 0.2f);
+                break;
+            }
+            if(rainbowShader != null)
+            {
+                float[] dimensions = new float[]{ Gdx.graphics.getWidth(), Gdx.graphics.getHeight() };
+                rainbowShader.setUniformf("u_startDuration", rainbowStartDuration);
+                rainbowShader.setUniformf("u_durationLeft", rainbowDurationLeft);
+                rainbowShader.setUniform2fv("u_frameDimension", dimensions, 0, 2);
+                rainbowShader.setUniformf("u_time", (float)TimeUtils.timeSinceMillis(startTime) * 0.001f);
+            }
+        }
+        
+        float mapWidth = map.getWidth() * map.getTileWidth();
+        float mapHeight = map.getHeight() * map.getTileHeight();
+        
+        // 0.5
+        float widthMultiplier = (float)backgroundTexture.getWidth() / mapWidth;
+        // 0.5
+        float heightMultiplier = (float)backgroundTexture.getHeight() / mapHeight;
+        
+        // 1
+        float camXNormalized = (CameraSystem.getCameraPosition().x - Gdx.graphics.getWidth() * 0.5f) / (mapWidth - Gdx.graphics.getWidth());
+        // 1
+        float camYNormalized = (CameraSystem.getCameraPosition().y - Gdx.graphics.getHeight() * 0.5f) / (mapHeight - Gdx.graphics.getHeight());
+        
+        // 1.5
+        float xLeft = (CameraSystem.getCameraPosition().x - Gdx.graphics.getWidth() * 0.5f) * widthMultiplier;
+        // 2
+        float xRight = (CameraSystem.getCameraPosition().x + Gdx.graphics.getWidth() * 0.5f) * widthMultiplier;
+        
+        // 2
+        float yTop = (CameraSystem.getCameraPosition().y - Gdx.graphics.getHeight() * 0.5f) * heightMultiplier;
+        // 1.5
+        float yBottom = (CameraSystem.getCameraPosition().y + Gdx.graphics.getHeight() * 0.5f) * heightMultiplier;
+        
+        // 2
+        float xPosition = (1 - camXNormalized) * xLeft + camXNormalized * xRight;
+        
+        float yPosition = (1 - camYNormalized) * yTop + camYNormalized * yBottom;
+        
+        DrawUtil.draw(backgroundTexture, xPosition, yPosition, backgroundTexture.getWidth(), backgroundTexture.getHeight());
+
+        DrawUtil.setShader(null);
     }
 }
