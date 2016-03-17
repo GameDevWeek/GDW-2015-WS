@@ -100,7 +100,8 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         float score_x = cookie_x + 60;
         float score_y = 35;
         
-        
+        int lives = playerComp.lives;
+        String lives_string = String.valueOf(lives);
               
         int minutes_int = (int) scoreComp.playedSeconds/60;
         String minutes_string = String.valueOf(minutes_int);
