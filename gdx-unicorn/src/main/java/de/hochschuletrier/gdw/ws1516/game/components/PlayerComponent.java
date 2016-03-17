@@ -6,10 +6,28 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 public class PlayerComponent extends Component implements Poolable {
 
     public boolean doRespawn;
+    public int maxHitpoints;
+    public int hitpoints;
+    public int lives;
+    
+    public static enum State{
+        NORMAL,
+        RAINBOW,
+        HORNATTACK,
+        SPUCKCHARGE
+    }
+    
+    public State state;
+    public float stateTimer;
 
     @Override
     public void reset() {
         doRespawn = false;
+        maxHitpoints=0;
+        hitpoints=0;
+        lives=0;
+        state=State.NORMAL;
+        stateTimer=0;
     }
-
+   
 }

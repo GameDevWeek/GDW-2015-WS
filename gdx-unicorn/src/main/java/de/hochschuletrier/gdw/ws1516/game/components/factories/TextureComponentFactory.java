@@ -4,23 +4,21 @@ import com.badlogic.ashley.core.Entity;
 
 import de.hochschuletrier.gdw.commons.gdx.ashley.ComponentFactory;
 import de.hochschuletrier.gdw.commons.utils.SafeProperties;
-import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.TextureComponent;
 
-public class PlayerComponentFactory extends ComponentFactory<EntityFactoryParam> {
+public class TextureComponentFactory extends ComponentFactory<EntityFactoryParam> {
 
     @Override
     public String getType() {
-        return "Player";
+        return "Texture";
     }
 
     @Override
     public void run(Entity entity, SafeProperties meta, SafeProperties properties, EntityFactoryParam param) {
-        PlayerComponent component = engine.createComponent(PlayerComponent.class);
+        TextureComponent component = engine.createComponent(TextureComponent.class);
+        component.texture = assetManager.getTexture(properties.getString("texture"));
+        component.flipHorizontal = properties.getBoolean("flipHorizontal", false);
         
-        component.maxHitpoints = properties.getInt("maxHitpoints",3);
-        component.hitpoints = properties.getInt("hitpoints",3);
-        component.lives = properties.getInt("lives",3);
-
         entity.add(component);
     }
 }

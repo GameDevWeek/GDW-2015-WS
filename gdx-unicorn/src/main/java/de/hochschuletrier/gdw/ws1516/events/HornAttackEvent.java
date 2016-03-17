@@ -1,19 +1,26 @@
 package de.hochschuletrier.gdw.ws1516.events;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.SnapshotArray;
 
-public class JumpEvent {
+public class HornAttackEvent {
     public static interface Listener {
-        void onJumpEvent(Entity entity);
+        void onHornAttackStart();
+        void onHornAttackStop();
     }
 
     private static final SnapshotArray<Listener> listeners = new SnapshotArray<Listener>();
 
-    public static void emit(Entity entity) {
+    public static void start() {
         Object[] items = listeners.begin();
         for (int i = 0, n = listeners.size; i < n; i++) {
-            ((Listener) items[i]).onJumpEvent(entity);
+            ((Listener) items[i]).onHornAttackStart();
+        }
+        listeners.end();
+    }
+    public static void stop() {
+        Object[] items = listeners.begin();
+        for (int i = 0, n = listeners.size; i < n; i++) {
+            ((Listener) items[i]).onHornAttackStop();
         }
         listeners.end();
     }
@@ -29,5 +36,4 @@ public class JumpEvent {
     public static void unregisterAll() {
         listeners.clear();
     }
-
 }

@@ -1,19 +1,18 @@
 package de.hochschuletrier.gdw.ws1516.events;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.SnapshotArray;
 
-public class JumpEvent {
+public class RainbowEvent  {
     public static interface Listener {
-        void onJumpEvent(Entity entity);
+        void onRainbowCollect();
     }
 
     private static final SnapshotArray<Listener> listeners = new SnapshotArray<Listener>();
 
-    public static void emit(Entity entity) {
+    public static void emit() {
         Object[] items = listeners.begin();
         for (int i = 0, n = listeners.size; i < n; i++) {
-            ((Listener) items[i]).onJumpEvent(entity);
+            ((Listener) items[i]).onRainbowCollect();
         }
         listeners.end();
     }

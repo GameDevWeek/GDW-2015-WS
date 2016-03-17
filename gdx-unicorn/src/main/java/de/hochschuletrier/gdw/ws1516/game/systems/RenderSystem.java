@@ -31,6 +31,7 @@ public class RenderSystem extends SortedSubIteratingSystem {
         addSubSystem(backgroundParticleRenderSystem);
         animationRenderSystem = new AnimationRenderSystem();
         addSubSystem(animationRenderSystem);
+        addSubSystem(new TextureRenderSystem());
         particleRenderSystem = new ParticleRenderSystem();
         addSubSystem(particleRenderSystem);
     }
@@ -40,11 +41,6 @@ public class RenderSystem extends SortedSubIteratingSystem {
     {
         // TODO Auto-generated method stub
         super.addedToEngine(engine);
-        
-        MovementEvent.register(animationRenderSystem);
-        JumpEvent.register(animationRenderSystem);
-        StartFlyEvent.register(animationRenderSystem);
-        EndFlyEvent.register(animationRenderSystem);
     }
 
     @Override

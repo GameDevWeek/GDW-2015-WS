@@ -2,6 +2,9 @@ package de.hochschuletrier.gdw.ws1516.game.utils;
 
 import java.util.concurrent.FutureTask;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -20,12 +23,14 @@ import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
+import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.GameLogicTest;
 
 /**
  *
  * @author Santo Pfingsten
  */
 public class PhysixUtil {
+    private static final Logger logger = LoggerFactory.getLogger(PhysixUtil.class);
 
     public static final float DEG2RAD = (float) (Math.PI / 180.0); 
     public static final float RAD2DEG = (float) (180.0 / Math.PI);
@@ -66,8 +71,8 @@ public class PhysixUtil {
         
         PhysixBodyComponent entityBody = ComponentMapper.getFor(PhysixBodyComponent.class).get(entity);
         if (entityBody != null) {
-            float forceScaler = (float) (forceScale / Math.sqrt(forceX * forceX + forceY * forceY));
-            entityBody.applyImpulse(forceX * forceScaler, forceY * forceScaler);
+            float forceLen = (float) Math.sqrt(forceX * forceX + forceY * forceY);
+            entityBody.applyImpulse((forceX / forceLen) * forceScale, (forceY / forceLen) * forceScale);
         }
         
     }
