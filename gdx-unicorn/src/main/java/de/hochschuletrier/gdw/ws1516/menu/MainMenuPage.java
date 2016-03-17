@@ -40,11 +40,9 @@ public class MainMenuPage extends MenuPage {
         addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Credits", new MenuPageCredits(skin, menuManager));
     
         if(type==Type.MENU) {
-<<<<<<< HEAD
         addLeftAlignedButton(xOffset, yOffset - yStep *( 2* i++), 100, 50, "Beenden", () -> System.exit(-1));
-=======
         addLeftAlignedButton(xOffset, yOffset - yStep *( 2* i++), 100, 50, "Ausfahrt", this::systemExitDelay);
->>>>>>> 4ef437fd0adce5586e874b50003544fa11f434b7
+
         }
         else if (type==Type.PAUSED) {
             addLeftAlignedButton(xOffset, yOffset - yStep*(2* i++), 100, 50, "Menü", this::stopGame);
