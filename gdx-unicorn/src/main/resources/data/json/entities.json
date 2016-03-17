@@ -18,7 +18,10 @@
                 "state":"on_ground"
                 },
             "Animation": {
-                "animation": "unicorn_idle"
+                "none": "unicorn_idle",
+                "walking": "walking",
+                "jump": "walking",
+                "fly": "ball"
             },
             "PhysixBody": {
                 "type": "player",
@@ -30,6 +33,9 @@
             "CameraTarget": {},
             "RenderLayer": {
                 "layer": 100
+            },
+            "BackgroundParticle": {
+                "effect": "test"
             }
         }
     },
@@ -48,7 +54,9 @@
 		"cooldown":0.5
 	    },
             "Animation": {
-                "animation": "hunter_walking"
+                "none": "unicorn_idle",
+                "walking": "walking",
+                "jump": "ball"
             },
             "PhysixBody": {
                 "type": "enemy",

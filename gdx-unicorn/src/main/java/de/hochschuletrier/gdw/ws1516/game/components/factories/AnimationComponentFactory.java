@@ -18,17 +18,22 @@ public class AnimationComponentFactory extends ComponentFactory<EntityFactoryPar
     {
         AnimationComponent component = engine.createComponent(AnimationComponent.class);
         
+//        System.out.println(component.animationState);
+        
         for(AnimationState animState : AnimationState.values())
         {
+//            System.out.println(animState + " - " + properties.getString(animState.toString()));
             if(properties.getString(animState.toString()) != null)
             {
+//                System.out.println("--> " + animState + " - " + properties.getString(animState.toString()));
                 component.animationMap.put(animState, assetManager.getAnimation(properties.getString(animState.toString())));
             }
         }
         
         if(properties.getString("animation") != null)
         {
-            component.animationMap.put(AnimationState.none, assetManager.getAnimation(properties.getString("animation")));
+//            System.out.println(properties.getString("animation"));
+            component.animationMap.put(AnimationState.none, assetManager.getAnimation(properties.getString("none")));
         }
         
         component.flipHorizontal = properties.getBoolean("flipHorizontal", false);
