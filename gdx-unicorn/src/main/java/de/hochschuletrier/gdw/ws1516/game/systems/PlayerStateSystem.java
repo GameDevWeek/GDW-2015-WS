@@ -1,5 +1,6 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
@@ -17,6 +18,17 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         super(Family.all(PlayerComponent.class).get());
     }
 
+    @Override
+    public void addedToEngine(Engine engine) {
+        super.addedToEngine(engine);
+        RainbowEvent.register(this);
+    }
+    
+    @Override
+    public void removedFromEngine(Engine engine) {
+        super.removedFromEngine(engine);
+        RainbowEvent.unregister(this);
+    }
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         PlayerComponent playerComp=ComponentMappers.player.get(entity);
