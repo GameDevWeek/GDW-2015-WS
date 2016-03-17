@@ -111,11 +111,20 @@ public class MenuPage extends Group {
         return button;
     }
     
-    protected ImageButton createImageButton(Texture texture, float x, float y, float width, float height, Runnable runnable, boolean add) {
+    protected ImageButton createImageButton(Texture texture, float x, float y, float width, float height, Runnable runnable, boolean addToActor, boolean tintable) {
         
-        // NICHT GUT FÜR PERFORMANCE!!
-        ImageButton ib = new ImageButton(new SpriteDrawable(new Sprite(texture)));
+        ImageButton ib;
+        if(tintable==true) {
+            Sprite downSprite = new Sprite(texture);
+            downSprite.setColor(Color.MAGENTA);
+            // NICHT GUT FÜR PERFORMANCE!!
+            ib = new ImageButton(new SpriteDrawable(new Sprite(texture)), new SpriteDrawable(downSprite));
+        }
         
+        else {
+            // NICHT GUT FÜR PERFORMANCE!!
+            ib = new ImageButton(new SpriteDrawable(new Sprite(texture)));
+        }
         ib.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -123,9 +132,8 @@ public class MenuPage extends Group {
             }
         });
         ib.setPosition(x, y);
-       // ib.setBounds(x, y, width, height);
-        
-        if(add==true) {
+               
+        if(addToActor==true) {
         super.addActor(ib);
         }
         return ib;
