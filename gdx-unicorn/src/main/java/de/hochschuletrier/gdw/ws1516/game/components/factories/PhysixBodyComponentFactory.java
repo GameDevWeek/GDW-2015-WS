@@ -79,31 +79,28 @@ public class PhysixBodyComponentFactory extends
                 .linearDamping(1).angularDamping(1);
 
         playerBody.init(playerDef, physixSystem, entity);
-
-
+        
         //test:
-     // Horn
+        // Horn
         PhysixFixtureDef fixtureDef = new PhysixFixtureDef(physixSystem)
                 .density(1).friction(0).restitution(0f)
                 .shapeCircle(width * 0.1f, new Vector2(width *0.45f, -height * 0.4f)).sensor(true);
+        fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
         Fixture fixture = playerBody.createFixture(fixtureDef);
 
         //mainBody
-       fixtureDef = new PhysixFixtureDef(physixSystem)
+        fixtureDef = new PhysixFixtureDef(physixSystem)
         .density(0.2f).friction(0f).restitution(0f)
         .shapeBox(width * 0.9f, height * 0.9f, new Vector2(0, 0), 0);
+        fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
         fixture = playerBody.createFixture(fixtureDef);
         fixture.setUserData("horn");
-
-
-
-
-        
+  
         //jump contact
         fixtureDef = new PhysixFixtureDef(physixSystem)
-
         .density(1).friction(0f).restitution(0f)
         .shapeCircle(width * 0.1f, new Vector2(0, height * 0.49f)).sensor(true);
+        fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
         fixture = playerBody.createFixture(fixtureDef);
         fixture.setUserData("foot");//foot becaUSE IST ON THE GROUND
 

@@ -36,19 +36,25 @@ public class GameConstants {
     //Effect Times
     public static final float FLYING_TIME= 10.0f;
     public static final float RAINBOW_MODE_TIME = 10.0f;
+    public static final float HORN_MODE_TIME = 3.0f;
+    public static final float SPUCK_MODE_TIME = 2.0f;
 
+    //Physic collision groups
+    public static final short PHYSIX_COLLISION_SPIT = -1;
+    public static final short PHYSIX_COLLISION_UNICORN = -1;
+    
     // Bullet system
     public static final float BULLET_SPEED = (50.0f / 43.0f) * 15.0f;
     
     // Bubble-gum spit 
-    public static final float SPIT_FORCE_MAX = 30.0f;
-    public static final float SPIT_FORCE_MIN = 10.0f;
-    public static final float SPIT_SPAWN_ANGLE = PhysixUtil.DEG2RAD * -20.0f;
-    public static final float SPIT_SPAWN_OFFSET_X = 80.0f;
-    public static final float SPIT_SPANW_OFFSET_Y = 20.0f;
+    public static final float SPIT_FORCE_MAX = 35.0f;
+    public static final float SPIT_FORCE_MIN = 20.0f;
+    public static final float SPIT_SPAWN_ANGLE = PhysixUtil.DEG2RAD * -25.0f;
+    public static final float SPIT_SPAWN_OFFSET_X = 55.0f;
+    public static final float SPIT_SPAWN_OFFSET_Y = -12.0f;
     public static final float SPIT_GLUE_COOLDOWN = 5.0f;
     public static final float SPIT_CHARGE_TIME_TO_MAX = 1.0f;
-    public static final float SPIT_COOLDOWN = 1.0f;
+    public static final float SPIT_COOLDOWN = 0.0f;
     
     public static float MUSIC_FADE_TIME = 2;
     
