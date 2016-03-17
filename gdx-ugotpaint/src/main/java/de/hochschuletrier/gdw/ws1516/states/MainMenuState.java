@@ -26,7 +26,7 @@ public class MainMenuState extends BaseGameState {
     private final Skin skin = new Skin(Gdx.files.internal("data/ui/menu/skins/menu.json"));
     private final Music music;
 
-    private final MenuManager menuManager = new MenuManager(Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT, null);
+    private final MenuManager menuManager = new MenuManager(GameConstants.WINDOW_WIDTH, GameConstants.WINDOW_HEIGHT, null);
     private final InputForwarder inputForwarder;
 
     public MainMenuState(AssetManagerX assetManager) {

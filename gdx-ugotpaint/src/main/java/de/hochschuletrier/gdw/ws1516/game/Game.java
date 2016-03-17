@@ -44,8 +44,12 @@ public class Game extends InputAdapter {
         entityFactory.init(engine, assetManager);
         
         inputForwarder.set(engine.getSystem(KeyboardInputSystem.class));
-        createSnake(0, 50, 50, Color.RED);
-        createSnake(1, 850, 550, Color.BLUE);
+        float x = GameConstants.BOUND_LEFT + 3* GameConstants.SEGMENT_DISTANCE;
+        float y = GameConstants.BOUND_TOP;
+        createSnake(0, x, y, 1, 0, Color.RED);
+        x = GameConstants.BOUND_RIGHT - 3* GameConstants.SEGMENT_DISTANCE;
+        y = GameConstants.BOUND_BOTTOM;
+        createSnake(1, x, y, -1, 0, Color.BLUE);
         pickupSystem.createRandomPickup();
         pickupSystem.createRandomPickup();
     }
@@ -67,15 +71,15 @@ public class Game extends InputAdapter {
         engine.update(delta);
     }
 
-    public Entity createSnake(int index, float x, float y, Color tint) {
+    public Entity createSnake(int index, float x, float y, float xDir, float yDir, Color tint) {
         Entity e = createEntity("snake", x, y, tint);
         final InputComponent input = engine.createComponent(InputComponent.class);
         input.index = index;
         e.add(input);
         
         final PlayerComponent player = engine.createComponent(PlayerComponent.class);
-        player.path.add(new Vector2(x - 100, y));
-        for(int i=0; i<6; i++)
+        player.path.add(new Vector2(-xDir, -yDir).nor().scl(100).add(x, y));
+        for(int i=0; i<2; i++)
             player.segments.add(new Vector2());
         e.add(player);
         return e;

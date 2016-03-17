@@ -32,7 +32,7 @@ public class GameplayState extends BaseGameState {
     private final Game game;
     private final Music music;
 
-    private final MenuManager menuManager = new MenuManager(Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT, this::onMenuEmptyPop);
+    private final MenuManager menuManager = new MenuManager(GameConstants.WINDOW_WIDTH, GameConstants.WINDOW_HEIGHT, this::onMenuEmptyPop);
     private final InputForwarder inputForwarder;
     private final InputProcessor menuInputProcessor;
     private final InputProcessor gameInputProcessor;

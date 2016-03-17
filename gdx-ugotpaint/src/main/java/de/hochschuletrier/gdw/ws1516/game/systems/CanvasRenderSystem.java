@@ -17,16 +17,19 @@ import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 
 public class CanvasRenderSystem extends IteratingSystem {
     
-    Pixmap pixmap = new Pixmap(Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT, Pixmap.Format.RGBA8888);
+    Pixmap pixmap = new Pixmap(GameConstants.WINDOW_WIDTH, GameConstants.WINDOW_HEIGHT, Pixmap.Format.RGBA8888);
     private final Color drawTint = new Color(1,1,1,0.5f);
     private final Color clearColor = new Color(0,0,0,0);
     private final Color pixelColor = new Color();
     private final Texture texture = new Texture(pixmap);
     private float pctFilled;
     private float nextUpdate = 0;
+    private final Texture background;
 
     public CanvasRenderSystem(int priority) {
         super(Family.all(PositionComponent.class, AnimationComponent.class, PlayerComponent.class).get(), priority);
+        
+        this.background = Main.getInstance().getAssetManager().getTexture("canvas");
     }
 
     public float getPctFilled() {
@@ -47,9 +50,9 @@ public class CanvasRenderSystem extends IteratingSystem {
         AnimationComponent animation = ComponentMappers.animation.get(entity);
         PlayerComponent player = ComponentMappers.player.get(entity);
         pixmap.setColor(animation.tint);
-        pixmap.fillCircle((int)position.x, Main.WINDOW_HEIGHT - (int)position.y, GameConstants.PAINT_RADIUS);
+        pixmap.fillCircle((int)position.x, GameConstants.WINDOW_HEIGHT - (int)position.y, GameConstants.PAINT_RADIUS);
         for (Vector2 segment : player.segments) {
-            pixmap.fillCircle((int)segment.x, Main.WINDOW_HEIGHT - (int)segment.y, GameConstants.PAINT_RADIUS);
+            pixmap.fillCircle((int)segment.x, GameConstants.WINDOW_HEIGHT - (int)segment.y, GameConstants.PAINT_RADIUS);
         }
     }
 
@@ -59,6 +62,7 @@ public class CanvasRenderSystem extends IteratingSystem {
         final int w = pixmap.getWidth();
         final int h = pixmap.getHeight();
         
+        DrawUtil.batch.draw(background, 0, 0, w, h);
         texture.draw(pixmap, 0, 0);
         DrawUtil.setColor(drawTint);
         DrawUtil.batch.draw(texture, 0, 0, w, h);

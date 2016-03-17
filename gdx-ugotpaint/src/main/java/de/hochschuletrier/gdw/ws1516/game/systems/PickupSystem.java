@@ -4,9 +4,11 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Rectangle;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.events.PickupEvent;
 import de.hochschuletrier.gdw.ws1516.game.Game;
+import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import java.util.Random;
 
 public class PickupSystem extends EntitySystem implements PickupEvent.Listener {
@@ -39,8 +41,9 @@ public class PickupSystem extends EntitySystem implements PickupEvent.Listener {
     }
 
     public void createRandomPickup() {
-        float x = rand.nextFloat() * Main.WINDOW_WIDTH - 1;
-        float y = rand.nextFloat() * Main.WINDOW_HEIGHT - 1;
+        Rectangle b = GameConstants.PICKUP_SPAWN_RECT;
+        float x = b.x + (rand.nextFloat() * b.width - 1);
+        float y = b.y + (rand.nextFloat() * b.height - 1);
         game.createEntity("pickup", x, y, Color.WHITE);
     }
 }

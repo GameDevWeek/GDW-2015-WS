@@ -1,5 +1,7 @@
 package de.hochschuletrier.gdw.ws1516.game;
 
+import com.badlogic.gdx.math.Rectangle;
+
 public class GameConstants {
 
     // Priorities for entity systems
@@ -21,8 +23,27 @@ public class GameConstants {
     public static final int VELOCITY_ITERATIONS = 8;
     public static final int BOX2D_SCALE = 40;
     
-    public static float MUSIC_FADE_TIME = 2;
-    public static final float COLLISION_DISTANCE = 12;
-    public static final float SEGMENT_DISTANCE = 18;
-    public static final int PAINT_RADIUS = 6;
+    public static final float MUSIC_FADE_TIME = 2;
+    
+    public static final int WINDOW_HEIGHT = 600;
+    public static final int WINDOW_WIDTH = 1024;
+    
+    public static final int PAINT_RADIUS = 14;
+    public static final float BORDER_SIZE = 60;
+    public static final float BOUND_LEFT = BORDER_SIZE + PAINT_RADIUS;
+    public static final float BOUND_TOP = BORDER_SIZE + PAINT_RADIUS;
+    public static final float BOUND_RIGHT = WINDOW_WIDTH - BORDER_SIZE - PAINT_RADIUS;
+    public static final float BOUND_BOTTOM = WINDOW_HEIGHT - BORDER_SIZE - PAINT_RADIUS;
+    public static final float BOUND_WIDTH = BOUND_RIGHT - BOUND_LEFT;
+    public static final float BOUND_HEIGHT = BOUND_BOTTOM - BOUND_TOP;
+    
+    public static final float COLLISION_DISTANCE = PAINT_RADIUS * 1.7f;
+    public static final float SEGMENT_DISTANCE = COLLISION_DISTANCE * 1.6f;
+    public static final int PATH_STEP_SIZE = 10;
+    public static final Rectangle PICKUP_SPAWN_RECT = new Rectangle(
+            BOUND_LEFT + SEGMENT_DISTANCE,
+            BOUND_TOP + SEGMENT_DISTANCE,
+            BOUND_WIDTH - 2* SEGMENT_DISTANCE,
+            BOUND_HEIGHT - 2* SEGMENT_DISTANCE
+    );
 }

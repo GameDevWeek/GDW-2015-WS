@@ -29,6 +29,14 @@ public class UpdatePlayerSystem extends IteratingSystem {
         PlayerComponent player = ComponentMappers.player.get(entity);
         vel.set(input.moveDirection).nor().scl(80 * deltaTime);
         position.pos.add(vel);
+        if(position.pos.x < GameConstants.BOUND_LEFT)
+            position.pos.x = GameConstants.BOUND_LEFT;
+        else if(position.pos.x > GameConstants.BOUND_RIGHT)
+            position.pos.x = GameConstants.BOUND_RIGHT;
+        if(position.pos.y < GameConstants.BOUND_TOP)
+            position.pos.y = GameConstants.BOUND_TOP;
+        else if(position.pos.y > GameConstants.BOUND_BOTTOM)
+            position.pos.y = GameConstants.BOUND_BOTTOM;
 
         updatePath(player, position);
         updateSegmentPositions(position, player);
@@ -37,7 +45,7 @@ public class UpdatePlayerSystem extends IteratingSystem {
     private void updatePath(PlayerComponent player, PositionComponent position) {
         // add a path entry if last pos was set some distance ago
         float dist = player.path.getFirst().dst(position.pos);
-        if (dist >= ComponentMappers.PATH_STEP_SIZE) {
+        if (dist >= GameConstants.PATH_STEP_SIZE) {
             player.path.addFirst(position.pos.cpy());
             
             // reduce path size afterwards

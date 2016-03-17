@@ -59,7 +59,7 @@ public class CollisionSystem extends IteratingSystem {
             if(playerB != null) {
                 int index = 0;
                 for (Vector2 vposB2 : playerB.segments) {
-                    if((self != other || index > 1) && vposA.dst(vposB2) < GameConstants.COLLISION_DISTANCE) {
+                    if(vposA.dst(vposB2) < GameConstants.COLLISION_DISTANCE) {
                         segmentHit(self, other, index);
                         return;
                     }

@@ -31,6 +31,7 @@ import de.hochschuletrier.gdw.commons.gdx.utils.GdxResourceLocator;
 import de.hochschuletrier.gdw.commons.gdx.utils.KeyUtil;
 import de.hochschuletrier.gdw.commons.resourcelocator.CurrentResourceLocator;
 import de.hochschuletrier.gdw.commons.utils.ClassUtils;
+import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.states.LoadGameState;
 import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
 import org.apache.commons.cli.CommandLine;
@@ -49,8 +50,6 @@ public class Main extends StateBasedGame {
 
     public static final boolean IS_RELEASE = ClassUtils.getClassUrl(Main.class).getProtocol().equals("jar");
 
-    public static final int WINDOW_HEIGHT = 600;
-    public static final int WINDOW_WIDTH = 1024;
 
     private final AssetManagerX assetManager = new AssetManagerX();
     private static Main instance;
@@ -201,8 +200,8 @@ public class Main extends StateBasedGame {
     public static void main(String[] args) {
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
         cfg.title = "Hue got Paint";
-        cfg.width = WINDOW_WIDTH;
-        cfg.height = WINDOW_HEIGHT;
+        cfg.width = GameConstants.WINDOW_WIDTH;
+        cfg.height = GameConstants.WINDOW_HEIGHT;
         cfg.useGL30 = false;
         cfg.vSyncEnabled = true;
         cfg.foregroundFPS = 60;
