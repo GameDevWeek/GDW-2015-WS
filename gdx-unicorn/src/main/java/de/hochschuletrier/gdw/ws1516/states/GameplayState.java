@@ -105,7 +105,7 @@ public class GameplayState extends BaseGameState {
     public void onEnter(BaseGameState previousState) {
         MusicManager.play(music, GameConstants.MUSIC_FADE_TIME);
         
-        System.out.print("TORLOLOTLROL");
+        
     }
 
     @Override

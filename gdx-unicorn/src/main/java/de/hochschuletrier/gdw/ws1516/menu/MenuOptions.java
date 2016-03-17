@@ -15,19 +15,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import de.hochschuletrier.gdw.commons.gdx.audio.MusicManager;
 import de.hochschuletrier.gdw.commons.gdx.audio.SoundEmitter;
-import de.hochschuletrier.gdw.commons.gdx.audio.SoundInstance;
-import de.hochschuletrier.gdw.commons.gdx.input.InputForwarder;
-import de.hochschuletrier.gdw.commons.gdx.input.hotkey.Hotkey;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
-import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
-import de.hochschuletrier.gdw.ws1516.game.components.SoundEmitterComponent;
 import de.hochschuletrier.gdw.ws1516.game.systems.SoundSystem;
 
 public class MenuOptions extends MenuPage {
 
-    private float generalSound;
-    private static Slider generalSlider;
-    private Slider musicSlider;
+    private static float generalSound;
+    private Slider generalSlider;
+    private static Slider musicSlider;
     private Slider soundSlider;
 
     public MenuOptions(Skin skin, MenuManager menuManager) {
@@ -41,7 +36,7 @@ public class MenuOptions extends MenuPage {
         generalSlider = addLabeledSlider(0, 100, 1, xOffset, yOffset - yStep * (i++), "Allgemein", true);     
         musicSlider = addLabeledSlider(0, 100, 1, xOffset, yOffset - yStep * (i++), "Musik", true);        
         soundSlider = addLabeledSlider(0, 100, 1, xOffset, yOffset - yStep * (i++), "Sound", true);
-        addLeftAlignedButton(xOffset, yOffset - yStep * (i++), 100, 50, "Zurücksetzen", this::reset, "buttonSound");    
+        addLeftAlignedButton(xOffset, yOffset - yStep * (i++), 120, 50, "Zurücksetzen", this::reset, "buttonSound");    
         
         generalSlider.addListener(new ChangeListener() {
             @Override
@@ -61,18 +56,17 @@ public class MenuOptions extends MenuPage {
             }
         });
 
-        soundSlider.addListener(new ChangeListener() {
+        soundSlider.addListener(new ClickListener() {
 
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 SoundSystem.setGlobalVolume(soundSlider.getValue() / 1000 * generalSound);        
                 soundTest();
 
             }
         });
 
-        addLeftAlignedButton(xOffset, 40, 100, 50, "Menu",
-                () -> menuManager.popPage(), "buttonSound");
+        addLeftAlignedButton(xOffset, 40, 100, 50, "Menü", () -> menuManager.popPage(), "buttonSound");
     }
 
     public void soundTest() {
@@ -86,17 +80,11 @@ public class MenuOptions extends MenuPage {
         MusicManager.setGlobalVolume(musicSlider.getValue() / 1000 * generalSound);         
         SoundSystem.setGlobalVolume(soundSlider.getValue() / 1000 * generalSound);
     }
-    public static float getGeneralSliderValue(){
-        return generalSlider.getValue();
+
+    public static float getMusicSlider() {
+        // TODO Auto-generated method stub
+        return musicSlider.getValue()/1000*generalSound;
     }
-    public static void setGeneralSliderValue(float x){
-        generalSlider.setValue(x);
-    }
-    public float getMusicSliderValue(){
-        return musicSlider.getValue();
-    }
-    public float getSoundSliderValue(){
-        return soundSlider.getValue();
-    }
+
    
 }
