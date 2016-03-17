@@ -1,16 +1,25 @@
 package de.hochschuletrier.gdw.ws1516.game.utils;
 
+import java.util.ArrayList;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
+import de.hochschuletrier.gdw.ws1516.game.systems.EnemyVisionSystem;
 
 /**
  * Physics utility class to test whether or not a player entity can be seen from another entity
@@ -19,6 +28,8 @@ import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
  */
 public class PlayerRayCaster {
 
+    private static final Logger logger = LoggerFactory.getLogger(PlayerRayCaster.class);
+    
     //Context
     private Engine engine;
     private PhysixSystem physixSystem;
@@ -42,7 +53,7 @@ public class PlayerRayCaster {
     public void isPlayerVisible() {
         
         //Rest raycast result
-        lastCastResult = false;
+        lastCastResult = true;
         
         //Fetch entity position component, if none abort
         PositionComponent entityPosition = ComponentMappers.position.get(toCastFrom);
@@ -55,20 +66,29 @@ public class PlayerRayCaster {
         //For every player entity
         ImmutableArray<Entity> players = engine.getEntitiesFor(Family.all(PlayerComponent.class,
                                                                           PhysixBodyComponent.class).get());
+        
+        ImmutableArray<Entity> enemies = engine.getEntitiesFor(Family.all(EnemyTypeComponent.class, PhysixBodyComponent.class).get());
+        ArrayList<Body> enemyBodies = new ArrayList<>();
+        enemies.forEach((c) -> enemyBodies.add(c.getComponent(PhysixBodyComponent.class).getBody()));
+
         for (Entity player : players) {
             PhysixBodyComponent playerBody = ComponentMappers.physixBody.get(player);
             Vector2 playerCenter = new Vector2(playerBody.getX(), playerBody.getY());
             
+            Vector2 box2DEntityEye = new Vector2();
+            physixSystem.toBox2D(entityEye, box2DEntityEye);
+            Vector2 box2DPlayerCenter = new Vector2();
+            physixSystem.toBox2D(playerCenter, box2DPlayerCenter);
+            
             physixSystem.getWorld().rayCast((fixture, point, normal, fraction) -> {
                 
-                //Player was hit -> visible
-                if (playerBody.getBody().equals(fixture.getBody())) {   
-                    lastCastResult = true;
+                if (fixture.getBody().getType().equals(BodyType.StaticBody)) {
+                    lastCastResult = false;
                     return 0;
                 }
                 
-                return 0;
-            }, entityEye, playerCenter);
+                return 1;
+            }, box2DEntityEye, box2DPlayerCenter);
             
         }
         
