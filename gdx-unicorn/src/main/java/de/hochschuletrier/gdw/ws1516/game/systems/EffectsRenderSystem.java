@@ -35,8 +35,8 @@ public class EffectsRenderSystem extends IteratingSystem {
     
     private Texture effectsScreenOverlay;
     
-    private final ConsoleCmd paparazzi = new ConsoleCmd("pap", 0, "Usage: pap [duration] - Activates paparazzi mode for [duration] seconds") { @Override public void execute(List<String> args) { startPaparazzi(args); } };
-    private final CVarFloat paparazziIntensity = new CVarFloat("paparazziIntensity", 8.0f, 0.0f, Float.MAX_VALUE, 0, "");
+    private final ConsoleCmd paparazzi = new ConsoleCmd("pap", 0, "Usage: pap (duration) - Activates paparazzi mode for (duration) seconds") { @Override public void execute(List<String> args) { startPaparazzi(args); } };
+    private final CVarFloat paparazziIntensity = new CVarFloat("paparazziIntensity", 1.0f, 0.0f, Float.MAX_VALUE, 0, "");
     private float currentPaparazziSeed;
 
     @SuppressWarnings("unchecked")
@@ -54,6 +54,7 @@ public class EffectsRenderSystem extends IteratingSystem {
         // save camera target position to set paparazzi effect save circle around player        
         PositionComponent targetPos = ComponentMappers.position.get(entity);
         cameraTargetScreenPos = CameraSystem.worldToScreenCoordinates(targetPos.x, targetPos.y);
+        //System.out.println("screenX: " + cameraTargetScreenPos.x + " (worldX: " + targetPos.x + ") # screenY: " + cameraTargetScreenPos.y + " worldY: " + targetPos.y);
     }
     
     @Override
@@ -76,6 +77,11 @@ public class EffectsRenderSystem extends IteratingSystem {
         super.removedFromEngine(engine);
     }
     
+    private Vector2 cameraScreenToShaderScreenCoords(Vector2 in)
+    {
+        return new Vector2(in.x, Gdx.graphics.getHeight() - in.y);
+    }
+    
     @Override
     public void update(float deltaTime) {
         
@@ -92,13 +98,12 @@ public class EffectsRenderSystem extends IteratingSystem {
                 shader.setUniformf("u_startDuration", paparazziStartDuration);
                 shader.setUniformf("u_durationLeft", paparazziDurationLeft);
 
-                float[] paparazziCircleRadiusRange = new float[]{ 60.0f, 120.0f };
-                shader.setUniform2fv("u_paparazziCircleRadiusRange", paparazziCircleRadiusRange, 0, 2);
                 float[] paparazziColor = new float[]{ 1.0f, 0.0f, 0.0f, 1.0f };
                 shader.setUniform4fv("u_paparazziColor", paparazziColor, 0, 4);
                 float[] paparazziSeed = new float[]{ currentPaparazziSeed, currentPaparazziSeed };
                 shader.setUniform2fv("u_paparazziSeed", paparazziSeed, 0, 2);
-                float[] paparazziOverlaySafeCircle = new float[]{ cameraTargetScreenPos.x, cameraTargetScreenPos.y, 80.0f };
+                Vector2 shaderCoords = cameraScreenToShaderScreenCoords(cameraTargetScreenPos);
+                float[] paparazziOverlaySafeCircle = new float[]{shaderCoords.x, shaderCoords.y , 100.0f };
                 shader.setUniform3fv("u_paparazziOverlaySafeCircle", paparazziOverlaySafeCircle, 0, 3);
                 shader.setUniformf("u_paparazziIntensity", paparazziIntensity.get());
                 
