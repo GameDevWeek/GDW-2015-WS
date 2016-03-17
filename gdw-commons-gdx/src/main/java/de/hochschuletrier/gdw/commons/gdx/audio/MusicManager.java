@@ -14,7 +14,7 @@ import java.util.LinkedList;
 public class MusicManager {
 
     private static boolean muted;
-    private static float globalVolume = 1;
+    private static float globalVolume = 0.25f;
     private static Music currentMusic;
     private static final LinkedList<Fade> fades = new LinkedList();
     private static final ReflectionPool<Fade> pool = new ReflectionPool(Fade.class);
