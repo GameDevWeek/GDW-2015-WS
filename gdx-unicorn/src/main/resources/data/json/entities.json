@@ -146,18 +146,12 @@
         "components": {
             "Position": {},
             "Texture": {
-                "texture": "bubblegum_spitting"
-            },
-            "PhysixBody": {
-                "type": "circle",
-                "size": 30,
-                "density": 5,
-                "friction": 0.2,
-                "restitution": 0.4
+                "texture": "bubblegum_spitting_pink"
             },
             "RenderLayer": {
-                "layer": 70
-            }
+                "layer": 60
+            },
+            "BubblegumSpitComponent" : {}
         }
     },
     "chocolate": {
@@ -227,7 +221,6 @@
             }
         }
     },
-    
     "ball": {
         "meta": {},
         "components": {

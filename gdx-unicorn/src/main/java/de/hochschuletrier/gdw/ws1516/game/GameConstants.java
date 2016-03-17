@@ -59,7 +59,7 @@ public class GameConstants {
     public static final float SPIT_SPAWN_OFFSET_Y = -12.0f;
     public static final float SPIT_GLUE_COOLDOWN = 5.0f;
     public static final float SPIT_CHARGE_TIME_TO_MAX = 1.0f;
-    public static final float SPIT_COOLDOWN = 0.0f;
+    public static final float SPIT_COOLDOWN = 1.0f;
     
     public static float MUSIC_FADE_TIME = 2;
     
