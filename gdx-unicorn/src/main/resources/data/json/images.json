@@ -27,5 +27,7 @@
     "menu_fg": "data/ui/menu/fg_border.png",
     "menu_bg": "data/ui/menu/menu_splash.png",
     "prev_Button": "data/ui/menu/prev_Button.png",
-    "next_Button": "data/ui/menu/next_Button.png"
+    "next_Button": "data/ui/menu/next_Button.png",
+    
+    "map_background": "data/graphics/dummy_background.jpg"
 }

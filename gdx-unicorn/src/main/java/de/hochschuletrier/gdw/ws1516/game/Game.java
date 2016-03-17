@@ -183,8 +183,8 @@ public class Game extends InputAdapter {
         EntityCreator.setGame(this);
         EntityCreator.setEntityFactory(entityFactory);
         
-        loadMap("data/maps/demo_level_worked.tmx");
-        mapRenderSystem.initialzeRenderer(map, cameraSystem);
+        loadMap("data/maps/demo_level_worked_nurMap.tmx");
+        mapRenderSystem.initialzeRenderer(map, "map_background", cameraSystem);
         
         //test:
         Entity unicorn = EntityCreator.createEntity("unicorn", 1300, 300);

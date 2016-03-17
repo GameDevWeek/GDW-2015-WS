@@ -10,6 +10,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import de.hochschuletrier.gdw.commons.devcon.ConsoleCmd;
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarFloat;
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarInt;
+import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.Hotkey;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.HotkeyModifier;
 import de.hochschuletrier.gdw.commons.gdx.tiled.TiledMapRendererGdx;
@@ -32,16 +34,6 @@ import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 
 public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Listener{
-
-    private TiledMap map;
-    private TiledMapRendererGdx mapRenderer;
-    
-    private long startTime;
-    
-    private float rainbowDurationLeft;
-    private float rainbowStartDuration;
-    
-    private final HashMap<TileSet, Texture> tilesetImages = new HashMap<>();
     
     private final CVarInt rainbowType = new CVarInt("fancyRainbow", 0, 0, 2, 0, "sets fancy rainbowmode");
     private final ConsoleCmd rainbow = new ConsoleCmd("rainbow", 0, "Usage: rainbow [duration] - Activates rainbow mode for [duration] seconds") { @Override public void execute(List<String> args) { startRainbow(args); } };
@@ -49,6 +41,17 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
     private final Hotkey fancyRainbowHotkey = new Hotkey(() -> rainbowType.set((rainbowType.get() + 1) % 3, true), Input.Keys.T, HotkeyModifier.CTRL);
     private final CVarFloat rainbowFrequency = new CVarFloat("rainbowFrequency", GameConstants.RAINBOW_FREQUENCY, 0.0f, Float.MAX_VALUE, 0, "");
     private final CVarFloat rainbowAlpha = new CVarFloat("rainbowAlpha", GameConstants.RAINBOW_ALPHA, 0.0f, Float.MAX_VALUE, 0, "");
+    
+    private final HashMap<TileSet, Texture> tilesetImages = new HashMap<>();
+    
+    private TiledMap map;
+    private TiledMapRendererGdx mapRenderer;
+    private Texture backgroundTexture;
+    
+    private long startTime;
+    
+    private float rainbowDurationLeft;
+    private float rainbowStartDuration;
     
     
     @SuppressWarnings("unchecked")
@@ -123,6 +126,8 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
             }
         }
         
+        //DrawUtil.draw(backgroundTexture, 0, 0, backgroundTexture.getWidth(), backgroundTexture.getHeight());
+        
         mapRenderer.update(deltaTime);
         for (Layer layer : map.getLayers()) {
             mapRenderer.render(0, 0, layer);
@@ -138,39 +143,39 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
     
     protected void startRainbow()
     {
-        List<String> duration = new ArrayList<>();
-        duration.add(GameConstants.RAINBOW_MODE_TIME + "");
-        startRainbow(duration);
+        startRainbow(GameConstants.RAINBOW_MODE_TIME);
     }
     
     protected void endRainbow()
     {
-        List<String> duration = new ArrayList<>();
-        duration.add(0 + "");
-        startRainbow(duration);
+        startRainbow(0);
     }
 
     protected void startRainbow(List<String> args) {
         if(args.size() <= 1)
         {
-            rainbowStartDuration = 5.0f;
+            startRainbow();
         }
         else
         {
             try
             {
-                rainbowStartDuration = Float.parseFloat(args.get(1));
+                startRainbow(Float.parseFloat(args.get(1)));
             }
             catch(Exception e)
             {
-                rainbowStartDuration = 5.0f;
+                startRainbow();
             }
         }
-        rainbowDurationLeft = rainbowStartDuration;
+    }
+    
+    protected void startRainbow(float duration)
+    {
+        rainbowDurationLeft = rainbowStartDuration = duration;
         startTime = TimeUtils.millis();
     }
     
-    public void initialzeRenderer(TiledMap map, CameraSystem cameraSystem)
+    public void initialzeRenderer(TiledMap map, String backgroundGraphic, CameraSystem cameraSystem)
     {
         this.map = map;
         for (TileSet tileset : map.getTileSets()) {
@@ -183,6 +188,8 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
         int totalMapWidth = map.getWidth() * map.getTileWidth();
         int totalMapHeight = map.getHeight() * map.getTileHeight();
         cameraSystem.setCameraBounds(0, 0, totalMapWidth, totalMapHeight);
+        
+        backgroundTexture = Main.getInstance().getAssetManager().getTexture(backgroundGraphic);
     }
 
     @Override
