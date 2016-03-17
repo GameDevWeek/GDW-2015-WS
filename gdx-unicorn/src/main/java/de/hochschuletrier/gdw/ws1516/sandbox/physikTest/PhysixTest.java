@@ -233,8 +233,8 @@ public class PhysixTest extends SandboxGame {
                     //Magie = Physik / Wollen
                     float cosine = (float) Math.cos(playerBody.getAngle());
                     float sine   = (float) Math.sin(playerBody.getAngle());
-                    float spawnOffsetX = GameConstants.SPIT_SPAWN_OFFSET_X * cosine - GameConstants.SPIT_SPANW_OFFSET_Y * sine; 
-                    float spawnOffsetY = GameConstants.SPIT_SPAWN_OFFSET_X * sine   + GameConstants.SPIT_SPANW_OFFSET_Y * cosine;
+                    float spawnOffsetX = GameConstants.SPIT_SPAWN_OFFSET_X * cosine - GameConstants.SPIT_SPAWN_OFFSET_Y * sine; 
+                    float spawnOffsetY = GameConstants.SPIT_SPAWN_OFFSET_X * sine   + GameConstants.SPIT_SPAWN_OFFSET_Y * cosine;
                     float spawnX = playerBody.getX() + spawnOffsetX;
                     float spawnY = playerBody.getY() + spawnOffsetY;
                               
