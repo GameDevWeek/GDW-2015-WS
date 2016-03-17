@@ -81,7 +81,7 @@ public class MenuOptions extends MenuPage {
     }
 
     public void soundTest() {
-        SoundEmitter.playGlobal(assetManager.getSound("EinhornEmpathy"), false);
+        SoundEmitter.playGlobal(assetManager.getSound("einhornempathy"), false);
     }
 
     public void reset() {

@@ -42,17 +42,17 @@ public class LevelSelectionPage extends MenuPage {
         level_previews[2] = assetManager.getTexture("paparazzi");
         level_previews[3] = assetManager.getTexture("bubble");
         
-        level_preview = createImageButton(level_previews[level_preview_index], 450, 250, 50, 50, this::startGame, true, false);
+        level_preview = createImageButton(level_previews[level_preview_index], 450, 250, 50, 50, this::startGame, "einhornMotivated", true, false);
                     
-        createImageButton(buttonBack_texture, 430, 230, 50, 50, this::previousLevel, true, true);
-        createImageButton(buttonNext_texture, 450+level_preview_texture.getWidth(), 230, 50, 50, this::nextLevel, true, true);
+        createImageButton(buttonBack_texture, 430, 230, 50, 50, this::previousLevel, "buttonSound", true, true);
+        createImageButton(buttonNext_texture, 450+level_preview_texture.getWidth(), 230, 50, 50, this::nextLevel, "buttonSound", true, true);
         addLeftAlignedButton(55, 40, 100, 50, "Menü", () -> menuManager.popPage());
         
     }
     
     private void setLevel(int index) {
         level_preview.remove();
-        level_preview = createImageButton(level_previews[index], 450, 250, 50, 50, this::startGame, true, false);
+        level_preview = createImageButton(level_previews[index], 450, 250, 50, 50, this::startGame, "einhornMotivated", true, false);
     }
     private void nextLevel() {
         level_preview.remove();

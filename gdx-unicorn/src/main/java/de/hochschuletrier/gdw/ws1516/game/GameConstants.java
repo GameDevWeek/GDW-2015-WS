@@ -32,6 +32,7 @@ public class GameConstants {
     public static final float PLAYER_SPEED = 250.0f;
     public static final float PLAYER_JUMP_IMPULSE = -1250.0f;
     public static final float THROWBACK_FORCE = 1000.0f;
+    public static final float HORNATTACK_IMPULSE=1500.0f;
     
     //Effect Times
     public static final float FLYING_TIME= 10.0f;
