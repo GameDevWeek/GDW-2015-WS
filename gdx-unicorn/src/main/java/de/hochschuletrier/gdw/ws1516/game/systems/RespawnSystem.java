@@ -1,29 +1,21 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
-import java.util.ArrayList;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
-import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 
-import de.hochschuletrier.gdw.commons.gdx.ashley.EntityInfo;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.ws1516.events.GameRespawnEvent;
-import de.hochschuletrier.gdw.ws1516.events.TriggerEvent;
-import de.hochschuletrier.gdw.ws1516.events.TriggerEvent.Action;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
-import de.hochschuletrier.gdw.ws1516.game.components.HitPointsComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.StartPointComponent;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.GameLogicTest;
-import de.hochschuletrier.gdw.ws1516.sandbox.maptest.MapTest;
 
 public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.Listener, EntityListener {
 
@@ -41,11 +33,10 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
        PlayerComponent playerComp = ComponentMappers.player.get(player);
        PhysixBodyComponent physixBody = ComponentMappers.physixBody.get(entity);
        StartPointComponent respawnPosition = ComponentMappers.startPoint.get(entity);
-       HitPointsComponent hitPoints = ComponentMappers.hp.get(entity);
        if ( physixBody != null && playerComp.doRespawn)
        {
            physixBody.setPosition(respawnPosition.x,respawnPosition.y);
-           hitPoints.value = hitPoints.max;
+           playerComp.hitpoints = playerComp.maxHitpoints;
            playerComp.doRespawn = false;
        }
     }

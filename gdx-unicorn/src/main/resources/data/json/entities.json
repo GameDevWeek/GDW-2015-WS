@@ -4,16 +4,13 @@
         "components": {
             "ScoreBoard":{},
             "StartPosition":{},
-            "Position": {},
+            "Position": { 
+		"maxHitpoints":3,
+		"hitpoints":3,
+		"lives":3
+            },
             "Input":{},
             "Player":{},
-	    "HP":{
-		"value":3,
-		"max":3
-            },
-            "Lives":{
-		"value":3
-            },
             "Movable":{
                 "state":"on_ground"
                 },
