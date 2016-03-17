@@ -108,7 +108,7 @@ public class MenuPage extends Group {
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                SoundEmitter.playGlobal(assetManager.getSound("buttonsound"), false);
+                SoundEmitter.playGlobal(assetManager.getSound("buttonSound"), false);
                 runnable.run();
             }
         });
