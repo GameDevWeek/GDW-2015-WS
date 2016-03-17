@@ -66,9 +66,11 @@ public class PhysixBodyComponentFactory extends
         entity.add(modifyComponent);
     }
 
+    
+    
     private void addPlayer(EntityFactoryParam param, Entity entity,
             SafeProperties properties) {
-        //TODO: modify to fit the model
+
         float width = 2*GameConstants.TILESIZE_X;
         float height = 1*GameConstants.TILESIZE_Y;
         
@@ -81,38 +83,43 @@ public class PhysixBodyComponentFactory extends
         playerBody.init(playerDef, physixSystem, entity);
 
 
-        //test:
-     // Horn
+     // Horn (sensor)
         PhysixFixtureDef fixtureDef = new PhysixFixtureDef(physixSystem)
                 .density(1).friction(0).restitution(0f)
-                .shapeCircle(width * 0.1f, new Vector2(width *0.45f, -height * 0.4f)).sensor(true);
+                .shapeCircle(width * 0.04f, new Vector2(width * 0.43f, height * -0.4f)).sensor(true);
         Fixture fixture = playerBody.createFixture(fixtureDef);
 
-        //mainBody
+    // mainBody
        fixtureDef = new PhysixFixtureDef(physixSystem)
-        .density(0.2f).friction(0f).restitution(0f)
-        .shapeBox(width * 0.9f, height * 0.9f, new Vector2(0, 0), 0);
+        .density(0.68f).friction(0f).restitution(0f)
+        .shapeCircle(width * 0.25f, new Vector2(1, 0));
         fixture = playerBody.createFixture(fixtureDef);
         fixture.setUserData("horn");
-
-
-
-
         
-        //jump contact
+    // head
+        fixtureDef = new PhysixFixtureDef(physixSystem)
+         .density(0.2f).friction(0f).restitution(0f)
+         .shapeCircle(width * 0.12f, new Vector2(width * 0.21f, height * -0.3f));
+         fixture = playerBody.createFixture(fixtureDef);
+         fixture.setUserData("head");
+
+
+    // jump contact (sensor)
         fixtureDef = new PhysixFixtureDef(physixSystem)
 
         .density(1).friction(0f).restitution(0f)
-        .shapeCircle(width * 0.1f, new Vector2(0, height * 0.49f)).sensor(true);
+        .shapeCircle(width * 0.05f, new Vector2(0, height * 0.49f)).sensor(true);
         fixture = playerBody.createFixture(fixtureDef);
-        fixture.setUserData("foot");//foot becaUSE IST ON THE GROUND
+        fixture.setUserData("foot");
 
         entity.add(playerBody);
     }
     
+
+    
     private void addEnemy(EntityFactoryParam param, Entity entity,
             SafeProperties properties) {
-        //TODO: modify to fit the model
+
         float width = 2*GameConstants.TILESIZE_X;
         float height = 1*GameConstants.TILESIZE_Y;
         
@@ -125,34 +132,34 @@ public class PhysixBodyComponentFactory extends
         playerBody.init(playerDef, physixSystem, entity);
 
 
-        
+    // head
         PhysixFixtureDef fixtureDef = new PhysixFixtureDef(physixSystem)
                 .density(1).friction(0).restitution(0f)
-                .shapeCircle(width * 0.1f, new Vector2(0, -height * 0.4f));
+                .shapeCircle(width * 0.09f, new Vector2(width * 0.08f, height * -0.4f));
         Fixture fixture = playerBody.createFixture(fixtureDef);
 
-     // Head
+     // body
        fixtureDef = new PhysixFixtureDef(physixSystem)
         .density(1f).friction(0f).restitution(0f)
-        .shapeBox(width * 0.18f, height * 0.825f, new Vector2(0, 0), 0);
+        .shapeBox(width * 0.18f, height * 0.825f, new Vector2(width * 0.08f, height * -0.1f), 0);
         fixture = playerBody.createFixture(fixtureDef);
         fixture.setUserData("head");
 
 
-    // mainBody
+    // foot
         fixtureDef = new PhysixFixtureDef(physixSystem)
                 .density(1).friction(0f).restitution(0f)
-                .shapeCircle(width * 0.1f, new Vector2(0, height * 0.425f));
+                .shapeCircle(width * 0.1f, new Vector2(width * 0.08f, height * 0.32f));
         fixture = playerBody.createFixture(fixtureDef);
         fixture.setUserData("body");
         
-    // jump contact
+    // jump contact (seonsor)
         fixtureDef = new PhysixFixtureDef(physixSystem)
 
         .density(1).friction(0f).restitution(0f)
-        .shapeCircle(width * 0.1f, new Vector2(0, height * 0.49f)).sensor(true);
+        .shapeCircle(width * 0.1f, new Vector2(width * 0.08f, height * 0.32f)).sensor(true);
         fixture = playerBody.createFixture(fixtureDef);
-        fixture.setUserData("foot");//foot becaUSE IST ON THE GROUND
+        fixture.setUserData("foot");
 
         entity.add(playerBody);
     }
