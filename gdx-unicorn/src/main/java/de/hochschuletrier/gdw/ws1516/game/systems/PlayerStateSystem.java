@@ -11,8 +11,9 @@ import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent.State;
 import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
+import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
 
-public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.Listener{
+public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.Listener,HornAttackEvent.Listener{
 
     public PlayerStateSystem() {
         super(Family.all(PlayerComponent.class).get());
@@ -34,6 +35,9 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         PlayerComponent playerComp=ComponentMappers.player.get(entity);
         playerComp.stateTimer=Math.max(playerComp.stateTimer-deltaTime, 0);
         if (playerComp.stateTimer<=0.0f){
+            if (playerComp.state==State.HORNATTACK){
+                HornAttackEvent.stop();
+            }
             playerComp.state=State.NORMAL;
         }
     }
@@ -42,9 +46,26 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
     public void onRainbowCollect() {
         if (getEntities().size()>0){
             PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
+            if (playerComp.state==State.HORNATTACK){
+                HornAttackEvent.stop();
+            }
             playerComp.state=State.RAINBOW;
             playerComp.stateTimer=GameConstants.RAINBOW_MODE_TIME;
         }
+    }
+
+    @Override
+    public void onHornAttackStart() {
+        if (getEntities().size()>0){
+            PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
+            playerComp.state=State.HORNATTACK;
+            playerComp.stateTimer=GameConstants.HORN_MODE_TIME;
+        }
+    }
+
+    @Override
+    public void onHornAttackStop() {
+        
     }
     
 }
