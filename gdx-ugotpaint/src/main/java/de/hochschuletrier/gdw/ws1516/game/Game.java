@@ -20,6 +20,7 @@ import de.hochschuletrier.gdw.ws1516.game.systems.PickupSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.ShootSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePlayerSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdateProjectileSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.UpdateSoundEmitterSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.input.InputSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.input.KeyboardInputSystem;
 import de.hochschuletrier.gdw.ws1516.game.utils.PlayerColor;
@@ -74,6 +75,7 @@ public class Game extends InputAdapter {
         engine.addSystem(new AnimationRenderSystem(GameConstants.PRIORITY_ANIMATIONS));
         engine.addSystem(new KeyboardInputSystem());
         engine.addSystem(new InputSystem());
+        engine.addSystem(new UpdateSoundEmitterSystem());
         engine.addSystem(pickupSystem);
     }
 
@@ -91,7 +93,7 @@ public class Game extends InputAdapter {
         final PlayerComponent player = engine.createComponent(PlayerComponent.class);
         player.color = color;
         player.path.add(new Vector2(-xDir, -yDir).nor().scl(100).add(x, y));
-        for(int i=0; i<2; i++)
+        for(int i=0; i<7; i++)
             player.segments.add(new Vector2());
         e.add(player);
         return e;

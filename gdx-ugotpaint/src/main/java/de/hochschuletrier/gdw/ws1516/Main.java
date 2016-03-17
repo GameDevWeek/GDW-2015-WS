@@ -33,6 +33,7 @@ import de.hochschuletrier.gdw.commons.gdx.utils.KeyUtil;
 import de.hochschuletrier.gdw.commons.resourcelocator.CurrentResourceLocator;
 import de.hochschuletrier.gdw.commons.utils.ClassUtils;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.systems.UpdateSoundEmitterSystem;
 import de.hochschuletrier.gdw.ws1516.game.utils.Canvas;
 import de.hochschuletrier.gdw.ws1516.states.LoadGameState;
 import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
@@ -135,6 +136,7 @@ public class Main extends StateBasedGame {
 
         this.console.register(emitterMode);
         emitterMode.addListener(this::onEmitterModeChanged);
+        UpdateSoundEmitterSystem.initCVars();
     }
 
     private void onLoadComplete() {
