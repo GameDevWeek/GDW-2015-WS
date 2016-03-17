@@ -2,7 +2,8 @@
     "com.badlogic.gdx.graphics.g2d.BitmapFont": {
         "default-font": {"file": "data/fonts/verdana_32.fnt"},
         "verdana_32": {"file": "data/fonts/verdana_32.fnt"},
-        "open_sans_24": {"file": "data/fonts/open_sans_24.fnt"}
+        "open_sans_24": {"file": "data/fonts/open_sans_24.fnt"},
+        "quartz_50": {"file": "data/fonts/quartz_50.fnt"}
     },
     "com.badlogic.gdx.graphics.Color": {
         "green": {"a": 1, "b": 0, "g": 1, "r": 0},
@@ -51,7 +52,9 @@
 
     },
     "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
-        "default": {"font": "open_sans_24", "fontColor": "pink"}
+        "default": {"font": "open_sans_24", "fontColor": "pink"},
+        "gameover": {"font": "quartz_50", "fontColor": "red"},
+        "win": {"font": "quartz_50", "fontColor": "cyan"}
     },
     "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
         "default": {"selection": "selection", "background": "textfield", "font": "default-font", "fontColor": "white", "cursor": "cursor"}

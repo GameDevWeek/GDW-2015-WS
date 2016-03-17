@@ -19,7 +19,9 @@ import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.menu.EndPage;
 import de.hochschuletrier.gdw.ws1516.menu.MainMenuPage;
+import de.hochschuletrier.gdw.ws1516.menu.MenuOptions;
 import de.hochschuletrier.gdw.ws1516.menu.MenuPageRoot;
 
 /**
@@ -31,7 +33,6 @@ public class MainMenuState extends BaseGameState {
 
     private final Skin skin = new Skin(Gdx.files.internal("data/ui/menu/skins/menu.json"));
     private final Music music;
-
     private final MenuManager menuManager = new MenuManager(Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT, null);
     private final InputForwarder inputForwarder;
 
@@ -39,13 +40,10 @@ public class MainMenuState extends BaseGameState {
         music = assetManager.getMusic("menutheme");
 
         final MainMenuPage menuPageRoot = new MainMenuPage(skin, menuManager, MainMenuPage.Type.MENU);
+   //     final EndPage menuPageRoot = new EndPage(skin, menuManager, "transparent_bg");
         menuManager.addLayer(menuPageRoot);
         
-        Hotkey test = new Hotkey(() -> MusicManager.setGlobalVolume(0.1F), Input.Keys.ALT_LEFT);
-        test.register();
-        
-        
-//        menuManager.addLayer(new DecoImage(assetManager.getTexture("menu_fg")));
+    //    menuManager.addLayer(new DecoImage(assetManager.getTexture("menu_fg")));
         menuManager.pushPage(menuPageRoot);
 //        menuManager.getStage().setDebugAll(true);
 
@@ -81,11 +79,14 @@ public class MainMenuState extends BaseGameState {
     public void onEnterComplete() {
        
         MusicManager.play(music, GameConstants.MUSIC_FADE_TIME);
-        MusicManager.setGlobalVolume(0.5f);
-        inputForwarder.set(menuManager.getInputProcessor());
         
+        MusicManager.setGlobalVolume(MenuOptions.getMusicSlider());
+        System.out.print(MenuOptions.getMusicSlider());
+        
+        inputForwarder.set(menuManager.getInputProcessor());
       //  music.setVolume(0.5F);
         menuManager.popAllPages();
+        
      //   music.play();
     }
 

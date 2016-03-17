@@ -20,6 +20,7 @@ import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent.State;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.GameLogicTest;
 
@@ -104,12 +105,14 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
 
         if (playerComp.state!=PlayerComponent.State.RAINBOW){   
             //es handelt sich um das Einhorn, also Leben abziehen.
-            playerComp.lives--;
-            
-            if (playerComp.lives > 0)
-                GameRespawnEvent.emit();
-            else
-                GameOverEvent.emit();
+            if (playerComp.lives>0){
+                playerComp.lives--;
+                
+                if (playerComp.lives > 0)
+                    GameRespawnEvent.emit();
+                else
+                    GameOverEvent.emit();
+            }
         }
     }
 
@@ -131,7 +134,12 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
 
     @Override
     public void onUnicornEnemyCollisionEvent(Entity unicorn, Entity enemy) {
-        HitEvent.emit(unicorn, HitType.TOUCH, 1);
+        PlayerComponent player=ComponentMappers.player.get(unicorn);
+        if (player.state==State.RAINBOW){
+            DeathEvent.emit(enemy);
+        }else{
+            HitEvent.emit(unicorn, HitType.TOUCH, 1);
+        }
     }
 
     @Override
