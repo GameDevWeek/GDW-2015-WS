@@ -67,12 +67,6 @@ public class MovementSystem extends IteratingSystem implements
         if (movement != null & input != null)
             movement.lookDirection = input.lookDirection;
         
-        if (input != null && input.hornAttack &&
-                playerComp.state!=State.RAINBOW && playerComp.hornAttackCooldown<=0){
-            HornAttackEvent.start();
-            input.hornAttack=false;
-        }
-        
         if (movement != null) {
             switch (movement.state) {
             case FLYING:
