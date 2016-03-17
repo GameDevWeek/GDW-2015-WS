@@ -14,6 +14,8 @@ import de.hochschuletrier.gdw.ws1516.events.GameRespawnEvent;
 import de.hochschuletrier.gdw.ws1516.events.HealEvent;
 import de.hochschuletrier.gdw.ws1516.events.HitEvent;
 import de.hochschuletrier.gdw.ws1516.events.HitEvent.HitType;
+import de.hochschuletrier.gdw.ws1516.events.UnicornEnemyCollisionEvent;
+import de.hochschuletrier.gdw.ws1516.events.HornCollisionEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
@@ -21,9 +23,9 @@ import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.GameLogicTest;
 
-public class HitPointManagementSystem extends EntitySystem implements HitEvent.Listener, DeathEvent.Listener, HealEvent.Listener{
+public class HitPointManagementSystem extends EntitySystem implements HitEvent.Listener, DeathEvent.Listener, HealEvent.Listener, UnicornEnemyCollisionEvent.Listener, HornCollisionEvent.Listener{
 
-    private static final Logger logger = LoggerFactory.getLogger(GameLogicTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(HitPointManagementSystem.class);
     
     private ComponentMapper<PlayerComponent> pm = ComponentMapper.getFor(PlayerComponent.class);
     private ComponentMapper<MovementComponent> mm = ComponentMapper.getFor(MovementComponent.class);
@@ -34,6 +36,8 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
         HitEvent.register(this);
         DeathEvent.register(this);
         HealEvent.register(this);
+        UnicornEnemyCollisionEvent.register(this);
+        HornCollisionEvent.register(this);
         this.engine = engine;
     }
     
@@ -42,6 +46,8 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
         HitEvent.unregister(this);
         DeathEvent.unregister(this);
         HealEvent.unregister(this);
+        UnicornEnemyCollisionEvent.unregister(this);
+        HornCollisionEvent.unregister(this);
         this.engine = null;
     }
     
@@ -52,8 +58,9 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
             PlayerComponent playerComp = pm.get(entity);
             if (playerComp == null) //wenn es sich um einen Gegner handelt wars das soweit.
                 return;
-            if (playerComp.state!=PlayerComponent.State.RAINBOW){
+            if (playerComp.state!=PlayerComponent.State.RAINBOW && playerComp.invulnerableTimer==0){
                 playerComp.hitpoints-= value;
+                playerComp.invulnerableTimer=GameConstants.INVULNERABLE_TIMER;
                 
                 if (playerComp.hitpoints <= 0)
                     DeathEvent.emit(entity);
@@ -120,5 +127,15 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
         {
             logger.warn("cannot heal for {} Hitpoints",value);
         }
+    }
+
+    @Override
+    public void onUnicornEnemyCollisionEvent(Entity unicorn, Entity enemy) {
+        HitEvent.emit(unicorn, HitType.TOUCH, 1);
+    }
+
+    @Override
+    public void onHornCollisionEvent(Entity unicorn, Entity enemy) {
+        DeathEvent.emit(enemy);
     }
 }

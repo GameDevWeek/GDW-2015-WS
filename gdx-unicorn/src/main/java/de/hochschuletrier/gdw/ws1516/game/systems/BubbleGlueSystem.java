@@ -27,25 +27,28 @@ public class BubbleGlueSystem extends EntitySystem {
         
         ImmutableArray<Entity> entitys = engine.getEntitiesFor(Family.all(BubbleGlueComponent.class).get());
         for (Entity entity : entitys) {
-        
-            //Fetch components
-            BubbleGlueComponent glueComponent = ComponentMapper.getFor(BubbleGlueComponent.class).get(entity);
-            PhysixBodyComponent body = ComponentMapper.getFor(PhysixBodyComponent.class).get(glueComponent.gluedEntity);
-            
-            //Glue (evtl modify component)
-            body.setX(glueComponent.gluedToPosition.x);
-            body.setY(glueComponent.gluedToPosition.y);
-            
-            //Arresto momentum
-            body.setLinearVelocity(0, 0);
-            
-            //Cooldown
-            glueComponent.timeRemaining -= deltaTime;
+              //Fetch components
+                BubbleGlueComponent glueComponent = ComponentMapper.getFor(BubbleGlueComponent.class).get(entity);
+                PhysixBodyComponent body = ComponentMapper.getFor(PhysixBodyComponent.class).get(glueComponent.gluedEntity);
                 
-            if (glueComponent.timeRemaining <= 0) {
-                engine.removeEntity(entity);
-            }
-        
+                if (body == null) {
+                    engine.removeEntity(entity);
+                    continue;
+                }
+                
+                //Glue (evtl modify component)
+                body.setX(glueComponent.gluedToPosition.x);
+                body.setY(glueComponent.gluedToPosition.y);
+                
+                //Arresto momentum
+                body.setLinearVelocity(0, 0);
+                
+                //Cooldown
+                glueComponent.timeRemaining -= deltaTime;
+                    
+                if (glueComponent.timeRemaining <= 0) {
+                    engine.removeEntity(entity);
+                }
         }
             
     }
