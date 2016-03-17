@@ -42,6 +42,8 @@ public class GameConstants {
     public static final float HORN_MODE_COOLDOWN = 5.0f;
     public static final float SPUCK_MODE_COOLDOWN = 2.0f;
     public static final float INVULNERABLE_TIMER = 0.5f;
+    
+    public static final float RAINBOW_SPEED_MODIFIER = 2.0f;
     //Physic collision groups
     public static final short PHYSIX_COLLISION_SPIT = -1;
     public static final short PHYSIX_COLLISION_UNICORN = -1;
@@ -57,7 +59,7 @@ public class GameConstants {
     public static final float SPIT_SPAWN_OFFSET_Y = -12.0f;
     public static final float SPIT_GLUE_COOLDOWN = 5.0f;
     public static final float SPIT_CHARGE_TIME_TO_MAX = 1.0f;
-    public static final float SPIT_COOLDOWN = 0.0f;
+    public static final float SPIT_COOLDOWN = 1.0f;
     
     public static float MUSIC_FADE_TIME = 2;
     

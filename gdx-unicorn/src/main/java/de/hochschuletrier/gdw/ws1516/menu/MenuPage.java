@@ -61,36 +61,28 @@ public class MenuPage extends Group {
     }
     
     
-     protected final Slider addLabeledSlider(float min, float max,float stepSize,int x, int y,String text,boolean add){
-        
-        Slider slider = new Slider(min,max,stepSize,false,skin,"default-horizontal");
+     protected final void addLabeledSlider(Slider slider,int x, int y,String text,boolean add){
         Label label = new Label(text,skin,"default");
-        
         int size = 250; 
-        slider.setValue(50);
-        
-
-        label.setPosition(x-5, y+7);
+        label.setPosition(x, y+7);
         slider.setBounds(x+80,y,size,35);
         Label value= new Label(""+(int)slider.getValue(),skin,"default");
         value.setPosition(x+size+90,y+7);   
-        
         slider.addListener(new ChangeListener(){
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 value.setText(""+(int)slider.getValue());
             }
         });
-
         if(add==true)
         {
          addActor(slider);
          addActor(label);
          addActor(value);
         }
-        return slider;
-        
     }
+     
+    
 
     protected final void addLeftAlignedButton(int x, int y, int width, int height, String text,Runnable runnable,String sound) {
         TextButton button = addButton(x, y, width, height, text, runnable, "default",sound);
@@ -115,6 +107,13 @@ public class MenuPage extends Group {
         addActor(button);
         return button;
     }
+    protected final Slider createSlider(float min, float max,float stepSize){
+        
+    Slider slider = new Slider(min,max,stepSize,false,skin,"default-horizontal");
+    slider.setValue(50);
+    return slider;
+     
+ }
     
     protected ImageButton createImageButton(Texture texture, float x, float y, float width, float height, Runnable runnable, String sound, boolean addToActor, boolean tintable) {
         

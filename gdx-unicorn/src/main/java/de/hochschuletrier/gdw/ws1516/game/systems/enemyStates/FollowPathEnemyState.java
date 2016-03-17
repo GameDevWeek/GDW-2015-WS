@@ -28,6 +28,7 @@ public class FollowPathEnemyState extends EnemyBaseState {
         EnemyTypeComponent enemyType=ComponentMappers.enemyType.get(entity);
         if ( behaviour.canSeeUnicorn )
         {
+            MovementEvent.emit(entity, 0.0f);
             if (enemyType.type==EnemyType.HUNTER){
                 if (behaviour.cooldown==0){
                     return new AttackEnemyState();

@@ -3,6 +3,7 @@ package de.hochschuletrier.gdw.commons.gdx.audio;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.badlogic.gdx.utils.ReflectionPool;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -14,7 +15,7 @@ import java.util.LinkedList;
 public class MusicManager {
 
     private static boolean muted;
-    private static float globalVolume = 0.25f;
+    private static float globalVolume = 1;
     private static Music currentMusic;
     private static final LinkedList<Fade> fades = new LinkedList();
     private static final ReflectionPool<Fade> pool = new ReflectionPool(Fade.class);
@@ -82,6 +83,7 @@ public class MusicManager {
     }
 
     public static void play(Music music, float fadeTime) {
+        //setGlobalVolume(0);
         if (currentMusic != null && currentMusic != music) {
             addFade(currentMusic, fadeTime, true);
         }
@@ -91,6 +93,8 @@ public class MusicManager {
             music.setLooping(true);
             music.play();
         }
+        System.out.println("music.play");
+        
         currentMusic = music;
 
        

@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import de.hochschuletrier.gdw.commons.gdx.ashley.SortedSubIteratingSystem.SubSystem;
+import de.hochschuletrier.gdw.commons.gdx.assets.AnimationExtended;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
@@ -29,10 +30,11 @@ public class AnimationRenderSystem extends SubSystem
         animation.stateTime += deltaTime;
         TextureRegion keyFrame = null;
 
+        String stateKey = movement.state.toString().toLowerCase();
         if(movement.state == MovementComponent.State.ON_GROUND)
         {
-            String idleString = movement.state.toString().toLowerCase() + "_idle";
-            String walkingString = movement.state.toString().toLowerCase() + "_walking";
+            String idleString = stateKey + "_idle";
+            String walkingString = stateKey + "_walking";
             
 //            System.out.println(idleString + " - " + walkingString + " - " + movement.velocityX + " - " + animation.animationMap.get(idleString));
             
@@ -45,9 +47,12 @@ public class AnimationRenderSystem extends SubSystem
                 keyFrame = animation.animationMap.get(walkingString).getKeyFrame(animation.stateTime);
             }
         }
-        else if(animation.animationMap.get(MovementComponent.State.ON_GROUND.toString().toLowerCase()) != null)
-        {
-            keyFrame = animation.animationMap.get(MovementComponent.State.ON_GROUND.toString().toLowerCase()).getKeyFrame(animation.stateTime);
+        else {
+            final AnimationExtended animationEntry = animation.animationMap.get(stateKey);
+            if(animationEntry != null)
+            {
+                keyFrame = animationEntry.getKeyFrame(animation.stateTime);
+            }
         }
         
         animation.flipHorizontal = (movement.lookDirection) == (MovementComponent.LookDirection.LEFT);
