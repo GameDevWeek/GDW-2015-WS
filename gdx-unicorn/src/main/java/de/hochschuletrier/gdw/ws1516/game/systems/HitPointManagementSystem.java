@@ -11,9 +11,12 @@ import com.badlogic.ashley.core.EntitySystem;
 import de.hochschuletrier.gdw.ws1516.events.HitEvent;
 import de.hochschuletrier.gdw.ws1516.events.HitEvent.HitType;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.HitPointsComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.LiveComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
+import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.GameLogicTest;
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
@@ -28,6 +31,7 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
     private ComponentMapper<PlayerComponent> pm = ComponentMapper.getFor(PlayerComponent.class);
     private ComponentMapper<LiveComponent> lm = ComponentMapper.getFor(LiveComponent.class);
     private ComponentMapper<HitPointsComponent> hm = ComponentMapper.getFor(HitPointsComponent.class);
+    private ComponentMapper<MovementComponent> mm = ComponentMapper.getFor(MovementComponent.class);
     private Engine engine;
     
     @Override
@@ -63,7 +67,19 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
             //ansonsten war es das Einhorn => unterschiedliches Verhalten, je nach Art des HitPoints.
             switch (type) {
             case TOUCH:
-                //TODO Einhorn ThrowBack? Über ThrowBackEvent?
+                //TODO anpassen!
+                //testweise vektoren in abhaengigkeit der Blickrichtung des Einhorns
+                MovementComponent moveComp = mm.get(entity);
+                float forceX = 0.0f;
+                float forceY = -0.5f;
+                
+                if (moveComp.lookDirection == MovementComponent.LookDirection.LEFT) {
+                    forceX = 1.0f;
+                } else {
+                    forceX = -1.0f;
+                }
+                
+                PhysixUtil.throwBackEntity(entity, forceX, forceY, GameConstants.THROWBACK_FORCE);
                 break;
             default:
                 break;
