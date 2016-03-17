@@ -27,7 +27,7 @@ public class AnimationComponentFactory extends ComponentFactory<EntityFactoryPar
                 String animStateString = properties.getString(animState.toString().toLowerCase() + "_idle");
                 String animStateString2 = properties.getString(animState.toString().toLowerCase() + "_walking");
 
-                System.out.println("put ON_GROUND " + animState.toString().toLowerCase() + " -- " + animStateString + " - " + animStateString2);
+//                System.out.println("put ON_GROUND " + animState.toString().toLowerCase() + " -- " + animStateString + " - " + animStateString2);
                 
                 component.animationMap.put(animState.toString().toLowerCase() + "_idle", assetManager.getAnimation(animStateString));
                 component.animationMap.put(animState.toString().toLowerCase() + "_walking", assetManager.getAnimation(animStateString2));                
@@ -38,7 +38,7 @@ public class AnimationComponentFactory extends ComponentFactory<EntityFactoryPar
                 
                 if(animStateString != null)
                 {
-                    System.out.println("put NOTGROUND " + animState.toString().toLowerCase() +" -- "+ animStateString);
+//                    System.out.println("put NOTGROUND " + animState.toString().toLowerCase() +" -- "+ animStateString);
                     
                     component.animationMap.put(animState.toString().toLowerCase(), assetManager.getAnimation(animStateString));
                 }
@@ -49,6 +49,6 @@ public class AnimationComponentFactory extends ComponentFactory<EntityFactoryPar
         component.flipHorizontal = properties.getBoolean("flipHorizontal", false);
         
         entity.add(component);
-        System.out.println("--");
+//        System.out.println("--");
     }
 }

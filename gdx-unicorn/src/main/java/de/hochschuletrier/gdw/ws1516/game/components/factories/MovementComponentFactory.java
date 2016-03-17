@@ -17,7 +17,7 @@ public class MovementComponentFactory extends ComponentFactory<EntityFactoryPara
     public void run(Entity entity, SafeProperties meta, SafeProperties properties, EntityFactoryParam param) {
         MovementComponent component = engine.createComponent(MovementComponent.class);
         String identifier = properties.getString("state");
-        System.out.println("MovementComponentFactory " + identifier);
+//        System.out.println("MovementComponentFactory " + identifier);
         if(identifier != null)
         {
             switch(identifier){
