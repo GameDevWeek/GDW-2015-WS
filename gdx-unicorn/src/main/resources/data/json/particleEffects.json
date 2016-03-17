@@ -1,4 +1,7 @@
 {
     "test": "data/particleEffects/partikelTest.p",
-    "test2": "data/particleEffects/sternTest.p"
+    "test2": "data/particleEffects/sternTest.p",
+    
+    "unicornWalking": "data/particleEffects/unicorn_walking_particle.p",
+    "unicornWalkingMirror": "data/particleEffects/unicorn_walking_particle_mirror.p"
 }
