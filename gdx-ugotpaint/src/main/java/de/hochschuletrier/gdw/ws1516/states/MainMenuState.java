@@ -11,6 +11,7 @@ import de.hochschuletrier.gdw.commons.gdx.state.BaseGameState;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.Cursor;
 import de.hochschuletrier.gdw.ws1516.Main;
+import static de.hochschuletrier.gdw.ws1516.Main.playMusic;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.menu.MenuPageRoot;
 
@@ -65,6 +66,7 @@ public class MainMenuState extends BaseGameState {
 
     @Override
     public void onEnter(BaseGameState previousState) {
+        playMusic("normal");
         menuPageRoot.fadeToMenuInstant();
     }
     

@@ -1,18 +1,21 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
+import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 
-public class UpdatePlayerSystem extends IteratingSystem {
+public class UpdatePlayerSystem extends IteratingSystem implements GameOverEvent.Listener {
 
     private final Vector2 vel = new Vector2();
+    protected boolean inputEnabled = true;
 
     public UpdatePlayerSystem() {
         this(0);
@@ -23,20 +26,39 @@ public class UpdatePlayerSystem extends IteratingSystem {
     }
 
     @Override
+    public void addedToEngine(Engine engine) {
+        super.addedToEngine(engine);
+        GameOverEvent.register(this);
+    }
+
+    @Override
+    public void removedFromEngine(Engine engine) {
+        super.removedFromEngine(engine);
+        GameOverEvent.unregister(this);
+    }
+    
+    @Override
+    public void onGameOverEvent() {
+        inputEnabled = false;
+    }
+
+    @Override
     public void processEntity(Entity entity, float deltaTime) {
-        InputComponent input = ComponentMappers.input.get(entity);
         PositionComponent position = ComponentMappers.position.get(entity);
+        if(inputEnabled) {
+            InputComponent input = ComponentMappers.input.get(entity);
+            vel.set(input.moveDirection).nor().scl(80 * deltaTime);
+            position.pos.add(vel);
+            if(position.pos.x < GameConstants.BOUND_LEFT)
+                position.pos.x = GameConstants.BOUND_LEFT;
+            else if(position.pos.x > GameConstants.BOUND_RIGHT)
+                position.pos.x = GameConstants.BOUND_RIGHT;
+            if(position.pos.y < GameConstants.BOUND_TOP)
+                position.pos.y = GameConstants.BOUND_TOP;
+            else if(position.pos.y > GameConstants.BOUND_BOTTOM)
+                position.pos.y = GameConstants.BOUND_BOTTOM;
+        }
         PlayerComponent player = ComponentMappers.player.get(entity);
-        vel.set(input.moveDirection).nor().scl(80 * deltaTime);
-        position.pos.add(vel);
-        if(position.pos.x < GameConstants.BOUND_LEFT)
-            position.pos.x = GameConstants.BOUND_LEFT;
-        else if(position.pos.x > GameConstants.BOUND_RIGHT)
-            position.pos.x = GameConstants.BOUND_RIGHT;
-        if(position.pos.y < GameConstants.BOUND_TOP)
-            position.pos.y = GameConstants.BOUND_TOP;
-        else if(position.pos.y > GameConstants.BOUND_BOTTOM)
-            position.pos.y = GameConstants.BOUND_BOTTOM;
 
         updatePath(player, position);
         updateSegmentPositions(position, player);

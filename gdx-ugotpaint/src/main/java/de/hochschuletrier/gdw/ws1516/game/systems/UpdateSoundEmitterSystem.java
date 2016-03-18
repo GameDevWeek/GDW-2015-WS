@@ -66,9 +66,13 @@ public class UpdateSoundEmitterSystem extends IteratingSystem implements SoundEv
 
     @Override
     public void onSoundEvent(Entity entity, String name) {
-        SoundEmitterComponent component = ComponentMappers.soundEmitter.get(entity);
-        if(component != null) {
-            component.emitter.play(assetManager.getSound(name), false);
+        if(entity == null) {
+            SoundEmitter.playGlobal(assetManager.getSound(name), false);
+        } else {
+            SoundEmitterComponent component = ComponentMappers.soundEmitter.get(entity);
+            if(component != null) {
+                component.emitter.play(assetManager.getSound(name), false);
+            }
         }
     }
 }

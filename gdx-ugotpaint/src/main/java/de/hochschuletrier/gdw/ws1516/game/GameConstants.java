@@ -13,6 +13,7 @@ public class GameConstants {
     public static final int PRIORITY_CANVAS = 20;
     public static final int PRIORITY_ANIMATIONS = 30;
     public static final int PRIORITY_DEBUG_WORLD = 40;
+    public static final int PRIORITY_HUD = 100;
     public static final int PRIORITY_REMOVE_ENTITIES = 1000;
 
     // PooledEngine parameters
@@ -26,7 +27,7 @@ public class GameConstants {
     public static final int VELOCITY_ITERATIONS = 8;
     public static final int BOX2D_SCALE = 40;
     
-    public static final float MUSIC_FADE_TIME = 2;
+    public static final float MUSIC_FADE_TIME = 1;
     
     public static final float CANVAS_SCALE_MENU = 0.715f;
     public static final float CANVAS_SCALE_MENU_REST = 1 - CANVAS_SCALE_MENU;
@@ -34,7 +35,7 @@ public class GameConstants {
     public static final int WINDOW_WIDTH = 1024;
     
     public static final int PAINT_RADIUS = 10;
-    public static final float BORDER_SIZE = 60;
+    public static final int BORDER_SIZE = 60;
     public static final float BOUND_LEFT = BORDER_SIZE + PAINT_RADIUS;
     public static final float BOUND_TOP = BORDER_SIZE + PAINT_RADIUS;
     public static final float BOUND_RIGHT = WINDOW_WIDTH - BORDER_SIZE - PAINT_RADIUS;

@@ -57,17 +57,20 @@ public class Canvas {
     }
 
     public void updatePctFilled() {
-        final int w = pixmap.getWidth();
-        final int h = pixmap.getHeight();
-        float drawnPixels = 0;
-        float totalPixels = w * h;
-        for(int x=0; x<w; x++) {
-            for(int y=0; y<h; y++) {
+        int drawnPixels = 0;
+        int totalPixels = 0;
+        int sx = GameConstants.BORDER_SIZE;
+        int sy = GameConstants.BORDER_SIZE;
+        int mx = GameConstants.WINDOW_WIDTH - GameConstants.BORDER_SIZE;
+        int my = GameConstants.WINDOW_HEIGHT - GameConstants.BORDER_SIZE;
+        for(int x=sx; x<mx; x++) {
+            for(int y=sy; y<my; y++) {
                 pixelColor.set(pixmap.getPixel(x, y));
                 if(pixelColor.a > 0)
                     drawnPixels++;
+                totalPixels++;
             }
         }
-        pctFilled =  drawnPixels / totalPixels;
+        pctFilled =  drawnPixels / (float)totalPixels;
     }
 }
