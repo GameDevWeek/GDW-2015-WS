@@ -18,6 +18,7 @@ import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixModifierComponent;
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
 import de.hochschuletrier.gdw.ws1516.events.BlockingGumSpawnEvent;
+import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.BlockingGumComponent;
@@ -32,17 +33,21 @@ import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
  * @author Eileen
  * @version 1.0
  */
-public class BlockingGumSystem extends IteratingSystem implements BlockingGumSpawnEvent.Listener {
+public class BlockingGumSystem extends IteratingSystem implements BlockingGumSpawnEvent.Listener,
+                                                                  RainbowEvent.Listener {
     private static final Logger logger = LoggerFactory.getLogger(BlockingGumSystem.class);
     
     private PooledEngine engine;
-
+    private boolean isRainbow;
+    
+        
     @SuppressWarnings("unchecked")
     public BlockingGumSystem(PooledEngine engine) {
         super(Family.all(BlockingGumComponent.class,
                          PositionComponent.class,
                          PhysixBodyComponent.class).get());
         this.engine = engine;
+        this.isRainbow = false;
     }
     
     @Override
@@ -61,8 +66,13 @@ public class BlockingGumSystem extends IteratingSystem implements BlockingGumSpa
     public void onSpawnBlockingGum(float spawnX, float spawnY, float angle, Consumer<Entity> onDespawn) {
         
         //Create callback
-        Entity blockingGumEntity = EntityCreator.createEntity("blockingGum", spawnX, spawnY);
-
+        Entity blockingGumEntity;
+        if (isRainbow) {
+            blockingGumEntity = EntityCreator.createEntity("blockingGumRainbow", spawnX, spawnY);
+        } else {
+            blockingGumEntity = EntityCreator.createEntity("blockingGum", spawnX, spawnY);
+        }
+            
         //Set callback's
         BlockingGumComponent blockingComponent = ComponentMappers.blockinggum.get(blockingGumEntity);
         blockingComponent.onDespawn = onDespawn;
@@ -95,8 +105,8 @@ public class BlockingGumSystem extends IteratingSystem implements BlockingGumSpa
             TextureComponent texture = ComponentMappers.texture.get(blockingGumEntity);
             PositionComponent position = ComponentMappers.position.get(blockingGumEntity);
             if (position != null) {
-                texture.originX = 32.0f;
-                texture.originY = 10.0f;
+                texture.originX = GameConstants.SPIT_BLOCKING_ORIGINX;
+                texture.originY = GameConstants.SPIT_BLOCKING_ORIGINY;
                 blockingBody.setAngle(angle * PhysixUtil.DEG2RAD);
             }
             
@@ -132,6 +142,16 @@ public class BlockingGumSystem extends IteratingSystem implements BlockingGumSpa
         }
         
         
+    }
+
+    @Override
+    public void onRainbowCollect(Entity player) {
+        this.isRainbow = true;
+    }
+
+    @Override
+    public void onRainbowModeEnd(Entity player) {
+        this.isRainbow = false;
     }
     
 }
