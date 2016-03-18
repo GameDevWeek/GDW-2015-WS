@@ -27,7 +27,7 @@
                 { "type": "text", "path" : "text", "style" : "text_right", "text": "Santo Pfingsten", "delay": "1350" },
                 { "type": "text", "path" : "text", "style" : "text_right", "text": "David Siepen", "delay": "1000" },
                 
-                { "type": "text", "path" : "text", "group" : "title", "style" : "title_right", "text": "Design", "delay": "2000" },
+                { "type": "text", "path" : "text", "group" : "title", "style" : "title_right", "text": "Grafik Design", "delay": "2000" },
                 { "type": "text", "path" : "text", "style" : "text_right", "text": "Julia Eiden", "delay": "1350" },
                 
                 { "type": "text", "path" : "text", "group" : "title", "style" : "title_right", "text": "Sound Design", "delay": "2000" },
