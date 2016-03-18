@@ -11,5 +11,6 @@
     "eat_cho": "data/sounds/ess_sound.wav",
     "huntergun":"data/sounds/gun.wav",
     "paparazzishoot":"data/sounds/PaparazziKlick.wav",
-    "paparazzidie":"data/sounds/Paparazzi.wav"
+    "paparazzidie":"data/sounds/Paparazzi.wav",
+    "laufen":"data/sounds/laufen.wav"
 }

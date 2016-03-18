@@ -18,6 +18,8 @@ import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.CollectableComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.SoundEmitterComponent;
@@ -64,8 +66,34 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
         SoundEmitterComponent soundEmitter = ComponentMappers.soundEmitter.get(entity);
         PositionComponent position = ComponentMappers.position.get(entity);
         PhysixBodyComponent body = ComponentMappers.physixBody.get(entity);
-        soundEmitter.emitter.setPosition(position.x, position.y, 0);
+        MovementComponent move = ComponentMappers.movement.get(entity);
+        PlayerComponent player = ComponentMappers.player.get(entity);
         
+        if (move != null && player != null )
+        {
+            boolean shouldPlay = false;
+            if ( move.state == State.ON_GROUND )
+            {
+                if ( Math.abs(body.getLinearVelocity().x)>1f )
+                {
+                    shouldPlay = true;
+                }
+            }
+            if( shouldPlay )
+            {
+                if ( !soundEmitter.soundNames.contains("laufen") )
+                    SoundEvent.emit("laufen", entity,true);
+            }else
+            {
+                if ( soundEmitter.soundNames.contains("laufen") )
+                    SoundEvent.stopSound("laufen",entity);
+            }
+        }
+        
+        
+        
+        
+        soundEmitter.emitter.setPosition(position.x, position.y, 0);
         /*
          * Löschen der beendeten Sounds
          */
@@ -76,6 +104,7 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
                 i--;
             }
         }
+        
         
         soundEmitter.emitter.update();
         
@@ -95,7 +124,7 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
     public void update(float deltaTime) {
         super.update(deltaTime);
         Vector2 pos = CameraSystem.getCameraPosition();
-        SoundEmitter.setListenerPosition(pos.x, pos.y, 10, SoundEmitter.Mode.STEREO);
+        SoundEmitter.setListenerPosition(pos.x, pos.y, 100, SoundEmitter.Mode.STEREO);
         SoundEmitter.updateGlobal();
     };
 
@@ -133,19 +162,14 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
     @Override
     public void onSoundStop(String sound,Entity entity) {
         SoundEmitterComponent soundEmitter = ComponentMappers.soundEmitter.get(entity);
-        logger.debug("stop sound {}", sound);
         for (int i=0;i<soundEmitter.soundNames.size();i++){
             if (sound == null ||  soundEmitter.soundNames.get(i).equals(sound)){
-                if ( soundEmitter.soundInstances != null )
-                {
-                    if ( soundEmitter.soundInstances.get(i).isPlaying() )
-                    {
-                        soundEmitter.soundInstances.get(i).stop();
-                    }
-                    soundEmitter.soundInstances.remove(i);
-                    soundEmitter.soundNames.remove(i);
-                    i--;
-                }
+                soundEmitter.soundInstances.get(i).stop();
+                
+                soundEmitter.soundInstances.remove(i);
+                soundEmitter.soundNames.remove(i);
+                i--;
+                
             }
         }
     }
