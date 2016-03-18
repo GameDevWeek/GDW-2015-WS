@@ -5,6 +5,9 @@
     "bubblegum_spitting_pink": "data/graphics/gum_spit_pink.png",
     "bubblegum_spitting_rainbow": "data/graphics/gum_spit_rainbow.png",
     
+    "gum_ground"  : "data/graphics/gum_ground.png",
+    "gum_stickie" : "data/graphics/gum_stickie.png", 
+    
     "bullet": "data/graphics/projectile.png",
     
     "coin": "data/graphics/coin.png",

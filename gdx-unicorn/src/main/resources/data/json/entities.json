@@ -185,12 +185,16 @@
         "components": {
             "Position": {},
             "Texture": {
-                "texture": "bullet"
+                "texture": "gum_ground",
+                "flipHorizontal" : true,
+                "flipVertical" : false
             },
             "RenderLayer": {
                 "layer": 60
             },
-            "Bullet" : {}
+            "BlockingGum" : {
+                "timeToDespawn" : 5.0
+            }
         }
     },
     "chocolate": {

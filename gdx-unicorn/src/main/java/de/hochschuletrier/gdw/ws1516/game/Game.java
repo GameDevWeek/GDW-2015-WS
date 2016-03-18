@@ -37,6 +37,7 @@ import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
 import de.hochschuletrier.gdw.ws1516.events.TriggerEvent.Action;
+import de.hochschuletrier.gdw.ws1516.game.components.BlockingGumComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.BubblegumSpitComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.BulletComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ImpactSoundComponent;
@@ -44,11 +45,13 @@ import de.hochschuletrier.gdw.ws1516.game.components.PathComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.TriggerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.factories.EntityFactoryParam;
+import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BlockingGumListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BubblegumSpitListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BulletListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.ImpactSoundListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerContactListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.TriggerListener;
+import de.hochschuletrier.gdw.ws1516.game.systems.BlockingGumSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BubbleGlueSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BubblegumSpitSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BulletSystem;
@@ -142,6 +145,7 @@ public class Game extends InputAdapter {
     private final PlayerStateSystem playerStateSystem = new PlayerStateSystem();
     private final BubblegumSpitSystem bubblegumSpitSystem = new BubblegumSpitSystem(engine);
     private final BulletSystem bulletSystem = new BulletSystem(engine);
+    private final BlockingGumSystem blockingGumSystem = new BlockingGumSystem(engine);
     
     private TiledMap map;
 
@@ -262,6 +266,7 @@ public class Game extends InputAdapter {
         engine.addSystem(bubblegumSpitSystem);
         engine.addSystem(bubbleGlueSystem);
         engine.addSystem(playerStateSystem);
+        engine.addSystem(blockingGumSystem);
     }
 
     private void addContactListeners() {
@@ -272,6 +277,7 @@ public class Game extends InputAdapter {
         contactListener.addListener(PlayerComponent.class, new PlayerContactListener());
         contactListener.addListener(BulletComponent.class, new BulletListener());
         contactListener.addListener(BubblegumSpitComponent.class, new BubblegumSpitListener());
+        contactListener.addListener(BlockingGumComponent.class, new BlockingGumListener());
     }
 
     private void setupPhysixWorld() {
