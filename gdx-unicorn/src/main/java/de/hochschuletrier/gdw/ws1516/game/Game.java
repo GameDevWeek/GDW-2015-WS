@@ -32,6 +32,7 @@ import de.hochschuletrier.gdw.commons.tiled.LayerObject;
 import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
+import de.hochschuletrier.gdw.ws1516.events.GameRestartEvent;
 import de.hochschuletrier.gdw.ws1516.events.PaparazziShootEvent;
 import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
@@ -82,8 +83,9 @@ import de.hochschuletrier.gdw.ws1516.game.utils.MapLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
 import de.hochschuletrier.gdw.ws1516.menu.MenuPageOptions;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.DummyEnemyExecutionSystem;
+import de.hochschuletrier.gdw.ws1516.states.GameplayState;
 
-public class Game extends InputAdapter {
+public class Game extends InputAdapter implements GameRestartEvent.Listener {
 
     private static final Logger logger = LoggerFactory.getLogger(Game.class);
     
@@ -158,9 +160,11 @@ public class Game extends InputAdapter {
             pauseGame.register();
             winGameCheat.register();
         }
+        GameRestartEvent.register(this);
     }
 
     public void dispose() {
+        GameRestartEvent.unregister(this);
         togglePhysixDebug.unregister();
         scoreCheating.unregister();
         pauseGame.unregister();
@@ -181,7 +185,7 @@ public class Game extends InputAdapter {
         }
     }
 
-    public void init(AssetManagerX assetManager) {
+    public void init(AssetManagerX assetManager, String mapFilename) {
         PAUSE_ENGINE = false;
         Main.getInstance().console.register(physixDebug);
         physixDebug.addListener((CVar) -> physixDebugRenderSystem.setProcessing(physixDebug.get()));
@@ -195,7 +199,7 @@ public class Game extends InputAdapter {
         EntityCreator.setGame(this);
         EntityCreator.setEntityFactory(entityFactory);
         
-        loadMap("data/maps/lvl1.tmx");
+        loadMap(mapFilename);
         mapRenderSystem.initialzeRenderer(map, "map_background", cameraSystem);
         
         //test: 
@@ -222,6 +226,15 @@ public class Game extends InputAdapter {
 
     }
 
+
+    @Override
+    public void onGameRestartEvent() {      
+        Game game = new Game();
+        final Main main = Main.getInstance();
+        final AssetManagerX assetManager = main.getAssetManager();
+        game.init(assetManager, map.getFilename());
+        main.changeState(new GameplayState(assetManager, game));
+    }
 
     /**
      * 

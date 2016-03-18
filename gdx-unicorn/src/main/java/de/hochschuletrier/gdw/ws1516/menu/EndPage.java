@@ -23,6 +23,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
 import de.hochschuletrier.gdw.ws1516.states.GameplayState;
 import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
 import de.hochschuletrier.gdw.ws1516.events.FinalScoreEvent;
+import de.hochschuletrier.gdw.ws1516.events.GameRestartEvent;
 
 public class EndPage extends MenuPage {
     
@@ -107,12 +108,7 @@ public class EndPage extends MenuPage {
     
     
     private void startGame() {
-        if (!main.isTransitioning()) {      
-            Game game = new Game();
-            game.init(assetManager);
-            main.changeState(new GameplayState(assetManager, game));
-            
-        }
+        GameRestartEvent.emit();
     }
     
     private void stopGame() {
