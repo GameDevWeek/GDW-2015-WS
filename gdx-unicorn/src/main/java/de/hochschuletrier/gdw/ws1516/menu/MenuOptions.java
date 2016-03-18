@@ -35,11 +35,11 @@ public class MenuOptions extends MenuPage {
         int yStep = 55;
         
         generalSound = 5;
-        generalSlider = addLabeledSlider(0,100,1,xOffset, yOffset - yStep * (i++), "Allgemein", true);    
+        generalSlider = addLabeledSlider(0,100,1,xOffset, yOffset - yStep * (i++), "Allgemein", true,Settings.generalValue.get());    
         System.out.println("Test1");
-        musicSlider = addLabeledSlider( 0,100,1,xOffset, yOffset - yStep * (i++), "Musik", true); 
+        musicSlider = addLabeledSlider( 0,100,1,xOffset, yOffset - yStep * (i++), "Musik", true,Settings.musicValue.get()); 
         System.out.println("Test2");
-        soundSlider=addLabeledSlider(0,100,1,xOffset, yOffset - yStep * (i++), "Sound", true);
+        soundSlider=addLabeledSlider(0,100,1,xOffset, yOffset - yStep * (i++), "Sound", true,Settings.soundValue.get());
         System.out.println("Test3");
         addLeftAlignedButton(xOffset, yOffset - yStep * (i++), 120, 50, "Zurücksetzen", this::reset, "buttonSound");  
         
@@ -47,9 +47,14 @@ public class MenuOptions extends MenuPage {
         generalSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                generalSound = generalSlider.getValue() / 10;
-                MusicManager.setGlobalVolume(musicSlider.getValue() / 1000 * generalSound);
-                SoundSystem.setGlobalVolume(soundSlider.getValue() / 1000 * generalSound);      
+                Settings.generalValue.set(generalSlider.getValue());
+                generalSound = Settings.generalValue.get();
+                System.out.println(""+generalSound);
+                Settings.musicValue.set(musicSlider.getValue());
+                Settings.soundValue.set(soundSlider.getValue());    
+                MusicManager.setGlobalVolume(Settings.musicValue.get()/1000*generalSound);
+                SoundSystem.setGlobalVolume(Settings.soundValue.get()/1000*generalSound);
+                
                 
                        
             }
@@ -58,19 +63,32 @@ public class MenuOptions extends MenuPage {
         musicSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                MusicManager.setGlobalVolume(musicSlider.getValue() / 1000 * generalSound);
+               Settings.musicValue.set(musicSlider.getValue());
+               MusicManager.setGlobalVolume(Settings.musicValue.get()/1000*generalSound);
                       
 
             }
         });
 
+//        soundSlider.addListener(new ClickListener() {
+//
+//            @Override
+//            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+//                Settings.soundValue.set(soundSlider.getValue());    
+//                SoundSystem.setGlobalVolume(Settings.soundValue.get()/1000*generalSound);
+//                soundTest();
+//
+//            }
+//        });
         soundSlider.addListener(new ClickListener() {
-
+            
             @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                SoundSystem.setGlobalVolume(soundSlider.getValue() / 1000 * generalSound);        
+            public void clicked(InputEvent event, float x, float y)  {
+                Settings.soundValue.set(soundSlider.getValue());    
+                SoundSystem.setGlobalVolume(Settings.soundValue.get()/1000*generalSound);
+                System.out.print(Settings.soundValue.get()/1000*generalSound);
                 soundTest();
-
+                
             }
         });
       
@@ -80,15 +98,17 @@ public class MenuOptions extends MenuPage {
     public void soundTest() {
         SoundEmitter.playGlobal(assetManager.getSound("einhornEmpathy"), false);
     }
-
-    public void reset() {
-        System.out.println("start");;
-        generalSlider.setValue(50);
-        musicSlider.setValue(50);
-        soundSlider.setValue(50);
-        MusicManager.setGlobalVolume(musicSlider.getValue() / 1000 * generalSound);         
-        SoundSystem.setGlobalVolume(soundSlider.getValue() / 1000 * generalSound);      
-        System.out.println("end");
+    
+    public void reset(){
+        System.out.println(""+Settings.generalValue.get()+" "+Settings.musicValue.get()+""+Settings.soundValue.get());
+        Settings.reset();
+        generalSlider.setValue(Settings.generalValue.get());
+        musicSlider.setValue(Settings.musicValue.get());
+        soundSlider.setValue(Settings.soundValue.get());
+        System.out.println(""+Settings.generalValue.get()+" "+Settings.musicValue.get()+""+Settings.soundValue.get());
+        
     }
+
+ 
   
 }

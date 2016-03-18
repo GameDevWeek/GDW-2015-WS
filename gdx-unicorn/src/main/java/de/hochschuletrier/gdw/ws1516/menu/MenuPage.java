@@ -61,12 +61,12 @@ public class MenuPage extends Group {
     }
     
     
-     protected final Slider addLabeledSlider(float min, float max,float stepSize,int x, int y,String text,boolean add){
+     protected final Slider addLabeledSlider(float min, float max,float stepSize,int x, int y,String text,boolean add,float sliderValue){
         Label label = new Label(text,skin,"default");
         int size = 250; 
         label.setPosition(x, y+7);
         Slider slider = new Slider(min,max,stepSize,false,skin,"default-horizontal");
-        slider.setValue(50);
+        slider.setValue(sliderValue);
         slider.setBounds(x+80,y,size,35);
         Label value= new Label(""+(int)slider.getValue(),skin,"default");
         value.setPosition(x+size+90,y+7);   
