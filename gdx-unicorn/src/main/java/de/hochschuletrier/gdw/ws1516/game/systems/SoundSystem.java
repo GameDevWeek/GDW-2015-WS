@@ -16,6 +16,7 @@ import de.hochschuletrier.gdw.commons.gdx.audio.SoundInstance;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.CollectableComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
@@ -68,8 +69,11 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
         PhysixBodyComponent body = ComponentMappers.physixBody.get(entity);
         MovementComponent move = ComponentMappers.movement.get(entity);
         PlayerComponent player = ComponentMappers.player.get(entity);
+
+        float distance = camera.dst(position.x,position.y) / GameConstants.SOUND_MAX_DISTANCE;
+        distance  = (float) Math.pow(distance, 2);
         
-        if (move != null && player != null )
+        if (move != null && distance <= 1 )
         {
             boolean shouldPlay = false;
             if ( move.state == State.ON_GROUND )
@@ -122,10 +126,10 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
     
     @Override
     public void update(float deltaTime) {
-        super.update(deltaTime);
-        Vector2 pos = CameraSystem.getCameraPosition();
-        SoundEmitter.setListenerPosition(pos.x, pos.y, 100, SoundEmitter.Mode.STEREO);
+        camera = CameraSystem.getCameraPosition();
+        SoundEmitter.setListenerPosition(camera.x, camera.y, 100, SoundEmitter.Mode.STEREO);
         SoundEmitter.updateGlobal();
+        super.update(deltaTime);
     };
 
     @Override
