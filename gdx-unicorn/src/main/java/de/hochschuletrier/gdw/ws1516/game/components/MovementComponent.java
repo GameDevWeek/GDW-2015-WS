@@ -55,6 +55,7 @@ public class MovementComponent extends Component implements Pool.Poolable{
         state = State.ON_GROUND;
         jumpImpulse=GameConstants.PLAYER_JUMP_IMPULSE;
         lookDirection = LookDirection.RIGHT;
+        isOnPlatform = false;
     }
     
     

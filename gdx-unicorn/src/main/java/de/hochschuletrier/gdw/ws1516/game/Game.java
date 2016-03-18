@@ -202,9 +202,9 @@ public class Game extends InputAdapter {
         // take it out
         Entity unicorn = EntityCreator.createEntity("unicorn", 9000, 500);
         Entity entity=EntityCreator.createEntity("hunter", 9000, 700);
-        PathComponent pathComponent =ComponentMappers.path.get(entity);
-        pathComponent.points.add(new Vector2(1000, 100));
-        pathComponent.points.add(new Vector2(800,100));
+        PathComponent pathComponent = ComponentMappers.path.get(entity);
+        pathComponent.points.add(new Vector2(10000, 700));
+        pathComponent.points.add(new Vector2(8800,100));
 //        Entity platform = EntityCreator.createEntity("platform", 1700, 100);
 /*        healCheating = new Hotkey(() -> HealEvent.emit(unicorn, 1), Input.Keys.F4,
         HotkeyModifier.CTRL);
