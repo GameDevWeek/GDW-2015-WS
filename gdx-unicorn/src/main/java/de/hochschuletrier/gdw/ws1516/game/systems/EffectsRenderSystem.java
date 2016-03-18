@@ -1,6 +1,5 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.ashley.core.Engine;
@@ -15,10 +14,8 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.TimeUtils;
 
 import de.hochschuletrier.gdw.commons.devcon.ConsoleCmd;
-import de.hochschuletrier.gdw.commons.devcon.cvar.CVarFloat;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.Hotkey;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.HotkeyModifier;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
@@ -68,7 +65,6 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
         // save camera target position to set paparazzi effect save circle around player        
         PositionComponent targetPos = ComponentMappers.position.get(entity);
         cameraTargetScreenPos = CameraSystem.worldToScreenCoordinates(targetPos.x, targetPos.y);
-        //System.out.println("screenX: " + cameraTargetScreenPos.x + " (worldX: " + targetPos.x + ") # screenY: " + cameraTargetScreenPos.y + " worldY: " + targetPos.y);
     }
     
     @Override
@@ -151,6 +147,8 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
         currentPaparazziSeed = seed;
         
         paparazziIntensity = (1 - Math.max((distance - 100) / 500, 0));
+        
+        System.out.println(distance);
     }
 
     protected void consolePaparazzi(List<String> args) {
