@@ -73,7 +73,12 @@ public class LevelSelectionPage extends MenuPage {
     }
     
     private void startGame() {
-        if (!main.isTransitioning()) {      
+        if (!main.isTransitioning()) { 
+            try {
+                Thread.sleep(500);                 //1000 milliseconds is one second.
+            } catch(InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
             Game game = new Game();
             game.init(assetManager);
             main.changeState(new GameplayState(assetManager, game), new SplitHorizontalTransition(500), null);
