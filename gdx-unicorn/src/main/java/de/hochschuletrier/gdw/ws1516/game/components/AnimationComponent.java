@@ -8,9 +8,11 @@ import de.hochschuletrier.gdw.commons.gdx.assets.AnimationExtended;
 
 public class AnimationComponent extends Component implements Pool.Poolable 
 {
+    public String name;
     public HashMap<String, AnimationExtended> animationMap = new HashMap<>();
     public float stateTime;
     public boolean flipHorizontal;
+    public boolean currentlyFlipped;
     public MovementComponent.State lastRenderedState;
 
     

@@ -26,7 +26,7 @@
                 "type": "player",
                 "size": 30,
                 "density": 5,
-                "friction": 0.2,
+                "friction": 100.0,
                 "restitution": 0.4
             },
             "CameraTarget": {},
@@ -42,7 +42,10 @@
                 "effect": "unicornTrail",
                 "reduceEmissionIfIdle": true,
                 "offsetWhenMoving": 15
-            }
+            },
+            "SoundEmitter":{}
+            
+            
         }
     },
     "hunter": {
@@ -57,14 +60,16 @@
                 "type" : "hunter"
             },
             "Behaviour": {
-		"cooldown":2.0
-	    },
+        		"cooldown":1.35
+        	    },
             "Animation": {
+                "name": "Hunter",
                 "on_ground_idle": "hunter_walking",
                 "on_ground_walking": "hunter_walking",
                 "flying": "hunter_walking",
                 "falling": "hunter_walking",
-                "jumping": "hunter_walking"
+                "jumping": "hunter_walking",
+                "flip_horizontal": true
             },
             "PhysixBody": {
                 "type": "enemy",
@@ -75,7 +80,8 @@
             },
             "RenderLayer": {
                 "layer": 50
-            }
+            },
+            "SoundEmitter":{}
         }
     },
     "tourist": {
@@ -93,11 +99,13 @@
 		"cooldown":1.5
 	    },
             "Animation": {
+                "name": "Paparazzi",
                 "on_ground_idle": "paparazzi_walking",
                 "on_ground_walking": "paparazzi_walking",
                 "flying": "paparazzi_walking",
                 "falling": "paparazzi_walking",
-                "jumping": "paparazzi_walking"
+                "jumping": "paparazzi_walking",
+                "flip_horizontal": true
             },
             "PhysixBody": {
                 "type": "enemy",
@@ -105,6 +113,30 @@
                 "density": 5,
                 "friction": 0.2,
                 "restitution": 0.4
+            },
+            "RenderLayer": {
+                "layer": 50
+            },
+            "SoundEmitter":{}
+        }
+    },
+    "platform": {
+        "meta": {},
+        "components": {
+            "Position": {},
+        "Platform":{},
+        "Path":{},
+            "Texture": {
+                "texture" : "bubble"
+            },
+            "PhysixBody": {
+                "type": "platform",
+                "size": 64,
+                "density": 0,
+                "friction": 100.0,
+                "restitution": 0,
+                "sizeWidth" : 4,
+                "sizeHeight" : 1
             },
             "RenderLayer": {
                 "layer": 50
@@ -162,6 +194,19 @@
             "BubblegumSpitComponent" : {}
         }
     },
+    "bubblegum_spitting_rainbow": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Texture": {
+                "texture": "bubblegum_spitting_rainbow"
+            },
+            "RenderLayer": {
+                "layer": 60
+            },
+            "BubblegumSpitComponent" : {}
+        }
+    },
     "bullet" : {
         "meta": {},
         "components": {
@@ -173,6 +218,40 @@
                 "layer": 60
             },
             "Bullet" : {}
+        }
+    },
+    "blockingGum" : {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Texture": {
+                "texture": "gum_ground",
+                "flipHorizontal" : true,
+                "flipVertical" : false
+            },
+            "RenderLayer": {
+                "layer": 60
+            },
+            "BlockingGum" : {
+                "timeToDespawn" : 3.0
+            }
+        }
+    },
+    "blockingGumRainbow" : {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Texture": {
+                "texture": "gum_ground_rainbow",
+                "flipHorizontal" : true,
+                "flipVertical" : false
+            },
+            "RenderLayer": {
+                "layer": 60
+            },
+            "BlockingGum" : {
+                "timeToDespawn" : 3.0
+            }
         }
     },
     "chocolate": {
@@ -196,6 +275,30 @@
             },
             "RenderLayer": {
                 "layer": 59
+            }
+        }
+    },
+    "safe_point": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Texture": {
+                "texture": "bubblegum_rainbow"
+            },
+            "Collectable":{
+                "type" : "spawn_point"
+            },
+            "PhysixBody": {
+                "type": "circle",
+                "size": 30,
+                "density": 5,
+                "friction": 0.2,
+                "restitution": 0.4,
+                "isSensor": true,
+                "gravity" : 0.0
+            },
+            "RenderLayer": {
+                "layer": 58
             }
         }
     },

@@ -21,7 +21,7 @@ import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.menu.EndPage;
 import de.hochschuletrier.gdw.ws1516.menu.MainMenuPage;
-import de.hochschuletrier.gdw.ws1516.menu.MenuOptions;
+import de.hochschuletrier.gdw.ws1516.menu.MenuPageOptions;
 import de.hochschuletrier.gdw.ws1516.menu.MenuPageRoot;
 import de.hochschuletrier.gdw.ws1516.menu.Settings;
 

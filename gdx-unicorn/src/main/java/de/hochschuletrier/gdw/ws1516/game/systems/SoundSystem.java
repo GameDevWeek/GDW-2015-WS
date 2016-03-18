@@ -16,20 +16,29 @@ import de.hochschuletrier.gdw.commons.gdx.audio.SoundInstance;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.components.CollectableComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State;
+import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.SoundEmitterComponent;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.GameLogicTest;
+import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
+import de.hochschuletrier.gdw.ws1516.events.BubblegumSpitSpawnEvent;
 
 /**
  * @author phili_000
  *
  */
-public class SoundSystem extends IteratingSystem implements SoundEvent.Listener {
+public class SoundSystem extends IteratingSystem implements SoundEvent.Listener, DeathEvent.Listener,BubblegumSpitSpawnEvent.Listener {
 
     private static final Logger logger = LoggerFactory.getLogger(GameLogicTest.class);
     private Vector2 camera;
     private AssetManagerX assetManager;
+    private Engine engine;
 
     public SoundSystem(Vector2 camera) {
         super(Family.all(SoundEmitterComponent.class, PositionComponent.class).get());
@@ -41,13 +50,18 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener 
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
         SoundEvent.register(this);
-        
+        DeathEvent.register(this);    
+        BubblegumSpitSpawnEvent.register(this);
+        this.engine = engine;
     }
 
     @Override
     public void removedFromEngine(Engine engine) {
         super.removedFromEngine(engine);
         SoundEvent.unregister(this);
+        DeathEvent.unregister(this);
+        BubblegumSpitSpawnEvent.unregister(this);
+        this.engine = null;
     };
     
     @Override
@@ -55,20 +69,64 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener 
         SoundEmitterComponent soundEmitter = ComponentMappers.soundEmitter.get(entity);
         PositionComponent position = ComponentMappers.position.get(entity);
         PhysixBodyComponent body = ComponentMappers.physixBody.get(entity);
-        soundEmitter.emitter.setPosition(position.x, position.y, 0);
+        MovementComponent move = ComponentMappers.movement.get(entity);
+        PlayerComponent player = ComponentMappers.player.get(entity);
         
-        /*
-         * Löschen der beendeten Sounds
-         */
-        SoundInstance[] instances=new SoundInstance[soundEmitter.soundInstances.size()];
-        soundEmitter.soundInstances.toArray(instances);
-        for (SoundInstance instance : instances){
-            if (instance.isStopped()){
-                soundEmitter.soundInstances.remove(instance);
+        if (move != null && player!=null)
+        {
+            boolean shouldplayRun = false;
+            boolean shouldplaySpuck=false;
+            if ( move.state == State.ON_GROUND )
+            {
+                if ( Math.abs(body.getLinearVelocity().x)>1f )
+                {
+                    shouldplayRun = true;
+                }
+            }
+            if ( player.state == PlayerComponent.State.SPUCKCHARGE)
+            {
+                if (!player.soundSpuckChargePlayed){
+                    shouldplaySpuck = true;
+                    player.soundSpuckChargePlayed=true;
+                }
+            }else{
+                player.soundSpuckChargePlayed=false;
+            }
+            if (shouldplaySpuck){
+                if (!soundEmitter.soundNames.contains("spuckCharge")){
+                    SoundEvent.emit("spuckCharge", entity);
+                }
+            }else if (player.state!=PlayerComponent.State.SPUCKCHARGE){
+                if ( soundEmitter.soundNames.contains("spuckCharge") )
+                    SoundEvent.stopSound("spuckCharge",entity);
+            }
+            if( shouldplayRun )
+            {
+                if ( !soundEmitter.soundNames.contains("laufen") )
+                    SoundEvent.emit("laufen", entity,true);
+            }else
+            {
+                if ( soundEmitter.soundNames.contains("laufen") )
+                    SoundEvent.stopSound("laufen",entity);
             }
         }
         
+        
+        
+        
         soundEmitter.emitter.setPosition(position.x, position.y, 0);
+        /*
+         * Löschen der beendeten Sounds
+         */
+        for (int i=0;i<soundEmitter.soundInstances.size();i++){
+            if (soundEmitter.soundInstances.get(i).isStopped()){
+                soundEmitter.soundNames.remove( i );
+                soundEmitter.soundInstances.remove(i);
+                i--;
+            }
+        }
+        
+        
         soundEmitter.emitter.update();
         
     }
@@ -85,10 +143,10 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener 
     
     @Override
     public void update(float deltaTime) {
-        super.update(deltaTime);
-        Vector3 pos = new Vector3(0, 0, 0);
-        SoundEmitter.setListenerPosition(pos.x, pos.y, pos.z, SoundEmitter.Mode.STEREO);
+        camera = CameraSystem.getCameraPosition();
+        SoundEmitter.setListenerPosition(camera.x, camera.y, 100, SoundEmitter.Mode.STEREO);
         SoundEmitter.updateGlobal();
+        super.update(deltaTime);
     };
 
     @Override
@@ -96,12 +154,18 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener 
         SoundEmitterComponent soundEmitter = ComponentMappers.soundEmitter.get(entity);
         // soundEmitter.emitter.play(assetManager.getSound(sound), b);
         // System.out.println(soundEmitter.emitter);
-        SoundInstance soundInstance = soundEmitter.emitter.play(assetManager.getSound(sound), b);
-        if (soundInstance != null) {
-            soundInstance.setVolume(100f);
+        if ( soundEmitter  != null )
+        {
+            SoundInstance soundInstance = soundEmitter.emitter.play(assetManager.getSound(sound), b);
+            if (soundInstance != null) {
+                soundInstance.setVolume(1f);
+            }
+            soundEmitter.soundInstances.add(soundInstance);
+            soundEmitter.soundNames.add(sound);
+        }else
+        {
+            logger.warn("Entity {} tried to play a sound( {} ), but has no SoundEmitter.",entity,sound);
         }
-        soundEmitter.soundInstances.add(soundInstance);
-        soundEmitter.soundNames.add(sound);
 
     }
 
@@ -122,10 +186,46 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener 
         for (int i=0;i<soundEmitter.soundNames.size();i++){
             if (sound == null ||  soundEmitter.soundNames.get(i).equals(sound)){
                 soundEmitter.soundInstances.get(i).stop();
+                
                 soundEmitter.soundInstances.remove(i);
                 soundEmitter.soundNames.remove(i);
                 i--;
+                
             }
         }
     }
+
+    @Override
+    public void onDeathEvent(Entity entity) {
+        Entity player =  engine.getEntitiesFor( Family.all(PlayerComponent.class).get() ).first();
+        CollectableComponent collect = ComponentMappers.collectable.get(entity);
+        EnemyTypeComponent enemy = ComponentMappers.enemyType.get(entity);
+        if (player != null)
+        {
+            if ( collect != null )
+            {
+                switch(collect.type )
+                {
+                    case CHOCO_COIN:
+                        
+                        SoundEvent.emit("eat_cho", player);
+                        break;
+                }
+            }
+        }
+        if ( enemy != null )
+        {
+
+            SoundEvent.emit("paparazzidie", player);
+        }
+    }
+
+    @Override
+    public void onSpawnBubblegumSpit(float force) {
+        Entity player =  engine.getEntitiesFor( Family.all(PlayerComponent.class).get() ).first();
+        SoundEvent.emit("spucken", player);
+    }
+    
+    
+    
 }
