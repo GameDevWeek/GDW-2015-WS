@@ -154,6 +154,19 @@
             "BubblegumSpitComponent" : {}
         }
     },
+    "bullet" : {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Texture": {
+                "texture": "bullet"
+            },
+            "RenderLayer": {
+                "layer": 60
+            },
+            "Bullet" : {}
+        }
+    },
     "chocolate": {
         "meta": {},
         "components": {
