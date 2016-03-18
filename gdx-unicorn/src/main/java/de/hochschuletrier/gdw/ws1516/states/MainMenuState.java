@@ -23,7 +23,7 @@ import de.hochschuletrier.gdw.ws1516.menu.EndPage;
 import de.hochschuletrier.gdw.ws1516.menu.MainMenuPage;
 import de.hochschuletrier.gdw.ws1516.menu.MenuOptions;
 import de.hochschuletrier.gdw.ws1516.menu.MenuPageRoot;
-import de.hochschuletrier.gdw.ws1516.menu.SoundSlider;
+import de.hochschuletrier.gdw.ws1516.menu.SoundValues;
 
 /**
  * Menu state
