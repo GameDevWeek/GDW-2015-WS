@@ -19,4 +19,9 @@ public class AnimationComponent extends Component implements Pool.Poolable
         flipHorizontal = false;
         stateTime = 0;
     }
+    
+    public void resetStateTime()
+    {
+        stateTime = 0;
+    }
 }

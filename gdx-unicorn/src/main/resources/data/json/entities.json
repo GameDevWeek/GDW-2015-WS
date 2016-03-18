@@ -19,7 +19,8 @@
                 "on_ground_walking": "unicorn_walking",
                 "flying": "unicorn_flying",
                 "falling": "unicorn_falling", 
-                "jumping": "unicorn_jumping"
+                "jumping": "unicorn_jumping",
+                "landing": "unicorn_idle"
             },
             "PhysixBody": {
                 "type": "player",
@@ -251,6 +252,7 @@
             "Light": {
                 "intensity": 10.0
             }
+        }
     },
     "ball": {
         "meta": {},

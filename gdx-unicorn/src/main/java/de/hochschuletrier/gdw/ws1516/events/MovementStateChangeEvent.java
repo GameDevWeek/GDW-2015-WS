@@ -3,7 +3,6 @@ package de.hochschuletrier.gdw.ws1516.events;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.SnapshotArray;
 
-import de.hochschuletrier.gdw.ws1516.events.MovementEvent.Listener;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 
 public class MovementStateChangeEvent {
