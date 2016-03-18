@@ -103,7 +103,12 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
             return;
         }
 
-        if (playerComp.state!=PlayerComponent.State.RAINBOW){   
+
+        /*
+         * kann nicht sterben während es am respawnen ist, 
+         * oder der RainBowMode active ist
+         */
+        if (playerComp.state!=PlayerComponent.State.RAINBOW && !playerComp.doRespawn){   
             //es handelt sich um das Einhorn, also Leben abziehen.
             if (playerComp.lives>0){
                 playerComp.lives--;
@@ -111,7 +116,7 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
                 if (playerComp.lives > 0)
                     GameRespawnEvent.emit();
                 else
-                    GameOverEvent.emit();
+                    GameOverEvent.emit(false);
             }
         }
     }

@@ -86,11 +86,11 @@ public class PhysixBodyComponentFactory extends
         playerBody.init(playerDef, physixSystem, entity);
         
      // Horn (sensor)
-        PhysixFixtureDef fixtureDef = new PhysixFixtureDef(physixSystem)
+     PhysixFixtureDef fixtureDef = new PhysixFixtureDef(physixSystem)
                 .density(1).friction(0).restitution(0f)
                 .shapeCircle(width * 0.04f, new Vector2(width * 0.43f, height * -0.4f)).sensor(true);
         fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
-        Fixture fixture = playerBody.createFixture(fixtureDef);
+		Fixture fixture = playerBody.createFixture(fixtureDef);
         fixture.setUserData("horn");
         
         // mainBody
@@ -108,10 +108,8 @@ public class PhysixBodyComponentFactory extends
         fixture = playerBody.createFixture(fixtureDef);
         fixture.setUserData("head");
         
-        
         // jump contact (sensor)
         fixtureDef = new PhysixFixtureDef(physixSystem)
-        
         .density(1).friction(0f).restitution(0f)
         .shapeCircle(width * 0.05f, new Vector2(0, height * 0.49f)).sensor(true);
         fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
@@ -178,6 +176,7 @@ public class PhysixBodyComponentFactory extends
         bodyComponent.createFixture(fixtureDef);
         bodyComponent.applyImpulse(0, 50000);
         entity.add(bodyComponent);
+        logger.debug("Circle body created");
     }
 
     private void addBox(EntityFactoryParam param, Entity entity,

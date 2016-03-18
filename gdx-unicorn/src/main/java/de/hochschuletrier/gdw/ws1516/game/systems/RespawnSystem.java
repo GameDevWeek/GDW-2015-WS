@@ -8,7 +8,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Input;
 
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.ws1516.events.GameRespawnEvent;
@@ -32,7 +31,7 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
    @Override
     protected void processEntity(Entity entity, float deltaTime) {
 
-       PlayerComponent playerComp = ComponentMappers.player.get(player);
+       PlayerComponent playerComp = ComponentMappers.player.get(entity);
        PhysixBodyComponent physixBody = ComponentMappers.physixBody.get(entity);
        StartPointComponent respawnPosition = ComponentMappers.startPoint.get(entity);
        if ( physixBody != null && playerComp.doRespawn)
@@ -46,23 +45,20 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
     @Override
     public void onGameRepawnEvent() {
         PlayerComponent playerComp = ComponentMappers.player.get(player);
-        MovementComponent moveComp=ComponentMappers.movement.get(player);
+        MovementComponent move= ComponentMappers.movement.get(player);
         if ( playerComp != null )
         {
             playerComp.doRespawn = true;
-            moveComp.reset();
+            playerComp.invulnerableTimer=1.0f;
+            if ( move != null )
+            {
+                move.reset();
+            }
             
         }else
         {
             logger.warn("No Player or no RespawnPoint set");
         }
-    }
-    
-    @Override
-    public void removedFromEngine(Engine engine) {
-        super.removedFromEngine(engine);
-        GameRespawnEvent.unregister(this);
-        engine.removeEntityListener(this);
     }
 
     @Override
@@ -71,6 +67,13 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
         super.addedToEngine(engine);
         engine.addEntityListener(this);
         GameRespawnEvent.register(this);
+    }
+    
+    @Override
+    public void removedFromEngine(Engine engine) {
+        super.removedFromEngine(engine);
+        GameRespawnEvent.unregister(this);
+        engine.removeEntityListener(this);
     }
 
     @Override
