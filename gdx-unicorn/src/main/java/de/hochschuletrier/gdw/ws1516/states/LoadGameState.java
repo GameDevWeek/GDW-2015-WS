@@ -22,6 +22,7 @@ public class LoadGameState extends BaseGameState {
     private final Skin skin = new Skin(Gdx.files.internal("data/ui/menu/skins/menu.json"));
     private final Texture loadingTexture = new Texture(Gdx.files.internal("data/graphics/unicorn_s.png"));
     private final Texture rectTexture = new Texture(Gdx.files.internal("data/ui/menu/loading-rect.png"));
+    private final Texture background = new Texture(Gdx.files.internal("data/ui/menu/menu_splash.png"));
     
     private final AnimationExtended anim;
     private float stateTime;
@@ -58,8 +59,9 @@ public class LoadGameState extends BaseGameState {
         
        
         
-        DrawUtil.fillRect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Color.PURPLE);
-
+       // DrawUtil.fillRect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Color.PURPLE);
+        DrawUtil.draw(background, 0, 0);
+        DrawUtil.fillRect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new Color(0,0,0,0.5F));
         float drawWidth = Gdx.graphics.getWidth() - 100.0f;
      
         DrawUtil.draw(rectTexture, 50, Gdx.graphics.getHeight() / 2 - 25, (int) (drawWidth * assetManager.getProgress()+25), 50);
