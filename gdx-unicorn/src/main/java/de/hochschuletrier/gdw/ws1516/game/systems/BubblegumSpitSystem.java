@@ -22,6 +22,7 @@ import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixModifierComponent;
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
 import de.hochschuletrier.gdw.ws1516.events.BubblegumSpitSpawnEvent;
+import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.BubbleGlueComponent;
@@ -38,15 +39,18 @@ import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
  * @author Eileen
  * @version 1.0
  */
-public class BubblegumSpitSystem extends IteratingSystem implements BubblegumSpitSpawnEvent.Listener {
+public class BubblegumSpitSystem extends IteratingSystem implements BubblegumSpitSpawnEvent.Listener,
+                                                                    RainbowEvent.Listener {
     private static final Logger logger = LoggerFactory.getLogger(BubblegumSpitSystem.class);
     private PooledEngine engine;
-
+    private boolean spitsRainbow;
+    
     public BubblegumSpitSystem(PooledEngine engine) {
         super(Family.all(BubblegumSpitComponent.class,
                          PositionComponent.class,
                          PhysixBodyComponent.class).get());
         this.engine = engine;
+        this.spitsRainbow = false;
     }
 
     @Override
@@ -91,9 +95,14 @@ public class BubblegumSpitSystem extends IteratingSystem implements BubblegumSpi
         float spawnX = playerPos.x + GameConstants.SPIT_SPAWN_OFFSET_X * playerLookCosine;
         float spawnY = playerPos.y + GameConstants.SPIT_SPAWN_OFFSET_Y;
         
-        //Create gum spit entity
-        final Entity gumSpitEntity = EntityCreator.createEntity("bubblegum_spitting", spawnX, spawnY);
-        
+        //Create gum spit entity, rainbow or not
+        Entity gumSpitEntity;
+        if (spitsRainbow) {
+            gumSpitEntity = EntityCreator.createEntity("bubblegum_spitting_rainbow", spawnX, spawnY);
+        } else {
+            gumSpitEntity = EntityCreator.createEntity("bubblegum_spitting", spawnX, spawnY);
+        }
+            
         //Set callback's
         BubblegumSpitComponent spitComponent = ComponentMappers.bubblegumSpitComponent.get(gumSpitEntity);
         spitComponent.onEnemyHit = this::makeBubbleGlue;
@@ -168,6 +177,16 @@ public class BubblegumSpitSystem extends IteratingSystem implements BubblegumSpi
     
     private void removeBubblegumSpit(Entity gum) {
         engine.removeEntity(gum);
+    }
+
+    @Override
+    public void onRainbowCollect(Entity player) {
+        this.spitsRainbow = true;
+    }
+
+    @Override
+    public void onRainbowModeEnd(Entity player) {
+        this.spitsRainbow = false;
     }
     
 }
