@@ -51,6 +51,7 @@ import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BubblegumSpitListener
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BulletListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.ImpactSoundListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerContactListener;
+import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerPlatformListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.TriggerListener;
 import de.hochschuletrier.gdw.ws1516.game.systems.BlockingGumSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BubbleGlueSystem;
@@ -283,6 +284,7 @@ public class Game extends InputAdapter {
         contactListener.addListener(PlayerComponent.class, new PlayerContactListener());
         contactListener.addListener(BulletComponent.class, new BulletListener());
         contactListener.addListener(BubblegumSpitComponent.class, new BubblegumSpitListener());
+        contactListener.addListener(PlayerComponent.class, new PlayerPlatformListener());
         contactListener.addListener(BlockingGumComponent.class, new BlockingGumListener());
     }
 

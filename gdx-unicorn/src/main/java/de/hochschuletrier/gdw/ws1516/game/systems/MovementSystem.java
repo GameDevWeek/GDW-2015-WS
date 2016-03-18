@@ -9,6 +9,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
@@ -108,15 +109,28 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         InputComponent input = ComponentMappers.input.get(entity);
         MovementComponent movement = ComponentMappers.movement.get(entity);
         PlayerComponent playerComp = ComponentMappers.player.get(entity);
-        
+                
         if (input != null) {
+            
+            
             MovementEvent.emit(entity, input.directionX);
             if (input.startJump && movement.state == MovementComponent.State.ON_GROUND) {
                 JumpEvent.emit(entity);
             }
+            
+            if ((input.directionX != 0 || input.directionY != 0) && physix != null) {
+                physix.getFixtureByUserData("body").setFriction(0.0f);
+            } else {
+                physix.getFixtureByUserData("body").setFriction(1.0f);
+            }
+            
         }
-        if (playerComp == null || playerComp.state != State.HORNATTACK && playerComp.state != State.THROWBACK) {
-            physix.setLinearVelocityX(movement.velocityX);
+        if (playerComp != null && playerComp.state != State.HORNATTACK && playerComp.state != State.THROWBACK) {
+            if (movement.isOnPlatform) {
+                physix.setLinearVelocityX(movement.velocityX + movement.onPlatformBody.getLinearVelocity().x);
+            } else {
+                physix.setLinearVelocityX(movement.velocityX);
+            }
         }
     }
     
