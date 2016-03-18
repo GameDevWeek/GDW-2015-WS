@@ -92,5 +92,5 @@ public class GameConstants {
     public static final float PAPARAZZI_DURATION = 2.0f;
     
     // Particle parameters
-    public static final float IDLE_PARTICLE_REDUCTION = 0.3f;
+    public static final float IDLE_PARTICLE_REDUCTION = 0.2f;
 }
