@@ -132,8 +132,6 @@ public class Game extends InputAdapter {
 
 
     private final TriggerSystem triggerSystem = new TriggerSystem();
-    private final BulletSystem bulletSystem = new BulletSystem(engine);
-
     private final EntitySystem respawnSystem = new RespawnSystem();
     private final SoundSystem soundSystem = new SoundSystem(null);
     private final HitPointManagementSystem hitPointSystem = new HitPointManagementSystem();
@@ -143,6 +141,7 @@ public class Game extends InputAdapter {
     private final ScoreSystem scoreBoardSystem = new ScoreSystem();
     private final PlayerStateSystem playerStateSystem = new PlayerStateSystem();
     private final BubblegumSpitSystem bubblegumSpitSystem = new BubblegumSpitSystem(engine);
+    private final BulletSystem bulletSystem = new BulletSystem(engine);
     
     private TiledMap map;
 
@@ -162,8 +161,6 @@ public class Game extends InputAdapter {
         togglePhysixDebug.unregister();
         scoreCheating.unregister();
         pauseGame.unregister();
-        rainbow.unregister();
-        healCheating.unregister();
         winGameCheat.unregister();
         Main.getInstance().console.unregister(physixDebug);
         
