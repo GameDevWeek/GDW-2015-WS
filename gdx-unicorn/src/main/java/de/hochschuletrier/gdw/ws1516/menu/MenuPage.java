@@ -85,12 +85,12 @@ public class MenuPage extends Group {
         return slider;
     }
 
-    protected final void addLabeledTexture(String texture, String text,int x, int y,int modifier){
+    protected final void addLabeledTexture(String texture, String text,int x, int y,int modifier,int width,int height){
         Label label = new Label(text,skin,"default");
         Texture image = assetManager.getTexture(texture);
         DecoImage decoImage = new DecoImage(image);
-        decoImage.setPosition(x, y+modifier);
-        label.setPosition(x+70, y);
+        decoImage.setBounds(x, y+modifier,width,height);
+        label.setPosition(x+50, y+12);
         addActor(decoImage);
         addActor(label);
         
