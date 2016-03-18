@@ -43,12 +43,6 @@ public class SandBoxEventLogger implements  EnemyActionEvent.Listener, DeathEven
     }
 
     @Override
-    public void onGameOverEvent() {
-        logger.info("Game is Over - event");
-        
-    }
-
-    @Override
     public void onTriggerEvent(Action action, Entity triggeringEntity) {
         logger.info("Trigger Event {}",action.toString());
         
@@ -63,6 +57,12 @@ public class SandBoxEventLogger implements  EnemyActionEvent.Listener, DeathEven
     @Override
     public void onEnemyActionEvent(Entity enemy, Type action, float strength) {
 //        logger.debug("Enemy made a move {} ",action.toString());
+        
+    }
+
+    @Override
+    public void onGameOverEvent(boolean won) {
+        // TODO Auto-generated method stub
         
     }
     

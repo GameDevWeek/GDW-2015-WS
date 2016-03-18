@@ -1,9 +1,11 @@
 {
     
-    "bubblegum_blue": "data/graphics/blue_gum_s.png",
-    "bubblegum_rainbow": "data/graphics/rainbow_gum_s.png",
-    "bubblegum_spitting": "data/dummies/bubblegum_spitting.png",
-    "coin": "data/dummies/coin.png",
+    "bubblegum_blue": "data/graphics/gum_blue.png",
+    "bubblegum_rainbow": "data/graphics/gum_rainbow.png",
+    "bubblegum_spitting_pink": "data/graphics/gum_spit_pink.png",
+    "bubblegum_spitting_rainbow": "data/graphics/gum_spit_rainbow.png",
+    
+    "coin": "data/graphics/coin.png",
     "gum_bubble": "data/dummies/gum_bubble.png",
     "splatter_0": "data/dummies/splatter.png",
     "splatter_1": "data/dummies/splatter.png",
@@ -12,18 +14,18 @@
     "unicorn_mirror" : "data/graphics/unicorn_mirror.png",
     "trex" : "data/graphics/trex.png",
     "trex_mirror" : "data/graphics/trex_mirror.png",
-    "cookie" : "data/graphics/cookie_s.png",
+    "cookie" : "data/graphics/cookie.png",
     "drop" : "data/graphics/drop.png",
-    "bubble" : "data/graphics/bubble_s.png",
+    "bubble" : "data/graphics/bubble.png",
     
-    "hunter" : "data/graphics/enemy_hunter_s.png",
-    "paparazzi" : "data/graphics/enemy_paparazzi_s.png",
-
+    "hunter" : "data/graphics/enemy_hunter.png",
+    "paparazzi" : "data/graphics/enemy_paparazzi.png",
 
     "heart0": "data/ui/menu/heart0.png",
     "heart1": "data/ui/menu/heart1.png",
     "heart2": "data/ui/menu/heart2.png",
     "heart3": "data/ui/menu/heart3.png",    
+    "dead_unicorn_gameover": "data/ui/menu/unicorn_dead.png",
     "menu_fg": "data/ui/menu/fg_border.png",
     "menu_bg": "data/ui/menu/menu_splash.png",
     "transparent_bg": "data/ui/menu/transparent.png",

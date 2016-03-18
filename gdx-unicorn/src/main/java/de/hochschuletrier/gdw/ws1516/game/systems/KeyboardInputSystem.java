@@ -51,30 +51,26 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
         switch (keycode) {
             case Input.Keys.UP:
             case Input.Keys.SPACE:
-            case Input.Keys.W:
                 directionY -= 1.0f;
                 jump = true;
                 break;
             case Input.Keys.LEFT:
-            case Input.Keys.A:
                 directionX -= 1.0f;
                 lookDirection = MovementComponent.LookDirection.LEFT;
                 break;
             case Input.Keys.RIGHT:
-            case Input.Keys.D:
                 directionX += 1.0f;
                 lookDirection = MovementComponent.LookDirection.RIGHT;
                 break;
-            case Input.Keys.J:
+            case Input.Keys.D:
                 hornAttack = true;
                 break;
-            case Input.Keys.K:
+            case Input.Keys.S:
                 spit = true;
                 break;
-            case Input.Keys.L:
+            case Input.Keys.F:
                 fly = true;
                 break;
-            case Input.Keys.S:
             case Input.Keys.DOWN:
                 directionY += 1.0f;
                 break;
@@ -87,39 +83,24 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
         switch (keycode) {
             case Input.Keys.UP:
             case Input.Keys.SPACE:
-            case Input.Keys.W:
                 directionY += 1.0f;
                 jump = false;
                 break;
             case Input.Keys.LEFT:
-            case Input.Keys.A:
                 directionX += 1.0f;
                 break;
             case Input.Keys.RIGHT:
-            case Input.Keys.D:
                 directionX -= 1.0f;
                 break;
-            // for testing reasons
-            case Input.Keys.NUM_1:
-                fly = true;
-                // hornAttack = false;
-                break;
-            // for testing reasons
-            case Input.Keys.NUM_2:
-                stopflying = true;
-                // hornAttack = false;
-                break;
-            case Input.Keys.NUM_3:
-                hornAttack = true;
-                // hornAttack = false;
-                break;
-            case Input.Keys.K:
-                spit = false;
-                break;
-            case Input.Keys.L:
+            case Input.Keys.F:
                 fly = false;
                 break;
+            case Input.Keys.D:
+                hornAttack = false;
+                break;
             case Input.Keys.S:
+                spit = false;
+                break;
             case Input.Keys.DOWN:
                 directionY -= 1.0f;
                 break;
@@ -164,7 +145,7 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
         input.directionX = directionX;
         input.directionY = directionY;
         input.startFly = fly;
-        if (fly) {
+        if (fly && player.state!=State.RAINBOW) {
             StartFlyEvent.emit(entity, GameConstants.FLYING_TIME);
             fly = false;
         }
@@ -188,15 +169,21 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
         
         // Spit cooldown
         input.gumSpitCooldown -= deltaTime;
-        if (input.gumSpitCooldown <= 0)
+        if (input.gumSpitCooldown <= 0){
+            if (player.state==State.SPUCKCHARGE)
+                player.state=State.NORMAL;
             input.gumSpitCooldown = 0;
+        }
         
-        // Charge spit
-        if (input.spit && input.gumSpitCooldown == 0)
+        //Charge spit
+        if (input.spit && input.gumSpitCooldown == 0 && player.state!=State.RAINBOW) {
             input.gumSpitCharge += deltaTime;
+            player.state=State.SPUCKCHARGE;
+        }
         
-        // Emit spit
-        if (input.gumSpitCooldown == 0 && (input.oldSpit && !input.spit) || (input.gumSpitCharge > GameConstants.SPIT_CHARGE_TIME_TO_MAX)) {
+        //Emit spit
+        if (input.gumSpitCooldown == 0 && player.state!=State.RAINBOW  &&
+            (input.oldSpit && !input.spit) || (input.gumSpitCharge > GameConstants.SPIT_CHARGE_TIME_TO_MAX)) {
             float force = (input.gumSpitCharge > GameConstants.SPIT_CHARGE_TIME_TO_MAX) ? 1.0f : input.gumSpitCharge / GameConstants.SPIT_CHARGE_TIME_TO_MAX;
             BubblegumSpitSpawnEvent.emit(force);
             input.gumSpitCooldown = GameConstants.SPIT_COOLDOWN;
