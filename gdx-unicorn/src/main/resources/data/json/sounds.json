@@ -3,5 +3,9 @@
 	"helicopter": "data/sounds/helicopter.wav",
 	"einhornEmpathy":"data/sounds/EinhornEmpathy.wav",
 	"buttonSound":"data/sounds/click.wav",
-	"einhornMotivated":"data/sounds/EinhornMotivated.wav"
+	"einhornMotivated":"data/sounds/EinhornMotivated.wav",
+	"zurueck": "data/sounds/zurueck.wav",
+	"menu": "data/sounds/menu.wav",
+	"win_sound": "data/sounds/winning.wav",
+	"lose_sound": "data/sounds/Game Over.wav"
 }
