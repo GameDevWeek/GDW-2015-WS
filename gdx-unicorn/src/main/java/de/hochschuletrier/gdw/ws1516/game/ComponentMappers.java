@@ -29,7 +29,7 @@ public class ComponentMappers {
     public static final ComponentMapper<PlatformComponent> platformMode = ComponentMapper.getFor(PlatformComponent.class);
     public static final ComponentMapper<MovementComponent> movement = ComponentMapper.getFor(MovementComponent.class);
     public static final ComponentMapper<CollectableComponent> collectable = ComponentMapper.getFor(CollectableComponent.class);
-
+    public static final ComponentMapper<BlockingGumComponent> blockinggum = ComponentMapper.getFor(BlockingGumComponent.class);
     public static final ComponentMapper<InputComponent> input = ComponentMapper.getFor(InputComponent.class);
     
 }

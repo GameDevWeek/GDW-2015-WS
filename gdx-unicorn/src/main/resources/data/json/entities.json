@@ -162,6 +162,19 @@
             "BubblegumSpitComponent" : {}
         }
     },
+    "bubblegum_spitting_rainbow": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Texture": {
+                "texture": "bubblegum_spitting_rainbow"
+            },
+            "RenderLayer": {
+                "layer": 60
+            },
+            "BubblegumSpitComponent" : {}
+        }
+    },
     "bullet" : {
         "meta": {},
         "components": {
@@ -173,6 +186,40 @@
                 "layer": 60
             },
             "Bullet" : {}
+        }
+    },
+    "blockingGum" : {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Texture": {
+                "texture": "gum_ground",
+                "flipHorizontal" : true,
+                "flipVertical" : false
+            },
+            "RenderLayer": {
+                "layer": 60
+            },
+            "BlockingGum" : {
+                "timeToDespawn" : 3.0
+            }
+        }
+    },
+    "blockingGumRainbow" : {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Texture": {
+                "texture": "gum_ground_rainbow",
+                "flipHorizontal" : true,
+                "flipVertical" : false
+            },
+            "RenderLayer": {
+                "layer": 60
+            },
+            "BlockingGum" : {
+                "timeToDespawn" : 3.0
+            }
         }
     },
     "chocolate": {
