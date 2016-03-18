@@ -66,7 +66,7 @@
   </object>
   <object id="315" x="960" y="2816" width="128" height="128">
    <properties>
-    <property name="entity_type" value="player_start"/>
+    <property name="entity_type" value="unicorn"/>
    </properties>
   </object>
   <object id="317" gid="204" x="13952" y="2176" width="64" height="64">
