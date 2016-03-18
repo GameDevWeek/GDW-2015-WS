@@ -8,12 +8,12 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 
+import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
 import de.hochschuletrier.gdw.ws1516.events.GameRespawnEvent;
 import de.hochschuletrier.gdw.ws1516.events.HealEvent;
 import de.hochschuletrier.gdw.ws1516.events.HitEvent;
-import de.hochschuletrier.gdw.ws1516.events.HitEvent.HitType;
 import de.hochschuletrier.gdw.ws1516.events.UnicornEnemyCollisionEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornCollisionEvent;
 import de.hochschuletrier.gdw.ws1516.events.ThrowBackEvent;
@@ -21,6 +21,7 @@ import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.LookDirection;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent.State;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.GameLogicTest;
@@ -54,32 +55,31 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
     }
     
     @Override
-    public void onHitEvent(Entity entity, HitType type, int value) {
+    public void onHitEvent(Entity wasHit, Entity source, int value) {
         if (value > 0 )
         {
-            PlayerComponent playerComp = pm.get(entity);
+            PlayerComponent playerComp = pm.get(wasHit);
             if (playerComp == null) //wenn es sich um einen Gegner handelt wars das soweit.
                 return;
+            
             if (playerComp.state!=PlayerComponent.State.RAINBOW && playerComp.invulnerableTimer==0){
                 playerComp.hitpoints-= value;
                 playerComp.invulnerableTimer=GameConstants.INVULNERABLE_TIMER;
                 
                 if (playerComp.hitpoints <= 0)
-                    DeathEvent.emit(entity);
+                    DeathEvent.emit(wasHit);
                 
+                PhysixBodyComponent unicorn = ComponentMappers.physixBody.get(wasHit);
+                PhysixBodyComponent enemy = ComponentMappers.physixBody.get(source);
                 
-                //ansonsten war es das Einhorn => unterschiedliches Verhalten, je nach Art des HitPoints.
-                switch (type) {
-                case TOUCH:
-                    ThrowBackEvent.start(entity);
-                    break;
-                default:
-                    break;
+                if (unicorn.getX() <= enemy.getX()) {
+                    ThrowBackEvent.start(wasHit, -1.0f);
+                } else {
+                    ThrowBackEvent.start(wasHit, 1.0f);
                 }
            }
         } else
         {
-
             logger.warn("cannot damage for {} Hitpoints",value);
         }
     }
@@ -133,7 +133,7 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
         if (player.state==State.RAINBOW){
             DeathEvent.emit(enemy);
         }else{
-            HitEvent.emit(unicorn, HitType.TOUCH, 1);
+            HitEvent.emit(unicorn, enemy, 1);
         }
     }
 

@@ -12,6 +12,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
+import de.hochschuletrier.gdw.ws1516.events.HornAttackCooldownEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
 import de.hochschuletrier.gdw.ws1516.events.MovementEvent;
 import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
@@ -64,6 +65,7 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         PlayerComponent playerComp = ComponentMappers.player.get(entity);
         playerComp.stateTimer = Math.max(playerComp.stateTimer - deltaTime, 0);
         playerComp.hornAttackCooldown = Math.max(playerComp.hornAttackCooldown - deltaTime, 0);
+        HornAttackCooldownEvent.emit(playerComp.hornAttackCooldown);
         playerComp.throwBackCooldown = Math.max(playerComp.throwBackCooldown - deltaTime, 0);
         playerComp.invulnerableTimer = Math.max(playerComp.invulnerableTimer - deltaTime, 0);
         if (playerComp.stateTimer <= 0.0f) {
@@ -168,7 +170,7 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
     }
 
     @Override
-    public void onThrowBackEventStart(Entity unicorn) {
+    public void onThrowBackEventStart(Entity unicorn, float dirX) {
         if (getEntities().size()>0){
             PlayerComponent playerComp = ComponentMappers.player.get(unicorn);
             
@@ -188,6 +190,7 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         if (getEntities().size()>0){
             PlayerComponent playerComp = ComponentMappers.player.get(unicorn);
             playerComp.throwBackCooldown = GameConstants.THROWBACK_MODE_COOLDOWN;
+            playerComp.state = State.NORMAL;
         }
     }
     

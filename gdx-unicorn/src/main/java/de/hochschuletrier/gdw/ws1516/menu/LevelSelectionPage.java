@@ -54,7 +54,7 @@ public class LevelSelectionPage extends MenuPage {
     
     private void setLevel(int index) {
         level_preview.remove();
-        level_preview = createImageButton(level_previews[index], 450, 250, 50, 50, this::startGame, "einhornMotivated", true, false);
+        level_preview = createImageButton(level_previews[index], 450, 250, 50, 50, this::nextLevel, "einhornMotivated", true, false);
     }
     private void nextLevel() {
         level_preview.remove();

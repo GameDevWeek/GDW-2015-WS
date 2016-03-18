@@ -22,11 +22,13 @@ import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
 import de.hochschuletrier.gdw.ws1516.menu.EndPage;
 import de.hochschuletrier.gdw.ws1516.menu.MainMenuPage;
 import de.hochschuletrier.gdw.ws1516.menu.Settings;
 import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
 import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
+import de.hochschuletrier.gdw.ws1516.events.FinalScoreEvent;
 
 
 /**
@@ -34,10 +36,13 @@ import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
  * 
  * @author Santo Pfingsten
  */
-public class GameplayState extends BaseGameState implements GameOverEvent.Listener {
+public class GameplayState extends BaseGameState implements GameOverEvent.Listener, FinalScoreEvent.Listener {
 
 
     private static final Color OVERLAY_COLOR = new Color(0f, 0f, 0f, 0.5f);
+    
+    private ScoreComponent scoreComp;
+    
 
     private final Game game;
     private final Music music;
@@ -130,6 +135,7 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
         Main.inputMultiplexer.addProcessor(inputForwarder);
         inputForwarder.set(gameInputProcessor);
         GameOverEvent.register(this);
+        FinalScoreEvent.register(this);
        
 
     }
@@ -139,6 +145,7 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
        
         Main.inputMultiplexer.removeProcessor(inputForwarder);
         GameOverEvent.unregister(this);
+        FinalScoreEvent.unregister(this);
     }
 
     @Override
@@ -155,9 +162,9 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
         Skin skin = ((MainMenuState)Main.getInstance().getPersistentState(MainMenuState.class)).getSkin();
         EndPage endPage; 
         if ( won ){
-            endPage = new EndPage(skin, menuManager, "transparent_bg", EndPage.Type.WIN);
+            endPage = new EndPage(skin, menuManager, "transparent_bg", EndPage.Type.WIN, scoreComp);
         } else {
-            endPage = new EndPage(skin, menuManager, "transparent_bg", EndPage.Type.GAMEOVER);
+            endPage = new EndPage(skin, menuManager, "transparent_bg", EndPage.Type.GAMEOVER, scoreComp);
         }
         PauseGameEvent.emit(true);
             
@@ -165,5 +172,12 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
         menuManager.pushPage(endPage);
         inputForwarder.set(menuInputProcessor);
             
+    }
+
+
+    @Override
+    public void onFinalScoreChanged(long score, ScoreComponent scoreComponent) {
+        this.scoreComp=scoreComponent;
+        
     }
 }

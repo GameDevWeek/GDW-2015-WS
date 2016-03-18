@@ -9,7 +9,6 @@ import de.hochschuletrier.gdw.ws1516.events.BulletSpawnEvent;
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.HitEvent;
 import de.hochschuletrier.gdw.ws1516.events.MovementEvent;
-import de.hochschuletrier.gdw.ws1516.events.HitEvent.HitType;
 import de.hochschuletrier.gdw.ws1516.events.PaparazziShootEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
@@ -42,7 +41,7 @@ public class AttackEnemyState extends EnemyBaseState {
             }
             BulletSpawnEvent.emit(enemyPosition.x+direction, enemyPosition.y,
                     playerPosition.x-(enemyPosition.x+direction), playerPosition.y-enemyPosition.y,
-                    (source,target)->{HitEvent.emit(player, HitType.BULLET, 1);}, (source,target)->{}, (e)->{DeathEvent.emit(e);});
+                    (bullet,target)->{HitEvent.emit(target, bullet, 1);}, (source,target)->{}, (e)->{DeathEvent.emit(e);});
             return new FollowPathEnemyState();
         }else{        
             float distance = (float)Math.sqrt( Math.pow(enemyPosition.x-playerPosition.x, 2)+ Math.pow(enemyPosition.y-playerPosition.y, 2) );
