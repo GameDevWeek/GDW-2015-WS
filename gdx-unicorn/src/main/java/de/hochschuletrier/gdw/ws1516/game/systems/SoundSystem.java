@@ -70,7 +70,7 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
         MovementComponent move = ComponentMappers.movement.get(entity);
         PlayerComponent player = ComponentMappers.player.get(entity);
         
-        if (move != null)
+        if (move != null && player!=null)
         {
             boolean shouldPlay = false;
             if ( move.state == State.ON_GROUND )
