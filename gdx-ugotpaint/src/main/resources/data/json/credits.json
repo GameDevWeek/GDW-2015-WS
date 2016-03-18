@@ -1,11 +1,11 @@
 {
     "textStyles" : {
-        "title_left": { "color": "F8BB08", "font": "verdana_32", "align": "right" },
-        "title_right": { "color": "F8BB08", "font": "verdana_32", "align": "left" },
-        "title_center": { "color": "F8BB08", "font": "verdana_32", "align": "center" },
-        "text_center": { "color": "FFFFFF", "font": "verdana_32", "align": "center" },
-        "text_left": { "color": "FFFFFF", "font": "verdana_32", "align": "right" },
-        "text_right": { "color": "FFFFFF", "font": "verdana_32", "align": "left" }
+        "title_left": { "color": "285AAA", "font": "credits_title_font", "align": "right" },
+        "title_right": { "color": "285AAA", "font": "credits_title_font", "align": "left" },
+        "title_center": { "color": "285AAA", "font": "credits_title_font", "align": "center" },
+        "text_center": { "color": "000000", "font": "credits_name_font", "align": "center" },
+        "text_left": { "color": "000000", "font": "credits_name_font", "align": "right" },
+        "text_right": { "color": "000000", "font": "credits_name_font", "align": "left" }
     },
     "paths" : {
         "text": {

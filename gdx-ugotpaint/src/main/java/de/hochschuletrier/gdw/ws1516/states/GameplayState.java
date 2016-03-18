@@ -90,11 +90,6 @@ public class GameplayState extends BaseGameState {
     }
 
     @Override
-    public void onEnter(BaseGameState previousState) {
-        menuPageRoot.fadeToMenu();
-    }
-
-    @Override
     public void onEnterComplete() {
         Main.inputMultiplexer.addProcessor(inputForwarder);
         inputForwarder.set(gameInputProcessor);

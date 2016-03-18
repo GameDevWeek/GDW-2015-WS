@@ -99,7 +99,7 @@ public class CollisionSystem extends IteratingSystem {
         
         AnimationComponent anim = ComponentMappers.animation.get(victim);
         PlayerComponent player = ComponentMappers.player.get(victim);
-        if(segment > 0) {
+        if(segment >= 0) {
             while(player.segments.size() > segment) {
                 explodeAt(player.segments.removeLast(), player.color);
             }

@@ -140,12 +140,13 @@ public class Main extends StateBasedGame {
     }
 
     private void onLoadComplete() {
+        Cursor.init();
         canvas = new Canvas(assetManager);
         final MainMenuState mainMenuState = new MainMenuState(assetManager);
         addPersistentState(mainMenuState);
         changeState(mainMenuState, null, null);
         
-//        MusicManager.play(assetManager.getMusic("menu"), GameConstants.MUSIC_FADE_TIME);
+        MusicManager.play(assetManager.getMusic("menu"), GameConstants.MUSIC_FADE_TIME);
     }
 
     @Override

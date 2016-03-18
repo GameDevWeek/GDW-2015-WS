@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
+import de.hochschuletrier.gdw.ws1516.Cursor;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
@@ -84,6 +85,7 @@ public class MenuPageRoot extends MenuPage {
     }
 
     public void fadeToMenu() {
+        Cursor.enable();
         canvasAnimationTime = 0;
         bigCanvas = false;
         this.setTouchable(Touchable.disabled);
@@ -101,6 +103,7 @@ public class MenuPageRoot extends MenuPage {
     }
     
     private void showGame() {
+        Cursor.disable();
         if (type == Type.MAINMENU) {
             Game game = new Game();
             game.init(assetManager);
