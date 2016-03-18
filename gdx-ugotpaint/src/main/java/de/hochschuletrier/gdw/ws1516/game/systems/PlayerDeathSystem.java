@@ -15,12 +15,16 @@ import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.utils.PlayerColor;
 
+import java.util.Random;
+
+import static de.hochschuletrier.gdw.ws1516.game.GameConstants.*;
+
 /**
  * Created by glumbatsch on 18.03.2016.
  */
 public class PlayerDeathSystem extends EntitySystem implements PlayerDeathEvent.Listener {
 
-    private RandomXS128 rnd = new RandomXS128();
+    private Random rnd = new Random();
 
     private Entity playerRed, playerBlue;
 
@@ -63,6 +67,8 @@ public class PlayerDeathSystem extends EntitySystem implements PlayerDeathEvent.
 
         PositionComponent position = ComponentMappers.position.get(player);
         PlayerComponent playerComponent = ComponentMappers.player.get(player);
+
+        // trim path to the new size
         playerComponent.path.clear();
 
         Vector2 respawnLocation;
@@ -84,8 +90,9 @@ public class PlayerDeathSystem extends EntitySystem implements PlayerDeathEvent.
             playerComponent.segments.add(new Vector2());
         }
         // add the new paths oriented along the movement direction
-        for(int i = 0; i < playerComponent.segments.size(); ++i){
-            playerComponent.path.add(new Vector2(playerComponent.segments.get(i).add(new Vector2(direction).scl(10))));
+        playerComponent.path.add(respawnLocation.add(direction.scl(-10)));
+        for (int i = 1; i < GameConstants.DEFAULT_SEGMENTS; ++i) {
+            playerComponent.path.add(playerComponent.path.get(i - 1).add(direction.scl(-10)));
         }
     }
 
@@ -96,10 +103,13 @@ public class PlayerDeathSystem extends EntitySystem implements PlayerDeathEvent.
      * @return new respawn location as Vector2
      */
     private Vector2 calculateRespawn() {
-        float x = rnd.nextLong((long) (GameConstants.BOUND_WIDTH - GameConstants.BORDER_SIZE))
-                + GameConstants.DEFAULT_SEGMENTS * GameConstants.PAINT_RADIUS + GameConstants.BORDER_SIZE;
-        float y = rnd.nextLong((long) (GameConstants.BOUND_HEIGHT - GameConstants.BORDER_SIZE))
-                + GameConstants.DEFAULT_SEGMENTS * GameConstants.PAINT_RADIUS + GameConstants.BORDER_SIZE;
+
+        float x = rnd.nextInt((int) (BOUND_RIGHT - BORDER_SIZE - 2 * DEFAULT_SEGMENTS * SEGMENT_DISTANCE - 2 * DEFAULT_SEGMENTS * PAINT_RADIUS))
+                + BORDER_SIZE + DEFAULT_SEGMENTS * SEGMENT_DISTANCE + DEFAULT_SEGMENTS * PAINT_RADIUS;
+
+
+        float y = rnd.nextInt((int) (BOUND_BOTTOM - BORDER_SIZE - 2 * DEFAULT_SEGMENTS * SEGMENT_DISTANCE - 2 * DEFAULT_SEGMENTS * PAINT_RADIUS))
+                + BORDER_SIZE + DEFAULT_SEGMENTS * SEGMENT_DISTANCE + DEFAULT_SEGMENTS * PAINT_RADIUS;
 
         return new Vector2(x, y);
     }
