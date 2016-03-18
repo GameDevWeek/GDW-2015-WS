@@ -61,10 +61,12 @@ public class MenuPage extends Group {
     }
     
     
-     protected final void addLabeledSlider(Slider slider,int x, int y,String text,boolean add){
+     protected final Slider addLabeledSlider(float min, float max,float stepSize,int x, int y,String text,boolean add,float sliderValue){
         Label label = new Label(text,skin,"default");
         int size = 250; 
         label.setPosition(x, y+7);
+        Slider slider = new Slider(min,max,stepSize,false,skin,"default-horizontal");
+        slider.setValue(sliderValue);
         slider.setBounds(x+80,y,size,35);
         Label value= new Label(""+(int)slider.getValue(),skin,"default");
         value.setPosition(x+size+90,y+7);   
@@ -80,8 +82,9 @@ public class MenuPage extends Group {
          addActor(label);
          addActor(value);
         }
+        return slider;
     }
-     
+
     
 
     protected final void addLeftAlignedButton(int x, int y, int width, int height, String text,Runnable runnable,String sound) {
@@ -107,22 +110,19 @@ public class MenuPage extends Group {
         addActor(button);
         return button;
     }
-    protected final Slider createSlider(float min, float max,float stepSize){
-        
-    Slider slider = new Slider(min,max,stepSize,false,skin,"default-horizontal");
-    slider.setValue(50);
-    return slider;
-     
- }
+
     
     protected ImageButton createImageButton(Texture texture, float x, float y, float width, float height, Runnable runnable, String sound, boolean addToActor, boolean tintable) {
         
         ImageButton ib;
         if(tintable==true) {
+            Sprite upSprite = new Sprite(texture);
+            upSprite.setColor(Color.MAROON);
             Sprite downSprite = new Sprite(texture);
+            
             downSprite.setColor(Color.MAGENTA);
             // NICHT GUT FÜR PERFORMANCE!!
-            ib = new ImageButton(new SpriteDrawable(new Sprite(texture)), new SpriteDrawable(downSprite));
+            ib = new ImageButton(new SpriteDrawable(upSprite), new SpriteDrawable(downSprite));
         }
         
         else {

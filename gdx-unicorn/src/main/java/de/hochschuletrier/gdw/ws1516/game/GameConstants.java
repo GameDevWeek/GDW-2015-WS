@@ -29,21 +29,21 @@ public class GameConstants {
     public static final int POSITION_ITERATIONS = 3;
     public static final int VELOCITY_ITERATIONS = 8;
     public static final int BOX2D_SCALE = 40;
-    public static final float PLAYER_SPEED = 250.0f;
+    public static final float PLAYER_SPEED = 350.0f;
     public static final float PLAYER_JUMP_IMPULSE = -1250.0f;
-    public static final float THROWBACK_FORCE = 1000.0f;
+    public static final float THROWBACK_FORCE = 800.0f;
     public static final float HORNATTACK_IMPULSE=1500.0f;
     public static final float PLATFORM_SPEED = 300.0f;
     
     //Effect Times
     public static final float FLYING_TIME= 10.0f;
     public static final float RAINBOW_MODE_TIME = 10.0f;
-    public static final float HORN_MODE_TIME = 3.0f;
     public static final float SPUCK_MODE_TIME = 2.0f;
-    public static final float HORN_MODE_COOLDOWN = 5.0f;
     public static final float SPUCK_MODE_COOLDOWN = 2.0f;
+    public static final float THROWBACK_MODE_COOLDOWN = 0.75f;
+    public static final float HORN_MODE_TIME = 0.75f;
+    public static final float HORN_MODE_COOLDOWN = 3.0f;
     public static final float INVULNERABLE_TIMER = 0.5f;
-    
     public static final float RAINBOW_SPEED_MODIFIER = 2.0f;
     //Physic collision groups
     public static final short PHYSIX_COLLISION_SPIT = -1;
@@ -65,7 +65,7 @@ public class GameConstants {
     public static float MUSIC_FADE_TIME = 2;
     
     // Scoreborad-Constant
-    public static final float SCORE_TIME_POINTS = - 100 / 60;
+    public static final float SCORE_TIME_POINTS = - 100F / 60;
     public static final int SCORE_CHOCOCOINS_POINTS = 1;
     public static final int SCORE_BONBONS_POINTS = 3;
     public static final int SCORE_DEATHS = 0; // negative Points ??

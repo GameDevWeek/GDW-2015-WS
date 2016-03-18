@@ -1,5 +1,3 @@
-package de.hochschuletrier.gdw.ws1516.game.components;
-
 import java.util.ArrayList;
 
 import com.badlogic.ashley.core.Component;

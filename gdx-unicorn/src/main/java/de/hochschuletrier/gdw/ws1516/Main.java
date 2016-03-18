@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import de.hochschuletrier.gdw.commons.devcon.DevConsole;
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVar;
+import de.hochschuletrier.gdw.commons.devcon.cvar.CVarBool;
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarEnum;
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarFloat;
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarInt;
@@ -39,6 +40,7 @@ import de.hochschuletrier.gdw.commons.gdx.utils.GdxResourceLocator;
 import de.hochschuletrier.gdw.commons.gdx.utils.KeyUtil;
 import de.hochschuletrier.gdw.commons.resourcelocator.CurrentResourceLocator;
 import de.hochschuletrier.gdw.commons.utils.ClassUtils;
+import de.hochschuletrier.gdw.commons.utils.FpsCalculator;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 import de.hochschuletrier.gdw.ws1516.sandbox.SandboxCommand;
@@ -75,6 +77,11 @@ public class Main extends StateBasedGame {
             SoundDistanceModel.INVERSE, SoundDistanceModel.class, 0, "sound distance model");
     private final CVarEnum<SoundEmitter.Mode> emitterMode = new CVarEnum("snd_mode", SoundEmitter.Mode.STEREO,
             SoundEmitter.Mode.class, 0, "sound mode");
+    
+    private final CVarBool showFPS = new CVarBool("r_showFPS", !IS_RELEASE, 0, "show FPS");
+    
+    private final FpsCalculator fpsCalc = new FpsCalculator(200, 100, 16);
+    private BitmapFont font;
     
     public Main() {
         super(new BaseGameState());
@@ -144,6 +151,8 @@ public class Main extends StateBasedGame {
 
         this.console.register(emitterMode);
         emitterMode.addListener(this::onEmitterModeChanged);
+        
+        this.console.register(showFPS);
     }
 
     private void onLoadComplete() {
@@ -155,6 +164,7 @@ public class Main extends StateBasedGame {
         if (cmdLine.hasOption("sandbox")) {
             SandboxCommand.runSandbox(cmdLine.getOptionValue("sandbox"));
         }
+        font = assetManager.getFont("verdana_32");
     }
 
     @Override
@@ -175,6 +185,12 @@ public class Main extends StateBasedGame {
     }
 
     protected void postRender() {
+        if(font != null && showFPS.get()) {
+            Main.getInstance().screenCamera.bind();
+            font.setColor(Color.WHITE);
+            font.draw(DrawUtil.batch, String.format("%.2f FPS", fpsCalc.getFps()), 0, 0);
+        }
+        
         DrawUtil.batch.end();
         if (consoleView.isVisible()) {
             consoleView.render();
@@ -183,6 +199,7 @@ public class Main extends StateBasedGame {
 
     @Override
     protected void preUpdate(float delta) {
+        fpsCalc.addFrame();
         if (consoleView.isVisible()) {
             consoleView.update(delta);
         }

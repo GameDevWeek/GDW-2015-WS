@@ -17,6 +17,7 @@ import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
 import de.hochschuletrier.gdw.ws1516.events.JumpEvent;
 import de.hochschuletrier.gdw.ws1516.events.MovementEvent;
 import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
+import de.hochschuletrier.gdw.ws1516.events.ThrowBackEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
@@ -28,7 +29,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent.State;
 import de.hochschuletrier.gdw.ws1516.game.components.factories.PhysixBodyComponentFactory;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 
-public class MovementSystem extends IteratingSystem implements StartFlyEvent.Listener, EndFlyEvent.Listener, JumpEvent.Listener, MovementEvent.Listener, HornAttackEvent.Listener {
+public class MovementSystem extends IteratingSystem implements StartFlyEvent.Listener, EndFlyEvent.Listener, JumpEvent.Listener, MovementEvent.Listener, HornAttackEvent.Listener, ThrowBackEvent.Listener {
     private static final Logger logger = LoggerFactory
             .getLogger(MovementSystem.class);
 
@@ -51,6 +52,7 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         MovementEvent.register(this);
         physixSystem = engine.getSystem(PhysixSystem.class);
         HornAttackEvent.register(this);
+        ThrowBackEvent.register(this);
     }
     
     @Override
@@ -62,6 +64,7 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         MovementEvent.unregister(this);
         physixSystem = null;
         HornAttackEvent.unregister(this);
+        ThrowBackEvent.unregister(this);
     };
     
     @Override
@@ -112,7 +115,7 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
                 JumpEvent.emit(entity);
             }
         }
-        if (playerComp == null || playerComp.state != State.HORNATTACK) {
+        if (playerComp == null || playerComp.state != State.HORNATTACK && playerComp.state != State.THROWBACK) {
             physix.setLinearVelocityX(movement.velocityX);
         }
     }
@@ -160,6 +163,7 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         MovementComponent movement = ComponentMappers.movement.get(entity);
         PhysixBodyComponent physix = ComponentMappers.physixBody.get(entity);
         movement.state = MovementComponent.State.JUMPING;
+        physix.setLinearVelocity(0, 0); //kills any movement
         physix.applyImpulse(0, movement.jumpImpulse);
     }
     
@@ -189,6 +193,22 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
     public void onHornAttackStop(Entity player) {
         // TODO Auto-generated method stub
         
+    }
+
+    @Override
+    public void onThrowBackEventStart(Entity unicorn, float dirX) {
+        PhysixBodyComponent physix = ComponentMappers.physixBody.get(unicorn);
+        MovementComponent movement = ComponentMappers.movement.get(unicorn);
+        
+        if (physix != null && movement != null) {            
+            movement.state = MovementComponent.State.FALLING;
+            physix.setLinearVelocity(0, 0); //kills any movement
+            physix.applyImpulse(dirX * GameConstants.THROWBACK_FORCE, -1.0f * GameConstants.THROWBACK_FORCE);
+        }
+    }
+
+    @Override
+    public void onThrowBackEventStop(Entity unicorn) {
     }
     
 }

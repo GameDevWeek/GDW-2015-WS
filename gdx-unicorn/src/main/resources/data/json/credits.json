@@ -43,7 +43,7 @@
                 {"x":-50,"y":0,"speed":333},
                 {"x":300,"y":500,"speed":333},
                 {"x":600,"y":100,"speed":333},
-                {"x":1200,"y":400,"speed":333}
+                {"x":1200,"y":350,"speed":333}
             ]
         },
         "nomnom":{
@@ -99,7 +99,7 @@
 
 
                 { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Level Design", "delay": "2000" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Wera Großner  ", "delay": "675" },
+                { "type": "text", "path" : "text", "style" : "text_left", "text": "Wera Goßner  ", "delay": "675" },
                 { "type": "text", "path" : "text", "style" : "text_right", "text": "  Kristofer Schmitz", "delay": "0" },
                 { "type": "text", "path" : "text", "style" : "text_center", "text": "Tristan-Philip Semmler", "delay": "675" },
 
@@ -112,8 +112,8 @@
                 { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Grafik Design", "delay": "2000" },
                 { "type": "text", "path" : "text", "style" : "text_left", "text": "Jeremy Baltat  ", "delay": "675" },
                 { "type": "text", "path" : "text", "style" : "text_right", "text": "  Loni", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_center", "text": "Sandra Weyand", "delay": "675" },
-
+                { "type": "text", "path" : "text", "style" : "text_left", "text": "Sandra Weyand  ", "delay": "675" },
+                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Julia Eiden", "delay": "0" },
 
 
                 { "type": "text", "path" : "thanks", "group" : "title", "style" : "title_center", "text": "Thank you for playing!", "delay": "2000" }
@@ -149,11 +149,11 @@
         "stuff": {
             "time": 3000,
             "items": [
-                {"type":"texture","path":"unicorn1", "resource":"unicorn","delay":5000},
+                {"type":"animation","path":"unicorn1", "resource":"unicorn_walking","delay":5000},
                 {"type":"texture","path":"chase1", "resource":"bubblegum_rainbow", "oriented":"true", "delay":10000},
-                {"type":"texture","path":"chase1", "resource":"unicorn_mirror", "oriented":"true", "angle" : 180,"delay":250},
+                {"type":"animation","path":"chase1", "resource":"unicorn_walking", "oriented":"true","delay":250},
                 {"type":"texture","path":"chase2","resource":"bubblegum_rainbow","oriented":"true", "delay":10000},
-                {"type":"texture","path":"chase2","resource":"unicorn","oriented":"true","delay":250},
+                {"type":"animation","path":"chase2","resource":"unicorn_walking","oriented":"true","delay":250},
                 {"type":"texture","path":"nomnom","resource":"trex_mirror","oriented":"false","delay":0}
             ],
             "animations":[]

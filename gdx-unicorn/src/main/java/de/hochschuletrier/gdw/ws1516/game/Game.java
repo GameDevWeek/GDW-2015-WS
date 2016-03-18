@@ -135,8 +135,6 @@ public class Game extends InputAdapter {
 
 
     private final TriggerSystem triggerSystem = new TriggerSystem();
-    private final BulletSystem bulletSystem = new BulletSystem(engine);
-
     private final EntitySystem respawnSystem = new RespawnSystem();
     private final SoundSystem soundSystem = new SoundSystem(null);
     private final HitPointManagementSystem hitPointSystem = new HitPointManagementSystem();
@@ -148,6 +146,7 @@ public class Game extends InputAdapter {
     private final BubblegumSpitSystem bubblegumSpitSystem = new BubblegumSpitSystem(engine);
     private final UpdatePlatformPositionSystem updatePlatformPositionSystem = new UpdatePlatformPositionSystem();
     private final PlatformSystem platformSystem = new PlatformSystem();
+    private final BulletSystem bulletSystem = new BulletSystem(engine);
     
     private TiledMap map;
 
@@ -167,8 +166,8 @@ public class Game extends InputAdapter {
         togglePhysixDebug.unregister();
         scoreCheating.unregister();
         pauseGame.unregister();
-        rainbow.unregister();
-        healCheating.unregister();
+//        rainbow.unregister();
+//        healCheating.unregister();
         winGameCheat.unregister();
         Main.getInstance().console.unregister(physixDebug);
         
@@ -198,22 +197,24 @@ public class Game extends InputAdapter {
         EntityCreator.setGame(this);
         EntityCreator.setEntityFactory(entityFactory);
         
-        loadMap("data/maps/demo_level_worked.tmx");
+        loadMap("data/maps/lvl1.tmx");
         mapRenderSystem.initialzeRenderer(map, "map_background", cameraSystem);
         
-        //test:
-        Entity unicorn = EntityCreator.createEntity("unicorn", 1000, 300);
-        Entity entity=EntityCreator.createEntity("hunter", 1000, 100);
+        //test: 
+        // take it out
+        Entity unicorn = EntityCreator.createEntity("unicorn", 9000, 500);
+        Entity entity=EntityCreator.createEntity("hunter", 9000, 700);
         PathComponent pathComponent =ComponentMappers.path.get(entity);
         pathComponent.points.add(new Vector2(1000, 100));
         pathComponent.points.add(new Vector2(800,100));
 //        Entity platform = EntityCreator.createEntity("platform", 1700, 100);
-        healCheating = new Hotkey(() -> HealEvent.emit(unicorn, 1), Input.Keys.F4,
+/*        healCheating = new Hotkey(() -> HealEvent.emit(unicorn, 1), Input.Keys.F4,
         HotkeyModifier.CTRL);
         healCheating.register();
         rainbow = new Hotkey(() -> RainbowEvent.start(unicorn), Input.Keys.F3,
                 HotkeyModifier.CTRL);
         rainbow.register();
+*/
         Entity platform = EntityCreator.createEntity("platform", 2000, 600);
         PlatformComponent platformComp = ComponentMappers.platform.get(platform);
         //platformComp.loop = true;
