@@ -31,9 +31,6 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
     private boolean             hornAttack    = false;
     private boolean             fly           = false;
     
-    // for testing
-    private boolean             stopflying    = false;
-    
     private float               directionX, directionY = 0.0f;
     public LookDirection        lookDirection = MovementComponent.LookDirection.RIGHT;
     
@@ -142,22 +139,28 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
     protected void processEntity(Entity entity, float deltaTime) {
         InputComponent input = entity.getComponent(InputComponent.class);
         PlayerComponent player=ComponentMappers.player.get(entity);
+        MovementComponent movement=ComponentMappers.movement.get(entity);
         input.directionX = directionX;
         input.directionY = directionY;
-        input.startFly = fly;
+        input.startFly=fly;
         if (fly && player.state!=State.RAINBOW) {
-            StartFlyEvent.emit(entity, GameConstants.FLYING_TIME);
+            if (movement.state==de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State.FLYING){
+                EndFlyEvent.emit(entity);
+            }else{
+                StartFlyEvent.emit(entity, GameConstants.FLYING_TIME);
+            }
             fly = false;
         }
-//        if(stopflying){
-//            EndFlyEvent.emit(entity);
-//            fly=false;
-//            stopflying=false;
-//        }
 
 
-        if(hornAttack && player.state!=State.RAINBOW && player.hornAttackCooldown<=0.0f){
-                HornAttackEvent.start(entity);
+        if(hornAttack){
+            if (movement.state==de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State.FLYING){
+                EndFlyEvent.emit(entity);
+            }else{
+                if (player.state!=State.RAINBOW && player.hornAttackCooldown<=0.0f){
+                    HornAttackEvent.start(entity);
+                }
+            }
             hornAttack=false;
         }
         input.hornAttack = hornAttack;
@@ -176,20 +179,28 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
         }
         
         //Charge spit
-        if (input.spit && input.gumSpitCooldown == 0 && player.state!=State.RAINBOW) {
-            input.gumSpitCharge += deltaTime;
-            player.state=State.SPUCKCHARGE;
+        if (input.spit){
+            if (movement.state==de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State.FLYING){
+                EndFlyEvent.emit(entity);
+                spit=false;
+            }else{
+                if(input.gumSpitCooldown == 0 && player.state!=State.RAINBOW) {
+                    input.gumSpitCharge += deltaTime;
+                    player.state=State.SPUCKCHARGE;
+                }
+            }
+            
+            //Emit spit
+            if (input.gumSpitCooldown == 0 && player.state!=State.RAINBOW  && input.gumSpitCharge>0.0f &&
+                (input.oldSpit && !input.spit) || (input.gumSpitCharge > GameConstants.SPIT_CHARGE_TIME_TO_MAX)) {
+                float force = (input.gumSpitCharge > GameConstants.SPIT_CHARGE_TIME_TO_MAX) ? 1.0f : input.gumSpitCharge / GameConstants.SPIT_CHARGE_TIME_TO_MAX;
+                BubblegumSpitSpawnEvent.emit(force);
+                input.gumSpitCooldown = GameConstants.SPIT_COOLDOWN;
+                input.gumSpitCharge = 0.0f;
+            }
+            
         }
-        
-        //Emit spit
-        if (input.gumSpitCooldown == 0 && player.state!=State.RAINBOW  &&
-            (input.oldSpit && !input.spit) || (input.gumSpitCharge > GameConstants.SPIT_CHARGE_TIME_TO_MAX)) {
-            float force = (input.gumSpitCharge > GameConstants.SPIT_CHARGE_TIME_TO_MAX) ? 1.0f : input.gumSpitCharge / GameConstants.SPIT_CHARGE_TIME_TO_MAX;
-            BubblegumSpitSpawnEvent.emit(force);
-            input.gumSpitCooldown = GameConstants.SPIT_COOLDOWN;
-            input.gumSpitCharge = 0.0f;
-        }
-        
+
         input.lookDirection = lookDirection;
         
     }
