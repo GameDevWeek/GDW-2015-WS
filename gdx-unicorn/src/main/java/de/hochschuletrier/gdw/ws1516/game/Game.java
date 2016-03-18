@@ -215,14 +215,12 @@ public class Game extends InputAdapter {
                 HotkeyModifier.CTRL);
         rainbow.register();
 */
-        Entity platform = EntityCreator.createEntity("platform", 2000, 600);
+        Entity platform = EntityCreator.createEntity("platform", 9000, 700);
         PlatformComponent platformComp = ComponentMappers.platform.get(platform);
         //platformComp.loop = true;
         pathComponent =ComponentMappers.path.get(platform);
-        pathComponent.points.add(new Vector2(2000, 600));
-        pathComponent.points.add(new Vector2(2200, 600));
-        pathComponent.points.add(new Vector2(1500, 600));
-        pathComponent.points.add(new Vector2(2600, 600));
+        pathComponent.points.add(new Vector2(9000, 700));
+        pathComponent.points.add(new Vector2(9500, 700));
 
     }
 

@@ -118,7 +118,7 @@
                 "density": 0,
                 "friction": 100.0,
                 "restitution": 0,
-                "sizeWidth" : 1,
+                "sizeWidth" : 4,
                 "sizeHeight" : 1
             },
             "RenderLayer": {
