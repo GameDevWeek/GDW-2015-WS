@@ -162,9 +162,9 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
         Skin skin = ((MainMenuState)Main.getInstance().getPersistentState(MainMenuState.class)).getSkin();
         EndPage endPage; 
         if ( won ){
-            endPage = new EndPage(skin, menuManager, "transparent_bg", EndPage.Type.WIN);
+            endPage = new EndPage(skin, menuManager, "transparent_bg", EndPage.Type.WIN, scoreComp);
         } else {
-            endPage = new EndPage(skin, menuManager, "transparent_bg", EndPage.Type.GAMEOVER);
+            endPage = new EndPage(skin, menuManager, "transparent_bg", EndPage.Type.GAMEOVER, scoreComp);
         }
         PauseGameEvent.emit(true);
             
