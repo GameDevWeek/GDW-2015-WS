@@ -1,5 +1,6 @@
 package de.hochschuletrier.gdw.ws1516.game;
 
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
 import org.slf4j.Logger;
@@ -31,24 +32,27 @@ import de.hochschuletrier.gdw.commons.tiled.LayerObject;
 import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
-import de.hochschuletrier.gdw.ws1516.events.HealEvent;
+import de.hochschuletrier.gdw.ws1516.events.PaparazziShootEvent;
 import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
-import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
 import de.hochschuletrier.gdw.ws1516.events.TriggerEvent.Action;
+import de.hochschuletrier.gdw.ws1516.game.components.BlockingGumComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.BubblegumSpitComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.BulletComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ImpactSoundComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PathComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PlatformComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.TriggerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.factories.EntityFactoryParam;
+import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BlockingGumListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BubblegumSpitListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BulletListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.ImpactSoundListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerContactListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.TriggerListener;
+import de.hochschuletrier.gdw.ws1516.game.systems.BlockingGumSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BubbleGlueSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BubblegumSpitSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BulletSystem;
@@ -62,23 +66,21 @@ import de.hochschuletrier.gdw.ws1516.game.systems.KeyboardInputSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.MapRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.MovementSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.NameSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.PlatformSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.PlayerStateSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RespawnSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.ScoreSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.SoundSystem;
-import de.hochschuletrier.gdw.ws1516.game.systems.TextureRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.TriggerSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePlatformPositionSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityCreator;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.MapLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
-import de.hochschuletrier.gdw.ws1516.menu.MenuOptions;
+import de.hochschuletrier.gdw.ws1516.menu.MenuPageOptions;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.DummyEnemyExecutionSystem;
-
-import java.util.ArrayList;
-import java.util.Iterator;
 
 public class Game extends InputAdapter {
 
@@ -98,7 +100,6 @@ public class Game extends InputAdapter {
     
     private static boolean PAUSE_ENGINE = false;
 
-    //private final Hotkey rainbowMode = new Hotkey(()->RainbowEvent.start(player),Input.Keys.F3,HotkeyModifier.CTRL);
 
 
     private final PooledEngine engine = new PooledEngine(GameConstants.ENTITY_POOL_INITIAL_SIZE,
@@ -141,11 +142,12 @@ public class Game extends InputAdapter {
     private final ScoreSystem scoreBoardSystem = new ScoreSystem();
     private final PlayerStateSystem playerStateSystem = new PlayerStateSystem();
     private final BubblegumSpitSystem bubblegumSpitSystem = new BubblegumSpitSystem(engine);
+    private final UpdatePlatformPositionSystem updatePlatformPositionSystem = new UpdatePlatformPositionSystem();
+    private final PlatformSystem platformSystem = new PlatformSystem();
     private final BulletSystem bulletSystem = new BulletSystem(engine);
+    private final BlockingGumSystem blockingGumSystem = new BlockingGumSystem(engine);
     
     private TiledMap map;
-
-
     
     public Game() {
         // If this is a build jar file, disable hotkeys
@@ -198,18 +200,24 @@ public class Game extends InputAdapter {
         //test: 
         // take it out
         Entity unicorn = EntityCreator.createEntity("unicorn", 9000, 500);
-        Entity entity=EntityCreator.createEntity("safe_point", 9500, 700);
-        Entity e2=EntityCreator.createEntity("tourist", 9500, 700);
-//        PathComponent pathComponent =ComponentMappers.path.get(entity);
-//        pathComponent.points.add(new Vector2(9000, 100));
-//        pathComponent.points.add(new Vector2(9200,100));
-//        
-//        healCheating = new Hotkey(() -> HealEvent.emit(unicorn, 1), Input.Keys.F4,
-//        HotkeyModifier.CTRL);
-//        healCheating.register();
-//        rainbow = new Hotkey(() -> RainbowEvent.start(unicorn), Input.Keys.F3,
-//                HotkeyModifier.CTRL);
-//        rainbow.register();
+        Entity entity=EntityCreator.createEntity("hunter", 9000, 700);
+        PathComponent pathComponent =ComponentMappers.path.get(entity);
+        pathComponent.points.add(new Vector2(1000, 100));
+        pathComponent.points.add(new Vector2(800,100));
+//        Entity platform = EntityCreator.createEntity("platform", 1700, 100);
+/*        healCheating = new Hotkey(() -> HealEvent.emit(unicorn, 1), Input.Keys.F4,
+        HotkeyModifier.CTRL);
+        healCheating.register();
+        rainbow = new Hotkey(() -> RainbowEvent.start(unicorn), Input.Keys.F3,
+                HotkeyModifier.CTRL);
+        rainbow.register();
+*/
+        Entity platform = EntityCreator.createEntity("platform", 9000, 700);
+        PlatformComponent platformComp = ComponentMappers.platform.get(platform);
+        //platformComp.loop = true;
+        pathComponent =ComponentMappers.path.get(platform);
+        pathComponent.points.add(new Vector2(9000, 700));
+        pathComponent.points.add(new Vector2(9500, 700));
 
     }
 
@@ -262,6 +270,9 @@ public class Game extends InputAdapter {
         engine.addSystem(bubblegumSpitSystem);
         engine.addSystem(bubbleGlueSystem);
         engine.addSystem(playerStateSystem);
+        engine.addSystem(updatePlatformPositionSystem);
+        engine.addSystem(platformSystem);
+        engine.addSystem(blockingGumSystem);
     }
 
     private void addContactListeners() {
@@ -272,6 +283,7 @@ public class Game extends InputAdapter {
         contactListener.addListener(PlayerComponent.class, new PlayerContactListener());
         contactListener.addListener(BulletComponent.class, new BulletListener());
         contactListener.addListener(BubblegumSpitComponent.class, new BubblegumSpitListener());
+        contactListener.addListener(BlockingGumComponent.class, new BlockingGumListener());
     }
 
     private void setupPhysixWorld() {

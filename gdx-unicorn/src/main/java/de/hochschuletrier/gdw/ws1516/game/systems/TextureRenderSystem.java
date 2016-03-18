@@ -31,18 +31,22 @@ public class TextureRenderSystem extends SubSystem {
         PositionComponent position = ComponentMappers.position.get(entity);
         
         if(texture.texture != null && position != null) {
-            drawRotated(texture.texture, position.x, position.y, position.rotation, texture.flipHorizontal,
+            drawRotated(texture.texture, position.x, position.y, position.rotation,
+                        texture.flipHorizontal, texture.flipVertical,
                         texture.originX, texture.originY);
         }
     }
     
-    private void drawRotated(Texture texture, float x, float y, float angleInDeg, boolean flipHorizontal, float originX, float originY) {
+    private void drawRotated(Texture texture, 
+                             float x, float y, float angleInDeg,
+                             boolean flipHorizontal, boolean flipVertical,
+                             float originX, float originY) {
         
         float w = texture.getWidth();
         float h = texture.getHeight();
         
         DrawUtil.batch.draw(texture, x - w * 0.5f, y - h * 0.5f, originX, originY, w, h,
-                1.0f, 1.0f, angleInDeg, 0, 0, (int) w, (int) h, flipHorizontal, false);
+                1.0f, 1.0f, angleInDeg, 0, 0, (int) w, (int) h, flipHorizontal, flipVertical);
         
     }
     

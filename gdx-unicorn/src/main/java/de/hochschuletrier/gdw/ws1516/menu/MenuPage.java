@@ -85,7 +85,18 @@ public class MenuPage extends Group {
         return slider;
     }
 
+    protected final void addLabeledTexture(String texture, String text,int x, int y,int modifier,int width,int height){
+        Label label = new Label(text,skin,"default");
+        Texture image = assetManager.getTexture(texture);
+        DecoImage decoImage = new DecoImage(image);
+        decoImage.setBounds(x, y+modifier,width,height);
+        label.setPosition(x+50, y+12);
+        addActor(decoImage);
+        addActor(label);
+        
+        
     
+    }
 
     protected final void addLeftAlignedButton(int x, int y, int width, int height, String text,Runnable runnable,String sound) {
         TextButton button = addButton(x, y, width, height, text, runnable, "default",sound);
@@ -116,10 +127,13 @@ public class MenuPage extends Group {
         
         ImageButton ib;
         if(tintable==true) {
+            Sprite upSprite = new Sprite(texture);
+            upSprite.setColor(Color.MAROON);
             Sprite downSprite = new Sprite(texture);
+            
             downSprite.setColor(Color.MAGENTA);
             // NICHT GUT FÜR PERFORMANCE!!
-            ib = new ImageButton(new SpriteDrawable(new Sprite(texture)), new SpriteDrawable(downSprite));
+            ib = new ImageButton(new SpriteDrawable(upSprite), new SpriteDrawable(downSprite));
         }
         
         else {

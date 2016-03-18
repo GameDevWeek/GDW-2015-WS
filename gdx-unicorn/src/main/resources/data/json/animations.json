@@ -1,18 +1,18 @@
 {
     "hunter_walking": {
-        "filename": "data/graphics/enemy_hunter.png",
-        "frames" : 1,
+        "filename": "data/graphics/spritesheets/hunter_walking.png",
+        "frames" : 5,
         "frameDuration": [0.15],
         "playType" : "LOOP",
-        "columns": 1,
+        "columns": 5,
         "rows" : 1
     },
     "paparazzi_walking": {
-        "filename": "data/graphics/enemy_paparazzi.png",
-        "frames" : 1,
+        "filename": "data/graphics/spritesheets/paparazzi_walking.png",
+        "frames" : 5,
         "frameDuration": [0.15],
         "playType" : "LOOP",
-        "columns": 1,
+        "columns": 5,
         "rows" : 1
     },
     "unicorn_walking": {
@@ -32,11 +32,11 @@
         "rows" : 1
     },
     "unicorn_falling": {
-        "filename": "data/graphics/unicorn_s.png",
-        "frames" : 1,
-        "frameDuration": [0.15],
-        "playType" : "LOOP",
-        "columns": 1,
+        "filename": "data/graphics/spritesheets/unicorn_jumping_fly_pink_spritesheet.png",
+        "frames" : 3,
+        "frameDuration": [0.10],
+        "playType" : "NORMAL",
+        "columns": 3,
         "rows" : 1
     },
     "unicorn_flying": {
@@ -48,11 +48,19 @@
         "rows": 1
     },
     "unicorn_jumping": {
-        "filename": "data/graphics/spritesheets/unicorn_jumping_pink_spritesheet.png",
-        "frames" : 10,
+        "filename": "data/graphics/spritesheets/unicorn_jumping_fly_pink_spritesheet.png",
+        "frames" : 3,
         "frameDuration": [0.10],
-        "playType" : "LOOP",
-        "columns": 10,
+        "playType" : "NORMAL",
+        "columns": 3,
+        "rows" : 1
+    },
+    "unicorn_landing": {
+        "filename": "data/graphics/spritesheets/unicorn_jumping_down_pink_spritesheet.png",
+        "frames" : 3,
+        "frameDuration": [0.1, 0.1, 0.1],
+        "playType" : "NORMAL",
+        "columns": 3,
         "rows" : 1
     },
     
