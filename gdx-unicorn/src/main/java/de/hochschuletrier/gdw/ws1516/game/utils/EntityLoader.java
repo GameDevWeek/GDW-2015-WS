@@ -24,15 +24,24 @@ public class EntityLoader implements MapLoader {
 
     @Override
     public void parseMap(TiledMap map, Game game, PooledEngine engine) {
+        logger.info("Hier startet parseMap");
         LinkedList<String> names = new LinkedList();
         for (Layer layer : map.getLayers()) {
             if (layer.isObjectLayer()) {
+                logger.info("Objektlayer");
                 for (LayerObject obj : layer.getObjects()) {
                     // only load tiles and rectangles
-                    LayerObject.Primitive primitive = obj.getPrimitive();
-                    if (primitive == LayerObject.Primitive.TILE || primitive == LayerObject.Primitive.POLYLINE) {
+                    logger.info("Objekte suchen");
+                    LayerObject.Primitive primitive = obj.getPrimitive(); /**
+                     * @author Tobias Gepp, Jerome Jähnig
+                     */
+                    // Welchen Zweck hat diese if-Abfrage? Ohne Abfrage werden Objekte erstellt.
+                    // Wird in Physicsloader geladen (bitte drinlassen)
+                    if (primitive == LayerObject.Primitive.TILE || primitive == LayerObject.Primitive.POLYLINE || primitive == LayerObject.Primitive.RECT) {
+                       
                         addEntity(engine, names, obj);
                     }
+                    
                 }
             }
         }
@@ -43,7 +52,7 @@ public class EntityLoader implements MapLoader {
 
     private void addEntity(PooledEngine engine, LinkedList<String> names, LayerObject obj) {
         String entity_type = obj.getProperty("entity_type", null);
-
+            logger.info("entity_type{}", entity_type);
         if (entity_type != null) {
             final String name = obj.getProperty("name", null);
             final float x = obj.getX() + obj.getWidth() * 0.5f;

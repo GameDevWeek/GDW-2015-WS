@@ -10,11 +10,10 @@ import de.hochschuletrier.gdw.ws1516.events.TestEvent.Listener;
 
 public class TriggerEvent {
     public static enum Action{
-        DEATH_ZONE("death_zone"),NONE(""),SPAWN_ZONE("spawn_zone");
+        DEATH_ZONE("death_zone"),NONE(""),SPAWN_ZONE("spawn_zone"),WINING_ZONE("win");
         private String identifier;
         Action(String s)
-        {
-            
+        {            
             identifier = s.toUpperCase();
         }
         public static Action toAction(String name)

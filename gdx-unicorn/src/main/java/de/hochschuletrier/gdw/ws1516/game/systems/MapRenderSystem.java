@@ -78,7 +78,6 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
         Main.getInstance().console.register(rainbowFrequency);
         Main.getInstance().console.register(rainbowAlpha);
         Main.getInstance().console.register(rainbowType);
-        rainbowHotkey.register();
         fancyRainbowHotkey.register();
     }
     
@@ -92,7 +91,6 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
         Main.getInstance().console.unregister(rainbowFrequency);
         Main.getInstance().console.unregister(rainbowAlpha);
         Main.getInstance().console.unregister(rainbowType);
-        rainbowHotkey.unregister();
         fancyRainbowHotkey.unregister();
     }
 
@@ -122,7 +120,11 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
     
     protected void endRainbow()
     {
-        startRainbow(0);
+        /**
+         * @author philipp -> gamelogic
+         * bad fix for rainbowmode continue in pause mode
+         */
+        rainbowDurationLeft = rainbowStartDuration = 0.0f;
     }
 
     protected void startRainbow(List<String> args) {
@@ -145,7 +147,11 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
     
     protected void startRainbow(float duration)
     {
-        rainbowDurationLeft = rainbowStartDuration = duration;
+        /**
+         * @author philipp -> gamelogic
+         * bad fix for rainbowmode continue in pause mode
+         */
+        rainbowDurationLeft = rainbowStartDuration = 100000.0f;
         startTime = TimeUtils.millis();
     }
     

@@ -1,5 +1,6 @@
 package de.hochschuletrier.gdw.ws1516.game;
 
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
 import org.slf4j.Logger;
@@ -31,10 +32,8 @@ import de.hochschuletrier.gdw.commons.tiled.LayerObject;
 import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
-import de.hochschuletrier.gdw.ws1516.events.HealEvent;
-import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
-import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
 import de.hochschuletrier.gdw.ws1516.events.PaparazziShootEvent;
+import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
 import de.hochschuletrier.gdw.ws1516.events.TriggerEvent.Action;
@@ -68,18 +67,13 @@ import de.hochschuletrier.gdw.ws1516.game.systems.RenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RespawnSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.ScoreSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.SoundSystem;
-import de.hochschuletrier.gdw.ws1516.game.systems.TextureRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.TriggerSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityCreator;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.MapLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
-import de.hochschuletrier.gdw.ws1516.menu.MenuOptions;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.DummyEnemyExecutionSystem;
-
-import java.util.ArrayList;
-import java.util.Iterator;
 
 public class Game extends InputAdapter {
 
@@ -99,7 +93,6 @@ public class Game extends InputAdapter {
     
     private static boolean PAUSE_ENGINE = false;
 
-    //private final Hotkey rainbowMode = new Hotkey(()->RainbowEvent.start(player),Input.Keys.F3,HotkeyModifier.CTRL);
 
 
     private final PooledEngine engine = new PooledEngine(GameConstants.ENTITY_POOL_INITIAL_SIZE,
@@ -133,8 +126,6 @@ public class Game extends InputAdapter {
 
 
     private final TriggerSystem triggerSystem = new TriggerSystem();
-    private final BulletSystem bulletSystem = new BulletSystem(engine);
-
     private final EntitySystem respawnSystem = new RespawnSystem();
     private final SoundSystem soundSystem = new SoundSystem(null);
     private final HitPointManagementSystem hitPointSystem = new HitPointManagementSystem();
@@ -144,6 +135,7 @@ public class Game extends InputAdapter {
     private final ScoreSystem scoreBoardSystem = new ScoreSystem();
     private final PlayerStateSystem playerStateSystem = new PlayerStateSystem();
     private final BubblegumSpitSystem bubblegumSpitSystem = new BubblegumSpitSystem(engine);
+    private final BulletSystem bulletSystem = new BulletSystem(engine);
     
     private TiledMap map;
 
@@ -193,26 +185,26 @@ public class Game extends InputAdapter {
         EntityCreator.setGame(this);
         EntityCreator.setEntityFactory(entityFactory);
         
-        loadMap("data/maps/demo_level_worked.tmx");
+        loadMap("data/maps/lvl1.tmx");
         mapRenderSystem.initialzeRenderer(map, "map_background", cameraSystem);
         
         //test:
-        Entity unicorn = EntityCreator.createEntity("unicorn", 1000, 300);
-        Entity entity=EntityCreator.createEntity("hunter", 1000, 100);
+        Entity unicorn = EntityCreator.createEntity("unicorn", 9000, 500);
+        Entity entity=EntityCreator.createEntity("hunter", 9000, 700);
         PathComponent pathComponent =ComponentMappers.path.get(entity);
-        pathComponent.points.add(new Vector2(1000, 100));
-        pathComponent.points.add(new Vector2(800,100));
-        Entity papa = EntityCreator.createEntity("tourist", 1700, 100);
-        healCheating = new Hotkey(() -> HealEvent.emit(unicorn, 1), Input.Keys.F4,
-        HotkeyModifier.CTRL);
-        healCheating.register();
-        rainbow = new Hotkey(() -> RainbowEvent.start(unicorn), Input.Keys.F3,
-                HotkeyModifier.CTRL);
-        rainbow.register();
-        papa = EntityCreator.createEntity("tourist", 2000, 100);
-        pathComponent =ComponentMappers.path.get(papa);
-        pathComponent.points.add(new Vector2(2000, 100));
-        pathComponent.points.add(new Vector2(2200,100));
+        pathComponent.points.add(new Vector2(9000, 100));
+        pathComponent.points.add(new Vector2(9200,100));
+        
+//        healCheating = new Hotkey(() -> HealEvent.emit(unicorn, 1), Input.Keys.F4,
+//        HotkeyModifier.CTRL);
+//        healCheating.register();
+//        rainbow = new Hotkey(() -> RainbowEvent.start(unicorn), Input.Keys.F3,
+//                HotkeyModifier.CTRL);
+//        rainbow.register();
+//        Entity papa = EntityCreator.createEntity("tourist", 2000, 100);
+//        pathComponent =ComponentMappers.path.get(papa);
+//        pathComponent.points.add(new Vector2(2000, 100));
+//        pathComponent.points.add(new Vector2(2200,100));
 
     }
 
