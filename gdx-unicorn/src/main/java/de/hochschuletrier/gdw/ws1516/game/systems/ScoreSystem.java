@@ -20,6 +20,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
 import de.hochschuletrier.gdw.ws1516.events.FinalScoreEvent;
 import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
+import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
 /*
  * TODO listeners für Objekte einsammeln und zählen in diesem hoch
@@ -105,6 +106,7 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
             scoreComponent.killedObstacles += value;
                 break;
         }
+        
         FinalScoreEvent.emit(getFinalScore(),scoreComponent);
     }
 

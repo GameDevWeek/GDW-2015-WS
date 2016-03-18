@@ -16,20 +16,25 @@ import de.hochschuletrier.gdw.commons.gdx.audio.SoundInstance;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.components.CollectableComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.SoundEmitterComponent;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.GameLogicTest;
+import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
+import de.hochschuletrier.gdw.ws1516.events.DeathEvent.Listener;
 import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
 
 /**
  * @author phili_000
  *
  */
-public class SoundSystem extends IteratingSystem implements SoundEvent.Listener {
+public class SoundSystem extends IteratingSystem implements SoundEvent.Listener, Listener {
 
     private static final Logger logger = LoggerFactory.getLogger(GameLogicTest.class);
     private Vector2 camera;
     private AssetManagerX assetManager;
+    private Engine engine;
 
     public SoundSystem(Vector2 camera) {
         super(Family.all(SoundEmitterComponent.class, PositionComponent.class).get());
@@ -41,13 +46,16 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener 
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
         SoundEvent.register(this);
-        
+        DeathEvent.register(this);     
+        this.engine = engine;
     }
 
     @Override
     public void removedFromEngine(Engine engine) {
         super.removedFromEngine(engine);
         SoundEvent.unregister(this);
+        DeathEvent.unregister(this);
+        this.engine = null;
     };
     
     @Override
@@ -68,7 +76,6 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener 
             }
         }
         
-        soundEmitter.emitter.setPosition(position.x, position.y, 0);
         soundEmitter.emitter.update();
         
     }
@@ -86,8 +93,8 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener 
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        Vector3 pos = new Vector3(0, 0, 0);
-        SoundEmitter.setListenerPosition(pos.x, pos.y, pos.z, SoundEmitter.Mode.STEREO);
+        Vector2 pos = CameraSystem.getCameraPosition();
+        SoundEmitter.setListenerPosition(pos.x, pos.y, 10, SoundEmitter.Mode.STEREO);
         SoundEmitter.updateGlobal();
     };
 
@@ -96,12 +103,18 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener 
         SoundEmitterComponent soundEmitter = ComponentMappers.soundEmitter.get(entity);
         // soundEmitter.emitter.play(assetManager.getSound(sound), b);
         // System.out.println(soundEmitter.emitter);
-        SoundInstance soundInstance = soundEmitter.emitter.play(assetManager.getSound(sound), b);
-        if (soundInstance != null) {
-            soundInstance.setVolume(100f);
+        if ( soundEmitter  != null )
+        {
+            SoundInstance soundInstance = soundEmitter.emitter.play(assetManager.getSound(sound), b);
+            if (soundInstance != null) {
+                soundInstance.setVolume(100f);
+            }
+            soundEmitter.soundInstances.add(soundInstance);
+            soundEmitter.soundNames.add(sound);
+        }else
+        {
+            logger.warn("Entity {} tried to play a sound( {} ), but has no SoundEmitter.",entity,sound);
         }
-        soundEmitter.soundInstances.add(soundInstance);
-        soundEmitter.soundNames.add(sound);
 
     }
 
@@ -128,4 +141,26 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener 
             }
         }
     }
+
+    @Override
+    public void onDeathEvent(Entity entity) {
+        Entity player =  engine.getEntitiesFor( Family.all(PlayerComponent.class).get() ).first();
+        CollectableComponent collect = ComponentMappers.collectable.get(entity);
+        if (player != null)
+        {
+            if ( collect != null )
+            {
+                switch(collect.type )
+                {
+                    case CHOCO_COIN:
+                        
+                        SoundEvent.emit("eat_cho", player);
+                        break;
+                }
+            }
+        }
+    }
+    
+    
+    
 }
