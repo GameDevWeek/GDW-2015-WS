@@ -19,6 +19,7 @@ import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixModifierCompon
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
 import de.hochschuletrier.gdw.ws1516.events.BlockingGumSpawnEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.BlockingGumComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.TextureComponent;
@@ -87,6 +88,7 @@ public class BlockingGumSystem extends IteratingSystem implements BlockingGumSpa
                                           .friction(0.0f)
                                           .restitution(0.0f)
                                           .shapeBox(64.0f, 30.0f);
+            fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_BLOCKINGGUM;
             blockingBody.createFixture(fixtureDef);
             
             //Rotate to match normal

@@ -45,6 +45,7 @@ public class GameConstants {
     //Physic collision groups
     public static final short PHYSIX_COLLISION_SPIT = -1;
     public static final short PHYSIX_COLLISION_UNICORN = -1;
+    public static final short PHYSIX_COLLISION_BLOCKINGGUM = -1;
     
     // Bullet system
     public static final float BULLET_SPEED = (50.0f / 43.0f) * 15.0f;
