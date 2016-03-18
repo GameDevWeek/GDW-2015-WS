@@ -61,6 +61,9 @@ public class PhysixBodyComponentFactory extends
             case "enemy":
                 addEnemy(param, entity, properties);
                 break;
+            case "platform":
+                addPlatform(param, entity, properties);
+                break;
             default:
                 logger.error("Unknown type: {}", type);
                 break;
@@ -95,7 +98,7 @@ public class PhysixBodyComponentFactory extends
         
         // mainBody
            fixtureDef = new PhysixFixtureDef(physixSystem)
-            .density(0.68f).friction(0f).restitution(0f)
+            .density(0.68f).friction(1.0f).restitution(0f)
             .shapeCircle(width * 0.25f, new Vector2(1, 0));
            fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
             fixture = playerBody.createFixture(fixtureDef);
@@ -166,6 +169,32 @@ public class PhysixBodyComponentFactory extends
         fixture.setUserData("foot");
 
         entity.add(playerBody);
+    }
+    
+    private void addPlatform(EntityFactoryParam param, Entity entity,
+            SafeProperties properties) {
+        
+        PhysixBodyComponent bodyComponent = engine.createComponent(PhysixBodyComponent.class);
+        PhysixBodyDef bodyDef = new PhysixBodyDef(BodyDef.BodyType.KinematicBody, physixSystem)
+        .position(param.x, param.y).fixedRotation(false);
+        bodyComponent.init(bodyDef, physixSystem, entity);
+        
+        float tilesWidth = properties.getFloat("sizeWidth", 1.0f);
+        float tilesHeight = properties.getFloat("sizeHeight", 1.0f);
+        
+      
+        PhysixFixtureDef fixtureDef = getFixtureDef(properties)
+                                      .friction(100.0f)
+                                      .shapeBox(GameConstants.TILESIZE_X * tilesWidth,GameConstants.TILESIZE_Y * tilesHeight);
+        
+        
+        
+        bodyComponent.createFixture(fixtureDef);
+        
+        logger.debug("{}", fixtureDef.friction);       
+        
+        
+        entity.add(bodyComponent);
     }
 
     private void addCircle(EntityFactoryParam param, Entity entity,

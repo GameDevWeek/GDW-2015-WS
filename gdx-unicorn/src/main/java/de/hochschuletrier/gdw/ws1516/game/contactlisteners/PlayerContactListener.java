@@ -24,10 +24,14 @@ public class PlayerContactListener extends PhysixContactAdapter {
     private static final Logger logger = LoggerFactory.getLogger(PlayerContactListener.class);
     // PooledEngine engine;
     
+    //contact count for player/world contact fix jumping bug only works with singlePlayer
+    int contactCount=0;
     public void beginContact(PhysixContact contact) {
         Entity myEntity = contact.getMyComponent().getEntity();
-        
         if (contact.getOtherComponent() == null) {
+            if (ComponentMappers.player.has(myEntity)){
+                contactCount++;
+            }
             if (ComponentMappers.movement.get(myEntity).state == State.FALLING || ComponentMappers.movement.get(myEntity).state == State.JUMPING) {                
                 // for Jumps:
                 if ("foot".equals(contact.getMyFixture().getUserData())) {
@@ -115,7 +119,10 @@ public class PlayerContactListener extends PhysixContactAdapter {
         Entity player = contact.getMyComponent().getEntity();
         
         if (contact.getOtherComponent() == null) {
-            if (ComponentMappers.movement.get(player).state == State.ON_GROUND ) {                
+            if (ComponentMappers.player.has(player)){
+                contactCount--;
+            }
+            if (ComponentMappers.movement.get(player).state == State.ON_GROUND&&contactCount==0 ) {                
                 // for Jumps:
                 if ("foot".equals(contact.getMyFixture().getUserData())) {
                     if (!contact.getOtherFixture().isSensor()) {

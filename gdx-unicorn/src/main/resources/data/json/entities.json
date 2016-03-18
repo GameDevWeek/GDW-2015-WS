@@ -26,7 +26,7 @@
                 "type": "player",
                 "size": 30,
                 "density": 5,
-                "friction": 0.2,
+                "friction": 100.0,
                 "restitution": 0.4
             },
             "CameraTarget": {},
@@ -111,6 +111,29 @@
             }
         }
     },
+    "platform": {
+        "meta": {},
+        "components": {
+            "Position": {},
+        "Platform":{},
+        "Path":{},
+            "Texture": {
+                "texture" : "bubble"
+            },
+            "PhysixBody": {
+                "type": "platform",
+                "size": 64,
+                "density": 0,
+                "friction": 100.0,
+                "restitution": 0,
+                "sizeWidth" : 4,
+                "sizeHeight" : 1
+            },
+            "RenderLayer": {
+                "layer": 50
+            }
+        }
+    },
     "bubblegum_blue": {
         "meta": {},
         "components": {
@@ -162,6 +185,19 @@
             "BubblegumSpitComponent" : {}
         }
     },
+    "bubblegum_spitting_rainbow": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Texture": {
+                "texture": "bubblegum_spitting_rainbow"
+            },
+            "RenderLayer": {
+                "layer": 60
+            },
+            "BubblegumSpitComponent" : {}
+        }
+    },
     "bullet" : {
         "meta": {},
         "components": {
@@ -173,6 +209,40 @@
                 "layer": 60
             },
             "Bullet" : {}
+        }
+    },
+    "blockingGum" : {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Texture": {
+                "texture": "gum_ground",
+                "flipHorizontal" : true,
+                "flipVertical" : false
+            },
+            "RenderLayer": {
+                "layer": 60
+            },
+            "BlockingGum" : {
+                "timeToDespawn" : 3.0
+            }
+        }
+    },
+    "blockingGumRainbow" : {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Texture": {
+                "texture": "gum_ground_rainbow",
+                "flipHorizontal" : true,
+                "flipVertical" : false
+            },
+            "RenderLayer": {
+                "layer": 60
+            },
+            "BlockingGum" : {
+                "timeToDespawn" : 3.0
+            }
         }
     },
     "chocolate": {
