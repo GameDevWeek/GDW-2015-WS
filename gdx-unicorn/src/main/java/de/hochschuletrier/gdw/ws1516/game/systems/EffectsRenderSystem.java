@@ -20,6 +20,7 @@ import de.hochschuletrier.gdw.commons.gdx.input.hotkey.Hotkey;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.HotkeyModifier;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.Main;
+import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.PaparazziShootEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
@@ -29,7 +30,7 @@ import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 
 
 
-public class EffectsRenderSystem extends IteratingSystem implements PaparazziShootEvent.Listener {
+public class EffectsRenderSystem extends IteratingSystem implements PaparazziShootEvent.Listener, DeathEvent.Listener {
     
     private long startTime;
     
@@ -72,6 +73,7 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
     public void addedToEngine(Engine engine) {
 
         PaparazziShootEvent.register(this);
+        DeathEvent.register(this);
 
         paparazziHotkey.register();
         
@@ -85,6 +87,7 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
     public void removedFromEngine(Engine engine) {
         
         PaparazziShootEvent.unregister(this);
+        DeathEvent.unregister(this);
 
         paparazziHotkey.unregister();
         
@@ -92,6 +95,60 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
         Main.getInstance().console.unregister(paparazziConsole);
         
         super.removedFromEngine(engine);
+    }
+    
+    @Override
+    public void onPaparazziShootEvent(float distance) {
+        startPaparazzi(distance, GameConstants.PAPARAZZI_DURATION, new Vector2(distance, distance*2));
+    }
+    
+    private void startPaparazzi(float distance, float duration, Vector2 seed)
+    {
+        
+        paparazziEffectDuration = paparazziEffectRemainingDuration = duration;
+        paparazziEffectSeed = seed;
+
+        float maxRange = GameConstants.GLOBAL_VISION * GameConstants.UNICORN_SIZE;
+        float minRange = GameConstants.UNICORN_SIZE;
+        paparazziIntensity = (1 - Math.max((distance - minRange) / maxRange, 0));
+        
+        // debug
+        System.out.println(paparazziIntensity);
+    }
+    
+    private void resetPaparazzi()
+    {
+        paparazziEffectDuration = paparazziEffectRemainingDuration = paparazziIntensity = 0.0f;
+    }
+
+    protected void consolePaparazzi(List<String> args) {
+        float duration;
+        final float stdDuration = 2.0f;
+        if(args.size() <= 1)
+        {
+            duration = stdDuration;
+        }
+        else
+        {
+            try
+            {
+                duration = Float.parseFloat(args.get(1));
+            }
+            catch(Exception e)
+            {
+                duration = stdDuration;
+            }
+        }
+        paparazziEffectSeed.add(3.6f, 7.8f);
+        startPaparazzi(500, duration, paparazziEffectSeed);
+    }
+
+    @Override
+    public void onDeathEvent(Entity entity) {
+        if (ComponentMappers.player.has(entity))
+        {
+            resetPaparazzi();
+        }
     }
     
     private Vector2 cameraScreenToShaderScreenCoords(Vector2 in)
@@ -133,47 +190,6 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
         DrawUtil.setShader(null);
         
         super.update(deltaTime);
-    }
-    
-    @Override
-    public void onPaparazziShootEvent(float distance) {
-        startPaparazzi(distance, GameConstants.PAPARAZZI_DURATION, new Vector2(distance, distance*2));
-    }
-    
-    private void startPaparazzi(float distance, float duration, Vector2 seed)
-    {
-        
-        paparazziEffectDuration = paparazziEffectRemainingDuration = duration;
-        paparazziEffectSeed = seed;
-
-        float maxRange = GameConstants.GLOBAL_VISION * GameConstants.UNICORN_SIZE;
-        float minRange = GameConstants.UNICORN_SIZE;
-        paparazziIntensity = (1 - Math.max((distance - minRange) / maxRange, 0));
-        
-        // debug
-        System.out.println(paparazziIntensity);
-    }
-
-    protected void consolePaparazzi(List<String> args) {
-        float duration;
-        final float stdDuration = 2.0f;
-        if(args.size() <= 1)
-        {
-            duration = stdDuration;
-        }
-        else
-        {
-            try
-            {
-                duration = Float.parseFloat(args.get(1));
-            }
-            catch(Exception e)
-            {
-                duration = stdDuration;
-            }
-        }
-        paparazziEffectSeed.add(3.6f, 7.8f);
-        startPaparazzi(500, duration, paparazziEffectSeed);
     }
 
 }

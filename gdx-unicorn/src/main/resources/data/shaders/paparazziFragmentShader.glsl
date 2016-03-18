@@ -13,9 +13,12 @@ precision mediump float;
 
 // CONSTANTS TO ADJUST SHADER RESULTS
 #define CIRCLE_ANIMATION_GROW_FACTOR 0.1
-#define CIRCLE_MAX_AMOUNT_FACTOR 1.1
-#define CIRCLE_RADIUS_RANGE_FACTOR_START 1.2 
-#define CIRCLE_RADIUS_RANGE_FACTOR_END 2.2
+#define CIRCLE_MAX_AMOUNT_FACTOR 1.3
+// lerps from start min to end min, ...
+#define CIRCLE_RADIUS_RANGE_FACTOR_START_MIN 0.5 
+#define CIRCLE_RADIUS_RANGE_FACTOR_START_MAX 1.0 
+#define CIRCLE_RADIUS_RANGE_FACTOR_END_MIN 1.8
+#define CIRCLE_RADIUS_RANGE_FACTOR_END_MAX 2.6
 // threshold in px
 #define ANTI_ALIASING_THRESHOLD 2.0
 // random chosen numbers
@@ -63,6 +66,7 @@ float   getOutroModeAnimProgress();
 float   getPassedEffectTime();
 float   getRemainingEffectDuration();
 float   getDistance(vec2 circleCenter);
+float   lerp(float a, float b, float t);
 float   rand(vec2 seed);
 vec2    rand2(vec2 seed);
 vec2    convertNormalizedToScreen(vec2 normalized);
@@ -173,23 +177,21 @@ float getAmountOfCircles()
 {
     return 30 * CIRCLE_MAX_AMOUNT_FACTOR * 
         (
-            // u_paparazziIntensity is taken 20 percent into account
-            (1 - clamp(u_paparazziIntensity, 0.0, 1.0)) * 0.2 
-            + 0.8
+            // u_paparazziIntensity is taken 40 percent into account
+            (1 - clamp(u_paparazziIntensity, 0.0, 1.0)) * 0.4 
+            + 0.6
         );
 } 
 
 // returns vec2(minRadius, maxRadius)
 vec2 getRadiusRange()
 {
-    float  baseFactor = max(u_frameDimension.x, u_frameDimension.y) * 0.0625; // 1/16
-    baseFactor *=
-        (
-            // u_paparazziIntensity is taken 40 percent into account
-            (clamp(u_paparazziIntensity, 0.0, 1.0)) * 0.4 
-            + 0.6
-        );
-    return vec2(baseFactor * CIRCLE_RADIUS_RANGE_FACTOR_START, baseFactor * CIRCLE_RADIUS_RANGE_FACTOR_END);
+    float baseFactor = max(u_frameDimension.x, u_frameDimension.y) * 0.0625; // 1/16
+    // u_paparazziIntensity
+    float rangeMin = lerp(CIRCLE_RADIUS_RANGE_FACTOR_START_MIN, CIRCLE_RADIUS_RANGE_FACTOR_END_MIN, u_paparazziIntensity);
+    float rangeMax = lerp(CIRCLE_RADIUS_RANGE_FACTOR_START_MAX, CIRCLE_RADIUS_RANGE_FACTOR_END_MAX, u_paparazziIntensity);
+    
+    return vec2(baseFactor * rangeMin, baseFactor * rangeMax);
 }
 
 // helper functions
@@ -241,6 +243,12 @@ float getRemainingEffectDuration()
 float getDistance(vec2 circleCenter)
 {
     return length(gl_FragCoord.xy - circleCenter);
+}
+
+// lerps from a [t = 0] to b [t = 1]
+float lerp(float a, float b, float t)
+{
+    return a * (1 - t) + b * t;
 }
 
 // returns [0.0, 1.0]
