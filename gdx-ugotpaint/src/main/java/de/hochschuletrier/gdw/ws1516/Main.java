@@ -107,6 +107,11 @@ public class Main extends StateBasedGame {
         assetManager.loadAssetList("data/json/particleEffects.json", ParticleEffect.class,null);
     }
 
+    public static void playMusic(String name) {
+        Music music = getInstance().getAssetManager().getMusic(name);
+        MusicManager.play(music, GameConstants.MUSIC_FADE_TIME);
+    }
+    
     private void setupGdx() {
         KeyUtil.init();
         Gdx.graphics.setContinuousRendering(true);
@@ -147,8 +152,6 @@ public class Main extends StateBasedGame {
         final MainMenuState mainMenuState = new MainMenuState(assetManager);
         addPersistentState(mainMenuState);
         changeState(mainMenuState, null, null);
-        
-        MusicManager.play(assetManager.getMusic("menu"), GameConstants.MUSIC_FADE_TIME);
     }
 
     @Override

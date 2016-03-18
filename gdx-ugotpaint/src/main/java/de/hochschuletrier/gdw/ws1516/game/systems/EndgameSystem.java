@@ -2,6 +2,7 @@ package de.hochschuletrier.gdw.ws1516.game.systems;
 
 import com.badlogic.ashley.systems.IntervalSystem;
 import de.hochschuletrier.gdw.ws1516.Main;
+import de.hochschuletrier.gdw.ws1516.events.SetCountdownEvent;
 import de.hochschuletrier.gdw.ws1516.game.utils.Canvas;
 
 public class EndgameSystem extends IntervalSystem {
@@ -16,8 +17,8 @@ public class EndgameSystem extends IntervalSystem {
     protected void updateInterval() {
         canvas.updatePctFilled();
         float filled = canvas.getPctFilled();
-        if(filled > 0.8) {
-            // todo
+        if(filled > 0.8f) {
+            SetCountdownEvent.emit(10);
         }
     }
 }

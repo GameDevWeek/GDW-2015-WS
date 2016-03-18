@@ -86,6 +86,7 @@ public class Game extends InputAdapter {
         engine.addSystem(new KeyboardInputSystem());
         engine.addSystem(new InputSystem());
         engine.addSystem(new UpdateSoundEmitterSystem());
+        engine.addSystem(new CountdownSystem(GameConstants.PRIORITY_HUD));
         engine.addSystem(pickupSystem);
         engine.addSystem(splashSystem);
         engine.addSystem(playerDeathSystem);
