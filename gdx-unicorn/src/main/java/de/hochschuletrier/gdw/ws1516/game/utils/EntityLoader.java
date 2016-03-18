@@ -37,7 +37,7 @@ public class EntityLoader implements MapLoader {
                      */
                     // Welchen Zweck hat diese if-Abfrage? Ohne Abfrage werden Objekte erstellt.
                     // Wird in Physicsloader geladen (bitte drinlassen)
-                    if (primitive == LayerObject.Primitive.TILE || primitive == LayerObject.Primitive.POLYLINE || primitive == LayerObject.Primitive.RECT) {
+                    if (primitive == LayerObject.Primitive.TILE || primitive == LayerObject.Primitive.POLYLINE) {
                        
                         addEntity(engine, names, obj);
                     }
