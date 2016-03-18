@@ -42,10 +42,12 @@ public class LevelSelectionPage extends MenuPage {
         level_previews[2] = assetManager.getTexture("paparazzi");
         level_previews[3] = assetManager.getTexture("bubble");
         
-        level_preview = createImageButton(level_previews[level_preview_index], 450, 250, 50, 50, this::startGame, "einhornMotivated", true, false);
+        level_preview = createImageButton(level_previews[level_preview_index], 450, 250, 50, 50, this::nextLevel, "einhornMotivated", true, false);
                     
         createImageButton(buttonBack_texture, 430, 230, 50, 50, this::previousLevel, "buttonSound", true, true);
         createImageButton(buttonNext_texture, 450+level_preview_texture.getWidth(), 230, 50, 50, this::nextLevel, "buttonSound", true, true);
+        
+        addCenteredButton(512, 200, 50, 50, "Spielen", this::startGame, "einhornMotivated");
         addLeftAlignedButton(55, 40, 100, 50, "Zurück", () -> menuManager.popPage(),"zurueck");
         
     }
