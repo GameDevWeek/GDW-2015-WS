@@ -103,13 +103,6 @@ public class PhysixBodyComponentFactory extends
            fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
             fixture = playerBody.createFixture(fixtureDef);
             
-        // head
-        fixtureDef = new PhysixFixtureDef(physixSystem)
-         .density(0.2f).friction(0f).restitution(0f)
-         .shapeCircle(width * 0.12f, new Vector2(width * 0.21f, height * -0.3f));
-        fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
-        fixture = playerBody.createFixture(fixtureDef);
-        fixture.setUserData("head");
         
         // jump contact (sensor)
         fixtureDef = new PhysixFixtureDef(physixSystem)
@@ -270,12 +263,5 @@ public class PhysixBodyComponentFactory extends
         Fixture fixture = playerBody.createFixture(fixtureDef);
         fixture.setUserData("horn");
         
-        // head
-        fixtureDef = new PhysixFixtureDef(physixSystem)
-         .density(0.2f).friction(0f).restitution(0f)
-         .shapeCircle(width * 0.12f, new Vector2(dir * width * 0.21f, height * -0.3f));
-        fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
-        fixture = playerBody.createFixture(fixtureDef);
-        fixture.setUserData("head");
     }
 }
