@@ -30,6 +30,12 @@ public class AnimationRenderSystem extends SubSystem implements MovementStateCha
         PhysixBodyComponent physics = ComponentMappers.physixBody.get(entity);
         
         animation.stateTime += deltaTime;
+        if(movement != null && movement.state != animation.lastRenderedState)
+        {
+            animation.resetStateTime();
+            animation.lastRenderedState = movement.state;
+        }
+        
         TextureRegion keyFrame = null;
 
         String stateKey = movement.state.toString().toLowerCase();
@@ -106,12 +112,13 @@ public class AnimationRenderSystem extends SubSystem implements MovementStateCha
         {
             return null;
         }
-        float normalized = physics.getLinearVelocity().y / 200f;
+        float normalized = physics.getLinearVelocity().y / 500f;
         if(normalized < -1f)
             normalized = -1f;
         else if(normalized > 1f)
             normalized = 1f;
-        normalized = (normalized + 1) * 0.5f; 
+        normalized = (normalized + 1) * 0.5f;
+        System.out.println(normalized);
         return animationExtended.getKeyFrame(normalized *  animationExtended.animationDuration);
     }
 

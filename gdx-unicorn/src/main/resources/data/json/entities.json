@@ -20,7 +20,7 @@
                 "flying": "unicorn_flying",
                 "falling": "unicorn_falling", 
                 "jumping": "unicorn_jumping",
-                "landing": "unicorn_idle"
+                "landing": "unicorn_landing"
             },
             "PhysixBody": {
                 "type": "player",
