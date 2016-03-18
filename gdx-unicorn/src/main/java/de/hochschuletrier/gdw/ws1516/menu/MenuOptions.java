@@ -74,7 +74,7 @@ public class MenuOptions extends MenuPage {
             }
         });
       
-        addLeftAlignedButton(xOffset, 40, 100, 50, "Menü", () -> menuManager.popPage(), "buttonSound");
+        addLeftAlignedButton(xOffset, 40, 100, 50, "Zurück", () -> menuManager.popPage(), "zurueck");
     }
 
     public void soundTest() {
