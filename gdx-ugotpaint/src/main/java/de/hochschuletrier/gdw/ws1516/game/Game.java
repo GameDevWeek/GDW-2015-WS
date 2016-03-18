@@ -40,7 +40,7 @@ public class Game extends InputAdapter {
     private final SplashSystem splashSystem = new SplashSystem(this);
     private final PlayerDeathSystem playerDeathSystem = new PlayerDeathSystem();
     private final ParticleRenderSystem particleRenderSystem = new ParticleRenderSystem(this, GameConstants.PRIORITY_ANIMATIONS-1);
-
+    private final EndExplosionSystem endExplosionSystem = new EndExplosionSystem();
 
     private final InputForwarder inputForwarder = new InputForwarder();
 
@@ -94,6 +94,7 @@ public class Game extends InputAdapter {
         engine.addSystem(splashSystem);
         engine.addSystem(playerDeathSystem);
         engine.addSystem(particleRenderSystem);
+        engine.addSystem(endExplosionSystem);
     }
 
     public void update(float delta) {
