@@ -33,7 +33,6 @@ varying LOWP vec2    v_texCoords;
 
 // standard frame dimensions in unicorn game 1024 x 600
 uniform LOWP vec2    u_frameDimension;
-uniform LOWP float   u_time;
 uniform LOWP float   u_effectDuration;
 uniform LOWP float   u_remainingEffectDuration;
 uniform LOWP vec2    u_paparazziSeed;
@@ -71,7 +70,6 @@ vec2    convertNormalizedToScreen(vec2 normalized);
 void main()
 {
     // prevent LibGDX from throwing "uniform not used" exception
-    float time = u_time;
     texture2D(u_texture, v_texCoords);
     
     float fragAlpha;

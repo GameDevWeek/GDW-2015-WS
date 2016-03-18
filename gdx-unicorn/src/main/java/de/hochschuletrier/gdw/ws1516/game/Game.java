@@ -96,8 +96,6 @@ public class Game extends InputAdapter {
             HotkeyModifier.CTRL);
     private Hotkey healCheating = null;
     private Hotkey rainbow=null;
-    private final Hotkey paparazzi = new Hotkey(()->PaparazziShootEvent.emit(1.0f), Input.Keys.F9,
-            HotkeyModifier.CTRL);
     
     private static boolean PAUSE_ENGINE = false;
 
@@ -158,7 +156,6 @@ public class Game extends InputAdapter {
             scoreCheating.register();
             pauseGame.register();
             winGameCheat.register();
-            paparazzi.register();
         }
     }
 
@@ -166,8 +163,6 @@ public class Game extends InputAdapter {
         togglePhysixDebug.unregister();
         scoreCheating.unregister();
         pauseGame.unregister();
-        rainbow.unregister();
-        paparazzi.unregister();
         healCheating.unregister();
         winGameCheat.unregister();
         Main.getInstance().console.unregister(physixDebug);

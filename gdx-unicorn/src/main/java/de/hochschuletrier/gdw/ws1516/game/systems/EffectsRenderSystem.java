@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -18,6 +19,8 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import de.hochschuletrier.gdw.commons.devcon.ConsoleCmd;
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarFloat;
+import de.hochschuletrier.gdw.commons.gdx.input.hotkey.Hotkey;
+import de.hochschuletrier.gdw.commons.gdx.input.hotkey.HotkeyModifier;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.events.PaparazziShootEvent;
@@ -39,9 +42,13 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
     
     private Texture screenOverlayWhiteRect;
     
-    private final ConsoleCmd paparazzi = new ConsoleCmd("pap", 0, "Usage: pap (duration) - Activates paparazzi mode for (duration) seconds") { @Override public void execute(List<String> args) { startPaparazzi(args); } };
-    private final CVarFloat paparazziIntensity = new CVarFloat("paparazziIntensity", 1.0f, 0.0f, Float.MAX_VALUE, 0, "");
-    private float currentPaparazziSeed;
+    private final ConsoleCmd paparazziConsole = new ConsoleCmd("pap", 0, "Usage: pap (duration) - Activates paparazzi mode for (duration) seconds") { @Override public void execute(List<String> args) { consolePaparazzi(args); } };
+    private float paparazziIntensity = 0.0f;
+    private Vector2 currentPaparazziSeed;
+    
+
+    private final Hotkey paparazziHotkey = new Hotkey(()->PaparazziShootEvent.emit(1.0f), Input.Keys.F9,
+            HotkeyModifier.CTRL);
 
     @SuppressWarnings("unchecked")
     public EffectsRenderSystem(int priority) {
@@ -66,20 +73,19 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
     
     @Override
     public void onPaparazziShootEvent(float distance) {
-        List<String> l = new ArrayList<>();
-        l.add("");
-        l.add(Float.toString(distance));
-        startPaparazzi(l);
+        startPaparazzi(distance, 2.0f, new Vector2(distance, distance*2));
+        System.out.println(distance);
     }
     
     @Override
     public void addedToEngine(Engine engine) {
 
         PaparazziShootEvent.register(this);
+
+        paparazziHotkey.register();
         
         //DEBUG
-        Main.getInstance().console.register(paparazzi);
-        Main.getInstance().console.register(paparazziIntensity);
+        Main.getInstance().console.register(paparazziConsole);
         
         super.addedToEngine(engine);
     }
@@ -88,10 +94,11 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
     public void removedFromEngine(Engine engine) {
         
         PaparazziShootEvent.unregister(this);
+
+        paparazziHotkey.unregister();
         
         //DEBUG
-        Main.getInstance().console.unregister(paparazzi);
-        Main.getInstance().console.unregister(paparazziIntensity);
+        Main.getInstance().console.unregister(paparazziConsole);
         
         super.removedFromEngine(engine);
     }
@@ -120,14 +127,12 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
                 // color set as RGBA [0.0, 1.0]. alpha is used as maximum result alpha for overlay.
                 float[] paparazziColor = new float[]{ 1.0f, 1.0f, 1.0f, 1.0f };
                 shader.setUniform4fv("u_paparazziColor", paparazziColor, 0, 4);
-                float[] paparazziSeed = new float[]{ currentPaparazziSeed, currentPaparazziSeed };
+                float[] paparazziSeed = new float[]{ currentPaparazziSeed.x, currentPaparazziSeed.y };
                 shader.setUniform2fv("u_paparazziSeed", paparazziSeed, 0, 2);
                 Vector2 shaderCoords = cameraScreenToShaderScreenCoords(cameraTargetScreenPos);
                 float[] paparazziOverlaySafeCircle = new float[]{ shaderCoords.x, shaderCoords.y , 100.0f };
                 shader.setUniform3fv("u_paparazziOverlaySafeCircle", paparazziOverlaySafeCircle, 0, 3);
-                shader.setUniformf("u_paparazziIntensity", paparazziIntensity.get());
-                
-                shader.setUniformf("u_time", (float)TimeUtils.timeSinceMillis(startTime) * 0.001f);
+                shader.setUniformf("u_paparazziIntensity", paparazziIntensity);
             }
             
             DrawUtil.batch.draw(screenOverlayWhiteRect, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -138,29 +143,36 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
         
         super.update(deltaTime);
     }
+    
+    private void startPaparazzi(float distance, float duration, Vector2 seed)
+    {
+        paparazziDurationLeft = paparazziStartDuration = duration;
+        
+        currentPaparazziSeed = seed;
+        
+        paparazziIntensity = (1 - Math.max((distance - 100) / 500, 0));
+    }
 
-    protected void startPaparazzi(List<String> args) {
+    protected void consolePaparazzi(List<String> args) {
+        float duration;
         final float stdDuration = 2.0f;
         if(args.size() <= 1)
         {
-            paparazziStartDuration = stdDuration;
+            duration = stdDuration;
         }
         else
         {
             try
             {
-                paparazziStartDuration = Float.parseFloat(args.get(1));
+                duration = Float.parseFloat(args.get(1));
             }
             catch(Exception e)
             {
-                paparazziStartDuration = stdDuration;
+                duration = stdDuration;
             }
         }
-        paparazziDurationLeft = paparazziStartDuration;
-        startTime = TimeUtils.millis();
-        
-        currentPaparazziSeed += 0.2;
-        currentPaparazziSeed = currentPaparazziSeed % Float.MAX_VALUE;
+        currentPaparazziSeed.add(3.6f, 7.8f);
+        startPaparazzi(500, duration, currentPaparazziSeed);
     }
 
 }
