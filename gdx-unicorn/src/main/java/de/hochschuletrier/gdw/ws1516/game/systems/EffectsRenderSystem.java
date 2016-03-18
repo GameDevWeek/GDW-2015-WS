@@ -47,7 +47,7 @@ public class EffectsRenderSystem extends IteratingSystem {
         
         cameraTargetScreenPos = new Vector2( (float) (Gdx.graphics.getWidth()* 0.5), (float) (Gdx.graphics.getHeight() * 0.5) );
         
-        // Create white Rectangle Texture to initiate draw call
+        // create white rectangle texture to initiate draw call
         Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
