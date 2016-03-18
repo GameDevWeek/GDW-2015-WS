@@ -35,9 +35,9 @@
     "transparent_bg": "data/ui/menu/transparent.png",
     "prev_Button": "data/ui/menu/prev_Button.png",
     "next_Button": "data/ui/menu/next_Button.png",
-
     "dash_Cooldown": "data/ui/menu/hud_dash01.png",
     "clock_hud": "data/ui/menu/hud_clock.png",
+    "tutorial":"data/ui/menu/Tutorial.png",
 
     "level1": "data/ui/menu/menu_level01.png",
     "level2": "data/ui/menu/menu_level02.png",

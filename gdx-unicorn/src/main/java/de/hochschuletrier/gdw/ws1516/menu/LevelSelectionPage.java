@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
+import de.hochschuletrier.gdw.commons.gdx.menu.widgets.DecoImage;
 import de.hochschuletrier.gdw.commons.gdx.state.transition.SplitHorizontalTransition;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.Main;
@@ -39,6 +40,9 @@ public class LevelSelectionPage extends MenuPage {
         Texture buttonBack_texture = assetManager.getTexture("prev_Button");
         Texture buttonNext_texture = assetManager.getTexture("next_Button");
         
+        addLayer("tutorial");
+    
+        
         level_previews = new Texture[level_preview_count];
       
         level_previews[0] = assetManager.getTexture("level1");
@@ -46,7 +50,7 @@ public class LevelSelectionPage extends MenuPage {
         level_previews[2] = assetManager.getTexture("level3");
         level_previews[3] = assetManager.getTexture("level4");
         
-        level_preview = createImageButton(level_previews[level_preview_index], 312, 280, 50, 50, this::nextLevel, "einhornMotivated", true, false);
+        level_preview = createImageButton(level_previews[level_preview_index], 312, 260, 50, 50, this::nextLevel, "einhornMotivated", true, false);
                     
         createImageButton(buttonBack_texture, 310-20-buttonBack_texture.getWidth(), 260, 50, 50, this::previousLevel, "buttonSound", true, true);
         createImageButton(buttonNext_texture, 310+level_preview_texture.getWidth()+20, 260, 50, 50, this::nextLevel, "buttonSound", true, true);
@@ -57,6 +61,7 @@ public class LevelSelectionPage extends MenuPage {
 //        addLabeledTexture("coin_hud", "1 Punkte", xOffset+xStep*(i++)-15,550,0,40,40);
 //        addLabeledTexture("drop", "3 Punkte", xOffset+xStep*(i++), 550,0,40,40);
 //        addLabeledTexture("gum_hud", "Kaugummi", xOffset+xStep*(i++), 550,0,40,40);
+        
         
         
         

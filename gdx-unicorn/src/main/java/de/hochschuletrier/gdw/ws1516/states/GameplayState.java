@@ -67,7 +67,7 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
         gameInputProcessor = game.getInputProcessor();
 
 
-//        menuManager.addLayer(new DecoImage(assetManager.getTexture("menu_fg")));
+        //menuManager.addLayer(new DecoImage(assetManager.getTexture("tutorial")));
 
 
 

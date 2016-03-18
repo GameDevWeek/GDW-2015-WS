@@ -93,11 +93,15 @@ public class MenuPage extends Group {
         label.setPosition(x+50, y+12);
         addActor(decoImage);
         addActor(label);
-        
-        
-    
     }
 
+    
+    protected final void addLayer(String texture){
+        Texture layer = assetManager.getTexture(texture);
+        DecoImage image = new DecoImage(layer);
+        image.setPosition(0, 0);
+        addActor(image);
+    }
     protected final void addLeftAlignedButton(int x, int y, int width, int height, String text,Runnable runnable,String sound) {
         TextButton button = addButton(x, y, width, height, text, runnable, "default",sound);
         button.getLabel().setAlignment(Align.left);
