@@ -1,6 +1,7 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
 import com.badlogic.ashley.core.*;
+import com.badlogic.ashley.systems.IntervalSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.collision.Segment;
@@ -10,23 +11,30 @@ import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.utils.PlayerColor;
 
 /**
  * Created by glumbatsch on 18.03.2016.
  */
-public class EndExplosionSystem extends EntitySystem implements GameOverEvent.Listener {
+public class EndExplosionSystem extends IntervalSystem implements GameOverEvent.Listener {
 
     private Entity playerRed, playerBlue;
     private Engine engine;
     private ImmutableArray<Entity> players;
 
+    private PlayerComponent player1, player2;
+    Entity player1Entity, player2Entity;
+
+    private Entity playerToBeDestroyed;
+    private PlayerComponent playerComponentToBeDestroyed;
+
     public EndExplosionSystem() {
-        super();
+        super(0.5f, 0);
     }
 
     public EndExplosionSystem(int priority) {
-        super(priority);
+        super(0.5f, priority);
     }
 
     @Override
@@ -55,43 +63,47 @@ public class EndExplosionSystem extends EntitySystem implements GameOverEvent.Li
             playerRed = players.get(1);
         }
 
-        // make the segments explode one by one
-        PlayerComponent player1,player2;
-        Entity player1Entity,player2Entity;
-
-        if(ComponentMappers.player.get(playerRed).segments.size() > ComponentMappers.player.get(playerBlue).segments.size()){
-            player1 = ComponentMappers.player.get(playerRed);
+        PlayerComponent playerComponentR = ComponentMappers.player.get(playerRed);
+        PlayerComponent playerComponentB = ComponentMappers.player.get(playerBlue);
+        if (playerComponentR.segments.size() > playerComponentB.segments.size()) {
+            player1 = playerComponentR;
             player1Entity = playerRed;
-            player2 = ComponentMappers.player.get(playerBlue);
+            player2 = playerComponentB;
             player2Entity = playerBlue;
         } else {
-            player1 = ComponentMappers.player.get(playerBlue);
+            player1 = playerComponentB;
             player1Entity = playerBlue;
-            player2 = ComponentMappers.player.get(playerRed);
+            player2 = playerComponentR;
             player2Entity = playerRed;
         }
+    }
 
 
-        while(!player2.segments.isEmpty()){
-            Vector2 segment = player1.segments.getFirst();
-
-            SplashEvent.emit(segment,player1.color);
-            player1.segments.removeLast();
-
-            segment = player2.segments.getFirst();
-
-            SplashEvent.emit(segment,player2.color);
-            player2.segments.removeLast();
+    @Override
+    protected void updateInterval() {
+        if(player1 == null){
+            return;
         }
-        SplashEvent.emit(ComponentMappers.position.get(player2Entity).pos,player2.color);
-        engine.removeEntity(player2Entity);
-        while (!player1.segments.isEmpty()){
-            Vector2 segment = player1.segments.getFirst();
-
-            SplashEvent.emit(segment,player1.color);
-            player1.segments.removeLast();
+        if (!player1.segments.isEmpty() && player1.segments.size() > player2.segments.size()) {
+            // kill player1 segment
+            SplashEvent.emit(player1.segments.removeLast(), player1.color);
+        } else if (!player2.segments.isEmpty()) {
+            // kill player 2 segment
+            SplashEvent.emit(player2.segments.removeLast(), player2.color);
+        } else if (player1Entity != null) {
+            // kill player1 entity
+            PositionComponent pos = ComponentMappers.position.get(player1Entity);
+            PlayerComponent play = ComponentMappers.player.get(player1Entity);
+            SplashEvent.emit(pos.pos, play.color);
+            engine.removeEntity(player1Entity);
+            player1Entity = null;
+        } else if (player2Entity != null) {
+            // kill player2 entity
+            PositionComponent pos = ComponentMappers.position.get(player2Entity);
+            PlayerComponent play = ComponentMappers.player.get(player2Entity);
+            SplashEvent.emit(pos.pos, play.color);
+            engine.removeEntity(player2Entity);
+            player2Entity = null;
         }
-        SplashEvent.emit(ComponentMappers.position.get(player1Entity).pos,player1.color);
-        engine.removeEntity(player1Entity);
     }
 }
