@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
@@ -25,9 +26,9 @@ public class CanvasRenderSystem extends IteratingSystem {
         final PositionComponent pos = ComponentMappers.position.get(entity);
         PlayerComponent player = ComponentMappers.player.get(entity);
         canvas.setColor(player.color.color);
-        canvas.drawPoint(pos.pos);
+        canvas.drawPoint(pos.pos, GameConstants.PAINT_RADIUS);
         for (Vector2 segment : player.segments) {
-            canvas.drawPoint(segment);
+            canvas.drawPoint(segment, GameConstants.PAINT_RADIUS);
         }
     }
 

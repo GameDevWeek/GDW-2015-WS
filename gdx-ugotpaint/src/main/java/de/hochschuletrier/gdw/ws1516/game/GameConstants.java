@@ -33,6 +33,7 @@ public class GameConstants {
     public static final int WINDOW_WIDTH = 1024;
     
     public static final int PAINT_RADIUS = 10;
+    public static final int PAINT_RADIUS_BIG = 3*PAINT_RADIUS;
     public static final int BORDER_SIZE = 60;
     public static final float BOUND_LEFT = BORDER_SIZE + PAINT_RADIUS;
     public static final float BOUND_TOP = BORDER_SIZE + PAINT_RADIUS;

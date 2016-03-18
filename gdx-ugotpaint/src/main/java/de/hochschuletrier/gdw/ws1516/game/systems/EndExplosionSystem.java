@@ -12,6 +12,8 @@ import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
+import de.hochschuletrier.gdw.ws1516.game.utils.Canvas;
+import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.utils.PlayerColor;
 
 /**
@@ -86,24 +88,31 @@ public class EndExplosionSystem extends IntervalSystem implements GameOverEvent.
         }
         if (!player1.segments.isEmpty() && player1.segments.size() > player2.segments.size()) {
             // kill player1 segment
-            SplashEvent.emit(player1.segments.removeLast(), player1.color);
+            splash(player1.segments.removeLast(), player1.color);
         } else if (!player2.segments.isEmpty()) {
             // kill player 2 segment
-            SplashEvent.emit(player2.segments.removeLast(), player2.color);
+            splash(player2.segments.removeLast(), player2.color);
         } else if (player1Entity != null) {
             // kill player1 entity
             PositionComponent pos = ComponentMappers.position.get(player1Entity);
             PlayerComponent play = ComponentMappers.player.get(player1Entity);
-            SplashEvent.emit(pos.pos, play.color);
+            splash(pos.pos, play.color);
             engine.removeEntity(player1Entity);
             player1Entity = null;
         } else if (player2Entity != null) {
             // kill player2 entity
             PositionComponent pos = ComponentMappers.position.get(player2Entity);
             PlayerComponent play = ComponentMappers.player.get(player2Entity);
-            SplashEvent.emit(pos.pos, play.color);
+            splash(pos.pos, play.color);
             engine.removeEntity(player2Entity);
             player2Entity = null;
         }
+    }
+
+    private void splash(final Vector2 point, final PlayerColor color) {
+        SplashEvent.emit(point, color);
+        Canvas canvas = Main.getCanvas();
+        canvas.setColor(color.color);
+        canvas.drawPoint(point, GameConstants.PAINT_RADIUS_BIG);
     }
 }
