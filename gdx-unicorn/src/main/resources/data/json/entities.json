@@ -33,7 +33,9 @@
                 "layer": 100
             },
             "BackgroundParticle": {
-                "effect": "unicornWalking"
+                "effect": "unicornTrail",
+                "reduceEmissionIfIdle": true,
+                "offsetWhenMoving": 15
             }
         }
     },
@@ -244,7 +246,7 @@
             "RenderLayer": {
                 "layer": 0
             },
-            "ParticleTest": {
+            "ForegroundParticle": {
                 "effect": "test2"
             },
             "BackgroundParticle": {

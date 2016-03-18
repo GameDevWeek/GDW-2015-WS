@@ -98,7 +98,6 @@ public class Game extends InputAdapter {
     
     private static boolean PAUSE_ENGINE = false;
 
-    //private final Hotkey rainbowMode = new Hotkey(()->RainbowEvent.start(player),Input.Keys.F3,HotkeyModifier.CTRL);
 
 
     private final PooledEngine engine = new PooledEngine(GameConstants.ENTITY_POOL_INITIAL_SIZE,
