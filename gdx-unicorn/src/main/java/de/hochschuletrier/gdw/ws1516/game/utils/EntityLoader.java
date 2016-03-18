@@ -35,10 +35,12 @@ public class EntityLoader implements MapLoader {
                     LayerObject.Primitive primitive = obj.getPrimitive(); /**
                      * @author Tobias Gepp, Jerome Jähnig
                      */
-                    //Welchen Zweck hat diese if-Abfrage? Ohne Abfrage werden Objekte erstellt.
-                    //if (primitive == LayerObject.Primitive.TILE || primitive == LayerObject.Primitive.POLYLINE) {
+                    // Welchen Zweck hat diese if-Abfrage? Ohne Abfrage werden Objekte erstellt.
+                    // Wird in Physicsloader geladen (bitte drinlassen)
+                    if (primitive == LayerObject.Primitive.TILE || primitive == LayerObject.Primitive.POLYLINE) {
                        
                         addEntity(engine, names, obj);
+                    }
                     
                 }
             }
