@@ -47,9 +47,9 @@ public class MenuOptions extends MenuPage {
         generalSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Settings.generalValue.set(generalSlider.getValue());
+                Settings.generalValue.set(generalSlider.getValue()/10);
                 generalSound = Settings.generalValue.get();
-                System.out.println(""+generalSound);
+               
                 Settings.musicValue.set(musicSlider.getValue());
                 Settings.soundValue.set(soundSlider.getValue());    
                 MusicManager.setGlobalVolume(Settings.musicValue.get()/1000*generalSound);
@@ -86,7 +86,7 @@ public class MenuOptions extends MenuPage {
             public void clicked(InputEvent event, float x, float y)  {
                 Settings.soundValue.set(soundSlider.getValue());    
                 SoundSystem.setGlobalVolume(Settings.soundValue.get()/1000*generalSound);
-                System.out.print(Settings.soundValue.get()/1000*generalSound);
+                System.out.println(Settings.soundValue.get()/1000*generalSound);
                 soundTest();
                 
             }
