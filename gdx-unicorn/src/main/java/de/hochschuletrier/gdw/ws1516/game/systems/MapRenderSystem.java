@@ -2,6 +2,8 @@ package de.hochschuletrier.gdw.ws1516.game.systems;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,8 +121,14 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
         mapHeight = map.getHeight() * map.getTileHeight();
         cameraSystem.setCameraBounds(0, 0, (int)mapWidth, (int)mapHeight);
 
-        String fileName = map.getFilename().split("/")[map.getFilename().split("/").length - 1];
-        String mapName = fileName.substring(0, fileName.length() - 4);
+        Pattern extractFileName = Pattern.compile("^.*/(.*)\\.tmx$");
+        Matcher extractFileNameMatcher = extractFileName.matcher(map.getFilename());
+        extractFileNameMatcher.matches();
+        String mapName = extractFileNameMatcher.group(1);
+        
+        // DEBUG
+        System.out.println(mapName);
+        
         try
         {
             backgroundTexture = Main.getInstance().getAssetManager().getTexture(mapName);
