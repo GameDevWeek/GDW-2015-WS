@@ -98,7 +98,7 @@ public class PhysixBodyComponentFactory extends
         
         // mainBody
            fixtureDef = new PhysixFixtureDef(physixSystem)
-            .density(0.68f).friction(0f).restitution(0f)
+            .density(0.68f).friction(1.0f).restitution(0f)
             .shapeCircle(width * 0.25f, new Vector2(1, 0));
            fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
             fixture = playerBody.createFixture(fixtureDef);
@@ -183,7 +183,12 @@ public class PhysixBodyComponentFactory extends
         float tilesHeight = properties.getFloat("sizeHeight", 1.0f);
         
       
-        PhysixFixtureDef fixtureDef = getFixtureDef(properties).shapeBox(GameConstants.TILESIZE_X * tilesWidth,GameConstants.TILESIZE_Y * tilesHeight);
+        PhysixFixtureDef fixtureDef = getFixtureDef(properties)
+                                      .friction(100.0f)
+                                      .shapeBox(GameConstants.TILESIZE_X * tilesWidth,GameConstants.TILESIZE_Y * tilesHeight);
+        
+        
+        
         bodyComponent.createFixture(fixtureDef);
         
         logger.debug("{}", fixtureDef.friction);       
