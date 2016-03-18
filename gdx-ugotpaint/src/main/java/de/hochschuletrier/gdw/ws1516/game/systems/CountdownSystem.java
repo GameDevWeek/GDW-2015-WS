@@ -20,7 +20,7 @@ public class CountdownSystem extends EntitySystem implements SetCountdownEvent.L
     };
     
     private State state = State.GAME;
-    private float timeLeft =  3;
+    private float timeLeft =  GameConstants.COUNTDOWN_TIME;
     private final BitmapFont font;
     private final Color color = Color.valueOf("73BE28");
     

@@ -52,4 +52,5 @@ public class GameConstants {
     );
     public static final float MIN_RESPAWN_DISTANCE = 100;
     public static final int DEFAULT_SEGMENTS = 3;
+    public static final int COUNTDOWN_TIME = 60 * 3; // 3 minutes
 }
