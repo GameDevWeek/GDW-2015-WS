@@ -85,7 +85,4 @@ public class GameConstants {
     public static final float RAINBOW_ALPHA = 0.5f;
     public static final float PAPARAZZI_ALPHA = 0.8f;
     public static final float PAPARAZZI_INTENSITY = 1.0f;
-    
-    // SOUNDS
-    public static final float SOUND_MAX_DISTANCE = 40 * TILESIZE_X;
 }

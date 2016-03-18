@@ -69,11 +69,8 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
         PhysixBodyComponent body = ComponentMappers.physixBody.get(entity);
         MovementComponent move = ComponentMappers.movement.get(entity);
         PlayerComponent player = ComponentMappers.player.get(entity);
-
-        float distance = camera.dst(position.x,position.y) / GameConstants.SOUND_MAX_DISTANCE;
-        distance  = (float) Math.pow(distance, 2);
         
-        if (move != null && distance <= 1 )
+        if (move != null)
         {
             boolean shouldPlay = false;
             if ( move.state == State.ON_GROUND )
@@ -141,7 +138,7 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
         {
             SoundInstance soundInstance = soundEmitter.emitter.play(assetManager.getSound(sound), b);
             if (soundInstance != null) {
-                soundInstance.setVolume(100f);
+                soundInstance.setVolume(1f);
             }
             soundEmitter.soundInstances.add(soundInstance);
             soundEmitter.soundNames.add(sound);
