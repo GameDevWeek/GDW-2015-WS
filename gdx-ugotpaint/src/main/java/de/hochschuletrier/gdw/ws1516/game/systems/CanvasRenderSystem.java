@@ -36,6 +36,6 @@ public class CanvasRenderSystem extends IteratingSystem {
     public void update(float deltaTime) {
         super.update(deltaTime);
 
-        canvas.render(DrawUtil.batch, Vector2.Zero, 1, true);
+        canvas.render(true, DrawUtil.batch, Vector2.Zero, 1, true);
     }
 }

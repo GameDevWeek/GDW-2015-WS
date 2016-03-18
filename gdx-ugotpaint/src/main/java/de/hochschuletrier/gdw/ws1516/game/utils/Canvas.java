@@ -41,13 +41,14 @@ public class Canvas {
         pixmap.fillCircle((int)position.x, (int)position.y, GameConstants.PAINT_RADIUS);
     }
     
-    public void render(Batch batch, Vector2 pos, float scale, boolean flipY) {
+    public void render(boolean drawPainted, Batch batch, Vector2 pos, float scale, boolean flipY) {
         texture.draw(pixmap, 0, 0);
         
         float bgDiff = flipY ? 0 : scale * (background.getHeight() - texture.getHeight());
         drawTexture(wall, batch, 0, 0, 1, flipY);
         drawTexture(background, batch, pos.x, pos.y - bgDiff, scale, flipY);
-        drawTexture(texture, batch, pos.x, pos.y, scale, flipY);
+        if(drawPainted)
+            drawTexture(texture, batch, pos.x, pos.y, scale, flipY);
     }
 
     private void drawTexture(Texture texture, Batch batch, float x, float y, float scale, boolean flipY) {

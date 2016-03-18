@@ -28,10 +28,12 @@ public class MenuPage extends Group {
     protected final Canvas canvas = Main.getCanvas();
     protected DecoImage overlayImage;
     private final Sound clickSound;
+    private final boolean drawPainted;
 
-    public MenuPage(Skin skin) {
+    public MenuPage(Skin skin, boolean drawPainted) {
         super();
         this.skin = skin;
+        this.drawPainted = drawPainted;
         setVisible(false);
         
         clickSound = assetManager.getSound("click");
@@ -44,7 +46,7 @@ public class MenuPage extends Group {
     
     @Override
     public void draw (Batch batch, float parentAlpha) {
-        canvas.render(batch, canvasPosition, canvasScale, false);
+        canvas.render(drawPainted, batch, canvasPosition, canvasScale, false);
         super.draw(batch, parentAlpha);
     }
 

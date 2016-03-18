@@ -26,7 +26,7 @@ public class MenuPageRoot extends MenuPage {
     private boolean bigCanvas = true;
 
     public MenuPageRoot(Skin skin, MenuManager menuManager, Type type) {
-        super(skin);
+        super(skin, true);
         this.type = type;
         this.menuManager = menuManager;
 
@@ -39,7 +39,7 @@ public class MenuPageRoot extends MenuPage {
             addLeftAlignedButton(x, y - yStep * (i++), 200, 50, "Spiel Starten", this::fadeToGame);
         } else {
             addLeftAlignedButton(x, y - yStep * (i++), 200, 50, "Fortsetzen", this::fadeToGame);
-            addLeftAlignedButton(x, y - yStep * (i++), 200, 50, "Spiel verlassen", this::stopGame);
+            addLeftAlignedButton(x, y - yStep * (i++), 250, 50, "Spiel verlassen", this::stopGame);
         }
         addPageEntry(menuManager, x, y - yStep * (i++), 150, "Credits", new MenuPageCredits(skin, menuManager));
         addForeground();
