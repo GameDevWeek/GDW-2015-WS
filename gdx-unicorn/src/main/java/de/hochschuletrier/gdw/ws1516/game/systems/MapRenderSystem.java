@@ -33,11 +33,13 @@ import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.commons.tiled.tmx.TmxImage;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
+import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
+import de.hochschuletrier.gdw.ws1516.states.GameplayState;
 
-public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Listener{
-    
+public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Listener, PauseGameEvent.Listener
+{
     private final CVarInt rainbowType = new CVarInt("fancyRainbow", 0, 0, 2, 0, "sets fancy rainbowmode");
     private final ConsoleCmd rainbow = new ConsoleCmd("rainbow", 0, "Usage: rainbow [duration] - Activates rainbow mode for [duration] seconds") { @Override public void execute(List<String> args) { startRainbow(args); } };
     private final Hotkey rainbowHotkey = new Hotkey(() -> startRainbow(), Input.Keys.R, HotkeyModifier.CTRL);
@@ -46,6 +48,8 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
     private final CVarFloat rainbowAlpha = new CVarFloat("rainbowAlpha", GameConstants.RAINBOW_ALPHA, 0.0f, Float.MAX_VALUE, 0, "");
     
     private final HashMap<TileSet, Texture> tilesetImages = new HashMap<>();
+    
+    private static Logger logger;
     
     private TiledMap map;
     float mapWidth;
@@ -56,13 +60,11 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
     float verticalParallaxMultiplier;
     private Texture rainbowLayerTexture;
     
-    private long startTime;
+    private float rainbowTime;
     
-    private float rainbowDurationLeft;
     private float rainbowStartDuration;
     
-    private static Logger logger;
-    
+    private boolean isPaused;
     
     @SuppressWarnings("unchecked")
     public MapRenderSystem(int priority) {
@@ -78,6 +80,7 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
         super.addedToEngine(engine);
         
         RainbowEvent.register(this);
+        PauseGameEvent.register(this);
         
         Main.getInstance().console.register(rainbow);
         Main.getInstance().console.register(rainbowFrequency);
@@ -92,6 +95,7 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
         super.removedFromEngine(engine);
         
         RainbowEvent.unregister(this);
+        PauseGameEvent.unregister(this);
         
         Main.getInstance().console.unregister(rainbow);
         Main.getInstance().console.unregister(rainbowFrequency);
@@ -134,6 +138,11 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
+        
+        if(!isPaused)
+        {
+            rainbowTime += deltaTime;
+        }
 
         renderBackground(deltaTime);
         
@@ -156,11 +165,7 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
     
     protected void endRainbow()
     {
-        /**
-         * @author philipp -> gamelogic
-         * bad fix for rainbowmode continue in pause mode
-         */
-        rainbowDurationLeft = rainbowStartDuration = 0.0f;
+        startRainbow(0);
     }
 
     protected void startRainbow(List<String> args) {
@@ -183,13 +188,8 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
     
     protected void startRainbow(float duration)
     {
-        /**
-         * @author philipp -> gamelogic
-         * bad fix for rainbowmode continue in pause mode
-         * TODO: improve
-         */
-        rainbowDurationLeft = rainbowStartDuration = 100000.0f;
-        startTime = TimeUtils.millis();
+        rainbowStartDuration = duration;
+        rainbowTime = 0f;
     }
 
     @Override
@@ -223,9 +223,8 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
 
         DrawUtil.draw(backgroundTexture, xPosition, yPosition, backgroundTexture.getWidth() * textureSizeMultiplier, backgroundTexture.getHeight() * textureSizeMultiplier);
         
-        if(rainbowDurationLeft > 0.0f)
+        if(rainbowTime < rainbowStartDuration)
         {
-            rainbowDurationLeft -= deltaTime;
             ShaderProgram rainbowShader = null;
             
             switch(rainbowType.get())
@@ -254,14 +253,24 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
                 float[] dimensions = new float[]{ Gdx.graphics.getWidth(), Gdx.graphics.getHeight() };
                 rainbowShader.setUniformf("u_rainbowAmplitude", GameConstants.RAINBOW_AMPLITUDE);
                 rainbowShader.setUniformf("u_startDuration", rainbowStartDuration);
-                rainbowShader.setUniformf("u_durationLeft", rainbowDurationLeft);
+                rainbowShader.setUniformf("u_durationLeft", rainbowStartDuration - rainbowTime);
                 rainbowShader.setUniform2fv("u_frameDimension", dimensions, 0, 2);
-                rainbowShader.setUniformf("u_time", (float)TimeUtils.timeSinceMillis(startTime) * 0.001f);
+                rainbowShader.setUniformf("u_time", rainbowTime);
             }
             
             DrawUtil.batch.draw(rainbowLayerTexture, CameraSystem.getCameraPosition().x - Gdx.graphics.getWidth() * 0.5f, CameraSystem.getCameraPosition().y - Gdx.graphics.getHeight() * 0.5f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             
             DrawUtil.setShader(null);
         }
+    }
+
+    @Override
+    public void onPauseGameEvent(boolean pauseOn) {
+        isPaused = pauseOn;
+    }
+
+    @Override
+    public void onPauseChange() {
+        isPaused = !isPaused;
     }
 }
