@@ -193,7 +193,7 @@
                 "layer": 60
             },
             "BlockingGum" : {
-                "timeToDespawn" : 5.0
+                "timeToDespawn" : 3.0
             }
         }
     },

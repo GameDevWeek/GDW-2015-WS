@@ -96,7 +96,7 @@ public class BlockingGumSystem extends IteratingSystem implements BlockingGumSpa
             PositionComponent position = ComponentMappers.position.get(blockingGumEntity);
             if (position != null) {
                 texture.originX = 32.0f;
-                texture.originY = 29.0f;
+                texture.originY = 10.0f;
                 blockingBody.setAngle(angle * PhysixUtil.DEG2RAD);
             }
             
