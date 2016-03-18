@@ -70,9 +70,11 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
          */
         SoundInstance[] instances=new SoundInstance[soundEmitter.soundInstances.size()];
         soundEmitter.soundInstances.toArray(instances);
-        for (SoundInstance instance : instances){
-            if (instance.isStopped()){
-                soundEmitter.soundInstances.remove(instance);
+        for (int i=0;i<instances.length;i++){
+            if (instances[i].isStopped()){
+                logger.debug("removed");
+                soundEmitter.soundNames.remove( i );
+                soundEmitter.soundInstances.remove(i);
             }
         }
         
@@ -133,6 +135,7 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
     @Override
     public void onSoundStop(String sound,Entity entity) {
         SoundEmitterComponent soundEmitter = ComponentMappers.soundEmitter.get(entity);
+        logger.debug("stop sound {}", sound);
         for (int i=0;i<soundEmitter.soundNames.size();i++){
             if (sound == null ||  soundEmitter.soundNames.get(i).equals(sound)){
                 if ( soundEmitter.soundInstances != null )
