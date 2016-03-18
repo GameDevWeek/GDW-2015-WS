@@ -186,7 +186,6 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
             }else{
                 if(input.gumSpitCooldown == 0 && player.state!=State.RAINBOW) {
                     input.gumSpitCharge += deltaTime;
-                    logger.info(""+input.gumSpitCharge);
                     player.state=State.SPUCKCHARGE;
                 }
             }
