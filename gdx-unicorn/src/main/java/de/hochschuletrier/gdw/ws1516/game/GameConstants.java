@@ -81,8 +81,7 @@ public class GameConstants {
     public static final float RAINBOW_FREQUENCY = 5.0f;
     public static final float RAINBOW_ALPHA = 0.65f;
     public static final float RAINBOW_AMPLITUDE = 0.2f;
-    public static final float PAPARAZZI_ALPHA = 0.8f;
-    public static final float PAPARAZZI_INTENSITY = 1.0f;
+    public static final float PAPARAZZI_DURATION = 2.0f;
     
     // Particle parameters
     public static final float IDLE_PARTICLE_REDUCTION = 0.3f;
