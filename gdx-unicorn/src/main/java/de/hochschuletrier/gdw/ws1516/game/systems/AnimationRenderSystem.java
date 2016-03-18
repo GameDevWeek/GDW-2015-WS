@@ -118,16 +118,11 @@ public class AnimationRenderSystem extends SubSystem implements MovementStateCha
         else if(normalized > 1f)
             normalized = 1f;
         normalized = (normalized + 1) * 0.5f;
-        System.out.println(normalized);
         return animationExtended.getKeyFrame(normalized *  animationExtended.animationDuration);
     }
 
     private TextureRegion getLandingKeyframe(Entity entity, AnimationComponent animation, MovementComponent movement, String stateKey) {
         AnimationExtended animationExtended = animation.animationMap.get(MovementComponent.State.LANDING.toString().toLowerCase());
-        if(animationExtended != null)
-        {
-            System.out.println("Current: " + animation.stateTime + "; End: " + animationExtended.animationDuration);
-        }
         if(animationExtended == null)
         {
             return null;

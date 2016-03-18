@@ -111,9 +111,6 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
         float maxRange = GameConstants.GLOBAL_VISION * GameConstants.UNICORN_SIZE;
         float minRange = GameConstants.UNICORN_SIZE;
         paparazziIntensity = (1 - Math.max((distance - minRange) / maxRange, 0));
-        
-        // debug
-        System.out.println(paparazziIntensity);
     }
     
     private void resetPaparazzi()
