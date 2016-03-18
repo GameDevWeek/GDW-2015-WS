@@ -16,7 +16,7 @@ float getRainbowAlpha();
 void main()
 {
 	// use uniforms so they do not get removed
-	texture2D(u_texture, a_texCoord0);
+	vec4 tex = texture2D(u_texture, a_texCoord0);
 	
 	v_rainbowAlpha = getRainbowAlpha();
 	gl_Position =  u_projTrans * a_position;
