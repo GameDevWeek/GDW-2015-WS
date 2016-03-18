@@ -17,6 +17,12 @@ import de.hochschuletrier.gdw.ws1516.game.utils.Canvas;
 
 public class MenuPage extends Group {
 
+    public static final int BUTTON_HEIGHT = 40;
+    public static final int BUTTON_WIDTH = 200;
+    public static final int MENU_X = 50;
+    public static final int MENU_Y = 470;
+    public static final int MENU_STEP = 55;
+    
     protected Main main = Main.getInstance();
     protected AssetManagerX assetManager = main.getAssetManager();
     protected final Skin skin;
