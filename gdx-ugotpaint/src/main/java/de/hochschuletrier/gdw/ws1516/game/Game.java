@@ -63,12 +63,12 @@ public class Game extends InputAdapter {
         }
 
         inputForwarder.set(engine.getSystem(KeyboardInputSystem.class));
-        float x = GameConstants.BOUND_LEFT + 3 * GameConstants.SEGMENT_DISTANCE;
+        float x = GameConstants.BOUND_LEFT + GameConstants.DEFAULT_SEGMENTS * GameConstants.SEGMENT_DISTANCE;
         float y = GameConstants.BOUND_TOP;
         createSnake(0, x, y, 1, 0, PlayerColor.RED);
 
 
-        x = GameConstants.BOUND_RIGHT - 3 * GameConstants.SEGMENT_DISTANCE;
+        x = GameConstants.BOUND_RIGHT - GameConstants.DEFAULT_SEGMENTS * GameConstants.SEGMENT_DISTANCE;
         y = GameConstants.BOUND_BOTTOM;
         createSnake(1, x, y, -1, 0, PlayerColor.BLUE);
 
@@ -110,7 +110,7 @@ public class Game extends InputAdapter {
         final PlayerComponent player = engine.createComponent(PlayerComponent.class);
         player.color = color;
         player.path.add(new Vector2(-xDir, -yDir).nor().scl(100).add(x, y));
-        for (int i = 0; i < 7; i++)
+        for (int i = 1; i < GameConstants.DEFAULT_SEGMENTS; i++)
             player.segments.add(new Vector2());
         e.add(player);
         return e;
