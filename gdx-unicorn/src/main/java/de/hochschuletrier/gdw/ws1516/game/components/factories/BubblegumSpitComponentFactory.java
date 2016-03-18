@@ -5,12 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import de.hochschuletrier.gdw.commons.gdx.ashley.ComponentFactory;
 import de.hochschuletrier.gdw.commons.utils.SafeProperties;
 import de.hochschuletrier.gdw.ws1516.game.components.BubblegumSpitComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.EnemyBehaviourComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.PathComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.StartPointComponent;
-import de.hochschuletrier.gdw.ws1516.game.systems.enemyStates.EnemyBaseState;
-import de.hochschuletrier.gdw.ws1516.game.systems.enemyStates.FollowPathEnemyState;
-
+ 
 /**
  * Factory for the 'bubblegumSpit' component
  * @author Eileen
@@ -29,7 +24,7 @@ public class BubblegumSpitComponentFactory extends ComponentFactory<EntityFactor
 
         //Set dummy callback's to prevent nullpointer exceptions
         component.onEnemyHit = (spit, enemy) -> {};
-        component.onHit = (spit) -> {};
+        component.onHit = (spit, enemyHit) -> {};
         
         entity.add(component);
     }

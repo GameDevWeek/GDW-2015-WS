@@ -241,7 +241,7 @@ public class DrawUtil {
         DrawUtil.batch.draw(texture, x, y, width, height, srcX, srcY, srcWidth,
                 srcHeight, false, true);
     }
-
+   
     public static void draw(Texture texture, float x, float y, int srcX, int srcY, float width, float height,
             float scaleX, float scaleY, float rotation) {
         DrawUtil.batch.draw(texture, x, y, 0, 0, width, height, scaleX,

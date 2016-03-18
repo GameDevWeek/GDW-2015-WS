@@ -11,12 +11,18 @@ public class AnimationComponent extends Component implements Pool.Poolable
     public HashMap<String, AnimationExtended> animationMap = new HashMap<>();
     public float stateTime;
     public boolean flipHorizontal;
+    public MovementComponent.State lastRenderedState;
 
     
     @Override
     public void reset() {
         animationMap = null;
         flipHorizontal = false;
+        stateTime = 0;
+    }
+    
+    public void resetStateTime()
+    {
         stateTime = 0;
     }
 }
