@@ -168,7 +168,7 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
     }
 
     @Override
-    public void onThrowBackEventStart(Entity unicorn) {
+    public void onThrowBackEventStart(Entity unicorn, float dirX) {
         if (getEntities().size()>0){
             PlayerComponent playerComp = ComponentMappers.player.get(unicorn);
             
@@ -188,6 +188,7 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         if (getEntities().size()>0){
             PlayerComponent playerComp = ComponentMappers.player.get(unicorn);
             playerComp.throwBackCooldown = GameConstants.THROWBACK_MODE_COOLDOWN;
+            playerComp.state = State.NORMAL;
         }
     }
     
