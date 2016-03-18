@@ -12,5 +12,7 @@
     "huntergun":"data/sounds/gun.wav",
     "paparazzishoot":"data/sounds/PaparazziKlick.wav",
     "paparazzidie":"data/sounds/Paparazzi.wav",
-    "laufen":"data/sounds/laufen.wav"
+    "laufen":"data/sounds/laufen.wav",
+    "spuckCharge":"data/sounds/spuckenCharge.wav",
+    "spucken":"data/sounds/spuckenAttack.wav"
 }

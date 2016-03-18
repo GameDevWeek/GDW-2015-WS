@@ -26,14 +26,14 @@ import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.SoundEmitterComponent;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.GameLogicTest;
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
-import de.hochschuletrier.gdw.ws1516.events.DeathEvent.Listener;
 import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
+import de.hochschuletrier.gdw.ws1516.events.BubblegumSpitSpawnEvent;
 
 /**
  * @author phili_000
  *
  */
-public class SoundSystem extends IteratingSystem implements SoundEvent.Listener, Listener {
+public class SoundSystem extends IteratingSystem implements SoundEvent.Listener, DeathEvent.Listener,BubblegumSpitSpawnEvent.Listener {
 
     private static final Logger logger = LoggerFactory.getLogger(GameLogicTest.class);
     private Vector2 camera;
@@ -50,7 +50,8 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
         SoundEvent.register(this);
-        DeathEvent.register(this);     
+        DeathEvent.register(this);    
+        BubblegumSpitSpawnEvent.register(this);
         this.engine = engine;
     }
 
@@ -59,6 +60,7 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
         super.removedFromEngine(engine);
         SoundEvent.unregister(this);
         DeathEvent.unregister(this);
+        BubblegumSpitSpawnEvent.unregister(this);
         this.engine = null;
     };
     
@@ -72,15 +74,33 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
         
         if (move != null && player!=null)
         {
-            boolean shouldPlay = false;
+            boolean shouldplayRun = false;
+            boolean shouldplaySpuck=false;
             if ( move.state == State.ON_GROUND )
             {
                 if ( Math.abs(body.getLinearVelocity().x)>1f )
                 {
-                    shouldPlay = true;
+                    shouldplayRun = true;
                 }
             }
-            if( shouldPlay )
+            if ( player.state == PlayerComponent.State.SPUCKCHARGE)
+            {
+                if (!player.soundSpuckChargePlayed){
+                    shouldplaySpuck = true;
+                    player.soundSpuckChargePlayed=true;
+                }
+            }else{
+                player.soundSpuckChargePlayed=false;
+            }
+            if (shouldplaySpuck){
+                if (!soundEmitter.soundNames.contains("spuckCharge")){
+                    SoundEvent.emit("spuckCharge", entity);
+                }
+            }else if (player.state!=PlayerComponent.State.SPUCKCHARGE){
+                if ( soundEmitter.soundNames.contains("spuckCharge") )
+                    SoundEvent.stopSound("spuckCharge",entity);
+            }
+            if( shouldplayRun )
             {
                 if ( !soundEmitter.soundNames.contains("laufen") )
                     SoundEvent.emit("laufen", entity,true);
@@ -198,6 +218,12 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
 
             SoundEvent.emit("paparazzidie", player);
         }
+    }
+
+    @Override
+    public void onSpawnBubblegumSpit(float force) {
+        Entity player =  engine.getEntitiesFor( Family.all(PlayerComponent.class).get() ).first();
+        SoundEvent.emit("spucken", player);
     }
     
     

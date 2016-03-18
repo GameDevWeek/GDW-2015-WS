@@ -13,6 +13,8 @@ public class PlayerComponent extends Component implements Poolable {
     /// im Bezug auf Rainbow Mode unverwundbarkeit
     public int deathZoneCounter;
     
+    public boolean soundSpuckChargePlayed=false;
+    
     public static enum State{
         NORMAL,
         RAINBOW,
