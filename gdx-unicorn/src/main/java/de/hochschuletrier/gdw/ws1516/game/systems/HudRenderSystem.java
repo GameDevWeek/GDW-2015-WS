@@ -37,7 +37,7 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
     private final AssetManagerX assetManager;
     private final BitmapFont font;
     private long finalScore;
-    
+        
     public HudRenderSystem(int priority) {
         super(Family.all(PlayerComponent.class).get(),priority);
         
@@ -71,8 +71,8 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         int displayHeight = Gdx.graphics.getHeight();
         
         Texture heart;
-        Texture coin = assetManager.getTexture("coin");
-        Texture blue_gum = assetManager.getTexture("bubblegum_blue");
+        Texture coin = assetManager.getTexture("coin_hud");
+        Texture blue_gum = assetManager.getTexture("gum_hud");
         
         if(playerComp.hitpoints==3) {
             heart = assetManager.getTexture("heart3");
@@ -93,12 +93,12 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         float heart_y = 20;
         
         float lives_x = heart_x+55;
-        float lives_y = 40;
+        float lives_y = heart_y+20;
         
         float gum_x = lives_x + 60;
-        float gum_y = lives_y-10;
+        float gum_y = heart_y;
         
-        float gum_count_x = gum_x + 40;
+        float gum_count_x = gum_x + 55;
         float gum_count_y = 40;
         
         float time_x = 0.45F * displayWidth;
@@ -125,13 +125,13 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         String lives_string = "x " + String.valueOf(lives);
         String gum_count_string = "x " + String.valueOf(gum_count_int); 
         String time = minutes_string+":"+seconds_string;
-        String score = String.valueOf(finalScore);
+        String score = String.valueOf(3*scoreComp.bonbons+scoreComp.chocoCoins);
         
         
                        
         DrawUtil.draw(heart, heart_x, heart_y, 50, 50);
         font.draw(DrawUtil.batch, lives_string, lives_x, lives_y);
-        DrawUtil.draw(blue_gum, gum_x, gum_y, 30, 30);
+        DrawUtil.draw(blue_gum, gum_x, gum_y, 50, 50);
         font.draw(DrawUtil.batch, gum_count_string, gum_count_x, gum_count_y);
         font.draw(DrawUtil.batch, time, time_x, time_y);
         DrawUtil.draw(coin, coin_x, coin_y, 50, 50);
