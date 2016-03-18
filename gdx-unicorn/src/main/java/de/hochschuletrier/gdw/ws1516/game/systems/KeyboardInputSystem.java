@@ -31,6 +31,11 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
     private boolean             hornAttack    = false;
     private boolean             fly           = false;
     
+    private boolean             moveRight=false;
+    private boolean             moveLeft=false;
+    private boolean             moveUp=false;
+    private boolean             moveDown=false;
+    
     private float               directionX, directionY = 0.0f;
     public LookDirection        lookDirection = MovementComponent.LookDirection.RIGHT;
     
@@ -48,16 +53,14 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
         switch (keycode) {
             case Input.Keys.UP:
             case Input.Keys.SPACE:
-                directionY -= 1.0f;
+                moveUp=true;
                 jump = true;
                 break;
             case Input.Keys.LEFT:
-                directionX -= 1.0f;
-                lookDirection = MovementComponent.LookDirection.LEFT;
+                moveLeft=true;
                 break;
             case Input.Keys.RIGHT:
-                directionX += 1.0f;
-                lookDirection = MovementComponent.LookDirection.RIGHT;
+                moveRight=true;
                 break;
             case Input.Keys.D:
                 hornAttack = true;
@@ -69,7 +72,7 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
                 fly = true;
                 break;
             case Input.Keys.DOWN:
-                directionY += 1.0f;
+                moveDown=true;
                 break;
         }
         return true;
@@ -80,14 +83,14 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
         switch (keycode) {
             case Input.Keys.UP:
             case Input.Keys.SPACE:
-                directionY += 1.0f;
+                moveUp=false;
                 jump = false;
                 break;
             case Input.Keys.LEFT:
-                directionX += 1.0f;
+                moveLeft=false;
                 break;
             case Input.Keys.RIGHT:
-                directionX -= 1.0f;
+                moveRight=false;
                 break;
             case Input.Keys.F:
                 fly = false;
@@ -99,7 +102,7 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
                 spit = false;
                 break;
             case Input.Keys.DOWN:
-                directionY -= 1.0f;
+                moveDown=false;
                 break;
         }
         return true;
@@ -140,6 +143,28 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
         InputComponent input = entity.getComponent(InputComponent.class);
         PlayerComponent player=ComponentMappers.player.get(entity);
         MovementComponent movement=ComponentMappers.movement.get(entity);
+        if (moveRight && moveLeft){
+            directionX=0.0f;
+        }else if (moveRight){
+            lookDirection=LookDirection.RIGHT;
+            directionX=+1.0f;
+        }
+        else if(moveLeft){
+            lookDirection=LookDirection.LEFT;
+            directionX=-1.0f;
+        }else{
+            directionX=0.0f;
+        }
+        if (moveUp && moveDown){
+            directionY=0.0f;
+        }else if (moveDown){
+            directionY=+1.0f;
+        }
+        else if(moveUp){
+            directionY=-1.0f;
+        }else{
+            directionY=0.0f;
+        }
         input.directionX = directionX;
         input.directionY = directionY;
         input.startFly=fly;
