@@ -115,7 +115,8 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
         mapHeight = map.getHeight() * map.getTileHeight();
         cameraSystem.setCameraBounds(0, 0, (int)mapWidth, (int)mapHeight);
 
-        String mapName = "lvl1";//map.getFilename().split("/")[map.getFilename().split("/").length].substring(0, map.getFilename().length() - 4);
+        String fileName = map.getFilename().split("/")[map.getFilename().split("/").length - 1];
+        String mapName = fileName.substring(0, fileName.length() - 4);
         try
         {
             backgroundTexture = Main.getInstance().getAssetManager().getTexture(mapName);
