@@ -22,11 +22,11 @@ public class CountdownSystem extends EntitySystem implements SetCountdownEvent.L
     private State state = State.GAME;
     private float timeLeft =  GameConstants.COUNTDOWN_TIME;
     private final BitmapFont font;
-    private final Color color = Color.valueOf("73BE28");
+    private final Color color = Color.WHITE;
     
     public CountdownSystem(int priority) {
         super(priority);
-        font = Main.getInstance().getAssetManager().getFont("quartz_50");
+        font = Main.getInstance().getAssetManager().getFont("midnight_48");
     }
 
     @Override
@@ -78,6 +78,6 @@ public class CountdownSystem extends EntitySystem implements SetCountdownEvent.L
         
         BitmapFont.TextBounds bounds = font.getBounds(result);
         float x = (GameConstants.WINDOW_WIDTH - bounds.width) * 0.5f;
-        font.draw(DrawUtil.batch, result, x, 10);
+        font.draw(DrawUtil.batch, result, x, 2);
     }
 }
