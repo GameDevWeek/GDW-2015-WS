@@ -1,5 +1,8 @@
 package de.hochschuletrier.gdw.ws1516.game.contactlisteners;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.ashley.core.Entity;
 
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixContact;
@@ -8,6 +11,7 @@ import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.BulletComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
+import de.hochschuletrier.gdw.ws1516.game.systems.BubblegumSpitSystem;
 
 /**
  * Listens to bullet collisions
@@ -15,7 +19,8 @@ import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
  * @version 1.0
  */
 public class BulletListener extends PhysixContactAdapter {
-
+    private static final Logger logger = LoggerFactory.getLogger(BulletListener.class);
+    
     @Override
     public void beginContact(final PhysixContact contact) {
         PhysixBodyComponent otherComponent = contact.getOtherComponent();

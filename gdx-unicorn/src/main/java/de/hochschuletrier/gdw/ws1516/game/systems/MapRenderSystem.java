@@ -120,7 +120,11 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
     
     protected void endRainbow()
     {
-        startRainbow(0);
+        /**
+         * @author philipp -> gamelogic
+         * bad fix for rainbowmode continue in pause mode
+         */
+        rainbowDurationLeft = rainbowStartDuration = 0.0f;
     }
 
     protected void startRainbow(List<String> args) {
@@ -143,7 +147,11 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
     
     protected void startRainbow(float duration)
     {
-        rainbowDurationLeft = rainbowStartDuration = duration;
+        /**
+         * @author philipp -> gamelogic
+         * bad fix for rainbowmode continue in pause mode
+         */
+        rainbowDurationLeft = rainbowStartDuration = 100000.0f;
         startTime = TimeUtils.millis();
     }
     
