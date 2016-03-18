@@ -2,6 +2,7 @@ package de.hochschuletrier.gdw.ws1516.game;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 public class GameConstants {
 
@@ -50,4 +51,6 @@ public class GameConstants {
             BOUND_WIDTH - 2* SEGMENT_DISTANCE,
             BOUND_HEIGHT - 2* SEGMENT_DISTANCE
     );
+    public static final float MIN_RESPAWN_DISTANCE = 100;
+    public static final int DEFAULT_SEGMENTS = 3;
 }

@@ -56,6 +56,7 @@ public class PlayerComponent extends Component implements Pool.Poolable {
             result = segments.removeFirst();
             num--;
         }
+
         return result;
     }
 }
