@@ -26,7 +26,7 @@ public class ParticleRenderSystem extends SortedSubIteratingSystem.SubSystem
     @Override
     public void processEntity(Entity entity, float deltaTime)
     {
-        ParticleComponent particleComponent = ComponentMappers.particleTest.get(entity);
+        ParticleComponent particleComponent = ComponentMappers.foregroundParticle.get(entity);
         MovementComponent movementComponent = ComponentMappers.movement.get(entity);
         PositionComponent positionComponent = ComponentMappers.position.get(entity);
 

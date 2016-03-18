@@ -241,6 +241,17 @@
             }
         }
     },
+    "light": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Texture": {
+                "texture": ""
+            },
+            "Light": {
+                "intensity": 10.0
+            }
+    },
     "ball": {
         "meta": {},
         "components": {

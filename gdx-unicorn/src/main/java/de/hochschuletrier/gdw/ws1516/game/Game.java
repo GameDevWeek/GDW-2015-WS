@@ -138,8 +138,6 @@ public class Game extends InputAdapter {
     private final BulletSystem bulletSystem = new BulletSystem(engine);
     
     private TiledMap map;
-
-
     
     public Game() {
         // If this is a build jar file, disable hotkeys

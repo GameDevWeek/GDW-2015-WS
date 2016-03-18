@@ -83,6 +83,7 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
         Main.getInstance().console.register(rainbowFrequency);
         Main.getInstance().console.register(rainbowAlpha);
         Main.getInstance().console.register(rainbowType);
+        rainbowHotkey.register();
         fancyRainbowHotkey.register();
     }
     
@@ -96,6 +97,7 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
         Main.getInstance().console.unregister(rainbowFrequency);
         Main.getInstance().console.unregister(rainbowAlpha);
         Main.getInstance().console.unregister(rainbowType);
+        rainbowHotkey.unregister();
         fancyRainbowHotkey.unregister();
     }
     

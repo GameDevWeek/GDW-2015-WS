@@ -26,7 +26,7 @@ public class BackgroundParticleRenderSystem extends SortedSubIteratingSystem.Sub
     @Override
     public void processEntity(Entity entity, float deltaTime) 
     {
-        BackgroundParticleComponent particleComponent = ComponentMappers.bgParticle.get(entity);
+        BackgroundParticleComponent particleComponent = ComponentMappers.backgroundParticle.get(entity);
         MovementComponent movementComponent = ComponentMappers.movement.get(entity);
         PositionComponent positionComponent = ComponentMappers.position.get(entity);
         
