@@ -8,7 +8,9 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.backends.lwjgl.audio.Wav;
 import com.badlogic.gdx.backends.lwjgl.audio.Wav.Sound;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.PauseableThread;
 
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.input.InputForwarder;
@@ -23,6 +25,7 @@ import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.menu.EndPage;
 import de.hochschuletrier.gdw.ws1516.menu.MainMenuPage;
 import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
+import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
 
 
 /**
@@ -78,10 +81,10 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
             public boolean keyUp(int keycode) {
                 if (keycode == Input.Keys.ESCAPE) {
                     if (mainProcessor == gameInputProcessor) {
-                        Game.pauseGame();
+                        PauseGameEvent.change();
                         mainProcessor = menuInputProcessor;                        
                     } else {
-                        Game.pauseGame();
+                        PauseGameEvent.change();
 
                         menuManager.popPage();
                     }
@@ -142,10 +145,21 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
         game.dispose();
     }
 
+    /**
+     * @author Tobi - Gamlogic 
+     * made it a winningScreen upon winning
+     */
     @Override
-    public void onGameOverEvent() {
+    public void onGameOverEvent(boolean won) {
         Skin skin = ((MainMenuState)Main.getInstance().getPersistentState(MainMenuState.class)).getSkin();
-        EndPage endPage = new EndPage(skin, menuManager, "transparent_bg", EndPage.Type.GAMEOVER);
+        EndPage endPage; 
+        if ( won ){
+            endPage = new EndPage(skin, menuManager, "transparent_bg", EndPage.Type.WIN);
+        } else {
+            endPage = new EndPage(skin, menuManager, "transparent_bg", EndPage.Type.GAMEOVER);
+        }
+        PauseGameEvent.emit(true);
+            
         menuManager.addLayer(endPage);
         menuManager.pushPage(endPage);
         inputForwarder.set(menuInputProcessor);

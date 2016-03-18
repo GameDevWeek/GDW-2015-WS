@@ -51,35 +51,28 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
         switch (keycode) {
             case Input.Keys.UP:
             case Input.Keys.SPACE:
-            case Input.Keys.W:
                 directionY -= 1.0f;
                 jump = true;
                 break;
             case Input.Keys.LEFT:
-            case Input.Keys.A:
                 directionX -= 1.0f;
                 lookDirection = MovementComponent.LookDirection.LEFT;
                 break;
             case Input.Keys.RIGHT:
-            case Input.Keys.D:
                 directionX += 1.0f;
                 lookDirection = MovementComponent.LookDirection.RIGHT;
                 break;
-            case Input.Keys.J:
+            case Input.Keys.D:
                 hornAttack = true;
-                break;
-            case Input.Keys.K:
-                spit = true;
-                break;
-            case Input.Keys.L:
-                fly = true;
                 break;
             case Input.Keys.S:
+                spit = true;
+                break;
+            case Input.Keys.F:
+                fly = true;
+                break;
             case Input.Keys.DOWN:
                 directionY += 1.0f;
-                break;
-            case Input.Keys.NUM_3:
-                hornAttack = true;
                 break;
         }
         return true;
@@ -90,38 +83,24 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
         switch (keycode) {
             case Input.Keys.UP:
             case Input.Keys.SPACE:
-            case Input.Keys.W:
                 directionY += 1.0f;
                 jump = false;
                 break;
             case Input.Keys.LEFT:
-            case Input.Keys.A:
                 directionX += 1.0f;
                 break;
             case Input.Keys.RIGHT:
-            case Input.Keys.D:
                 directionX -= 1.0f;
                 break;
-            // for testing reasons
-            case Input.Keys.NUM_1:
-                fly = true;
-                // hornAttack = false;
-                break;
-            // for testing reasons
-            case Input.Keys.NUM_2:
-                stopflying = true;
-                // hornAttack = false;
-                break;
-            case Input.Keys.NUM_3:
-                hornAttack = false;
-                break;
-            case Input.Keys.K:
-                spit = false;
-                break;
-            case Input.Keys.L:
+            case Input.Keys.F:
                 fly = false;
                 break;
+            case Input.Keys.D:
+                hornAttack = false;
+                break;
             case Input.Keys.S:
+                spit = false;
+                break;
             case Input.Keys.DOWN:
                 directionY -= 1.0f;
                 break;
