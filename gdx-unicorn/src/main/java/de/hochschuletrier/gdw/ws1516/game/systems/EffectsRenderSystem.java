@@ -44,7 +44,9 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
     private Vector2 paparazziEffectSeed;
     
 
-    private final Hotkey paparazziHotkey = new Hotkey(()->PaparazziShootEvent.emit((float)Math.random()), Input.Keys.F9,
+    private final Hotkey paparazzi1Hotkey = new Hotkey(()->PaparazziShootEvent.emit((float)Math.random()), Input.Keys.F9,
+            HotkeyModifier.CTRL);
+    private final Hotkey paparazzi0Hotkey = new Hotkey(()->PaparazziShootEvent.emit((float)Math.random()*600), Input.Keys.F8,
             HotkeyModifier.CTRL);
 
     @SuppressWarnings("unchecked")
@@ -73,7 +75,8 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
         PaparazziShootEvent.register(this);
         DeathEvent.register(this);
 
-        paparazziHotkey.register();
+        paparazzi1Hotkey.register();
+        paparazzi0Hotkey.register();
         
         //DEBUG
         Main.getInstance().console.register(paparazziConsole);
@@ -87,7 +90,8 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
         PaparazziShootEvent.unregister(this);
         DeathEvent.unregister(this);
 
-        paparazziHotkey.unregister();
+        paparazzi1Hotkey.unregister();
+        paparazzi0Hotkey.unregister();
         
         //DEBUG
         Main.getInstance().console.unregister(paparazziConsole);
@@ -165,7 +169,7 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
                 shader.setUniform2fv("u_frameDimension", dimensions, 0, 2);
                 
                 shader.setUniformf("u_effectDuration", paparazziEffectDuration);
-                shader.setUniformf("u_remainingEffectDuration", paparazziEffectRemainingDuration);
+                shader.setUniformf("u_passedEffectTime", paparazziEffectDuration - Math.max(paparazziEffectRemainingDuration, 0.0f));
                 
                 // color set as RGBA [0.0, 1.0]. alpha is used as maximum result alpha for overlay.
                 float[] paparazziColor = new float[]{ 1.0f, 1.0f, 1.0f, 1.0f };
