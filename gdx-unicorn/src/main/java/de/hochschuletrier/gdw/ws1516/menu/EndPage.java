@@ -1,6 +1,7 @@
 package de.hochschuletrier.gdw.ws1516.menu;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
+import de.hochschuletrier.gdw.commons.gdx.audio.SoundEmitter;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
 import de.hochschuletrier.gdw.commons.gdx.menu.widgets.DecoImage;
 import de.hochschuletrier.gdw.commons.gdx.state.transition.SplitHorizontalTransition;
@@ -35,25 +37,29 @@ public class EndPage extends MenuPage {
         String message;
         Label label;
         Texture texture;
+        Sound sound;
         
         if(type==Type.GAMEOVER) {
             message="Verloren!";
             label = new Label(message, skin, "gameover");
             texture = assetManager.getTexture("dead_unicorn_gameover");
+            sound = assetManager.getSound("lose_sound");
         }
         else
         {
             message="Gewonnen!";
             label = new Label(message, skin, "win");
             texture = assetManager.getTexture("trex");
+            sound = assetManager.getSound("win_sound");
         }
         
-        label.setPosition(0.40F*Gdx.graphics.getWidth(), 0.5F*Gdx.graphics.getHeight());
+        label.setPosition(400, 300);
+        SoundEmitter.playGlobal(sound, false);
         
         DecoImage endPicture = new DecoImage(texture);
         endPicture.setPosition(500, 30);
-        addCenteredButton(450, 250, 100, 50, "Retry", this::startGame, "einhornMotivated");
-        addCenteredButton(600, 250, 100, 50, "Menü", this::stopGame, "einhornMotivated");
+        addCenteredButton(450, 250, 100, 50, "Nochmal versuchen", this::startGame, "einhornMotivated");
+        addCenteredButton(600, 250, 100, 50, "Ins Hauptmenü", this::stopGame, "einhornMotivated");
         super.addActor(label);
         super.addActor(endPicture);
         

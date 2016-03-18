@@ -46,7 +46,7 @@ public class MainMenuPage extends MenuPage {
 
         }
         else if (type==Type.PAUSED) {
-            addLeftAlignedButton(xOffset, yOffset - yStep*(2* i++), 100, 50, "Menü", this::stopGame,"buttonSound");
+            addLeftAlignedButton(xOffset, yOffset - yStep*(2* i++), 100, 50, "Menü", this::stopGame,"menu");
          }
         
     }    
