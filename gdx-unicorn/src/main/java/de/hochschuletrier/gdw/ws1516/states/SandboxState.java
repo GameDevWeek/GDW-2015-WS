@@ -25,26 +25,19 @@ public class SandboxState extends BaseGameState implements InputProcessor {
 
     private final SandboxGame game;
     private final Vector2 cursor = new Vector2();
-    private final FpsCalculator fpsCalc = new FpsCalculator(200, 100, 16);
-    private final BitmapFont font;
 
     public SandboxState(AssetManagerX assetManager, SandboxGame game) {
-        font = assetManager.getFont("verdana_32");
         this.game = game;
     }
 
     @Override
     public void update(float delta) {
-        fpsCalc.addFrame();
         
         Main.getInstance().screenCamera.bind();
 
         DrawUtil.fillRect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Color.BLUE);
 
         game.update(delta);
-        Main.getInstance().screenCamera.bind();
-        font.setColor(Color.WHITE);
-        font.draw(DrawUtil.batch, String.format("%.2f FPS", fpsCalc.getFps()), 0, 0);
     }
 
     @Override

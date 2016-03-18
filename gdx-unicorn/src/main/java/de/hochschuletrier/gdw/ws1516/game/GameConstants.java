@@ -37,13 +37,12 @@ public class GameConstants {
     //Effect Times
     public static final float FLYING_TIME= 10.0f;
     public static final float RAINBOW_MODE_TIME = 10.0f;
-    public static final float HORN_MODE_TIME = 3.0f;
     public static final float SPUCK_MODE_TIME = 2.0f;
-    public static final float HORN_MODE_COOLDOWN = 5.0f;
-    public static final float THROWBACK_MODE_COOLDOWN = 0.75f;
     public static final float SPUCK_MODE_COOLDOWN = 2.0f;
+    public static final float THROWBACK_MODE_COOLDOWN = 0.75f;
+    public static final float HORN_MODE_TIME = 0.75f;
+    public static final float HORN_MODE_COOLDOWN = 3.0f;
     public static final float INVULNERABLE_TIMER = 0.5f;
-    
     public static final float RAINBOW_SPEED_MODIFIER = 2.0f;
     //Physic collision groups
     public static final short PHYSIX_COLLISION_SPIT = -1;
