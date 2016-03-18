@@ -21,7 +21,7 @@ public class MovementComponent extends Component implements Pool.Poolable{
         FLYING,
         FALLING,
         JUMPING,
-        LANDING
+        LANDING,
         GLUED
     }
     
