@@ -197,7 +197,7 @@ public class Game extends InputAdapter {
         mapRenderSystem.initialzeRenderer(map, "map_background", cameraSystem);
         
         //test:
-      //  Entity unicorn = EntityCreator.createEntity("unicorn", 9000, 500);
+        Entity unicorn = EntityCreator.createEntity("unicorn", 9000, 500);
         Entity entity=EntityCreator.createEntity("hunter", 9000, 700);
         PathComponent pathComponent =ComponentMappers.path.get(entity);
         pathComponent.points.add(new Vector2(9000, 100));
