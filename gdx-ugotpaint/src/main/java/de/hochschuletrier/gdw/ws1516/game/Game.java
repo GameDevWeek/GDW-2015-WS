@@ -86,6 +86,7 @@ public class Game extends InputAdapter {
         engine.addSystem(new CollisionSystem(GameConstants.PRIORITY_PHYSIX + 1));
         engine.addSystem(new CanvasRenderSystem(GameConstants.PRIORITY_CANVAS));
         engine.addSystem(new AnimationRenderSystem(GameConstants.PRIORITY_ANIMATIONS));
+        engine.addSystem(new FirstSegmentRenderSystem(GameConstants.PRIORITY_ANIMATIONS+1));
         engine.addSystem(new KeyboardInputSystem());
         engine.addSystem(new InputSystem());
         engine.addSystem(new UpdateSoundEmitterSystem());
