@@ -110,7 +110,7 @@
             "layer" :1,
             "time" : -1,
             "items" : [
-                {"type":"texture", "path":"uc1","resource":"unicorn"}
+                {"type":"animation", "path":"uc1","resource":"unicorn_walking"}
             ],
             "animations" : [],
             "finalNext":"unicornQ2"
@@ -119,7 +119,7 @@
             "layer" :1,
             "time" : -1,
             "items" : [
-                {"type":"texture", "path":"uc2","resource":"unicorn"}
+                {"type":"animation", "path":"uc2","resource":"unicorn_walking"}
             ],
             "animations" : [
               {"time":0, "animation":"pause_path","animationTime":1000,"group":"*"}
