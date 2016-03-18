@@ -53,7 +53,7 @@ public class EndPage extends MenuPage {
             sound = assetManager.getSound("win_sound");
         }
         
-        label.setPosition(0.40F*Gdx.graphics.getWidth(), 0.5F*Gdx.graphics.getHeight());
+        label.setPosition(400, 300);
         SoundEmitter.playGlobal(sound, false);
         
         DecoImage endPicture = new DecoImage(texture);

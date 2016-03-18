@@ -71,7 +71,7 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         int displayHeight = Gdx.graphics.getHeight();
         
         Texture heart;
-        Texture cookie = assetManager.getTexture("cookie");
+        Texture coin = assetManager.getTexture("coin");
         Texture blue_gum = assetManager.getTexture("bubblegum_blue");
         
         if(playerComp.hitpoints==3) {
@@ -104,17 +104,12 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         float time_x = 0.45F * displayWidth;
         float time_y = 20;
         
-        float cookie_x = displayWidth-140;
-        float cookie_y = 20;
+        float coin_x = displayWidth-140;
+        float coin_y = 20;
         
-        float score_x = cookie_x + 60;
+        float score_x = coin_x + 60;
         float score_y = 35;
-        
-       
-        
-        
-  
-              
+               
         int minutes_int = (int) scoreComp.playedSeconds/60;
         String minutes_string = String.valueOf(minutes_int);
         int seconds_int = (int) scoreComp.playedSeconds%60;
@@ -139,13 +134,17 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         DrawUtil.draw(blue_gum, gum_x, gum_y, 30, 30);
         font.draw(DrawUtil.batch, gum_count_string, gum_count_x, gum_count_y);
         font.draw(DrawUtil.batch, time, time_x, time_y);
-        DrawUtil.draw(cookie, cookie_x, cookie_y, 50, 50);
+        DrawUtil.draw(coin, coin_x, coin_y, 50, 50);
         font.draw(DrawUtil.batch,score, score_x, score_y);
                
     }
 
     @Override
-    public void onFinalScoreChanged(long score) {
+    public void onFinalScoreChanged(long score,ScoreComponent scoreComp) {
+        /**
+         * @author philipp -> gamelogic
+         * scorecomp hat alle werte
+         */
         finalScore = score;
     }
     

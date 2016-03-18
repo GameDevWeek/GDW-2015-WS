@@ -31,8 +31,10 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
     private boolean             hornAttack    = false;
     private boolean             fly           = false;
     
-    // for testing
-    private boolean             stopflying    = false;
+    private boolean             moveRight=false;
+    private boolean             moveLeft=false;
+    private boolean             moveUp=false;
+    private boolean             moveDown=false;
     
     private float               directionX, directionY = 0.0f;
     public LookDirection        lookDirection = MovementComponent.LookDirection.RIGHT;
@@ -51,16 +53,14 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
         switch (keycode) {
             case Input.Keys.UP:
             case Input.Keys.SPACE:
-                directionY -= 1.0f;
+                moveUp=true;
                 jump = true;
                 break;
             case Input.Keys.LEFT:
-                directionX -= 1.0f;
-                lookDirection = MovementComponent.LookDirection.LEFT;
+                moveLeft=true;
                 break;
             case Input.Keys.RIGHT:
-                directionX += 1.0f;
-                lookDirection = MovementComponent.LookDirection.RIGHT;
+                moveRight=true;
                 break;
             case Input.Keys.D:
                 hornAttack = true;
@@ -72,7 +72,7 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
                 fly = true;
                 break;
             case Input.Keys.DOWN:
-                directionY += 1.0f;
+                moveDown=true;
                 break;
         }
         return true;
@@ -83,14 +83,14 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
         switch (keycode) {
             case Input.Keys.UP:
             case Input.Keys.SPACE:
-                directionY += 1.0f;
+                moveUp=false;
                 jump = false;
                 break;
             case Input.Keys.LEFT:
-                directionX += 1.0f;
+                moveLeft=false;
                 break;
             case Input.Keys.RIGHT:
-                directionX -= 1.0f;
+                moveRight=false;
                 break;
             case Input.Keys.F:
                 fly = false;
@@ -102,7 +102,7 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
                 spit = false;
                 break;
             case Input.Keys.DOWN:
-                directionY -= 1.0f;
+                moveDown=false;
                 break;
         }
         return true;
@@ -142,22 +142,50 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
     protected void processEntity(Entity entity, float deltaTime) {
         InputComponent input = entity.getComponent(InputComponent.class);
         PlayerComponent player=ComponentMappers.player.get(entity);
+        MovementComponent movement=ComponentMappers.movement.get(entity);
+        if (moveRight && moveLeft){
+            directionX=0.0f;
+        }else if (moveRight){
+            lookDirection=LookDirection.RIGHT;
+            directionX=+1.0f;
+        }
+        else if(moveLeft){
+            lookDirection=LookDirection.LEFT;
+            directionX=-1.0f;
+        }else{
+            directionX=0.0f;
+        }
+        if (moveUp && moveDown){
+            directionY=0.0f;
+        }else if (moveDown){
+            directionY=+1.0f;
+        }
+        else if(moveUp){
+            directionY=-1.0f;
+        }else{
+            directionY=0.0f;
+        }
         input.directionX = directionX;
         input.directionY = directionY;
-        input.startFly = fly;
+        input.startFly=fly;
         if (fly && player.state!=State.RAINBOW) {
-            StartFlyEvent.emit(entity, GameConstants.FLYING_TIME);
+            if (movement.state==de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State.FLYING){
+                EndFlyEvent.emit(entity);
+            }else{
+                StartFlyEvent.emit(entity, GameConstants.FLYING_TIME);
+            }
             fly = false;
         }
-//        if(stopflying){
-//            EndFlyEvent.emit(entity);
-//            fly=false;
-//            stopflying=false;
-//        }
 
 
-        if(hornAttack && player.state!=State.RAINBOW && player.hornAttackCooldown<=0.0f){
-                HornAttackEvent.start(entity);
+        if(hornAttack){
+            if (movement.state==de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State.FLYING){
+                EndFlyEvent.emit(entity);
+            }else{
+                if (player.state!=State.RAINBOW && player.hornAttackCooldown<=0.0f){
+                    HornAttackEvent.start(entity);
+                }
+            }
             hornAttack=false;
         }
         input.hornAttack = hornAttack;
@@ -176,20 +204,21 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
         }
         
         //Charge spit
-        if (input.spit && input.gumSpitCooldown == 0 && player.state!=State.RAINBOW) {
-            input.gumSpitCharge += deltaTime;
-            player.state=State.SPUCKCHARGE;
+        if (input.spit){
+            if(input.gumSpitCooldown == 0 && player.state!=State.RAINBOW) {
+                input.gumSpitCharge += deltaTime;
+                player.state=State.SPUCKCHARGE;
+            }
         }
-        
         //Emit spit
-        if (input.gumSpitCooldown == 0 && player.state!=State.RAINBOW  &&
+        if (input.gumSpitCooldown == 0 && player.state!=State.RAINBOW &&
             (input.oldSpit && !input.spit) || (input.gumSpitCharge > GameConstants.SPIT_CHARGE_TIME_TO_MAX)) {
             float force = (input.gumSpitCharge > GameConstants.SPIT_CHARGE_TIME_TO_MAX) ? 1.0f : input.gumSpitCharge / GameConstants.SPIT_CHARGE_TIME_TO_MAX;
             BubblegumSpitSpawnEvent.emit(force);
             input.gumSpitCooldown = GameConstants.SPIT_COOLDOWN;
             input.gumSpitCharge = 0.0f;
         }
-        
+
         input.lookDirection = lookDirection;
         
     }
