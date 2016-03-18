@@ -150,10 +150,11 @@ public class BubblegumSpitSystem extends IteratingSystem implements BubblegumSpi
         
         //Fetch body
         PhysixBodyComponent enemyBody = ComponentMapper.getFor(PhysixBodyComponent.class).get(enemy);
-        
+                
         //Create glue entity
         final Entity glueEntity = engine.createEntity();
-        
+ 
+        //Set glue component
         BubbleGlueComponent glueComponent = engine.createComponent(BubbleGlueComponent.class);
         glueComponent.gluedEntity = enemy;
         glueComponent.gluedToPosition = new Vector2(enemyBody.getX(), enemyBody.getY());
