@@ -233,7 +233,7 @@ public class Game extends InputAdapter {
         try {
             map = new TiledMap(filename, LayerObject.PolyMode.ABSOLUTE);
         } catch (Exception ex) {
-            throw new IllegalArgumentException("Map konnte nicht geladen werden: " + filename);
+            throw new IllegalArgumentException("Map konnte nicht geladen werden: " + filename, ex);
         }
 
         // Wenn map geladen wurde

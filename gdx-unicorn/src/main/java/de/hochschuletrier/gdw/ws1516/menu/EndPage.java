@@ -110,7 +110,7 @@ public class EndPage extends MenuPage {
         if (!main.isTransitioning()) {      
             Game game = new Game();
             game.init(assetManager);
-            main.changeState(new GameplayState(assetManager, game), new SplitHorizontalTransition(500), null);
+            main.changeState(new GameplayState(assetManager, game));
             
         }
     }
