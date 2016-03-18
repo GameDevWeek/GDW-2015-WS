@@ -17,6 +17,7 @@ import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.CollectableComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.SoundEmitterComponent;
@@ -68,13 +69,11 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
         /*
          * Löschen der beendeten Sounds
          */
-        SoundInstance[] instances=new SoundInstance[soundEmitter.soundInstances.size()];
-        soundEmitter.soundInstances.toArray(instances);
-        for (int i=0;i<instances.length;i++){
-            if (instances[i].isStopped()){
-                logger.debug("removed");
+        for (int i=0;i<soundEmitter.soundInstances.size();i++){
+            if (soundEmitter.soundInstances.get(i).isStopped()){
                 soundEmitter.soundNames.remove( i );
                 soundEmitter.soundInstances.remove(i);
+                i--;
             }
         }
         
@@ -113,7 +112,6 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
             }
             soundEmitter.soundInstances.add(soundInstance);
             soundEmitter.soundNames.add(sound);
-            logger.debug("array {} size {}", soundEmitter.soundInstances,soundEmitter.soundInstances.size());
         }else
         {
             logger.warn("Entity {} tried to play a sound( {} ), but has no SoundEmitter.",entity,sound);
@@ -156,6 +154,7 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
     public void onDeathEvent(Entity entity) {
         Entity player =  engine.getEntitiesFor( Family.all(PlayerComponent.class).get() ).first();
         CollectableComponent collect = ComponentMappers.collectable.get(entity);
+        EnemyTypeComponent enemy = ComponentMappers.enemyType.get(entity);
         if (player != null)
         {
             if ( collect != null )
@@ -168,6 +167,11 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
                         break;
                 }
             }
+        }
+        if ( enemy != null )
+        {
+
+            SoundEvent.emit("paparazzidie", player);
         }
     }
     
