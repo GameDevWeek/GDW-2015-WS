@@ -1,5 +1,7 @@
 package de.hochschuletrier.gdw.ws1516.states;
 
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -10,6 +12,7 @@ import com.badlogic.gdx.backends.lwjgl.audio.Wav.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.PauseableThread;
 
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
@@ -38,6 +41,7 @@ import de.hochschuletrier.gdw.ws1516.events.FinalScoreEvent;
  */
 public class GameplayState extends BaseGameState implements GameOverEvent.Listener, FinalScoreEvent.Listener {
 
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Game.class);
 
     private static final Color OVERLAY_COLOR = new Color(0f, 0f, 0f, 0.5f);
     
@@ -87,11 +91,8 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
             public boolean keyUp(int keycode) {
                 if (keycode == Input.Keys.ESCAPE) {
                     if (mainProcessor == gameInputProcessor) {
-                        PauseGameEvent.emit(true);
                         mainProcessor = menuInputProcessor;                        
                     } else {
-                        PauseGameEvent.emit(false);
-
                         menuManager.popPage();
                     }
                     return true;
@@ -115,6 +116,16 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
             Main.getInstance().screenCamera.bind();
             DrawUtil.fillRect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), OVERLAY_COLOR);
             menuManager.render();
+            if ( !Game.PAUSE_ENGINE )
+            {   /** @author Tobi-Gamelogic   hier weis ich ganz sicher dass es pasuiert ist **/
+                PauseGameEvent.emit(true);
+            }
+        }else
+        {
+            if ( Game.PAUSE_ENGINE )
+            {
+                PauseGameEvent.emit(false);
+            }
         }
     }
 

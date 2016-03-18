@@ -204,15 +204,19 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
             de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State oldState,
             de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State newState) {
         MovementComponent move = ComponentMappers.movement.get(entity);
-        PhysixBodyComponent body = ComponentMappers.physixBody.get(entity);            
-        if ( newState == MovementComponent.State.LANDING )
+        PhysixBodyComponent body = ComponentMappers.physixBody.get(entity);
+        PlayerComponent player = ComponentMappers.player.get(entity);
+        if ( player != null && player.state != PlayerComponent.State.RAINBOW )
         {
-            move.speed = GameConstants.PLAYER_SPEED * 0.5f;
-        } 
-        if ( oldState == MovementComponent.State.LANDING )
-        {
-            move.speed = GameConstants.PLAYER_SPEED ;
-        } 
+            if ( newState == MovementComponent.State.LANDING )
+            {
+                move.speed = GameConstants.PLAYER_SPEED * 0.5f;
+            } 
+            if ( oldState == MovementComponent.State.LANDING )
+            {
+                move.speed = GameConstants.PLAYER_SPEED ;
+            } 
+        }
         
     }
     

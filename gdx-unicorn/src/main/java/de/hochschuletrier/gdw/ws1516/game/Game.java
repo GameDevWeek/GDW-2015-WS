@@ -99,7 +99,7 @@ public class Game extends InputAdapter {
     private Hotkey healCheating = null;
     private Hotkey rainbow=null;
     
-    private static boolean PAUSE_ENGINE = false;
+    public static boolean PAUSE_ENGINE = false;
 
 
 
