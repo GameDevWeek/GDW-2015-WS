@@ -1,8 +1,6 @@
 package de.hochschuletrier.gdw.ws1516.game;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 
 public class GameConstants {
 

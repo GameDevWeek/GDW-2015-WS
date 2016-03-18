@@ -1,5 +1,6 @@
 {
     "wall": "data/images/wall.png",
     "canvas": "data/images/canvas.png",
-    "overlay": "data/images/overlay.png"
+    "overlay": "data/images/overlay.png",
+    "first_segment_overlay" : "data/images/first_segment_overlay.png"
 }

@@ -1,13 +1,12 @@
 package de.hochschuletrier.gdw.ws1516.events;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.SnapshotArray;
 import de.hochschuletrier.gdw.ws1516.game.utils.PlayerColor;
 
 public class SplashEvent {
     public static interface Listener {
-        void onSplashEvent(Vector2 first, PlayerColor color);
+        void onSplashEvent(Vector2 position, PlayerColor color);
     }
 
     private static final SnapshotArray<Listener> listeners = new SnapshotArray<Listener>();

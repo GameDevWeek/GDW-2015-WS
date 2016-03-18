@@ -71,8 +71,8 @@ public class ParticleRenderSystem extends IteratingSystem implements SplashEvent
     }
 
     @Override
-    public void onSplashEvent(Vector2 first, PlayerColor color) {
-        Entity entity = game.createEntity("explosion", first.x, first.y, color);
+    public void onSplashEvent(Vector2 position, PlayerColor color) {
+        Entity entity = game.createEntity("explosion", position.x, position.y, color);
         ParticleComponent particle = ComponentMappers.particle.get(entity);
 
         particle.effect = new ParticleEffect(color.particleEffectExplosion);

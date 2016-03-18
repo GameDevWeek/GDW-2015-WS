@@ -65,14 +65,12 @@ public class Game extends InputAdapter {
         inputForwarder.set(engine.getSystem(KeyboardInputSystem.class));
         float x = GameConstants.BOUND_LEFT + 3 * GameConstants.SEGMENT_DISTANCE;
         float y = GameConstants.BOUND_TOP;
-        Entity snake1 = createSnake(0, x, y, 1, 0, PlayerColor.RED);
-        ComponentMappers.input.get(snake1).lastMoveDirection.add(1,0);
+        createSnake(0, x, y, 1, 0, PlayerColor.RED);
 
 
         x = GameConstants.BOUND_RIGHT - 3 * GameConstants.SEGMENT_DISTANCE;
         y = GameConstants.BOUND_BOTTOM;
-        Entity snake2 = createSnake(1, x, y, -1, 0, PlayerColor.BLUE);
-        ComponentMappers.input.get(snake2).lastMoveDirection.add(-1,0);
+        createSnake(1, x, y, -1, 0, PlayerColor.BLUE);
 
         pickupSystem.createRandomPickup();
         pickupSystem.createRandomPickup();
@@ -86,6 +84,7 @@ public class Game extends InputAdapter {
         engine.addSystem(new CollisionSystem(GameConstants.PRIORITY_PHYSIX + 1));
         engine.addSystem(new CanvasRenderSystem(GameConstants.PRIORITY_CANVAS));
         engine.addSystem(new AnimationRenderSystem(GameConstants.PRIORITY_ANIMATIONS));
+        engine.addSystem(new FirstSegmentRenderSystem(GameConstants.PRIORITY_ANIMATIONS+1));
         engine.addSystem(new KeyboardInputSystem());
         engine.addSystem(new InputSystem());
         engine.addSystem(new UpdateSoundEmitterSystem());
@@ -106,6 +105,7 @@ public class Game extends InputAdapter {
         Entity e = createEntity("snake", x, y, color);
         final InputComponent input = engine.createComponent(InputComponent.class);
         input.index = index;
+        input.lastMoveDirection.add(xDir, yDir);
         e.add(input);
 
         final PlayerComponent player = engine.createComponent(PlayerComponent.class);
