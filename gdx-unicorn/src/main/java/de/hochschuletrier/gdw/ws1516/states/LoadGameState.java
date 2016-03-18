@@ -21,6 +21,8 @@ public class LoadGameState extends BaseGameState {
     private final Runnable completeFunc;
     private final Skin skin = new Skin(Gdx.files.internal("data/ui/menu/skins/menu.json"));
     private final Texture loadingTexture = new Texture(Gdx.files.internal("data/graphics/unicorn_s.png"));
+    private final Texture rectTexture = new Texture(Gdx.files.internal("data/ui/menu/loading-rect.png"));
+    
     private final AnimationExtended anim;
     private float stateTime;
 
@@ -57,20 +59,14 @@ public class LoadGameState extends BaseGameState {
        
         
         DrawUtil.fillRect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Color.PURPLE);
-//        ProgressBar pBar = new ProgressBar(0, 100, 1, false, skin, "unicorn");
-//        pBar.setPosition(20, 20);
-//        pBar.setWidth(300);
-//        pBar.setHeight(200);
-//        pBar.draw(DrawUtil.batch, 1);
-        
-        
+
         float drawWidth = Gdx.graphics.getWidth() - 100.0f;
-     //   DrawUtil.fillRect(50, Gdx.graphics.getHeight() / 2 - 25, Gdx.graphics.getWidth()-100.0F, 50, Color.MAGENTA);
-        DrawUtil.fillRect(50, Gdx.graphics.getHeight() / 2 - 25, (int) (drawWidth * assetManager.getProgress()+25), 50, Color.MAGENTA);
-     //  DrawUtil.draw(loadingTexture, (int) (drawWidth * assetManager.getProgress()) , Gdx.graphics.getHeight() / 2 - 25);
+     
+        DrawUtil.draw(rectTexture, 50, Gdx.graphics.getHeight() / 2 - 25, (int) (drawWidth * assetManager.getProgress()+25), 50);
+
         TextureRegion keyFrame = anim.getKeyFrame(stateTime);
         DrawUtil.batch.draw(keyFrame, (int) (drawWidth * assetManager.getProgress()), Gdx.graphics.getHeight() / 2 - 25, 0,0, keyFrame.getRegionWidth(), keyFrame.getRegionHeight(), 1, 1, 0);
-     //   DrawUtil.drawRect(50, Gdx.graphics.getHeight() / 2 - 25, drawWidth, 50, Color.GREEN);
+   
     }
 
     @Override
