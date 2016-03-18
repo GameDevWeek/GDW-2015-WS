@@ -65,6 +65,7 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         ScoreComponent scoreComp = ComponentMappers.score.get(entity);
         PlayerComponent playerComp = ComponentMappers.player.get(entity);
         
+        
         Main.getInstance().screenCamera.bind();
         
         int displayWidth = Gdx.graphics.getWidth();
@@ -73,6 +74,7 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         Texture heart;
         Texture coin = assetManager.getTexture("coin_hud");
         Texture blue_gum = assetManager.getTexture("gum_hud");
+        Texture hornAttackDummy;
         
         if(playerComp.hitpoints==3) {
             heart = assetManager.getTexture("heart3");
@@ -86,6 +88,17 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         else  {
             heart = assetManager.getTexture("heart0");
         }
+        
+        if(playerComp.hornAttackCooldown==0) {
+            hornAttackDummy = assetManager.getTexture("heart3");
+        }
+        else {
+            hornAttackDummy = assetManager.getTexture("heart2");
+        }
+ 
+     
+        
+        
         
         
         
@@ -109,7 +122,10 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         
         float score_x = coin_x + 60;
         float score_y = 35;
-               
+        
+        float hornAttackDummy_x = 20;
+        float hornAttackDummy_y = displayHeight-70;
+        
         int minutes_int = (int) scoreComp.playedSeconds/60;
         String minutes_string = String.valueOf(minutes_int);
         int seconds_int = (int) scoreComp.playedSeconds%60;
@@ -136,6 +152,8 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         font.draw(DrawUtil.batch, time, time_x, time_y);
         DrawUtil.draw(coin, coin_x, coin_y, 50, 50);
         font.draw(DrawUtil.batch,score, score_x, score_y);
+        DrawUtil.draw(hornAttackDummy, hornAttackDummy_x, hornAttackDummy_y, 50, 50);
+        
                
     }
 
