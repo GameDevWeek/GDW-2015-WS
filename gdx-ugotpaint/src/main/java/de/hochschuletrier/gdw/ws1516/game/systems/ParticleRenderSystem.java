@@ -25,13 +25,9 @@ public class ParticleRenderSystem extends IteratingSystem implements SplashEvent
     private Engine engine;
     private Game game;
 
-    public ParticleRenderSystem(Game game) {
-        this(0);
-        this.game = game;
-    }
-
-    public ParticleRenderSystem(int priority) {
+    public ParticleRenderSystem(Game game, int priority) {
         super(Family.one(ParticleComponent.class).get(), priority);
+        this.game = game;
     }
 
     @Override
@@ -62,12 +58,16 @@ public class ParticleRenderSystem extends IteratingSystem implements SplashEvent
         particle.effect.setPosition(position.pos.x, position.pos.y);
         particle.effect.draw(DrawUtil.batch);
 
-        System.out.println("peng");
-
-        if(particle.effect.isComplete()){
+        boolean complete = false;
+        for (ParticleEmitter emitter : particle.effect.getEmitters()) {
+            if(emitter.getPercentComplete() <= -25) {
+                complete = true;
+                break;
+            }
+        }
+        if(complete){
             engine.removeEntity(entity);
         }
-
     }
 
     @Override
@@ -75,6 +75,7 @@ public class ParticleRenderSystem extends IteratingSystem implements SplashEvent
         Entity entity = game.createEntity("explosion", first.x, first.y, color);
         ParticleComponent particle = ComponentMappers.particle.get(entity);
         particle.effect = new ParticleEffect(color.particleEffect);
+        particle.effect.allowCompletion();
 
         System.out.println("explosion");
 

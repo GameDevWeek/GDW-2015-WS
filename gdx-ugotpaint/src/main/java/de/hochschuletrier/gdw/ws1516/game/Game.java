@@ -38,7 +38,7 @@ public class Game extends InputAdapter {
     private final PickupSystem pickupSystem = new PickupSystem(this);
     private final SplashSystem splashSystem = new SplashSystem(this);
     private final PlayerDeathSystem playerDeathSystem = new PlayerDeathSystem();
-    private final ParticleRenderSystem particleRenderSystem = new ParticleRenderSystem(this);
+    private final ParticleRenderSystem particleRenderSystem = new ParticleRenderSystem(this, GameConstants.PRIORITY_ANIMATIONS-1);
 
 
     private final InputForwarder inputForwarder = new InputForwarder();
@@ -56,11 +56,7 @@ public class Game extends InputAdapter {
             if (color != PlayerColor.NEUTRAL) {
                 color.splashAnimation = assetManager.getAnimation("splash_" + colorKey);
                 color.projectileAnimation = assetManager.getAnimation("projectile_" + colorKey);
-            }
-            if (color == PlayerColor.RED) {
-                color.particleEffect = assetManager.getParticleEffect("explosion_red");
-            } else if (color == PlayerColor.BLUE) {
-                color.particleEffect = assetManager.getParticleEffect("explosion_blue");
+                color.particleEffect = assetManager.getParticleEffect("explosion_" + colorKey);
             }
         }
 
