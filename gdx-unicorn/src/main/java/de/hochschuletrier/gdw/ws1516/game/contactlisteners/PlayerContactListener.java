@@ -7,10 +7,14 @@ import com.badlogic.ashley.core.Entity;
 
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixContact;
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixContactAdapter;
+import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.EndContactEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornCollisionEvent;
+import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
+import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
 import de.hochschuletrier.gdw.ws1516.events.UnicornEnemyCollisionEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.components.CollectableComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
@@ -49,7 +53,7 @@ public class PlayerContactListener extends PhysixContactAdapter{
         
         Entity playerEn=myEntity;
         Entity otherEn=otherEntity;
-        if (ComponentMappers.player.has(otherEntity)&&ComponentMappers.enemyType.has(myEntity)){
+        if (ComponentMappers.player.has(otherEntity) ){
             playerEn=otherEntity;
             otherEn=myEntity;
         }
@@ -64,6 +68,30 @@ public class PlayerContactListener extends PhysixContactAdapter{
                 UnicornEnemyCollisionEvent.emit(playerEn, otherEn);
                 logger.debug("gegnerKollision {}");
             }
+        }
+        /**
+         * @author Tobi - GameLogic
+         * einsammeln von Items
+         */
+        if(ComponentMappers.player.has(playerEn)&&ComponentMappers.collectable.has(otherEn)){
+            //TODO Hornattack
+            PlayerComponent player=playerEn.getComponent(PlayerComponent.class);
+            CollectableComponent collect = ComponentMappers.collectable.get(otherEn);
+            if ( !collect.isCollected )
+            {
+                switch (collect.type) 
+                {
+                    case CHOCO_COIN:
+                            ScoreBoardEvent.emit(ScoreType.CHOCO_COIN, 1);
+                        break;
+                    default:
+                        break;
+                }                
+                collect.isCollected = true;
+                DeathEvent.emit(otherEn);
+                logger.debug("einsammeln {}");
+            }
+          
         }
 //        if(ComponentMappers.enemyType.has(myEntity)&&ComponentMappers.player.has(otherEntity)){
 //            PlayerComponent player=otherEntity.getComponent(PlayerComponent.class);
