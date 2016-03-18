@@ -14,7 +14,9 @@ import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 
 public class UpdatePlayerSystem extends IteratingSystem implements GameOverEvent.Listener {
 
-    private final Vector2 vel = new Vector2();
+    private final Vector2 lastDir = new Vector2();
+    private final Vector2 lastPoint = new Vector2();
+    private final Vector2 dummy = new Vector2();
     protected boolean inputEnabled = true;
 
     public UpdatePlayerSystem() {
@@ -47,8 +49,8 @@ public class UpdatePlayerSystem extends IteratingSystem implements GameOverEvent
         PositionComponent position = ComponentMappers.position.get(entity);
         if(inputEnabled) {
             InputComponent input = ComponentMappers.input.get(entity);
-            vel.set(input.moveDirection).nor().scl(80 * deltaTime);
-            position.pos.add(vel);
+            dummy.set(input.moveDirection).nor().scl(80 * deltaTime);
+            position.pos.add(dummy);
             if(position.pos.x < GameConstants.BOUND_LEFT)
                 position.pos.x = GameConstants.BOUND_LEFT;
             else if(position.pos.x > GameConstants.BOUND_RIGHT)
@@ -93,14 +95,16 @@ public class UpdatePlayerSystem extends IteratingSystem implements GameOverEvent
 
     private void updateSegmentPositions(PositionComponent position, PlayerComponent player) {
         // set segment positions based on path
-        final Vector2 lastDir = new Vector2();
-        final Vector2 lastPoint = position.pos.cpy();
+        lastDir.setZero();
+        dummy.setZero();
+        lastPoint.set(position.pos);
         int pathIndex = 0;
         for (Vector2 seg : player.segments) {
             float toMove = GameConstants.SEGMENT_DISTANCE;
             while (toMove > 0) {
                 if (pathIndex >= player.path.size()) {
-                    lastPoint.set(lastDir).scl(toMove).add(lastPoint);
+                    dummy.set(lastDir).scl(toMove).add(lastPoint);
+                    lastPoint.set(dummy);
                     break;
                 }
                 Vector2 destination = player.path.get(pathIndex);

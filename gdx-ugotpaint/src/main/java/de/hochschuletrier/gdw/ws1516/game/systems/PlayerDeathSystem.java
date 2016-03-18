@@ -27,6 +27,7 @@ public class PlayerDeathSystem extends EntitySystem implements PlayerDeathEvent.
     private Entity playerRed, playerBlue;
 
     private ImmutableArray<Entity> players;
+    private final Vector2 dummy = new Vector2();
 
     public PlayerDeathSystem() {
         super();
@@ -89,9 +90,6 @@ public class PlayerDeathSystem extends EntitySystem implements PlayerDeathEvent.
         }
         // add the new paths oriented along the movement direction
         playerComponent.path.add(respawnLocation.add(direction.scl(-10)));
-        for (int i = 1; i < GameConstants.DEFAULT_SEGMENTS; ++i) {
-            playerComponent.path.add(playerComponent.path.get(i - 1).add(direction.scl(-10)));
-        }
     }
 
     /**
@@ -109,6 +107,6 @@ public class PlayerDeathSystem extends EntitySystem implements PlayerDeathEvent.
         float y = rnd.nextInt((int) (BOUND_BOTTOM - BORDER_SIZE - 2 * DEFAULT_SEGMENTS * SEGMENT_DISTANCE - 2 * DEFAULT_SEGMENTS * PAINT_RADIUS))
                 + BORDER_SIZE + DEFAULT_SEGMENTS * SEGMENT_DISTANCE + DEFAULT_SEGMENTS * PAINT_RADIUS;
 
-        return new Vector2(x, y);
+        return dummy.set(x,y);
     }
 }
