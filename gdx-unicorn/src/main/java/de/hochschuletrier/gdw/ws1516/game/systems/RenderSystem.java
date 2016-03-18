@@ -39,7 +39,6 @@ public class RenderSystem extends SortedSubIteratingSystem {
     @Override
     public void addedToEngine(Engine engine) 
     {
-        // TODO Auto-generated method stub
         super.addedToEngine(engine);
     }
 
