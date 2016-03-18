@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 
 import de.hochschuletrier.gdw.commons.gdx.ashley.ComponentFactory;
 import de.hochschuletrier.gdw.commons.utils.SafeProperties;
+import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 
 public class MovementComponentFactory extends ComponentFactory<EntityFactoryParam> {
@@ -35,6 +36,7 @@ public class MovementComponentFactory extends ComponentFactory<EntityFactoryPara
                     component.state=MovementComponent.State.ON_GROUND;             
             }   
         }
+        component.speed = properties.getFloat("speed",GameConstants.PLAYER_SPEED);
         entity.add(component);
     }
 }

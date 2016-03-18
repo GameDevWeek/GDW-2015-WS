@@ -10,11 +10,14 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 
+import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornAttackCooldownEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
 import de.hochschuletrier.gdw.ws1516.events.MovementEvent;
+import de.hochschuletrier.gdw.ws1516.events.MovementStateChangeEvent;
+import de.hochschuletrier.gdw.ws1516.events.MovementStateChangeEvent.Listener;
 import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
@@ -25,7 +28,7 @@ import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
 import de.hochschuletrier.gdw.ws1516.events.ThrowBackEvent;
 
 public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.Listener,
-    HornAttackEvent.Listener, StartFlyEvent.Listener, EndFlyEvent.Listener, ThrowBackEvent.Listener
+    HornAttackEvent.Listener, StartFlyEvent.Listener, EndFlyEvent.Listener, ThrowBackEvent.Listener, MovementStateChangeEvent.Listener
     {
 
     private static final Logger logger = LoggerFactory.getLogger(PlayerStateSystem.class);
@@ -44,6 +47,7 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         StartFlyEvent.register(this);
         EndFlyEvent.register(this);
         ThrowBackEvent.register(this);
+        MovementStateChangeEvent.register(this);
     }
     
     @Override
@@ -55,6 +59,7 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         StartFlyEvent.unregister(this);
         EndFlyEvent.unregister(this);
         ThrowBackEvent.unregister(this);
+        MovementStateChangeEvent.unregister(this);
     }
     
     @Override
@@ -192,6 +197,23 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
             playerComp.throwBackCooldown = GameConstants.THROWBACK_MODE_COOLDOWN;
             playerComp.state = State.NORMAL;
         }
+    }
+
+    @Override
+    public void onMovementStateChangeEvent(Entity entity,
+            de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State oldState,
+            de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State newState) {
+        MovementComponent move = ComponentMappers.movement.get(entity);
+        PhysixBodyComponent body = ComponentMappers.physixBody.get(entity);            
+        if ( newState == MovementComponent.State.LANDING )
+        {
+            move.speed = GameConstants.PLAYER_SPEED * 0.5f;
+        } 
+        if ( oldState == MovementComponent.State.LANDING )
+        {
+            move.speed = GameConstants.PLAYER_SPEED ;
+        } 
+        
     }
     
 

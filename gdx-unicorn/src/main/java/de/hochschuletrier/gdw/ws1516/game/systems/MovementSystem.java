@@ -22,6 +22,7 @@ import de.hochschuletrier.gdw.ws1516.events.ThrowBackEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.LookDirection;
@@ -109,6 +110,7 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         InputComponent input = ComponentMappers.input.get(entity);
         MovementComponent movement = ComponentMappers.movement.get(entity);
         PlayerComponent playerComp = ComponentMappers.player.get(entity);
+        EnemyTypeComponent enemyType = ComponentMappers.enemyType.get(entity);
                 
         if (input != null) {
             
@@ -126,6 +128,16 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
             
         }
         if (playerComp != null && playerComp.state != State.HORNATTACK && playerComp.state != State.THROWBACK) {
+            if (movement.isOnPlatform) {
+                physix.setLinearVelocityX(movement.velocityX + movement.onPlatformBody.getLinearVelocity().x);
+            } else {
+                physix.setLinearVelocityX(movement.velocityX);
+            }
+        }
+        /** Gegner wollen sich auch bewegen
+         * @author Tobi - GameLogic
+         */
+        if (enemyType != null ) {
             if (movement.isOnPlatform) {
                 physix.setLinearVelocityX(movement.velocityX + movement.onPlatformBody.getLinearVelocity().x);
             } else {
@@ -183,7 +195,6 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
     
     @Override
     public void onMovementEvent(Entity entity, float dirX) {
-        
         MovementComponent movement = ComponentMappers.movement.get(entity);
         movement.velocityX = movement.speed * Math.max(Math.min(dirX, 1.0f), -1.0f);
         
