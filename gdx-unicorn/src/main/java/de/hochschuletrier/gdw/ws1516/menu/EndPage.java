@@ -18,6 +18,7 @@ import de.hochschuletrier.gdw.commons.gdx.state.transition.SplitHorizontalTransi
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.Game;
+import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
 import de.hochschuletrier.gdw.ws1516.states.GameplayState;
 import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
 import de.hochschuletrier.gdw.ws1516.events.FinalScoreEvent;
@@ -30,6 +31,7 @@ public class EndPage extends MenuPage implements FinalScoreEvent.Listener {
     }
     
     private long finalScore;
+    private ScoreComponent scoreComp;
 
     public EndPage(Skin skin, MenuManager menuManager, String background, Type type) {
         super(skin, background);
@@ -90,9 +92,9 @@ public class EndPage extends MenuPage implements FinalScoreEvent.Listener {
     }
 
     @Override
-    public void onFinalScoreChanged(long score) {
+    public void onFinalScoreChanged(long score, ScoreComponent scoreComp) {
         finalScore = score;
-        
+        this.scoreComp=scoreComp;
     }
 
 }
