@@ -1,5 +1,6 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.ashley.core.Engine;
@@ -19,6 +20,7 @@ import de.hochschuletrier.gdw.commons.devcon.ConsoleCmd;
 import de.hochschuletrier.gdw.commons.devcon.cvar.CVarFloat;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.Main;
+import de.hochschuletrier.gdw.ws1516.events.PaparazziShootEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.CameraTargetComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
@@ -26,7 +28,7 @@ import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 
 
 
-public class EffectsRenderSystem extends IteratingSystem {
+public class EffectsRenderSystem extends IteratingSystem implements PaparazziShootEvent.Listener {
     
     private long startTime;
     
@@ -63,8 +65,18 @@ public class EffectsRenderSystem extends IteratingSystem {
     }
     
     @Override
+    public void onPaparazziShootEvent(float distance) {
+        List<String> l = new ArrayList<>();
+        l.add("");
+        l.add(Float.toString(distance));
+        startPaparazzi(l);
+    }
+    
+    @Override
     public void addedToEngine(Engine engine) {
 
+        PaparazziShootEvent.register(this);
+        
         //DEBUG
         Main.getInstance().console.register(paparazzi);
         Main.getInstance().console.register(paparazziIntensity);
@@ -74,6 +86,8 @@ public class EffectsRenderSystem extends IteratingSystem {
     
     @Override
     public void removedFromEngine(Engine engine) {
+        
+        PaparazziShootEvent.unregister(this);
         
         //DEBUG
         Main.getInstance().console.unregister(paparazzi);
@@ -103,7 +117,8 @@ public class EffectsRenderSystem extends IteratingSystem {
                 shader.setUniformf("u_effectDuration", paparazziStartDuration);
                 shader.setUniformf("u_remainingEffectDuration", paparazziDurationLeft);
                 
-                float[] paparazziColor = new float[]{ 0.0f, 0.0f, 1.0f, 1.0f };
+                // color set as RGBA [0.0, 1.0]. alpha is used as maximum result alpha for overlay.
+                float[] paparazziColor = new float[]{ 1.0f, 1.0f, 1.0f, 1.0f };
                 shader.setUniform4fv("u_paparazziColor", paparazziColor, 0, 4);
                 float[] paparazziSeed = new float[]{ currentPaparazziSeed, currentPaparazziSeed };
                 shader.setUniform2fv("u_paparazziSeed", paparazziSeed, 0, 2);
