@@ -161,8 +161,6 @@ public class Game extends InputAdapter {
         togglePhysixDebug.unregister();
         scoreCheating.unregister();
         pauseGame.unregister();
-        rainbow.unregister();
-        healCheating.unregister();
         winGameCheat.unregister();
         Main.getInstance().console.unregister(physixDebug);
         
