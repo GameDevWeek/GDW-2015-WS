@@ -209,7 +209,7 @@ public class Game extends InputAdapter {
 //        rainbow = new Hotkey(() -> RainbowEvent.start(unicorn), Input.Keys.F3,
 //                HotkeyModifier.CTRL);
 //        rainbow.register();
-        papa = EntityCreator.createEntity("tourist", 2000, 100);
+        Entity papa = EntityCreator.createEntity("tourist", 2000, 100);
         pathComponent =ComponentMappers.path.get(papa);
         pathComponent.points.add(new Vector2(2000, 100));
         pathComponent.points.add(new Vector2(2200,100));
