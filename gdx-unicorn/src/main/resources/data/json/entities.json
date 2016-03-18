@@ -278,10 +278,34 @@
             },
             "PhysixBody": {
                 "type": "circle",
+                "size": 20,
+                "density": 5,
+                "friction": 0.0,
+                "restitution": 0.0,
+                "isSensor": true,
+                "gravity" : 0.0
+            },
+            "RenderLayer": {
+                "layer": 59
+            }
+        }
+    },
+    "bonbon": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Texture": {
+                "texture": "drop"
+            },
+            "Collectable":{
+                "type" : "bonbon"
+            },
+            "PhysixBody": {
+                "type": "circle",
                 "size": 30,
                 "density": 5,
-                "friction": 0.2,
-                "restitution": 0.4,
+                "friction": 0.0,
+                "restitution": 0.0,
                 "isSensor": true,
                 "gravity" : 0.0
             },
