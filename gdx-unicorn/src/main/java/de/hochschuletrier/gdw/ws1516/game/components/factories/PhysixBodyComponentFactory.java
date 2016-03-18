@@ -173,8 +173,9 @@ public class PhysixBodyComponentFactory extends
         PhysixBodyComponent bodyComponent = getBodyComponent(param, entity);
         PhysixFixtureDef fixtureDef = getFixtureDef(properties).shapeCircle(
                 properties.getFloat("size", 5));
+        fixtureDef.isSensor = properties.getBoolean("isSensor",false);
         bodyComponent.createFixture(fixtureDef);
-        bodyComponent.applyImpulse(0, 50000);
+        bodyComponent.setGravityScale(properties.getFloat("gravity",1.0f));
         entity.add(bodyComponent);
         logger.debug("Circle body created");
     }

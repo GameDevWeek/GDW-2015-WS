@@ -29,7 +29,7 @@ public class GameConstants {
     public static final int POSITION_ITERATIONS = 3;
     public static final int VELOCITY_ITERATIONS = 8;
     public static final int BOX2D_SCALE = 40;
-    public static final float PLAYER_SPEED = 250.0f;
+    public static final float PLAYER_SPEED = 350.0f;
     public static final float PLAYER_JUMP_IMPULSE = -1250.0f;
     public static final float THROWBACK_FORCE = 800.0f;
     public static final float HORNATTACK_IMPULSE=1500.0f;
