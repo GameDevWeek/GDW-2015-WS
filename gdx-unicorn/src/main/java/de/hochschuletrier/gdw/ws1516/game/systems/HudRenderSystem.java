@@ -71,7 +71,8 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         int displayHeight = Gdx.graphics.getHeight();
         
         Texture heart;
-        Texture cookie = assetManager.getTexture("cookie");
+        Texture coin = assetManager.getTexture("coin");
+        Texture blue_gum = assetManager.getTexture("bubblegum_blue");
         
         if(playerComp.hitpoints==3) {
             heart = assetManager.getTexture("heart3");
@@ -91,21 +92,24 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         float heart_x =  20;
         float heart_y = 20;
         
+        float lives_x = heart_x+55;
+        float lives_y = 40;
+        
+        float gum_x = lives_x + 60;
+        float gum_y = lives_y-10;
+        
+        float gum_count_x = gum_x + 40;
+        float gum_count_y = 40;
+        
         float time_x = 0.45F * displayWidth;
         float time_y = 20;
         
-        float cookie_x = displayWidth-140;
-        float cookie_y = 20;
+        float coin_x = displayWidth-140;
+        float coin_y = 20;
         
-        float score_x = cookie_x + 60;
+        float score_x = coin_x + 60;
         float score_y = 35;
-        
-        float lives_x = heart_x+50;
-        float lives_y = 40;
-        
-        
-  
-              
+               
         int minutes_int = (int) scoreComp.playedSeconds/60;
         String minutes_string = String.valueOf(minutes_int);
         int seconds_int = (int) scoreComp.playedSeconds%60;
@@ -116,19 +120,23 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         }
         
         int lives = playerComp.lives;
-                  
+        int gum_count_int = scoreComp.bubblegums;
+           
+        String lives_string = "x " + String.valueOf(lives);
+        String gum_count_string = "x " + String.valueOf(gum_count_int); 
         String time = minutes_string+":"+seconds_string;
         String score = String.valueOf(finalScore);
-        String lives_string = "x " + String.valueOf(lives);
+        
         
                        
-       
-        
-        font.draw(DrawUtil.batch, time, time_x, time_y);
-        font.draw(DrawUtil.batch,score, score_x, score_y);
-        font.draw(DrawUtil.batch, lives_string, lives_x, lives_y);
         DrawUtil.draw(heart, heart_x, heart_y, 50, 50);
-        DrawUtil.draw(cookie, cookie_x, cookie_y, 50, 50);
+        font.draw(DrawUtil.batch, lives_string, lives_x, lives_y);
+        DrawUtil.draw(blue_gum, gum_x, gum_y, 30, 30);
+        font.draw(DrawUtil.batch, gum_count_string, gum_count_x, gum_count_y);
+        font.draw(DrawUtil.batch, time, time_x, time_y);
+        DrawUtil.draw(coin, coin_x, coin_y, 50, 50);
+        font.draw(DrawUtil.batch,score, score_x, score_y);
+               
     }
 
     @Override

@@ -103,7 +103,6 @@ public class TriggerSystem extends EntitySystem implements TriggerEvent.Listener
             TriggerComponent trigger = ComponentMappers.trigger.get(contact);
             if ( trigger != null)
             {
-                logger.debug("Trigger exited");
                  if ( playerComp.state == State.RAINBOW && trigger.action == Action.DEATH_ZONE ) 
                  {
                      playerComp.deathZoneCounter--;

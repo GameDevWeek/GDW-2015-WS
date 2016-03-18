@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-
 import de.hochschuletrier.gdw.commons.gdx.audio.MusicManager;
 import de.hochschuletrier.gdw.commons.gdx.audio.SoundEmitter;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
@@ -21,52 +20,56 @@ import de.hochschuletrier.gdw.ws1516.game.systems.SoundSystem;
 public class MenuOptions extends MenuPage {
 
     private static float generalSound;
-    private Slider generalSlider;
-    private static Slider musicSlider;
-    private Slider soundSlider;
+    
+
 
     public MenuOptions(Skin skin, MenuManager menuManager) {
         super(skin, "menu_bg");
-        
+        System.out.println("Test");
         int i = 0;
         int xOffset = 55;
         int yOffset = 370;
         int yStep = 55;
+        
         generalSound = 5;
-        generalSlider = addLabeledSlider(0, 100, 1, xOffset, yOffset - yStep * (i++), "Allgemein", true);     
-        musicSlider = addLabeledSlider(0, 100, 1, xOffset, yOffset - yStep * (i++), "Musik", true);        
-        soundSlider = addLabeledSlider(0, 100, 1, xOffset, yOffset - yStep * (i++), "Sound", true);
+        addLabeledSlider(SoundSlider.getGeneralSlider(),xOffset, yOffset - yStep * (i++), "Allgemein", true);    
+        System.out.println("Test1");
+        addLabeledSlider( SoundSlider.getMusicSlider(),xOffset, yOffset - yStep * (i++), "Musik", true); 
+        System.out.println("Test2");
+        addLabeledSlider(SoundSlider.getSoundSlider(),xOffset, yOffset - yStep * (i++), "Sound", true);
+        System.out.println("Test3");
         addLeftAlignedButton(xOffset, yOffset - yStep * (i++), 120, 50, "Zurücksetzen", this::reset, "buttonSound");    
         
-        generalSlider.addListener(new ChangeListener() {
+        
+        SoundSlider.getGeneralSlider().addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                generalSound = generalSlider.getValue() / 10;
-                MusicManager.setGlobalVolume(musicSlider.getValue() / 1000 * generalSound);
+                generalSound = SoundSlider.getGeneralSlider().getValue() / 10;
+                MusicManager.setGlobalVolume(SoundSlider.getMusicSlider().getValue() / 1000 * generalSound);
                        
             }
         });
 
-        musicSlider.addListener(new ChangeListener() {
+        SoundSlider.getMusicSlider().addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                MusicManager.setGlobalVolume(musicSlider.getValue() / 1000 * generalSound);
+                MusicManager.setGlobalVolume(SoundSlider.getMusicSlider().getValue() / 1000 * generalSound);
                       
 
             }
         });
 
-        soundSlider.addListener(new ClickListener() {
+        SoundSlider.getSoundSlider().addListener(new ClickListener() {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                SoundSystem.setGlobalVolume(soundSlider.getValue() / 1000 * generalSound);        
+                SoundSystem.setGlobalVolume(SoundSlider.getSoundSlider().getValue() / 1000 * generalSound);        
                 soundTest();
 
             }
         });
-
-        addLeftAlignedButton(xOffset, 40, 100, 50, "Menü", () -> menuManager.popPage(), "buttonSound");
+      
+        addLeftAlignedButton(xOffset, 40, 100, 50, "Zurück", () -> menuManager.popPage(), "zurueck");
     }
 
     public void soundTest() {
@@ -74,17 +77,13 @@ public class MenuOptions extends MenuPage {
     }
 
     public void reset() {
-        generalSlider.setValue(50);
-        musicSlider.setValue(50);
-        soundSlider.setValue(50);
-        MusicManager.setGlobalVolume(musicSlider.getValue() / 1000 * generalSound);         
-        SoundSystem.setGlobalVolume(soundSlider.getValue() / 1000 * generalSound);
+        System.out.println("start");;
+        SoundSlider.getGeneralSlider().setValue(50);
+        SoundSlider.getMusicSlider().setValue(50);
+        SoundSlider.getSoundSlider().setValue(50);
+        MusicManager.setGlobalVolume(SoundSlider.getMusicSlider().getValue() / 1000 * generalSound);         
+        SoundSystem.setGlobalVolume(SoundSlider.getSoundSlider().getValue() / 1000 * generalSound);
+        System.out.println("end");
     }
-
-    public static float getMusicSlider() {
-        // TODO Auto-generated method stub
-        return musicSlider.getValue()/1000*generalSound;
-    }
-
-   
+  
 }

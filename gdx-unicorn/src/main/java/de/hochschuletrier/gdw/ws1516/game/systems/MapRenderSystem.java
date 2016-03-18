@@ -130,7 +130,8 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
         
         mapRenderer.update(deltaTime);
         for (Layer layer : map.getLayers()) {
-            mapRenderer.render(0, 0, layer);
+            if(layer.isTileLayer())
+                mapRenderer.render(0, 0, layer);
         }
 
         DrawUtil.setShader(null);
@@ -148,7 +149,11 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
     
     protected void endRainbow()
     {
-        startRainbow(0);
+        /**
+         * @author philipp -> gamelogic
+         * bad fix for rainbowmode continue in pause mode
+         */
+        rainbowDurationLeft = rainbowStartDuration = 0.0f;
     }
 
     protected void startRainbow(List<String> args) {
@@ -171,7 +176,11 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
     
     protected void startRainbow(float duration)
     {
-        rainbowDurationLeft = rainbowStartDuration = duration;
+        /**
+         * @author philipp -> gamelogic
+         * bad fix for rainbowmode continue in pause mode
+         */
+        rainbowDurationLeft = rainbowStartDuration = 100000.0f;
         startTime = TimeUtils.millis();
     }
     
