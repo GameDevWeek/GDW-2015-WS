@@ -45,6 +45,5 @@
     "level4": "data/ui/menu/menu_level04.png",
 
     
-    "map_background": "data/graphics/dummy_background.jpg",
-    "lvl1": "data/graphics/dummy_background_old.jpg"
+    "lvl1": "data/graphics/background_lvl1_big.png"
 }
