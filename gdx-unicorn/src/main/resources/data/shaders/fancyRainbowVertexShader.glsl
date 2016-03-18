@@ -7,7 +7,6 @@ uniform float u_rainbowAlpha;
 uniform float u_startDuration;
 uniform float u_durationLeft;
 uniform mat4 u_projTrans;
-uniform sampler2D u_texture;
 
 varying float v_rainbowAlpha;
 
@@ -15,9 +14,6 @@ float getRainbowAlpha();
 
 void main()
 {
-	// use uniforms so they do not get removed
-	vec4 tex = texture2D(u_texture, a_texCoord0);
-	
 	v_rainbowAlpha = getRainbowAlpha();
 	gl_Position =  u_projTrans * a_position;
 }

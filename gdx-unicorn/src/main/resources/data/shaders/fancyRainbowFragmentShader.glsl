@@ -13,12 +13,15 @@ uniform vec2 u_frameDimension;
 uniform float u_rainbowFrequency;
 uniform float u_rainbowAmplitude;
 uniform float u_time;
+uniform sampler2D u_texture;
 
 vec4 calcRainbowColor();
 float getHorizontalOffset();
 
 void main()
 {
+	// use uniforms so they do not get removed
+	vec4 tex = texture2D(u_texture, a_texCoord0);
 	//vec4 rainbowColor = v_color * (1.0 - v_rainbowAlpha) + calcRainbowColor() * v_rainbowAlpha;
 	
 	gl_FragColor = calcRainbowColor();
