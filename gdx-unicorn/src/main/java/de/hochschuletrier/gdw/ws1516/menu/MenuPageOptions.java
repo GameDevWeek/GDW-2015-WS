@@ -17,7 +17,7 @@ import de.hochschuletrier.gdw.commons.gdx.audio.SoundEmitter;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
 import de.hochschuletrier.gdw.ws1516.game.systems.SoundSystem;
 
-public class MenuOptions extends MenuPage {
+public class MenuPageOptions extends MenuPage {
 
     private static float generalSound;
     private Slider generalSlider;
@@ -26,7 +26,7 @@ public class MenuOptions extends MenuPage {
     
 
 
-    public MenuOptions(Skin skin, MenuManager menuManager) {
+    public MenuPageOptions(Skin skin, MenuManager menuManager) {
         super(skin, "menu_bg");
         System.out.println("Test");
         int i = 0;
