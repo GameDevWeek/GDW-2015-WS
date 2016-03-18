@@ -19,7 +19,8 @@
                 "on_ground_walking": "unicorn_walking",
                 "flying": "unicorn_flying",
                 "falling": "unicorn_falling", 
-                "jumping": "unicorn_jumping"
+                "jumping": "unicorn_jumping",
+                "landing": "unicorn_landing"
             },
             "PhysixBody": {
                 "type": "player",
@@ -33,7 +34,14 @@
                 "layer": 100
             },
             "BackgroundParticle": {
-                "effect": "test"
+                "effect": "unicornTrailAlternative",
+                "reduceEmissionIfIdle": true,
+                "offsetWhenMoving": 15
+            },
+            "ForegroundParticle": {
+                "effect": "unicornTrail",
+                "reduceEmissionIfIdle": true,
+                "offsetWhenMoving": 15
             }
         }
     },
@@ -239,6 +247,18 @@
             }
         }
     },
+    "light": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Texture": {
+                "texture": ""
+            },
+            "Light": {
+                "intensity": 10.0
+            }
+        }
+    },
     "ball": {
         "meta": {},
         "components": {
@@ -262,7 +282,7 @@
             "RenderLayer": {
                 "layer": 0
             },
-            "ParticleTest": {
+            "ForegroundParticle": {
                 "effect": "test2"
             },
             "BackgroundParticle": {
