@@ -186,19 +186,19 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
             }else{
                 if(input.gumSpitCooldown == 0 && player.state!=State.RAINBOW) {
                     input.gumSpitCharge += deltaTime;
+                    logger.info(""+input.gumSpitCharge);
                     player.state=State.SPUCKCHARGE;
                 }
             }
             
-            //Emit spit
-            if (input.gumSpitCooldown == 0 && player.state!=State.RAINBOW  && input.gumSpitCharge>0.0f &&
-                (input.oldSpit && !input.spit) || (input.gumSpitCharge > GameConstants.SPIT_CHARGE_TIME_TO_MAX)) {
-                float force = (input.gumSpitCharge > GameConstants.SPIT_CHARGE_TIME_TO_MAX) ? 1.0f : input.gumSpitCharge / GameConstants.SPIT_CHARGE_TIME_TO_MAX;
-                BubblegumSpitSpawnEvent.emit(force);
-                input.gumSpitCooldown = GameConstants.SPIT_COOLDOWN;
-                input.gumSpitCharge = 0.0f;
-            }
-            
+        }
+        //Emit spit
+        if (input.gumSpitCooldown == 0 && player.state!=State.RAINBOW  && input.gumSpitCharge>0.0f &&
+            (input.oldSpit && !input.spit) || (input.gumSpitCharge > GameConstants.SPIT_CHARGE_TIME_TO_MAX)) {
+            float force = (input.gumSpitCharge > GameConstants.SPIT_CHARGE_TIME_TO_MAX) ? 1.0f : input.gumSpitCharge / GameConstants.SPIT_CHARGE_TIME_TO_MAX;
+            BubblegumSpitSpawnEvent.emit(force);
+            input.gumSpitCooldown = GameConstants.SPIT_COOLDOWN;
+            input.gumSpitCharge = 0.0f;
         }
 
         input.lookDirection = lookDirection;
