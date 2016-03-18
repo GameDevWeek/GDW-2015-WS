@@ -51,8 +51,8 @@
                 "type" : "hunter"
             },
             "Behaviour": {
-		"cooldown":2.0
-	    },
+        		"cooldown":1.35
+        	    },
             "Animation": {
                 "on_ground_idle": "hunter_walking",
                 "on_ground_walking": "hunter_walking",
@@ -69,7 +69,8 @@
             },
             "RenderLayer": {
                 "layer": 50
-            }
+            },
+            "SoundEmitter":{}
         }
     },
     "tourist": {
@@ -102,7 +103,8 @@
             },
             "RenderLayer": {
                 "layer": 50
-            }
+            },
+            "SoundEmitter":{}
         }
     },
     "bubblegum_blue": {

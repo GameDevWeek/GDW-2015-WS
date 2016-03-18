@@ -111,6 +111,7 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
             }
             soundEmitter.soundInstances.add(soundInstance);
             soundEmitter.soundNames.add(sound);
+            logger.debug("array {} size {}", soundEmitter.soundInstances,soundEmitter.soundInstances.size());
         }else
         {
             logger.warn("Entity {} tried to play a sound( {} ), but has no SoundEmitter.",entity,sound);
@@ -134,10 +135,16 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
         SoundEmitterComponent soundEmitter = ComponentMappers.soundEmitter.get(entity);
         for (int i=0;i<soundEmitter.soundNames.size();i++){
             if (sound == null ||  soundEmitter.soundNames.get(i).equals(sound)){
-                soundEmitter.soundInstances.get(i).stop();
-                soundEmitter.soundInstances.remove(i);
-                soundEmitter.soundNames.remove(i);
-                i--;
+                if ( soundEmitter.soundInstances != null )
+                {
+                    if ( soundEmitter.soundInstances.get(i).isPlaying() )
+                    {
+                        soundEmitter.soundInstances.get(i).stop();
+                    }
+                    soundEmitter.soundInstances.remove(i);
+                    soundEmitter.soundNames.remove(i);
+                    i--;
+                }
             }
         }
     }

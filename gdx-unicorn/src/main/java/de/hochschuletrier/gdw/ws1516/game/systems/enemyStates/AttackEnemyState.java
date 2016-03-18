@@ -21,6 +21,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 
 public class AttackEnemyState extends EnemyBaseState {
     private static final Logger logger = LoggerFactory.getLogger(AttackEnemyState.class);
+    private boolean soundPlayed = false;
 
     @Override
     public EnemyBaseState _compute(Entity entity, Entity player, float deltaTime) {
@@ -30,10 +31,15 @@ public class AttackEnemyState extends EnemyBaseState {
         EnemyTypeComponent type=ComponentMappers.enemyType.get(entity);
         behaviour.cooldown=behaviour.maxCooldown;
         if (type.type==EnemyType.HUNTER){
+            if (!soundPlayed) {
+                SoundEvent.emit("huntergun", entity);
+                soundPlayed = true;
+            }
             if (timePassed<behaviour.cooldown){
                 if (behaviour.canSeeUnicorn){
                     return this;
                 }else{
+                    SoundEvent.stopSound("huntergun", entity);
                     return new FollowPathEnemyState();
                 }
             }
@@ -41,7 +47,6 @@ public class AttackEnemyState extends EnemyBaseState {
             if (playerPosition.x<enemyPosition.x){
                 direction=-direction;
             }
-            SoundEvent.emit("huntergun", entity);
             BulletSpawnEvent.emit(enemyPosition.x+direction, enemyPosition.y,
                     playerPosition.x-(enemyPosition.x+direction), playerPosition.y-enemyPosition.y,
                     (bullet,target)->{HitEvent.emit(target, bullet, 1);}, (source,target)->{}, (e)->{DeathEvent.emit(e);});

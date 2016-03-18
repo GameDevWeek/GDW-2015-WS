@@ -20,10 +20,10 @@ public class SoundEmitterComponent extends Component implements Poolable {
     
     @Override
     public void reset() {
-        emitter.dispose();
         for (SoundInstance instance: soundInstances){
             instance.stop();
         }
+        emitter.dispose();
         soundInstances.clear();
         soundNames.clear();
         isPlaying = false;
