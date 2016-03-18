@@ -1,3 +1,4 @@
+// author: Daniel Reiners (03/2016)
 #ifdef GL_ES
 #define LOWP lowp
 precision mediump float;
@@ -10,6 +11,7 @@ precision mediump float;
 #define M_2PI 6.283185307179586476925286766559
 #define M_3PI 9.4247779607693797153879301498385
 
+// CONSTANTS TO ADJUST SHADER RESULTS
 #define CIRCLE_ANIMATION_GROW_FACTOR 0.1
 #define CIRCLE_MAX_AMOUNT_FACTOR 1.1
 #define CIRCLE_RADIUS_RANGE_FACTOR_START 1.2 
@@ -115,8 +117,8 @@ float getCircleAlpha(vec3 circle)
     // inside the circle
     if (centerDistance < circle.z)
     {
-        // blend from center to border with sine
-        return sin( (centerDistance / circle.z) * M_HALF_PI + M_HALF_PI );
+        // blend from center to border with cosine
+        return cos( (centerDistance / circle.z) * M_HALF_PI );
     }
     // anti aliasing not needed if blending with sine
     
@@ -173,7 +175,7 @@ float getAmountOfCircles()
 {
     return 30 * CIRCLE_MAX_AMOUNT_FACTOR * 
         (
-            // u_paparazziIntensity taken into account 20 percent
+            // u_paparazziIntensity is taken 20 percent into account
             (1 - clamp(u_paparazziIntensity, 0.0, 1.0)) * 0.2 
             + 0.8
         );
@@ -185,7 +187,7 @@ vec2 getRadiusRange()
     float  baseFactor = max(u_frameDimension.x, u_frameDimension.y) * 0.0625; // 1/16
     baseFactor *=
         (
-            // u_paparazziIntensity taken into account 40 percent
+            // u_paparazziIntensity is taken 40 percent into account
             (clamp(u_paparazziIntensity, 0.0, 1.0)) * 0.4 
             + 0.6
         );
@@ -233,7 +235,7 @@ float getPassedEffectTime()
 
 float getRemainingEffectDuration()
 {
-    // negative remaining duration are set to 0.0
+    // negative remaining durations are set to 0.0
     return max(u_remainingEffectDuration, 0.0);
 }
 

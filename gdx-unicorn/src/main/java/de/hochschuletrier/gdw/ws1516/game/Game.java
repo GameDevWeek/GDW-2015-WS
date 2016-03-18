@@ -34,6 +34,7 @@ import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
 import de.hochschuletrier.gdw.ws1516.events.HealEvent;
 import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
 import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
+import de.hochschuletrier.gdw.ws1516.events.PaparazziShootEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
 import de.hochschuletrier.gdw.ws1516.events.TriggerEvent.Action;
@@ -95,6 +96,8 @@ public class Game extends InputAdapter {
             HotkeyModifier.CTRL);
     private Hotkey healCheating = null;
     private Hotkey rainbow=null;
+    private final Hotkey paparazzi = new Hotkey(()->PaparazziShootEvent.emit(1.0f), Input.Keys.F9,
+            HotkeyModifier.CTRL);
     
     private static boolean PAUSE_ENGINE = false;
 
@@ -154,6 +157,7 @@ public class Game extends InputAdapter {
             scoreCheating.register();
             pauseGame.register();
             winGameCheat.register();
+            paparazzi.register();
         }
     }
 
@@ -162,6 +166,7 @@ public class Game extends InputAdapter {
         scoreCheating.unregister();
         pauseGame.unregister();
         rainbow.unregister();
+        paparazzi.unregister();
         healCheating.unregister();
         winGameCheat.unregister();
         Main.getInstance().console.unregister(physixDebug);
