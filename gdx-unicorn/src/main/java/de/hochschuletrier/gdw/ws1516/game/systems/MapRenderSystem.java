@@ -133,15 +133,13 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
+
+        renderBackground(deltaTime);
         
         mapRenderer.update(deltaTime);
         for (Layer layer : map.getLayers()) {
             if(layer.isTileLayer())
                 mapRenderer.render(0, 0, layer);
-            if(layer.getName().equals("background"))
-            {
-                renderBackground(deltaTime);
-            }
         }
     }
 
@@ -187,6 +185,7 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
         /**
          * @author philipp -> gamelogic
          * bad fix for rainbowmode continue in pause mode
+         * TODO: improve
          */
         rainbowDurationLeft = rainbowStartDuration = 100000.0f;
         startTime = TimeUtils.millis();
