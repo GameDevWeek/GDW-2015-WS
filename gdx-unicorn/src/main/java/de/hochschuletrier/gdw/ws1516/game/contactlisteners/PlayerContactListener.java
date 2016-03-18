@@ -9,6 +9,7 @@ import de.hochschuletrier.gdw.commons.gdx.physix.PhysixContact;
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixContactAdapter;
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.EndContactEvent;
+import de.hochschuletrier.gdw.ws1516.events.HealEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornCollisionEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
@@ -18,6 +19,8 @@ import de.hochschuletrier.gdw.ws1516.game.components.CollectableComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.StartPointComponent;
 
 public class PlayerContactListener extends PhysixContactAdapter{
     private static final Logger logger = LoggerFactory.getLogger(PlayerContactListener.class);
@@ -74,22 +77,30 @@ public class PlayerContactListener extends PhysixContactAdapter{
          * einsammeln von Items
          */
         if(ComponentMappers.player.has(playerEn)&&ComponentMappers.collectable.has(otherEn)){
-            //TODO Hornattack
             PlayerComponent player=playerEn.getComponent(PlayerComponent.class);
             CollectableComponent collect = ComponentMappers.collectable.get(otherEn);
+            StartPointComponent start = ComponentMappers.startPoint.get(playerEn);
+            PositionComponent collectPos = ComponentMappers.position.get(otherEn);
+            
             if ( !collect.isCollected )
             {
                 switch (collect.type) 
                 {
                     case CHOCO_COIN:
                             ScoreBoardEvent.emit(ScoreType.CHOCO_COIN, 1);
+                            DeathEvent.emit(otherEn);
                         break;
+                    case SPAWN_POINT:
+                            start.x = collectPos.x;
+                            start.y = collectPos.y;         
+                            
+                            /// TODO Change animation
+                            HealEvent.emit(playerEn, player.maxHitpoints);
+                        break;                        
                     default:
                         break;
                 }                
                 collect.isCollected = true;
-                DeathEvent.emit(otherEn);
-                logger.debug("einsammeln {}");
             }
           
         }

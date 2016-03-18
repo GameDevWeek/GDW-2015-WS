@@ -9,6 +9,7 @@ public class CollectableComponent extends Component {
         RAINBOW_GUM,
         BLUE_GUM,
         PINK_GUM,
+        SPAWN_POINT,
         NONE
     }
     

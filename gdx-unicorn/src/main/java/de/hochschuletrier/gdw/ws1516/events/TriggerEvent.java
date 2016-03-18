@@ -10,7 +10,7 @@ import de.hochschuletrier.gdw.ws1516.events.TestEvent.Listener;
 
 public class TriggerEvent {
     public static enum Action{
-        DEATH_ZONE("death_zone"),NONE(""),SPAWN_ZONE("spawn_zone"),WINING_ZONE("win");
+        DEATH_ZONE("death_zone"),NONE(""),SPAWN_ZONE("safe_point"),WINING_ZONE("goal");
         private String identifier;
         Action(String s)
         {            

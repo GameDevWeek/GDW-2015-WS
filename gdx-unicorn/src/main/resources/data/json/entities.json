@@ -195,6 +195,30 @@
             }
         }
     },
+    "safe_point": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Texture": {
+                "texture": "bubblegum_rainbow"
+            },
+            "Collectable":{
+                "type" : "spawn_point"
+            },
+            "PhysixBody": {
+                "type": "circle",
+                "size": 30,
+                "density": 5,
+                "friction": 0.2,
+                "restitution": 0.4,
+                "isSensor": true,
+                "gravity" : 0.0
+            },
+            "RenderLayer": {
+                "layer": 58
+            }
+        }
+    },
     "splatter_0": {
         "meta": {},
         "components": {
