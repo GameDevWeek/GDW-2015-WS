@@ -60,11 +60,13 @@
 		"cooldown":2.0
 	    },
             "Animation": {
+                "name": "Hunter",
                 "on_ground_idle": "hunter_walking",
                 "on_ground_walking": "hunter_walking",
                 "flying": "hunter_walking",
                 "falling": "hunter_walking",
-                "jumping": "hunter_walking"
+                "jumping": "hunter_walking",
+                "flip_horizontal": true
             },
             "PhysixBody": {
                 "type": "enemy",
@@ -93,11 +95,13 @@
 		"cooldown":1.5
 	    },
             "Animation": {
+                "name": "Paparazzi",
                 "on_ground_idle": "paparazzi_walking",
                 "on_ground_walking": "paparazzi_walking",
                 "flying": "paparazzi_walking",
                 "falling": "paparazzi_walking",
-                "jumping": "paparazzi_walking"
+                "jumping": "paparazzi_walking",
+                "flip_horizontal": true
             },
             "PhysixBody": {
                 "type": "enemy",

@@ -29,6 +29,11 @@ public class AnimationRenderSystem extends SubSystem implements MovementStateCha
         MovementComponent movement = ComponentMappers.movement.get(entity);
         PhysixBodyComponent physics = ComponentMappers.physixBody.get(entity);
         
+        if(animation.name.equals("Paparazzi"))
+        {
+            System.out.println("Test");
+        }
+        
         animation.stateTime += deltaTime;
         if(movement != null && movement.state != animation.lastRenderedState)
         {
@@ -60,14 +65,14 @@ public class AnimationRenderSystem extends SubSystem implements MovementStateCha
             keyFrame = getDefaultKeyframe(animation);
         }
         
-        animation.flipHorizontal = (movement.lookDirection) == (MovementComponent.LookDirection.LEFT);
+        animation.currentlyFlipped = (movement.lookDirection) == (MovementComponent.LookDirection.LEFT) ^ animation.flipHorizontal;
         
         if(keyFrame != null)
         {
             int w = keyFrame.getRegionWidth();
             int h = keyFrame.getRegionHeight();
             
-            if(animation.flipHorizontal)
+            if(animation.currentlyFlipped)
             {
                 DrawUtil.batch.draw(keyFrame, position.x + w * 0.5f, position.y - h * 0.5f, w * 0.5f, h * 0.5f, -w, h, 1, 1, position.rotation);
             }
