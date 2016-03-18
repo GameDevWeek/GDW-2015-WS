@@ -31,17 +31,22 @@ public class MenuPageRoot extends MenuPage {
         this.menuManager = menuManager;
 
 //        addActor(new DecoImage(assetManager.getTexture("menu_bg_root_bottom")));
-        int x = 50;
+        int x = MENU_X;
         int i = 0;
-        int y = 370;
-        int yStep = 55;
+        int y = MENU_Y;
         if (type == Type.MAINMENU) {
-            addLeftAlignedButton(x, y - yStep * (i++), 200, 50, "Spiel Starten", this::fadeToGame);
+            addLeftAlignedButton(x, y - MENU_STEP * (i++), BUTTON_WIDTH, BUTTON_HEIGHT, "Spiel Starten", this::fadeToGame);
         } else {
-            addLeftAlignedButton(x, y - yStep * (i++), 200, 50, "Fortsetzen", this::fadeToGame);
-            addLeftAlignedButton(x, y - yStep * (i++), 250, 50, "Spiel verlassen", this::stopGame);
+            addLeftAlignedButton(x, y - MENU_STEP * (i++), BUTTON_WIDTH, BUTTON_HEIGHT, "Fortsetzen", this::fadeToGame);
         }
-        addPageEntry(menuManager, x, y - yStep * (i++), 150, "Credits", new MenuPageCredits(skin, menuManager));
+        addPageEntry(menuManager, x, y - MENU_STEP * (i++), BUTTON_WIDTH, "Credits", new MenuPageCredits(skin, menuManager));
+        
+        i++;
+        if (type != Type.MAINMENU) {
+            addLeftAlignedButton(x, y - MENU_STEP * (i++), BUTTON_WIDTH, BUTTON_HEIGHT, "Hauptmenü", this::stopGame);
+        } else {
+            addLeftAlignedButton(x, y - MENU_STEP * (i++), BUTTON_WIDTH, BUTTON_HEIGHT, "Beenden", ()->System.exit(0));
+        }
         addForeground();
     }
 

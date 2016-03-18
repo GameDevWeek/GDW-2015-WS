@@ -54,7 +54,7 @@ public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter, S
             logger.error("Error loading credits", ex);
         }
 
-        addLeftAlignedButton(50, 370, 200, 50, "Zurück", () -> menuManager.popPage());
+        addLeftAlignedButton(MENU_X, MENU_Y - MENU_STEP * 3, BUTTON_WIDTH, BUTTON_HEIGHT, "Zurück", () -> menuManager.popPage());
         addForeground();
     }
 
