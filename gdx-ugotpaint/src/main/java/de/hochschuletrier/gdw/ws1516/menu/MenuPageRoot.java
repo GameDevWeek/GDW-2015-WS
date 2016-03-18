@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
+import de.hochschuletrier.gdw.commons.gdx.menu.widgets.DecoImage;
 import de.hochschuletrier.gdw.ws1516.Cursor;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.Game;
@@ -14,6 +15,7 @@ import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
 public class MenuPageRoot extends MenuPage {
     private final Type type;
     private final MenuManager menuManager;
+    private final DecoImage overlayImage2;
 
     public enum Type {
 
@@ -48,6 +50,8 @@ public class MenuPageRoot extends MenuPage {
             addLeftAlignedButton(x, y - MENU_STEP * (i++), BUTTON_WIDTH, BUTTON_HEIGHT, "Beenden", ()->System.exit(0));
         }
         addForeground();
+        overlayImage2 = new DecoImage(assetManager.getTexture("overlay_main"));
+        addActor(overlayImage2);
     }
 
     @Override
@@ -59,8 +63,10 @@ public class MenuPageRoot extends MenuPage {
                     canvasAnimationTime = totalCanvasAnimationTime;
                     if(bigCanvas)
                         this.showGame();
-                    else
+                    else {
+                        overlayImage2.setVisible(type == Type.MAINMENU);
                         this.setTouchable(Touchable.enabled);
+                    }
                 }
             }
 
@@ -90,6 +96,7 @@ public class MenuPageRoot extends MenuPage {
     }
 
     public void fadeToMenu() {
+        overlayImage2.setVisible(false);
         Cursor.enable();
         canvasAnimationTime = 0;
         bigCanvas = false;
@@ -99,9 +106,11 @@ public class MenuPageRoot extends MenuPage {
     public void fadeToMenuInstant() {
         this.fadeToMenu();
         this.canvasAnimationTime = 0.99f;
+        overlayImage2.setVisible(type == Type.MAINMENU);
     }
     
     public void fadeToGame() {
+        overlayImage2.setVisible(false);
         canvasAnimationTime = 0;
         bigCanvas = true;
         this.setTouchable(Touchable.disabled);
