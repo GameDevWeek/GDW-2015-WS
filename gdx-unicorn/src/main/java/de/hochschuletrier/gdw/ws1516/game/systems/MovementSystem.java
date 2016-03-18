@@ -163,6 +163,7 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         MovementComponent movement = ComponentMappers.movement.get(entity);
         PhysixBodyComponent physix = ComponentMappers.physixBody.get(entity);
         movement.state = MovementComponent.State.JUMPING;
+        physix.setLinearVelocity(0, 0); //kills any movement
         physix.applyImpulse(0, movement.jumpImpulse);
     }
     
@@ -195,28 +196,19 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
     }
 
     @Override
-    public void onThrowBackEventStart(Entity unicorn) {
+    public void onThrowBackEventStart(Entity unicorn, float dirX) {
         PhysixBodyComponent physix = ComponentMappers.physixBody.get(unicorn);
         MovementComponent movement = ComponentMappers.movement.get(unicorn);
         
-        if (physix != null && movement != null) {
-            float x = 0.0f;
-            float y = -1.0f;
-            
-            if (movement.lookDirection == LookDirection.LEFT) {
-                x = 1.0f;
-            } else {
-                x = -1.0f;
-            }
-
-            physix.applyImpulse(x * GameConstants.THROWBACK_FORCE, y * GameConstants.THROWBACK_FORCE);
+        if (physix != null && movement != null) {            
+            movement.state = MovementComponent.State.FALLING;
+            physix.setLinearVelocity(0, 0); //kills any movement
+            physix.applyImpulse(dirX * GameConstants.THROWBACK_FORCE, -1.0f * GameConstants.THROWBACK_FORCE);
         }
     }
 
     @Override
     public void onThrowBackEventStop(Entity unicorn) {
-        // TODO Auto-generated method stub
-        
     }
     
 }
