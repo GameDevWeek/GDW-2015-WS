@@ -85,7 +85,18 @@ public class MenuPage extends Group {
         return slider;
     }
 
+    protected final void addLabeledTexture(String texture, String text,int x, int y,int modifier){
+        Label label = new Label(text,skin,"default");
+        Texture image = assetManager.getTexture(texture);
+        DecoImage decoImage = new DecoImage(image);
+        decoImage.setPosition(x, y+modifier);
+        label.setPosition(x+70, y);
+        addActor(decoImage);
+        addActor(label);
+        
+        
     
+    }
 
     protected final void addLeftAlignedButton(int x, int y, int width, int height, String text,Runnable runnable,String sound) {
         TextButton button = addButton(x, y, width, height, text, runnable, "default",sound);
