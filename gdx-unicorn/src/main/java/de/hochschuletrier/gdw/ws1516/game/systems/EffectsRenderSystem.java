@@ -32,8 +32,6 @@ import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 
 public class EffectsRenderSystem extends IteratingSystem implements PaparazziShootEvent.Listener, DeathEvent.Listener {
     
-    private long startTime;
-    
     private float paparazziEffectRemainingDuration;
     private float paparazziEffectDuration;
     
@@ -46,7 +44,7 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
     private Vector2 paparazziEffectSeed;
     
 
-    private final Hotkey paparazziHotkey = new Hotkey(()->PaparazziShootEvent.emit(1.0f), Input.Keys.F9,
+    private final Hotkey paparazziHotkey = new Hotkey(()->PaparazziShootEvent.emit((float)Math.random()), Input.Keys.F9,
             HotkeyModifier.CTRL);
 
     @SuppressWarnings("unchecked")
