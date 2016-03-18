@@ -31,39 +31,59 @@ public class EndPage extends MenuPage implements FinalScoreEvent.Listener {
     }
     
     private long finalScore;
-    private ScoreComponent scoreComp;
+    private ScoreComponent scoreComp  = new ScoreComponent();
 
     public EndPage(Skin skin, MenuManager menuManager, String background, Type type) {
         super(skin, background);
         
         Main.getInstance().screenCamera.bind();
         AssetManagerX assetManager = Main.getInstance().getAssetManager();
-              
+        
         String message;
         Label label;
-        Texture texture;
+        Texture endImage;
+        Texture bonbons = assetManager.getTexture("drop");
+        Texture chocoCoins = assetManager.getTexture("coin_hud");
         Sound sound;
+        
+        Label chocoScore;
+        Label bonbonScore;
+        
+        FinalScoreEvent.register(this);
                 
         if(type==Type.GAMEOVER) {
             message="Verloren!";
             label = new Label(message, skin, "gameover");
-            texture = assetManager.getTexture("dead_unicorn_gameover");
+            endImage = assetManager.getTexture("dead_unicorn_gameover");
             sound = assetManager.getSound("lose_sound");
         }
         else
         {
             message="Gewonnen!";
             label = new Label(message, skin, "win");
-            texture = assetManager.getTexture("trex");
+            endImage = assetManager.getTexture("drop");
             sound = assetManager.getSound("win_sound");
+            DecoImage bonbons_image = new DecoImage(bonbons);
+            DecoImage chocoCoins_image = new DecoImage(chocoCoins);
+            chocoCoins_image.setPosition(20, 350);
+            bonbons_image.setPosition(20, 420);
+            chocoScore = new Label("x " + scoreComp.chocoCoins, skin, "default");
+            bonbonScore = new Label("x " + scoreComp.bonbons, skin, "default");
+            
+            chocoScore.setPosition(20+70, 350);
+            bonbonScore.setPosition(20+70, 420);
+            super.addActor(bonbonScore);
+            super.addActor(chocoScore);
+            super.addActor(bonbons_image);
+            super.addActor(chocoCoins_image);
             
         }
         
         label.setPosition(400, 350);
         SoundEmitter.playGlobal(sound, false);
         
-        DecoImage endPicture = new DecoImage(texture);
-        endPicture.setPosition(280, 0);
+        DecoImage endPicture = new DecoImage(endImage);
+        endPicture.setPosition(300, 50);
         addCenteredButton(430, 330, 100, 50, "Nochmal versuchen", this::startGame, "einhornMotivated");
         addCenteredButton(620, 330, 100, 50, "Ins Hauptmenü", this::stopGame, "menu");
         super.addActor(label);
@@ -92,9 +112,11 @@ public class EndPage extends MenuPage implements FinalScoreEvent.Listener {
     }
 
     @Override
-    public void onFinalScoreChanged(long score, ScoreComponent scoreComp) {
+    public void onFinalScoreChanged(long score, ScoreComponent scoreComponent) {
+        
         finalScore = score;
-        this.scoreComp=scoreComp;
+        scoreComp=scoreComponent;
+        
     }
 
 }
