@@ -2,6 +2,7 @@ package de.hochschuletrier.gdw.ws1516.game;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
@@ -26,6 +27,7 @@ import de.hochschuletrier.gdw.ws1516.game.systems.*;
 import de.hochschuletrier.gdw.ws1516.game.systems.input.InputSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.input.KeyboardInputSystem;
 import de.hochschuletrier.gdw.ws1516.game.utils.PlayerColor;
+import java.util.ArrayList;
 
 public class Game extends InputAdapter {
 
@@ -45,6 +47,16 @@ public class Game extends InputAdapter {
     private final InputForwarder inputForwarder = new InputForwarder();
 
     public void dispose() {
+        engine.removeAllEntities();
+        
+        // Stupid Engine does not have a removeAllSystems()
+        ArrayList<EntitySystem> list = new ArrayList<EntitySystem>();
+        for (EntitySystem system : engine.getSystems()) {
+            list.add(system);
+        }
+        for (EntitySystem system : list) {
+            engine.removeSystem(system);
+        }
     }
 
     public void init(AssetManagerX assetManager) {
