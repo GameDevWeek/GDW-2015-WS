@@ -37,7 +37,7 @@ public class Game extends InputAdapter {
     private final EntityFactory<EntityFactoryParam> entityFactory = new EntityFactory("data/json/entities.json", Game.class);
     private final PickupSystem pickupSystem = new PickupSystem(this);
     private final SplashSystem splashSystem = new SplashSystem(this);
-
+    private final PlayerDeathSystem playerDeathSystem = new PlayerDeathSystem();
 
     private final InputForwarder inputForwarder = new InputForwarder();
     
@@ -81,6 +81,7 @@ public class Game extends InputAdapter {
         engine.addSystem(new UpdateSoundEmitterSystem());
         engine.addSystem(pickupSystem);
         engine.addSystem(splashSystem);
+        engine.addSystem(playerDeathSystem);
     }
 
     public void update(float delta) {

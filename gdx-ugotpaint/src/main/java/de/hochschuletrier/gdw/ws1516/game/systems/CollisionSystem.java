@@ -7,6 +7,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
 import de.hochschuletrier.gdw.ws1516.events.PickupEvent;
+import de.hochschuletrier.gdw.ws1516.events.PlayerDeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.SplashEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
@@ -116,6 +117,9 @@ public class CollisionSystem extends IteratingSystem {
                 explodeAt(player.segments.removeFirst(), player.color);
             }
             //fixme: die
+            // Throw a PlayerDeathEvent
+            PlayerDeathEvent.emit(entity);
+
         } else {
             for(int i=0; i<3; i++) {
                 explodeAt(player.segments.get(i), player.color);
