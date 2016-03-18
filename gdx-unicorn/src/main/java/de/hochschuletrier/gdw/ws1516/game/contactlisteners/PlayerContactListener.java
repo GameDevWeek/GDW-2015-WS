@@ -59,10 +59,10 @@ public class PlayerContactListener extends PhysixContactAdapter{
             PlayerComponent player=playerEn.getComponent(PlayerComponent.class);
             if(player.state==PlayerComponent.State.HORNATTACK&&"horn".equals(contact.getMyFixture().getUserData())){
                 HornCollisionEvent.emit(playerEn, otherEn);
-                logger.debug("hornKollision {}");
+                //logger.debug("hornKollision {}");
             }else{
                 UnicornEnemyCollisionEvent.emit(playerEn, otherEn);
-                logger.debug("gegnerKollision {}");
+                //logger.debug("gegnerKollision {}");
             }
         }
 //        if(ComponentMappers.enemyType.has(myEntity)&&ComponentMappers.player.has(otherEntity)){
