@@ -38,30 +38,37 @@ public class Game extends InputAdapter {
     private final PickupSystem pickupSystem = new PickupSystem(this);
     private final SplashSystem splashSystem = new SplashSystem(this);
     private final PlayerDeathSystem playerDeathSystem = new PlayerDeathSystem();
+    private final ParticleRenderSystem particleRenderSystem = new ParticleRenderSystem(this);
+
 
     private final InputForwarder inputForwarder = new InputForwarder();
-    
+
     public void dispose() {
     }
 
     public void init(AssetManagerX assetManager) {
         addSystems();
         entityFactory.init(engine, assetManager);
-        
+
         for (PlayerColor color : PlayerColor.values()) {
             final String colorKey = color.name().toLowerCase();
             color.animation = assetManager.getAnimation("segment_" + colorKey);
-            if(color != PlayerColor.NEUTRAL) {
+            if (color != PlayerColor.NEUTRAL) {
                 color.splashAnimation = assetManager.getAnimation("splash_" + colorKey);
                 color.projectileAnimation = assetManager.getAnimation("projectile_" + colorKey);
             }
+            if (color == PlayerColor.RED) {
+                color.particleEffect = assetManager.getParticleEffect("explosion_red");
+            } else if (color == PlayerColor.BLUE) {
+                color.particleEffect = assetManager.getParticleEffect("explosion_blue");
+            }
         }
-        
+
         inputForwarder.set(engine.getSystem(KeyboardInputSystem.class));
-        float x = GameConstants.BOUND_LEFT + 3* GameConstants.SEGMENT_DISTANCE;
+        float x = GameConstants.BOUND_LEFT + 3 * GameConstants.SEGMENT_DISTANCE;
         float y = GameConstants.BOUND_TOP;
         createSnake(0, x, y, 1, 0, PlayerColor.RED);
-        x = GameConstants.BOUND_RIGHT - 3* GameConstants.SEGMENT_DISTANCE;
+        x = GameConstants.BOUND_RIGHT - 3 * GameConstants.SEGMENT_DISTANCE;
         y = GameConstants.BOUND_BOTTOM;
         createSnake(1, x, y, -1, 0, PlayerColor.BLUE);
         pickupSystem.createRandomPickup();
@@ -82,6 +89,7 @@ public class Game extends InputAdapter {
         engine.addSystem(pickupSystem);
         engine.addSystem(splashSystem);
         engine.addSystem(playerDeathSystem);
+        engine.addSystem(particleRenderSystem);
     }
 
     public void update(float delta) {
@@ -94,16 +102,16 @@ public class Game extends InputAdapter {
         final InputComponent input = engine.createComponent(InputComponent.class);
         input.index = index;
         e.add(input);
-        
+
         final PlayerComponent player = engine.createComponent(PlayerComponent.class);
         player.color = color;
         player.path.add(new Vector2(-xDir, -yDir).nor().scl(100).add(x, y));
-        for(int i=0; i<7; i++)
+        for (int i = 0; i < 7; i++)
             player.segments.add(new Vector2());
         e.add(player);
         return e;
     }
-    
+
     public Entity createEntity(String name, float x, float y, PlayerColor color) {
         factoryParam.x = x;
         factoryParam.y = y;

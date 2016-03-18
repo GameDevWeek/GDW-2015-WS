@@ -32,5 +32,12 @@
             "Splash": {},
             "Animation": {}
         }
+    },
+    "explosion":{
+        "meta":{},
+        "components":{
+            "Position":{},
+            "Particle":{}
+        }
     }
 }

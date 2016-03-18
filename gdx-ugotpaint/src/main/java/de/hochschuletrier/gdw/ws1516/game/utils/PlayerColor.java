@@ -6,6 +6,7 @@
 package de.hochschuletrier.gdw.ws1516.game.utils;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import de.hochschuletrier.gdw.commons.gdx.assets.AnimationExtended;
 
 /**
@@ -21,7 +22,8 @@ public enum PlayerColor {
     public AnimationExtended animation;
     public AnimationExtended splashAnimation;
     public AnimationExtended projectileAnimation;
-    
+    public ParticleEffect particleEffect;
+
     PlayerColor(Color color) {
         this.color = color;
     }
