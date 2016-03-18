@@ -20,10 +20,6 @@ public class CollisionSystem extends IteratingSystem {
     private final Vector2 delta = new Vector2();
     private ImmutableArray<Entity> otherEntitites;
 
-    public CollisionSystem() {
-        this(0);
-    }
-
     public CollisionSystem(int priority) {
         super(Family.one(PlayerComponent.class, ProjectileComponent.class).get(), priority);
     }
@@ -32,7 +28,10 @@ public class CollisionSystem extends IteratingSystem {
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
         this.engine = engine;
-        otherEntitites = engine.getEntitiesFor(Family.all(PositionComponent.class).get());
+        otherEntitites = engine.getEntitiesFor(
+                Family.all(PositionComponent.class)
+                        .exclude(SplashComponent.class).get()
+        );
     }
 
     @Override
@@ -72,7 +71,6 @@ public class CollisionSystem extends IteratingSystem {
         if(player != null) {
             PickupEvent.emit(attacker, victim);
             PositionComponent pos = ComponentMappers.position.get(attacker);
-            PositionComponent otherPos = ComponentMappers.position.get(victim);
             InputComponent input = ComponentMappers.input.get(attacker);
             player.segments.addFirst(pos.pos.cpy());
             delta.set(input.lastMoveDirection).nor().scl(GameConstants.SEGMENT_DISTANCE);
@@ -97,7 +95,6 @@ public class CollisionSystem extends IteratingSystem {
             engine.removeEntity(attacker);
         }
         
-        AnimationComponent anim = ComponentMappers.animation.get(victim);
         PlayerComponent player = ComponentMappers.player.get(victim);
         if(segment >= 0) {
             while(player.segments.size() > segment) {
@@ -108,7 +105,6 @@ public class CollisionSystem extends IteratingSystem {
 
     private void receiveHeadDamage(Entity entity) {
         PositionComponent pos = ComponentMappers.position.get(entity);
-        AnimationComponent anim = ComponentMappers.animation.get(entity);
         PlayerComponent player = ComponentMappers.player.get(entity);
         final int size = player.segments.size();
         if(size <= 2) {
@@ -116,7 +112,6 @@ public class CollisionSystem extends IteratingSystem {
             for(int i=0; i<size; i++) {
                 explodeAt(player.segments.removeFirst(), player.color);
             }
-            //fixme: die
             // Throw a PlayerDeathEvent
             PlayerDeathEvent.emit(entity);
 
@@ -128,7 +123,7 @@ public class CollisionSystem extends IteratingSystem {
         }
     }
 
-    private void explodeAt(Vector2 first, PlayerColor color) {
-        SplashEvent.emit(first,color);
+    private void explodeAt(Vector2 position, PlayerColor color) {
+        SplashEvent.emit(position,color);
     }
 }

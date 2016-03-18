@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import de.hochschuletrier.gdw.ws1516.events.PlayerDeathEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
@@ -13,7 +12,6 @@ import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
-import de.hochschuletrier.gdw.ws1516.game.utils.PlayerColor;
 
 import java.util.Random;
 

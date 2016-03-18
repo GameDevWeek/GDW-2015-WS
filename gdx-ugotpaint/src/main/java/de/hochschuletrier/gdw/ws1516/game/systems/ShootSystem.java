@@ -49,7 +49,6 @@ public class ShootSystem extends EntitySystem implements ShootEvent.Listener {
             ParticleComponent particle = ComponentMappers.particle.get(entity);
             particle.effect = new ParticleEffect(player.color.particleEffectSplash);
 
-
             AnimationComponent animation = ComponentMappers.animation.get(entity);
             animation.animation = player.color.projectileAnimation;
             animation.rotation = projectile.velocity.angle();

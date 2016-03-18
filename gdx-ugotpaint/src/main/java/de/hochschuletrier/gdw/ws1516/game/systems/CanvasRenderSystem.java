@@ -23,7 +23,6 @@ public class CanvasRenderSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         final PositionComponent pos = ComponentMappers.position.get(entity);
-        AnimationComponent animation = ComponentMappers.animation.get(entity);
         PlayerComponent player = ComponentMappers.player.get(entity);
         canvas.setColor(player.color.color);
         canvas.drawPoint(pos.pos);
