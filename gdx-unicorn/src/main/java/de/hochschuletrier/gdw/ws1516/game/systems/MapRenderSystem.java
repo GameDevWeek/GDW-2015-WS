@@ -100,7 +100,8 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
         
         mapRenderer.update(deltaTime);
         for (Layer layer : map.getLayers()) {
-            mapRenderer.render(0, 0, layer);
+            if(layer.isTileLayer())
+                mapRenderer.render(0, 0, layer);
             if(layer.getName().equals("background"))
             {
                 renderBackground(deltaTime);
