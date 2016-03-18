@@ -18,12 +18,13 @@ import de.hochschuletrier.gdw.commons.gdx.state.transition.SplitHorizontalTransi
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.Game;
+import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
 import de.hochschuletrier.gdw.ws1516.states.GameplayState;
 import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
 import de.hochschuletrier.gdw.ws1516.events.FinalScoreEvent;
 
-public class EndPage extends MenuPage implements FinalScoreEvent.Listener {
+public class EndPage extends MenuPage {
     
     public enum Type {
         WIN,
@@ -31,9 +32,9 @@ public class EndPage extends MenuPage implements FinalScoreEvent.Listener {
     }
     
     private long finalScore;
-    private ScoreComponent scoreComp  = new ScoreComponent();
+    
 
-    public EndPage(Skin skin, MenuManager menuManager, String background, Type type) {
+    public EndPage(Skin skin, MenuManager menuManager, String background, Type type, ScoreComponent scoreComp) {
         super(skin, background);
         
         Main.getInstance().screenCamera.bind();
@@ -48,9 +49,7 @@ public class EndPage extends MenuPage implements FinalScoreEvent.Listener {
         
         Label chocoScore;
         Label bonbonScore;
-        
-        FinalScoreEvent.register(this);
-                
+                                
         if(type==Type.GAMEOVER) {
             message="Verloren!";
             label = new Label(message, skin, "gameover");
@@ -65,17 +64,30 @@ public class EndPage extends MenuPage implements FinalScoreEvent.Listener {
             sound = assetManager.getSound("win_sound");
             DecoImage bonbons_image = new DecoImage(bonbons);
             DecoImage chocoCoins_image = new DecoImage(chocoCoins);
-            chocoCoins_image.setPosition(20, 350);
-            bonbons_image.setPosition(20, 420);
-            chocoScore = new Label("x " + scoreComp.chocoCoins, skin, "default");
-            bonbonScore = new Label("x " + scoreComp.bonbons, skin, "default");
+            chocoScore = new Label("x " + scoreComp.chocoCoins + " (1 Punkt)", skin, "default");
+            bonbonScore = new Label("x " + scoreComp.bonbons + " (3 Punkte)", skin, "default");
+            Label trennstrich = new Label("_______________________", skin, "default");
             
-            chocoScore.setPosition(20+70, 350);
-            bonbonScore.setPosition(20+70, 420);
+            long timeScore = (long) (scoreComp.playedSeconds*GameConstants.SCORE_TIME_POINTS);
+            Label timeScore_label = new Label(""+timeScore + " (" + String.valueOf((int) (GameConstants.SCORE_TIME_POINTS*60))+" Punkte pro Minute)", skin, "default");
+            
+            Label finalScore = new Label(String.valueOf(scoreComp.bonbons*3+scoreComp.chocoCoins+timeScore), skin, "win");
+            
+            chocoCoins_image.setPosition(20, 420);
+            bonbons_image.setPosition(20, 350);
+            chocoScore.setPosition(20+70, 420);
+            bonbonScore.setPosition(20+70, 350);
+            timeScore_label.setPosition(20+70, 300);
+            trennstrich.setPosition(20+70, 280);
+            finalScore.setPosition(100, 190);
             super.addActor(bonbonScore);
             super.addActor(chocoScore);
             super.addActor(bonbons_image);
             super.addActor(chocoCoins_image);
+            super.addActor(trennstrich);
+            super.addActor(finalScore);
+            super.addActor(timeScore_label);
+            
             
         }
         
@@ -111,12 +123,6 @@ public class EndPage extends MenuPage implements FinalScoreEvent.Listener {
         
     }
 
-    @Override
-    public void onFinalScoreChanged(long score, ScoreComponent scoreComponent) {
-        
-        finalScore = score;
-        scoreComp=scoreComponent;
-        
-    }
+    
 
 }
