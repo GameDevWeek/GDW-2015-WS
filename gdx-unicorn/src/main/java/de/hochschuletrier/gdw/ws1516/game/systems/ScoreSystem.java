@@ -127,8 +127,14 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
     }
 
     @Override
-    public void onGameOverEvent() {
+    public void onGameOverEvent(boolean won) {
         gameIsPaused = true;        
+    }
+
+    @Override
+    public void onPauseChange() {
+        onPauseGameEvent(!gameIsPaused);
+        
     }
     
     

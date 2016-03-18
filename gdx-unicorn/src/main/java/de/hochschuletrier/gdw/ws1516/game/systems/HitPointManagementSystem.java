@@ -116,7 +116,7 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
                 if (playerComp.lives > 0)
                     GameRespawnEvent.emit();
                 else
-                    GameOverEvent.emit();
+                    GameOverEvent.emit(false);
             }
         }
     }

@@ -30,7 +30,9 @@ import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
 import de.hochschuletrier.gdw.commons.tiled.LayerObject;
 import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.ws1516.Main;
+import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
 import de.hochschuletrier.gdw.ws1516.events.HealEvent;
+import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
 import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
@@ -87,7 +89,9 @@ public class Game extends InputAdapter {
             HotkeyModifier.CTRL);
     private final Hotkey scoreCheating = new Hotkey(() -> ScoreBoardEvent.emit(ScoreType.BONBON, 1), Input.Keys.F2,
             HotkeyModifier.CTRL);
-    private final Hotkey pauseGame = new Hotkey(()->pauseGame(), Input.Keys.F5,
+    private final Hotkey winGameCheat = new Hotkey(() -> GameOverEvent.emit(true), Input.Keys.F6,
+            HotkeyModifier.CTRL);
+    private final Hotkey pauseGame = new Hotkey(()->PauseGameEvent.emit(true), Input.Keys.F5,
             HotkeyModifier.CTRL);
     private Hotkey healCheating = null;
     private Hotkey rainbow=null;
@@ -150,6 +154,7 @@ public class Game extends InputAdapter {
             togglePhysixDebug.register();
             scoreCheating.register();
             pauseGame.register();
+            winGameCheat.register();
         }
     }
 
@@ -159,6 +164,7 @@ public class Game extends InputAdapter {
         pauseGame.unregister();
         rainbow.unregister();
         healCheating.unregister();
+        winGameCheat.unregister();
         Main.getInstance().console.unregister(physixDebug);
         
         engine.removeAllEntities();
@@ -191,7 +197,7 @@ public class Game extends InputAdapter {
         mapRenderSystem.initialzeRenderer(map, "map_background", cameraSystem);
         
         //test:
-        Entity unicorn = EntityCreator.createEntity("unicorn", 1300, 300);
+        Entity unicorn = EntityCreator.createEntity("unicorn", 1000, 300);
         Entity entity=EntityCreator.createEntity("hunter", 1000, 100);
         PathComponent pathComponent =ComponentMappers.path.get(entity);
         pathComponent.points.add(new Vector2(1000, 100));
@@ -290,7 +296,10 @@ public class Game extends InputAdapter {
 
 
 
-    public static void pauseGame() {
+    public static void pauseGame(boolean pause) {
+        PAUSE_ENGINE = pause;
+    }
+    public static void switchPause() {
         PAUSE_ENGINE = !PAUSE_ENGINE;
     }
     
