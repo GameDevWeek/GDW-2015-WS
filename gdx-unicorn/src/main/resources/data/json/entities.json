@@ -181,12 +181,17 @@
             "Texture": {
                 "texture": "coin"
             },
+            "Collectable":{
+                "type" : "choco_coin"
+            },
             "PhysixBody": {
                 "type": "circle",
                 "size": 30,
                 "density": 5,
                 "friction": 0.2,
-                "restitution": 0.4
+                "restitution": 0.4,
+                "isSensor": true,
+                "gravity" : 0.0
             },
             "RenderLayer": {
                 "layer": 59
