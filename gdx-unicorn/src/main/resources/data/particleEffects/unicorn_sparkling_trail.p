@@ -41,8 +41,8 @@ timeline2: 1.0
 active: false
 - X Offset - 
 active: true
-lowMin: -50.0
-lowMax: -50.0
+lowMin: 35.0
+lowMax: 35.0
 highMin: 0.0
 highMax: 0.0
 relative: false
@@ -52,8 +52,8 @@ timelineCount: 1
 timeline0: 0.0
 - Y Offset - 
 active: true
-lowMin: 10.0
-lowMax: -10.0
+lowMin: -25.0
+lowMax: -35.0
 highMin: 0.0
 highMax: 0.0
 relative: false
@@ -213,8 +213,8 @@ timeline2: 1.0
 active: false
 - X Offset - 
 active: true
-lowMin: -50.0
-lowMax: -50.0
+lowMin: 35.0
+lowMax: 35.0
 highMin: 0.0
 highMax: 0.0
 relative: false
@@ -224,8 +224,8 @@ timelineCount: 1
 timeline0: 0.0
 - Y Offset - 
 active: true
-lowMin: 10.0
-lowMax: -10.0
+lowMin: -25.0
+lowMax: -35.0
 highMin: 0.0
 highMax: 0.0
 relative: false
@@ -385,8 +385,8 @@ timeline2: 1.0
 active: false
 - X Offset - 
 active: true
-lowMin: -50.0
-lowMax: -50.0
+lowMin: 25.0
+lowMax: 25.0
 highMin: 0.0
 highMax: 0.0
 relative: false
@@ -396,8 +396,8 @@ timelineCount: 1
 timeline0: 0.0
 - Y Offset - 
 active: true
-lowMin: 10.0
-lowMax: -10.0
+lowMin: -25.0
+lowMax: -35.0
 highMin: 0.0
 highMax: 0.0
 relative: false
@@ -557,8 +557,8 @@ timeline2: 1.0
 active: false
 - X Offset - 
 active: true
-lowMin: -50.0
-lowMax: -50.0
+lowMin: 35.0
+lowMax: 35.0
 highMin: 0.0
 highMax: 0.0
 relative: false
@@ -568,8 +568,8 @@ timelineCount: 1
 timeline0: 0.0
 - Y Offset - 
 active: true
-lowMin: 10.0
-lowMax: -10.0
+lowMin: -25.0
+lowMax: -35.0
 highMin: 0.0
 highMax: 0.0
 relative: false
@@ -729,8 +729,8 @@ timeline2: 1.0
 active: false
 - X Offset - 
 active: true
-lowMin: -50.0
-lowMax: -50.0
+lowMin: 35.0
+lowMax: 35.0
 highMin: 0.0
 highMax: 0.0
 relative: false
@@ -740,8 +740,8 @@ timelineCount: 1
 timeline0: 0.0
 - Y Offset - 
 active: true
-lowMin: 10.0
-lowMax: -10.0
+lowMin: -25.0
+lowMax: -35.0
 highMin: 0.0
 highMax: 0.0
 relative: false
@@ -901,8 +901,8 @@ timeline2: 1.0
 active: false
 - X Offset - 
 active: true
-lowMin: -50.0
-lowMax: -50.0
+lowMin: 35.0
+lowMax: 35.0
 highMin: 0.0
 highMax: 0.0
 relative: false
@@ -912,8 +912,8 @@ timelineCount: 1
 timeline0: 0.0
 - Y Offset - 
 active: true
-lowMin: 10.0
-lowMax: -10.0
+lowMin: -25.0
+lowMax: -35.0
 highMin: 0.0
 highMax: 0.0
 relative: false
@@ -1073,8 +1073,8 @@ timeline2: 1.0
 active: false
 - X Offset - 
 active: true
-lowMin: -50.0
-lowMax: -50.0
+lowMin: 35.0
+lowMax: 35.0
 highMin: 0.0
 highMax: 0.0
 relative: false
@@ -1084,8 +1084,8 @@ timelineCount: 1
 timeline0: 0.0
 - Y Offset - 
 active: true
-lowMin: 10.0
-lowMax: -10.0
+lowMin: -25.0
+lowMax: -35.0
 highMin: 0.0
 highMax: 0.0
 relative: false

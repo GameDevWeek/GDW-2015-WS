@@ -33,6 +33,11 @@
                 "layer": 100
             },
             "BackgroundParticle": {
+                "effect": "unicornTrailAlternative",
+                "reduceEmissionIfIdle": true,
+                "offsetWhenMoving": 15
+            },
+            "ForegroundParticle": {
                 "effect": "unicornTrail",
                 "reduceEmissionIfIdle": true,
                 "offsetWhenMoving": 15

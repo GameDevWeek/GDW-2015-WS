@@ -3,6 +3,9 @@ package de.hochschuletrier.gdw.ws1516.game.systems;
 import java.util.HashMap;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -58,6 +61,8 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
     private float rainbowDurationLeft;
     private float rainbowStartDuration;
     
+    private static Logger logger;
+    
     
     @SuppressWarnings("unchecked")
     public MapRenderSystem(int priority) {
@@ -92,6 +97,35 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
         Main.getInstance().console.unregister(rainbowAlpha);
         Main.getInstance().console.unregister(rainbowType);
         fancyRainbowHotkey.unregister();
+    }
+    
+    public void initialzeRenderer(TiledMap map, String backgroundGraphic, CameraSystem cameraSystem)
+    {
+        this.map = map;
+        for (TileSet tileset : map.getTileSets()) {
+            TmxImage img = tileset.getImage();
+            String filename = CurrentResourceLocator.combinePaths(tileset.getFilename(), img.getSource());
+            tilesetImages.put(tileset, new Texture(filename));
+        }
+        mapRenderer = new TiledMapRendererGdx(map, tilesetImages);
+        
+        mapWidth = map.getWidth() * map.getTileWidth();
+        mapHeight = map.getHeight() * map.getTileHeight();
+        cameraSystem.setCameraBounds(0, 0, (int)mapWidth, (int)mapHeight);
+
+        String mapName = "lvl1";//map.getFilename().split("/")[map.getFilename().split("/").length].substring(0, map.getFilename().length() - 4);
+        try
+        {
+            backgroundTexture = Main.getInstance().getAssetManager().getTexture(mapName);
+        }
+        catch(NullPointerException e)
+        {
+            if(logger == null)
+            {
+                logger = LoggerFactory.getLogger(MapRenderSystem.class);
+            }
+            logger.error("Could not find entry " + mapName + " in images.json.", e);
+        }
     }
 
     @Override
@@ -155,23 +189,6 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
         rainbowDurationLeft = rainbowStartDuration = 100000.0f;
         startTime = TimeUtils.millis();
     }
-    
-    public void initialzeRenderer(TiledMap map, String backgroundGraphic, CameraSystem cameraSystem)
-    {
-        this.map = map;
-        for (TileSet tileset : map.getTileSets()) {
-            TmxImage img = tileset.getImage();
-            String filename = CurrentResourceLocator.combinePaths(tileset.getFilename(), img.getSource());
-            tilesetImages.put(tileset, new Texture(filename));
-        }
-        mapRenderer = new TiledMapRendererGdx(map, tilesetImages);
-        
-        mapWidth = map.getWidth() * map.getTileWidth();
-        mapHeight = map.getHeight() * map.getTileHeight();
-        cameraSystem.setCameraBounds(0, 0, (int)mapWidth, (int)mapHeight);
-        
-        backgroundTexture = Main.getInstance().getAssetManager().getTexture(backgroundGraphic);
-    }
 
     @Override
     public void onRainbowCollect(Entity player) {
@@ -185,6 +202,12 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
     
     private void renderBackground(float deltaTime)
     {
+        if(backgroundTexture == null)
+        {
+            // no background available, early out
+            return;
+        }
+        
         float textureSizeMultiplier = 1f;
         while(backgroundTexture.getWidth() * textureSizeMultiplier < Gdx.graphics.getWidth() || backgroundTexture.getHeight() * textureSizeMultiplier < Gdx.graphics.getHeight())
         {
