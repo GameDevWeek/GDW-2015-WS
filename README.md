@@ -89,6 +89,8 @@ Unicorn Bubblegum
 - Visuell wie z.B. [Sugar Rush aus dem Film "Wreck it Ralph"](http://wreckitralph.wikia.com/wiki/Candy_Cane_Forest?file=Ralph_meets_Vanellope)
 - Todeszonen (Schokofluss, etc.)
 - Parallax-Effekt für den Hintergrund
+- Es gibt Höhlen mit statischen Lichtquellen (Kerzen)
+- In den Höhlen ist die Helligkeit gedimmt
 - [Bewegliche Platformen]
 - [Jumppad]
 

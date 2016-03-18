@@ -16,6 +16,7 @@ import de.hochschuletrier.gdw.ws1516.events.HitEvent;
 import de.hochschuletrier.gdw.ws1516.events.HitEvent.HitType;
 import de.hochschuletrier.gdw.ws1516.events.UnicornEnemyCollisionEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornCollisionEvent;
+import de.hochschuletrier.gdw.ws1516.events.ThrowBackEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
@@ -70,18 +71,7 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
                 //ansonsten war es das Einhorn => unterschiedliches Verhalten, je nach Art des HitPoints.
                 switch (type) {
                 case TOUCH:
-                    //TODO anpassen!
-                    //testweise vektoren in abhaengigkeit der Blickrichtung des Einhorns
-                    MovementComponent moveComp = mm.get(entity);
-                    float forceX = 0.0f;
-                    float forceY = -0.5f;
-                    
-                    if (moveComp.lookDirection == MovementComponent.LookDirection.LEFT) {
-                        forceX = 1.0f;
-                    } else {
-                        forceX = -1.0f;
-                    }
-                    
+                    ThrowBackEvent.start(entity);
                     break;
                 default:
                     break;
