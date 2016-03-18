@@ -12,6 +12,7 @@ import de.hochschuletrier.gdw.ws1516.events.EndContactEvent;
 import de.hochschuletrier.gdw.ws1516.events.HealEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornCollisionEvent;
 import de.hochschuletrier.gdw.ws1516.events.MovementStateChangeEvent;
+import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
 import de.hochschuletrier.gdw.ws1516.events.UnicornEnemyCollisionEvent;
@@ -92,10 +93,22 @@ public class PlayerContactListener extends PhysixContactAdapter {
             {
                 switch (collect.type) 
                 {
+                    case RAINBOW_GUM:
+                            RainbowEvent.start(playerEn);
+                            DeathEvent.emit(otherEn); 
+                        break;
+                    case BLUE_GUM:
+                            player.blueGumStacks++;
+                            DeathEvent.emit(otherEn);  
+                        break;
                     case CHOCO_COIN:
                             ScoreBoardEvent.emit(ScoreType.CHOCO_COIN, 1);
                             DeathEvent.emit(otherEn);
                         break;
+                    case BONBON:
+                            ScoreBoardEvent.emit(ScoreType.BONBON, 1);
+                            DeathEvent.emit(otherEn);                            
+                    break;
                     case SPAWN_POINT:
                             start.x = collectPos.x;
                             start.y = collectPos.y;         

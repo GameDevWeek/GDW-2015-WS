@@ -28,6 +28,7 @@ public class PlayerComponent extends Component implements Poolable {
     
     public float hornAttackCooldown;
     public float throwBackCooldown;
+    public int blueGumStacks;
 
     @Override
     public void reset() {
@@ -40,6 +41,7 @@ public class PlayerComponent extends Component implements Poolable {
         hornAttackCooldown=0;
         invulnerableTimer=0;
         throwBackCooldown=0;
+        blueGumStacks = 0;
     }
    
 }
