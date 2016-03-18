@@ -140,7 +140,11 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
     }
 
     @Override
-    public void onFinalScoreChanged(long score) {
+    public void onFinalScoreChanged(long score,ScoreComponent scoreComp) {
+        /**
+         * @author philipp -> gamelogic
+         * scorecomp hat alle werte
+         */
         finalScore = score;
     }
     

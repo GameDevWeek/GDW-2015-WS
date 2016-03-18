@@ -60,7 +60,7 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
             if(scoreComponent != null)
             {
                 scoreComponent.playedSeconds += deltaTime;
-                FinalScoreEvent.emit(getFinalScore());
+                FinalScoreEvent.emit(getFinalScore(),scoreComponent);
             }
         }
     }
@@ -105,7 +105,7 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
             scoreComponent.killedObstacles += value;
                 break;
         }
-        FinalScoreEvent.emit(getFinalScore());
+        FinalScoreEvent.emit(getFinalScore(),scoreComponent);
     }
 
     public long getFinalScore()

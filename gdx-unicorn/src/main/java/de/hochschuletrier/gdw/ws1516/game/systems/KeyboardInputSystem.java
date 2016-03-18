@@ -205,19 +205,13 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
         
         //Charge spit
         if (input.spit){
-            if (movement.state==de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State.FLYING){
-                EndFlyEvent.emit(entity);
-                spit=false;
-            }else{
-                if(input.gumSpitCooldown == 0 && player.state!=State.RAINBOW) {
-                    input.gumSpitCharge += deltaTime;
-                    player.state=State.SPUCKCHARGE;
-                }
+            if(input.gumSpitCooldown == 0 && player.state!=State.RAINBOW) {
+                input.gumSpitCharge += deltaTime;
+                player.state=State.SPUCKCHARGE;
             }
-            
         }
         //Emit spit
-        if (input.gumSpitCooldown == 0 && player.state!=State.RAINBOW  && input.gumSpitCharge>0.0f &&
+        if (input.gumSpitCooldown == 0 && player.state!=State.RAINBOW &&
             (input.oldSpit && !input.spit) || (input.gumSpitCharge > GameConstants.SPIT_CHARGE_TIME_TO_MAX)) {
             float force = (input.gumSpitCharge > GameConstants.SPIT_CHARGE_TIME_TO_MAX) ? 1.0f : input.gumSpitCharge / GameConstants.SPIT_CHARGE_TIME_TO_MAX;
             BubblegumSpitSpawnEvent.emit(force);
