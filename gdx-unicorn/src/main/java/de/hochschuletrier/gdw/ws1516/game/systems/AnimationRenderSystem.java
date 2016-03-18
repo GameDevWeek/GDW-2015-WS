@@ -31,7 +31,7 @@ public class AnimationRenderSystem extends SubSystem implements MovementStateCha
         
         if(animation.name.equals("Paparazzi"))
         {
-            System.out.println("Test");
+            //System.out.println("Test");
         }
         
         animation.stateTime += deltaTime;
