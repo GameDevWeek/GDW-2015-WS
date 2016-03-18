@@ -3,16 +3,13 @@ package de.hochschuletrier.gdw.ws1516.game.systems;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import de.hochschuletrier.gdw.ws1516.events.ShootEvent;
 import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
-import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.ProjectileComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.*;
 
 public class ShootSystem extends EntitySystem implements ShootEvent.Listener {
 
@@ -48,7 +45,11 @@ public class ShootSystem extends EntitySystem implements ShootEvent.Listener {
             SoundEvent.emit(entity, "shoot");
             ProjectileComponent projectile = ComponentMappers.projectile.get(entity);
             projectile.velocity.set(input.lastMoveDirection).nor().scl(120);
-            
+
+            ParticleComponent particle = ComponentMappers.particle.get(entity);
+            particle.effect = new ParticleEffect(player.color.particleEffectSplash);
+
+
             AnimationComponent animation = ComponentMappers.animation.get(entity);
             animation.animation = player.color.projectileAnimation;
             animation.rotation = projectile.velocity.angle();

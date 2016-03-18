@@ -1,6 +1,5 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -14,7 +13,6 @@ import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.components.ParticleComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.factories.ParticleComponentFactory;
 import de.hochschuletrier.gdw.ws1516.game.utils.PlayerColor;
 
 /**
@@ -51,16 +49,18 @@ public class ParticleRenderSystem extends IteratingSystem implements SplashEvent
 
         for (ParticleEmitter emitter : particle.effect.getEmitters()) {
             emitter.start();
+
             emitter.setPosition(position.pos.x, position.pos.y);
             emitter.draw(DrawUtil.batch, deltaTime);
         }
+
 
         particle.effect.setPosition(position.pos.x, position.pos.y);
         particle.effect.draw(DrawUtil.batch);
 
         boolean complete = false;
         for (ParticleEmitter emitter : particle.effect.getEmitters()) {
-            if(emitter.getPercentComplete() <= -25) {
+            if(!emitter.isContinuous() && emitter.getPercentComplete() <= -25) {
                 complete = true;
                 break;
             }
@@ -74,10 +74,9 @@ public class ParticleRenderSystem extends IteratingSystem implements SplashEvent
     public void onSplashEvent(Vector2 first, PlayerColor color) {
         Entity entity = game.createEntity("explosion", first.x, first.y, color);
         ParticleComponent particle = ComponentMappers.particle.get(entity);
-        particle.effect = new ParticleEffect(color.particleEffect);
-        particle.effect.allowCompletion();
 
-        System.out.println("explosion");
+        particle.effect = new ParticleEffect(color.particleEffectExplosion);
+        particle.effect.allowCompletion();
 
         engine.addEntity(entity);
     }

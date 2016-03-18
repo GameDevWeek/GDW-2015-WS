@@ -1,4 +1,5 @@
 {
   "explosion_red": "data/particles/explosion_red.p",
-  "explosion_blue": "data/particles/explosion_blue.p"
+  "explosion_blue": "data/particles/explosion_blue.p",
+  "splash_red": "data/particles/drop_red.p"
 }

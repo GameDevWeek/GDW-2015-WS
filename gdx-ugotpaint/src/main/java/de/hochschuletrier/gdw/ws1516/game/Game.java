@@ -1,5 +1,6 @@
 package de.hochschuletrier.gdw.ws1516.game;
 
+import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.InputAdapter;
@@ -56,17 +57,23 @@ public class Game extends InputAdapter {
             if (color != PlayerColor.NEUTRAL) {
                 color.splashAnimation = assetManager.getAnimation("splash_" + colorKey);
                 color.projectileAnimation = assetManager.getAnimation("projectile_" + colorKey);
-                color.particleEffect = assetManager.getParticleEffect("explosion_" + colorKey);
+                color.particleEffectExplosion = assetManager.getParticleEffect("explosion_" + colorKey);
+                color.particleEffectSplash = assetManager.getParticleEffect("splash_red");
             }
         }
 
         inputForwarder.set(engine.getSystem(KeyboardInputSystem.class));
         float x = GameConstants.BOUND_LEFT + 3 * GameConstants.SEGMENT_DISTANCE;
         float y = GameConstants.BOUND_TOP;
-        createSnake(0, x, y, 1, 0, PlayerColor.RED);
+        Entity snake1 = createSnake(0, x, y, 1, 0, PlayerColor.RED);
+        ComponentMappers.input.get(snake1).lastMoveDirection.add(1,0);
+
+
         x = GameConstants.BOUND_RIGHT - 3 * GameConstants.SEGMENT_DISTANCE;
         y = GameConstants.BOUND_BOTTOM;
-        createSnake(1, x, y, -1, 0, PlayerColor.BLUE);
+        Entity snake2 = createSnake(1, x, y, -1, 0, PlayerColor.BLUE);
+        ComponentMappers.input.get(snake2).lastMoveDirection.add(-1,0);
+
         pickupSystem.createRandomPickup();
         pickupSystem.createRandomPickup();
     }

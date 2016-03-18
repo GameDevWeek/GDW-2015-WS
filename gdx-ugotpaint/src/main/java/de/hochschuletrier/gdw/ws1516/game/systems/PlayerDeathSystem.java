@@ -57,7 +57,7 @@ public class PlayerDeathSystem extends EntitySystem implements PlayerDeathEvent.
     public void onPlayerDeathEvent(Entity player) {
 
         InputComponent input = ComponentMappers.input.get(player);
-        Vector2 direction = input.moveDirection;
+        Vector2 direction = input.lastMoveDirection;
 
         // on the first player death initialize the players
         if (playerRed == null) {

@@ -22,7 +22,8 @@ public enum PlayerColor {
     public AnimationExtended animation;
     public AnimationExtended splashAnimation;
     public AnimationExtended projectileAnimation;
-    public ParticleEffect particleEffect;
+    public ParticleEffect particleEffectExplosion;
+    public ParticleEffect particleEffectSplash;
 
     PlayerColor(Color color) {
         this.color = color;
