@@ -193,22 +193,22 @@ public class Game extends InputAdapter {
         EntityCreator.setGame(this);
         EntityCreator.setEntityFactory(entityFactory);
         
-        loadMap("data/maps/demo_level_worked.tmx");
+        loadMap("data/maps/lvl1.tmx");
         mapRenderSystem.initialzeRenderer(map, "map_background", cameraSystem);
         
         //test:
-        Entity unicorn = EntityCreator.createEntity("unicorn", 1000, 300);
-        Entity entity=EntityCreator.createEntity("hunter", 1000, 100);
+      //  Entity unicorn = EntityCreator.createEntity("unicorn", 9000, 500);
+        Entity entity=EntityCreator.createEntity("hunter", 9000, 700);
         PathComponent pathComponent =ComponentMappers.path.get(entity);
-        pathComponent.points.add(new Vector2(1000, 100));
-        pathComponent.points.add(new Vector2(800,100));
-        Entity papa = EntityCreator.createEntity("tourist", 1700, 100);
-        healCheating = new Hotkey(() -> HealEvent.emit(unicorn, 1), Input.Keys.F4,
-        HotkeyModifier.CTRL);
-        healCheating.register();
-        rainbow = new Hotkey(() -> RainbowEvent.start(unicorn), Input.Keys.F3,
-                HotkeyModifier.CTRL);
-        rainbow.register();
+        pathComponent.points.add(new Vector2(9000, 100));
+        pathComponent.points.add(new Vector2(9200,100));
+        
+//        healCheating = new Hotkey(() -> HealEvent.emit(unicorn, 1), Input.Keys.F4,
+//        HotkeyModifier.CTRL);
+//        healCheating.register();
+//        rainbow = new Hotkey(() -> RainbowEvent.start(unicorn), Input.Keys.F3,
+//                HotkeyModifier.CTRL);
+//        rainbow.register();
         papa = EntityCreator.createEntity("tourist", 2000, 100);
         pathComponent =ComponentMappers.path.get(papa);
         pathComponent.points.add(new Vector2(2000, 100));
