@@ -41,6 +41,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.BubblegumSpitComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.BulletComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ImpactSoundComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PathComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PlatformComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.TriggerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.factories.EntityFactoryParam;
@@ -62,6 +63,7 @@ import de.hochschuletrier.gdw.ws1516.game.systems.KeyboardInputSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.MapRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.MovementSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.NameSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.PlatformSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.PlayerStateSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RespawnSystem;
@@ -69,6 +71,7 @@ import de.hochschuletrier.gdw.ws1516.game.systems.ScoreSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.SoundSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.TextureRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.TriggerSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePlatformPositionSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityCreator;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityLoader;
@@ -143,6 +146,8 @@ public class Game extends InputAdapter {
     private final ScoreSystem scoreBoardSystem = new ScoreSystem();
     private final PlayerStateSystem playerStateSystem = new PlayerStateSystem();
     private final BubblegumSpitSystem bubblegumSpitSystem = new BubblegumSpitSystem(engine);
+    private final UpdatePlatformPositionSystem updatePlatformPositionSystem = new UpdatePlatformPositionSystem();
+    private final PlatformSystem platformSystem = new PlatformSystem();
     
     private TiledMap map;
 
@@ -202,17 +207,21 @@ public class Game extends InputAdapter {
         PathComponent pathComponent =ComponentMappers.path.get(entity);
         pathComponent.points.add(new Vector2(1000, 100));
         pathComponent.points.add(new Vector2(800,100));
-        Entity papa = EntityCreator.createEntity("tourist", 1700, 100);
+//        Entity platform = EntityCreator.createEntity("platform", 1700, 100);
         healCheating = new Hotkey(() -> HealEvent.emit(unicorn, 1), Input.Keys.F4,
         HotkeyModifier.CTRL);
         healCheating.register();
         rainbow = new Hotkey(() -> RainbowEvent.start(unicorn), Input.Keys.F3,
                 HotkeyModifier.CTRL);
         rainbow.register();
-        papa = EntityCreator.createEntity("tourist", 2000, 100);
-        pathComponent =ComponentMappers.path.get(papa);
-        pathComponent.points.add(new Vector2(2000, 100));
-        pathComponent.points.add(new Vector2(2200,100));
+        Entity platform = EntityCreator.createEntity("platform", 2000, 600);
+        PlatformComponent platformComp = ComponentMappers.platform.get(platform);
+        //platformComp.loop = true;
+        pathComponent =ComponentMappers.path.get(platform);
+        pathComponent.points.add(new Vector2(2000, 600));
+        pathComponent.points.add(new Vector2(2200, 600));
+        pathComponent.points.add(new Vector2(1500, 600));
+        pathComponent.points.add(new Vector2(2600, 600));
 
     }
 
@@ -265,6 +274,8 @@ public class Game extends InputAdapter {
         engine.addSystem(bubblegumSpitSystem);
         engine.addSystem(bubbleGlueSystem);
         engine.addSystem(playerStateSystem);
+        engine.addSystem(updatePlatformPositionSystem);
+        engine.addSystem(platformSystem);
     }
 
     private void addContactListeners() {
