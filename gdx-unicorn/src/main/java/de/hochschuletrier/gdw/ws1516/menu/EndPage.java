@@ -18,15 +18,20 @@ import de.hochschuletrier.gdw.commons.gdx.state.transition.SplitHorizontalTransi
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.Game;
+import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
 import de.hochschuletrier.gdw.ws1516.states.GameplayState;
 import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
+import de.hochschuletrier.gdw.ws1516.events.FinalScoreEvent;
 
-public class EndPage extends MenuPage {
+public class EndPage extends MenuPage implements FinalScoreEvent.Listener {
     
     public enum Type {
         WIN,
         GAMEOVER
     }
+    
+    private long finalScore;
+    private ScoreComponent scoreComp;
 
     public EndPage(Skin skin, MenuManager menuManager, String background, Type type) {
         super(skin, background);
@@ -38,7 +43,7 @@ public class EndPage extends MenuPage {
         Label label;
         Texture texture;
         Sound sound;
-        
+                
         if(type==Type.GAMEOVER) {
             message="Verloren!";
             label = new Label(message, skin, "gameover");
@@ -51,20 +56,23 @@ public class EndPage extends MenuPage {
             label = new Label(message, skin, "win");
             texture = assetManager.getTexture("trex");
             sound = assetManager.getSound("win_sound");
+            
         }
         
-        label.setPosition(400, 300);
+        label.setPosition(400, 350);
         SoundEmitter.playGlobal(sound, false);
         
         DecoImage endPicture = new DecoImage(texture);
-        endPicture.setPosition(500, 30);
-        addCenteredButton(450, 250, 100, 50, "Nochmal versuchen", this::startGame, "einhornMotivated");
-        addCenteredButton(600, 250, 100, 50, "Ins Hauptmenü", this::stopGame, "einhornMotivated");
+        endPicture.setPosition(280, 0);
+        addCenteredButton(430, 330, 100, 50, "Nochmal versuchen", this::startGame, "einhornMotivated");
+        addCenteredButton(620, 330, 100, 50, "Ins Hauptmenü", this::stopGame, "menu");
         super.addActor(label);
         super.addActor(endPicture);
         
         
     }
+    
+    
     
     private void startGame() {
         if (!main.isTransitioning()) {      
@@ -81,6 +89,12 @@ public class EndPage extends MenuPage {
             
         }
         
+    }
+
+    @Override
+    public void onFinalScoreChanged(long score, ScoreComponent scoreComp) {
+        finalScore = score;
+        this.scoreComp=scoreComp;
     }
 
 }

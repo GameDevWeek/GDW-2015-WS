@@ -23,7 +23,7 @@ import de.hochschuletrier.gdw.ws1516.menu.EndPage;
 import de.hochschuletrier.gdw.ws1516.menu.MainMenuPage;
 import de.hochschuletrier.gdw.ws1516.menu.MenuOptions;
 import de.hochschuletrier.gdw.ws1516.menu.MenuPageRoot;
-import de.hochschuletrier.gdw.ws1516.menu.SoundSlider;
+
 
 /**
  * Menu state
@@ -83,7 +83,7 @@ public class MainMenuState extends BaseGameState {
        
         MusicManager.play(music, GameConstants.MUSIC_FADE_TIME);
         
-        MusicManager.setGlobalVolume(1);
+        MusicManager.setGlobalVolume(0.25f);
        
         
         inputForwarder.set(menuManager.getInputProcessor());

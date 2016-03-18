@@ -129,7 +129,7 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
         inputForwarder.set(gameInputProcessor);
 
         GameOverEvent.register(this);
-        MusicManager.setGlobalVolume(0);
+       
 
     }
 
