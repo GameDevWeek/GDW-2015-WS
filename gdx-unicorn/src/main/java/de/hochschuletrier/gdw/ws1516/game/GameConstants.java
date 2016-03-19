@@ -72,9 +72,10 @@ public class GameConstants {
     public static float MUSIC_FADE_TIME = 2;
     
     // Scoreborad-Constant
-    public static final float SCORE_TIME_POINTS = 1000;
-    public static final int SCORE_CHOCOCOINS_POINTS = 1;
-    public static final int SCORE_BONBONS_POINTS = 3;
+    public static final int SCORE_BASEPOINTS = 500;
+    public static final float SCORE_TIME_POINTS = -100.0f/ 60.0f;
+    public static final int SCORE_CHOCOCOINS_POINTS = 5;
+    public static final int SCORE_BONBONS_POINTS = 15;
     public static final int SCORE_DEATHS = 0; // negative Points ??
     public static final int SCORE_KILLED_ENEMIES = 0;
     public static final int SCORE_KILLED_OBSTACLES = 0;
