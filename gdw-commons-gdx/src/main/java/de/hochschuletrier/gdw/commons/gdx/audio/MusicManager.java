@@ -3,6 +3,7 @@ package de.hochschuletrier.gdw.commons.gdx.audio;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.badlogic.gdx.utils.ReflectionPool;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -82,6 +83,7 @@ public class MusicManager {
     }
 
     public static void play(Music music, float fadeTime) {
+        //setGlobalVolume(0);
         if (currentMusic != null && currentMusic != music) {
             addFade(currentMusic, fadeTime, true);
         }
@@ -91,6 +93,8 @@ public class MusicManager {
             music.setLooping(true);
             music.play();
         }
+        System.out.println("music.play");
+        
         currentMusic = music;
 
        
@@ -135,4 +139,6 @@ public class MusicManager {
     public static void setGlobalVolume(float globalVolume) {
         MusicManager.globalVolume = globalVolume;
     }
+    
+   
 }

@@ -1,3 +1,4 @@
+// author: Daniel Reiners (03/2016)
 #ifdef GL_ES
 #define LOWP lowp
 precision mediump float;
@@ -5,82 +6,265 @@ precision mediump float;
 #define LOWP 
 #endif
 
+#define M_HALF_PI 1.5707963267948966192313216916398
+#define M_PI 3.1415926535897932384626433832795
+#define M_2PI 6.283185307179586476925286766559
+#define M_3PI 9.4247779607693797153879301498385
+
+// CONSTANTS TO ADJUST SHADER RESULTS
+#define CIRCLE_ANIMATION_GROW_FACTOR 0.1
+#define CIRCLE_MAX_AMOUNT_FACTOR 1.3
+// lerps from start min to end min, ...
+#define CIRCLE_RADIUS_RANGE_FACTOR_START_MIN 0.5 
+#define CIRCLE_RADIUS_RANGE_FACTOR_START_MAX 1.0 
+#define CIRCLE_RADIUS_RANGE_FACTOR_END_MIN 1.8
+#define CIRCLE_RADIUS_RANGE_FACTOR_END_MAX 2.6
+// threshold in px
 #define ANTI_ALIASING_THRESHOLD 2.0
+// random chosen numbers
+#define SEED_STEP_A 78.1563
+#define SEED_STEP_B 87.16854
+#define SEED_STEP_C 59.742
+// duration in seconds
+#define PRE_INTRO_DURATION 0.1
+#define INTRO_DURATION 0.2
+#define OUTRO_DURATION 0.4
 
-varying LOWP vec4 v_color;
-varying vec2 v_texCoords;
 
-uniform float u_startDuration;
-uniform float u_durationLeft;
-uniform float u_paparazziAlpha;
-uniform float u_paparazziIntensity;
-uniform vec2 u_frameDimension;
-uniform float u_time;
+varying LOWP vec4    v_color;
+varying LOWP vec2    v_texCoords;
+
+// standard frame dimensions in unicorn game 1024 x 600
+uniform LOWP vec2    u_frameDimension;
+uniform LOWP float   u_effectDuration;
+uniform LOWP float   u_remainingEffectDuration;
+uniform LOWP vec2    u_paparazziSeed;
+// float [0.0, 0.1]
+uniform LOWP float   u_paparazziIntensity;
+// rgb: color to use for overlay. a: max alpha for result overlay
+uniform LOWP vec4    u_paparazziColor;
+// xy: circle center screen coordinates. z: circle radius
+uniform LOWP vec3    u_paparazziOverlaySafeCircle;
 
 uniform sampler2D u_texture;
 
-float getCircleAlpha(vec2 center, float radius);
-vec2 getCircleCenter(float seed);
-float getCircleRadius(float seed);
+vec3    createCircle(vec2 seed);
+float   getAnimatedRadiusFactor();
+float   getCircleAlpha(vec3 circle);
+float   getCircleFade(float alphaIn);
+
+float   getAmountOfCircles();
+vec2    getRadiusRange();
+
+// helper functions
+bool    isModePreIntro();
+bool    isModeIntro();
+bool    isModeOutro();
+float   getIntroModeAnimProgress();
+float   getStandardModeAnimProgress();
+float   getOutroModeAnimProgress();
+float   getPassedEffectTime();
+float   getRemainingEffectDuration();
+float   getDistance(vec2 circleCenter);
+float   lerp(float a, float b, float t);
+float   rand(vec2 seed);
+vec2    rand2(vec2 seed);
+vec2    convertNormalizedToScreen(vec2 normalized);
 
 void main()
 {
-    //DUMMY
-    vec2 d1 = u_frameDimension;
-    float d2 = u_paparazziIntensity;
-    float d3 = u_paparazziAlpha;
-    float time = u_time;
+    // prevent LibGDX from throwing "uniform not used" exception
     texture2D(u_texture, v_texCoords);
     
-    // test 1 circle
-    vec2 center = vec2( u_frameDimension.x / 2, u_frameDimension.y / 2 );
-    float radius = 200.0;
+    float fragAlpha;
+    for (int i = 0; i < getAmountOfCircles(); ++i)
+    {
+        fragAlpha += (u_paparazziColor.a - 0.2) * getCircleAlpha(createCircle(u_paparazziSeed + i * SEED_STEP_A));
+    }
     
-	gl_FragColor = vec4(1.0, 1.0, 1.0, getCircleAlpha(center, radius));
+    float finalAlpha = getCircleFade(clamp(fragAlpha, 0.0, u_paparazziColor.a));
+    
+    gl_FragColor = vec4(u_paparazziColor.r, u_paparazziColor.g, u_paparazziColor.b, finalAlpha);
 }
 
-float getCircleAlpha(vec2 center, float radius)
-{   
-    
-    vec2 fragPos = vec2(gl_FragCoord.x, gl_FragCoord.y);
-    float distance = length(fragPos - center);
-    
-    float fragAlpha;
-    if (distance < (radius - ANTI_ALIASING_THRESHOLD))
-    {
-        fragAlpha = 1.0;
+// returns deterministic circle property
+vec3 createCircle(vec2 seed)
+{
+    // create circle coords
+    vec2 circleCoords = convertNormalizedToScreen(rand2(seed));
+    // create radius
+    vec2 radiusRange = getRadiusRange();
+    float radiusInBounds = rand(seed + SEED_STEP_B) * (radiusRange.y - radiusRange.x) + radiusRange.x;
+    radiusInBounds *= getAnimatedRadiusFactor();
+    // return circle vec3
+    return vec3(circleCoords.x, circleCoords.y, radiusInBounds);
+}
+
+float getAnimatedRadiusFactor()
+{
+    if (isModeIntro()) {
+        return sin(getIntroModeAnimProgress() * M_HALF_PI);
     }
-    else if (distance < radius)
+    
+    // standard
+    return (1.0 + sin(getStandardModeAnimProgress() * M_PI) * CIRCLE_ANIMATION_GROW_FACTOR);
+}
+
+// returns alpha value if gl_FragCoord is inside the circle. 0.0 otherwise.
+// blends value from center to border.
+float getCircleAlpha(vec3 circle)
+{
+    // circle.z = radius of circle
+    float centerDistance = getDistance(circle.xy);
+    // inside the circle
+    if (centerDistance < circle.z)
     {
-        fragAlpha = ((radius - distance) / ANTI_ALIASING_THRESHOLD);
+        // blend from center to border with cosine
+        return cos( (centerDistance / circle.z) * M_HALF_PI );
     }
-    else 
+    // anti aliasing not needed if blending with sine
+    
+    // VERSION 1: CIRCLE COMPLETELY FILLED
+    // inside the circle
+    //if (centerDistance < (circle.z - ANTI_ALIASING_THRESHOLD))
+    //{
+    //    return 1.0;
+    //}
+    // circle border (anti aliasing)
+    //if (centerDistance <= circle.z)
+    //{
+    //    return ((circle.z - centerDistance) / ANTI_ALIASING_THRESHOLD);
+    //}
+    
+    // outside the circle
+    return 0.0;
+}
+
+float getCircleFade(float alphaIn) {
+
+    float distanceToSafeCircleRegionCenter = (getDistance(u_paparazziOverlaySafeCircle.xy) - u_paparazziOverlaySafeCircle.z);
+    // anti aliasing of safe center region border
+    if (distanceToSafeCircleRegionCenter <= ANTI_ALIASING_THRESHOLD)
     {
-        fragAlpha = 0.0;
+        alphaIn = alphaIn * ( distanceToSafeCircleRegionCenter / ANTI_ALIASING_THRESHOLD );
+        // continue with fading afterwards
     }
 
-    // Fade in
-    if(u_startDuration - u_durationLeft <= 0.25)
+    // Flash in
+    if (isModePreIntro())
     {
-        return fragAlpha * (u_startDuration - u_durationLeft) * 4;
+        return 1.0;
     }
     
     // Fade out
-    if(u_durationLeft <= 0.5)
+    if(isModeOutro())
     {
-        return fragAlpha * u_durationLeft * 2;
+        return alphaIn * (1 - getOutroModeAnimProgress());
+    }
+    
+    // exclude safe circle region from overlay
+    if (distanceToSafeCircleRegionCenter <= 0.0)
+    {
+        // no overlay in safe circle region
+        return 0.0; 
     }
     
     // Default
-    return fragAlpha;
+    return alphaIn;
 }
 
-vec2 getCircleCenter(float seed)
+float getAmountOfCircles()
 {
-    return vec2(1.0, 1.0);
+    return 30 * CIRCLE_MAX_AMOUNT_FACTOR * 
+        (
+            // u_paparazziIntensity is taken 40 percent into account
+            (1 - clamp(u_paparazziIntensity, 0.0, 1.0)) * 0.4 
+            + 0.6
+        );
+} 
+
+// returns vec2(minRadius, maxRadius)
+vec2 getRadiusRange()
+{
+    float baseFactor = max(u_frameDimension.x, u_frameDimension.y) * 0.0625; // 1/16
+    // u_paparazziIntensity
+    float rangeMin = lerp(CIRCLE_RADIUS_RANGE_FACTOR_START_MIN, CIRCLE_RADIUS_RANGE_FACTOR_END_MIN, u_paparazziIntensity);
+    float rangeMax = lerp(CIRCLE_RADIUS_RANGE_FACTOR_START_MAX, CIRCLE_RADIUS_RANGE_FACTOR_END_MAX, u_paparazziIntensity);
+    
+    return vec2(baseFactor * rangeMin, baseFactor * rangeMax);
 }
 
-float getCircleRadius(float seed)
+// helper functions
+bool isModePreIntro()
 {
-    return 1.0;
+    return ( getPassedEffectTime() < (PRE_INTRO_DURATION) );
+}
+
+bool isModeIntro()
+{
+    return ( getPassedEffectTime() >= PRE_INTRO_DURATION ) && ( getPassedEffectTime() < (PRE_INTRO_DURATION + INTRO_DURATION) );
+}
+
+bool isModeOutro()
+{
+   return  ( getPassedEffectTime() >= (u_effectDuration - OUTRO_DURATION) );
+}
+
+float getIntroModeAnimProgress()
+{
+    // calculates (currentEffectTime) / effectTimeMax
+    return (getPassedEffectTime() - PRE_INTRO_DURATION) / INTRO_DURATION;
+}
+
+float getStandardModeAnimProgress()
+{
+    // calculates (currentEffectTime) / effectTimeMax
+    return (getPassedEffectTime() - PRE_INTRO_DURATION - INTRO_DURATION) / (u_effectDuration - PRE_INTRO_DURATION - INTRO_DURATION - OUTRO_DURATION);
+}
+
+float getOutroModeAnimProgress()
+{
+    // calculates (currentEffectTime) / effectTimeMax
+    return (getPassedEffectTime() - (u_effectDuration - OUTRO_DURATION)) / OUTRO_DURATION;
+}
+
+float getPassedEffectTime()
+{
+    return (u_effectDuration - getRemainingEffectDuration());
+}
+
+float getRemainingEffectDuration()
+{
+    // negative remaining durations are set to 0.0
+    return max(u_remainingEffectDuration, 0.0);
+}
+
+// returns distance between circle center and current gl_FragCoord
+float getDistance(vec2 circleCenter)
+{
+    return length(gl_FragCoord.xy - circleCenter);
+}
+
+// lerps from a [t = 0] to b [t = 1]
+float lerp(float a, float b, float t)
+{
+    return a * (1 - t) + b * t;
+}
+
+// returns [0.0, 1.0]
+float rand(vec2 seed)
+{
+    return abs(fract(sin(dot(seed.xy, vec2(12.9898,78.233))) * 43758.5453));
+}
+
+// returns vec2([0.0, 1.0], [0.0, 1.0])
+vec2 rand2(vec2 seed)
+{
+    return vec2(rand(seed), rand(seed + SEED_STEP_C));
+}
+
+// converts from ([0.0, 1.0], [0.0, 1.0]) to (Width, Height)
+vec2 convertNormalizedToScreen(vec2 normalized)
+{
+    return normalized * u_frameDimension;
 }

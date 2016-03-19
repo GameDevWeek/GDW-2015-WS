@@ -5,15 +5,16 @@ import com.badlogic.gdx.utils.SnapshotArray;
 
 public class GameOverEvent {
     public static interface Listener {
-        void onGameOverEvent();
+
+        void onGameOverEvent(boolean won);
     }
     
     private static final SnapshotArray<Listener> listeners = new SnapshotArray<Listener>();
 
-    public static void emit() {
+    public static void emit(boolean won) {
         Object[] items = listeners.begin();
         for (int i = 0, n = listeners.size; i < n; i++) {
-            ((Listener) items[i]).onGameOverEvent();
+            ((Listener) items[i]).onGameOverEvent(won);
         }
         listeners.end();
     }

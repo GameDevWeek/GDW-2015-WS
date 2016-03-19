@@ -75,8 +75,6 @@ public class GameLogicTest extends SandboxGame {
     }, Input.Keys.F1,HotkeyModifier.CTRL);
     private Hotkey stopSound = new Hotkey(() -> {SoundEvent.stopSound(unicorn);
     }, Input.Keys.F2,HotkeyModifier.CTRL);
-    private final Hotkey damage = new  Hotkey(() -> {HitEvent.emit(unicorn,HitEvent.HitType.TOUCH,1);
-    }, Input.Keys.F4,HotkeyModifier.CTRL);
     
     private SandBoxEventLogger sbeLogger = new SandBoxEventLogger();
 
@@ -155,8 +153,7 @@ public class GameLogicTest extends SandboxGame {
         unicorn = createDummyUnicorn();
         playSound.register();
         stopSound.register();
-        restart.register();
-        damage.register();       
+        restart.register();     
 
         createDummyStartPoint();
         createDummyStartPoint();

@@ -1,27 +1,53 @@
 {
     
-    "bubblegum_blue": "data/graphics/blue_gum_s.png",
-    "bubblegum_rainbow": "data/graphics/rainbow_gum_s.png",
-    "bubblegum_spitting": "data/dummies/bubblegum_spitting.png",
-    "coin": "data/dummies/coin.png",
+    "bubblegum_blue": "data/graphics/gum_blue.png",
+    "bubblegum_rainbow": "data/graphics/gum_rainbow.png",
+    "bubblegum_spitting_pink": "data/graphics/gum_spit_pink.png",
+    "bubblegum_spitting_rainbow": "data/graphics/gum_spit_rainbow.png",
+    
+    "gum_ground"  : "data/graphics/gum_ground.png",
+    "gum_ground_rainbow"  : "data/graphics/gum_ground_rainbow.png",
+    "gum_stickie" : "data/graphics/gum_stickie.png", 
+    "gum_stickie_rainbow" : "data/graphics/gum_stickie_rainbow.png", 
+    
+    "bullet": "data/graphics/projectile.png",
+    
+    "coin": "data/graphics/coin.png",
     "gum_bubble": "data/dummies/gum_bubble.png",
     "splatter_0": "data/dummies/splatter.png",
     "splatter_1": "data/dummies/splatter.png",
     "splatter_2": "data/dummies/splatter.png",
     "unicorn": "data/graphics/unicorn_s.png",
+    "unicorn_mirror" : "data/graphics/unicorn_mirror.png",
     "trex" : "data/graphics/trex.png",
-    "cookie" : "data/graphics/cookie_s.png",
+    "trex_mirror" : "data/graphics/trex_mirror.png",
+    "cookie" : "data/graphics/cookie.png",
     "drop" : "data/graphics/drop.png",
-    "bubble" : "data/graphics/bubble_s.png",
+    "bubble" : "data/graphics/bubble.png",
     
-    "hunter" : "data/graphics/enemy_hunter_s.png",
-    "paparazzi" : "data/graphics/enemy_paparazzi_s.png",
-
+    "hunter" : "data/graphics/enemy_hunter.png",
+    "paparazzi" : "data/graphics/enemy_paparazzi.png",
 
     "heart0": "data/ui/menu/heart0.png",
     "heart1": "data/ui/menu/heart1.png",
     "heart2": "data/ui/menu/heart2.png",
-    "heart3": "data/ui/menu/heart3.png",    
+    "heart3": "data/ui/menu/heart3.png",
+    "gum_hud": "data/ui/menu/hud_gum.png",
+    "coin_hud": "data/ui/menu/hud_coin.png",
+    "dead_unicorn_gameover": "data/ui/menu/unicorn_dead.png",
     "menu_fg": "data/ui/menu/fg_border.png",
-    "menu_bg": "data/ui/menu/menu_splash.png"
+    "menu_bg": "data/ui/menu/menu_splash.png",
+    "transparent_bg": "data/ui/menu/transparent.png",
+    "prev_Button": "data/ui/menu/prev_Button.png",
+    "next_Button": "data/ui/menu/next_Button.png",
+
+    "dash_Cooldown": "data/ui/menu/hud_dash01.png",
+    "clock_hud": "data/ui/menu/hud_clock.png",
+
+    "data/maps/lvl1.tmx": "data/ui/menu/menu_level01.png",
+    "data/maps/lvl2.tmx": "data/ui/menu/menu_level02.png",
+    "data/maps/lvl3.tmx": "data/ui/menu/menu_level03.png",
+    "data/maps/lvl4.tmx": "data/ui/menu/menu_level04.png",
+    
+    "lvl1": "data/graphics/background_lvl1_big.png"
 }

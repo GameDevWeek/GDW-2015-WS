@@ -16,6 +16,8 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixModifierComponent;
 import de.hochschuletrier.gdw.commons.utils.Point;
+
+import java.util.Collections;
 import java.util.List;
 
 /**

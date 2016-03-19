@@ -9,16 +9,26 @@ public class PlayerComponent extends Component implements Poolable {
     public int maxHitpoints;
     public int hitpoints;
     public int lives;
+    public float invulnerableTimer;
+    /// im Bezug auf Rainbow Mode unverwundbarkeit
+    public int deathZoneCounter;
+    
+    public boolean soundSpuckChargePlayed=false;
     
     public static enum State{
         NORMAL,
         RAINBOW,
         HORNATTACK,
-        SPUCKCHARGE
+        SPUCKCHARGE,
+        THROWBACK;
     }
     
-    public State state;
+    public State state = State.NORMAL;
     public float stateTimer;
+    
+    public float hornAttackCooldown;
+    public float throwBackCooldown;
+    public int blueGumStacks;
 
     @Override
     public void reset() {
@@ -28,6 +38,10 @@ public class PlayerComponent extends Component implements Poolable {
         lives=0;
         state=State.NORMAL;
         stateTimer=0;
+        hornAttackCooldown=0;
+        invulnerableTimer=0;
+        throwBackCooldown=0;
+        blueGumStacks = 0;
     }
    
 }

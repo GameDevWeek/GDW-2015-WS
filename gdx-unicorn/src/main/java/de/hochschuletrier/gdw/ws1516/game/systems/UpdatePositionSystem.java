@@ -22,9 +22,12 @@ public class UpdatePositionSystem extends IteratingSystem {
     public void processEntity(Entity entity, float deltaTime) {
         PhysixBodyComponent physix = ComponentMappers.physixBody.get(entity);
         PositionComponent position = ComponentMappers.position.get(entity);
-        position.x = physix.getX();
-        position.y = physix.getY();
-        position.rotation = physix.getAngle() * MathUtils.radiansToDegrees;
+        
+        if (position != null && physix != null && physix.getBody() != null) {    
+            position.x = physix.getX();
+            position.y = physix.getY();
+            position.rotation = physix.getAngle() * MathUtils.radiansToDegrees;
+        }
     }
 
 }

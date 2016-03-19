@@ -11,15 +11,47 @@
         "text": {
             "type": "linear",
             "destinations": [
-                {"x": 512, "y": 120, "speed": 30 },
-                {"x": 512, "y": 700, "speed": 30 }
+                {"x": 512, "y": 20, "speed": 75 },
+                {"x": 512, "y": 700, "speed": 75 }
             ]
         },
-        "btw": {
+        "thanks": {
             "type": "linear",
             "destinations": [
-                {"x": 200, "y": 120, "speed": 30 },
-                {"x": 200, "y": 700, "speed": 30 }
+                {"x": 512, "y": 20, "speed": 75 },
+                {"x": 512, "y": 350, "speed": 0.2 },
+                {"x": 512, "y": 351, "speed": 1 }
+            ]
+        },
+        "unicorn1": {
+            "type": "linear",
+            "destinations": [
+                {"x" : -50,"y": 300,"speed": 333},
+                {"x" : 1500, "y": 300 ,"speed": 333}
+            ]
+        },
+        "chase1":{
+            "type":"linear",
+            "destinations": [
+                {"x" : 1500,"y": 600,"speed": 333},
+                {"x" : -50, "y": 100 ,"speed": 333}
+            ]
+        },
+        "chase2":{
+            "type":"linear",
+            "destinations":[
+                {"x":-50,"y":0,"speed":333},
+                {"x":300,"y":500,"speed":333},
+                {"x":600,"y":100,"speed":333},
+                {"x":1200,"y":350,"speed":333}
+            ]
+        },
+        "nomnom":{
+            "type":"linear",
+            "destinations":[
+                {"x":1500,"y":0,"speed":70},
+                {"x":1200,"y":0,"speed":50},
+                {"x":1400,"y":0,"speed":50}
             ]
         }
     },
@@ -27,48 +59,64 @@
         "text": {
             "time": 0,
             "items" : [
-                { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "GameDevWeek Codebase", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Santo Pfingsten  ", "delay": "1350" },
-                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Torsten Scholer", "delay": "0" },
-                
-                { "type": "text", "path" : "text", "group" : "title", "style" : "title_left", "text": "Contributions: ", "delay": "3300" },
-                { "type": "text", "path" : "text", "group" : "title", "style" : "title_right", "text": " Torsten Scholer", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "A.I. Behaviourtree  ", "delay": "1350" },
-                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Asset Loaders", "delay": "0" },
-                
-                { "type": "text", "path" : "text", "group" : "title", "style" : "title_left", "text": "Contributions: ", "delay": "3300" },
-                { "type": "text", "path" : "text", "group" : "title", "style" : "title_right", "text": " Santo Pfingsten", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Developer Console  ", "delay": "1350" },
-                { "type": "text", "path" : "text", "style" : "text_right", "text": "  JSON Parser", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Network Library  ", "delay": "1350" },
-                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Tiled Map Loader & Renderer", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Asset Loaders  ", "delay": "1350" },
-                { "type": "text", "path" : "text", "style" : "text_right", "text": "  2D Cameras", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Physics Helpers  ", "delay": "1350" },
-                { "type": "text", "path" : "text", "style" : "text_right", "text": "  SceneAnimator", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Settings Helpers  ", "delay": "1350" },
-                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Sound Emitters", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Gamestates & Transitions  ", "delay": "1350" },
-                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Various Utilities", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Maven Setup  ", "delay": "1350" },
-                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Demo Project Setup", "delay": "0" },
-                
-                { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Management (chronological)", "delay": "3300" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Tobias Krumholz  ", "delay": "1350" },
-                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Robert Rößger", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Johannes Strack  ", "delay": "1350" },
-                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Santo Pfingsten", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Robin Dick  ", "delay": "1350" },
-                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Torsten Scholer", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Minh Duc Dao  ", "delay": "1350" },
-                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Georg Schäfer", "delay": "0" },
-                { "type": "text", "path" : "text", "style" : "text_left", "text": "Kristina Kölln  ", "delay": "1350" },
-                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Tobias Meier", "delay": "0" },
-                
-                { "type": "text", "path" : "btw", "group" : "btw", "style" : "text_right", "text": "btw..", "delay": "8500" },
-                { "type": "text", "path" : "btw", "group" : "git1", "style" : "text_right", "text": "I hate Git!", "delay": "1500" },
-                { "type": "text", "path" : "btw", "group" : "git1b", "style" : "text_right", "text": "Nevermind, I need to learn to live with it..", "delay": "0" },
-                { "type": "text", "path" : "btw", "group" : "git2", "style" : "text_right", "text": "... there, I said it!", "delay": "1500" }
+
+                { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Organisation", "delay": "0" },
+                { "type": "text", "path" : "text", "style" : "text_left", "text": "Santo Pfingsten  ", "delay": "675" },
+                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Kore Kaluzynski", "delay": "0" },
+                { "type": "text", "path" : "text", "style" : "text_left", "text": "Julia Eiden  ", "delay": "675" },
+                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Minh Duc Dao", "delay": "0" },
+                { "type": "text", "path" : "text", "style" : "text_center", "text": "Jerome Jähnig", "delay": "675" },
+
+                { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Game Logik", "delay": "2000" },
+                { "type": "text", "path" : "text", "style" : "text_left", "text": "Tobias Gepp  ", "delay": "675" },
+                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Marwin Rieger", "delay": "0" },
+                { "type": "text", "path" : "text", "style" : "text_center", "text": "Philipp Martschei", "delay": "675" },
+
+
+                { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Physik", "delay": "2000" },
+                { "type": "text", "path" : "text", "style" : "text_left", "text": "Tobias Thierbach  ", "delay": "675" },
+                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Eileen Neumann", "delay": "0" },
+                { "type": "text", "path" : "text", "style" : "text_center", "text": "Jeremy Merse", "delay": "675" },
+
+
+                { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Rendering", "delay": "2000" },
+                { "type": "text", "path" : "text", "style" : "text_left", "text": "Armin Willer  ", "delay": "675" },
+                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Daniel Reiners", "delay": "0" },
+                { "type": "text", "path" : "text", "style" : "text_center", "text": "Michael Dahm", "delay": "675" },
+
+
+                { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Assets", "delay": "2000" },
+                { "type": "text", "path" : "text", "style" : "text_center", "text": "David Siepen", "delay": "675" },
+
+
+                { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Eingabeverarbeitung", "delay": "2000" },
+                { "type": "text", "path" : "text", "style" : "text_center", "text": "Jonathan Jan-Thadeusz Wojcik", "delay": "675" },
+
+
+                { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "UI/Hud", "delay": "2000" },
+                { "type": "text", "path" : "text", "style" : "text_left", "text": "Mateo Egey  ", "delay": "675" },
+                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Max Flesh", "delay": "0" },
+
+
+                { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Level Design", "delay": "2000" },
+                { "type": "text", "path" : "text", "style" : "text_left", "text": "Wera Goßner  ", "delay": "675" },
+                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Kristofer Schmitz", "delay": "0" },
+                { "type": "text", "path" : "text", "style" : "text_center", "text": "Tristan-Philip Semmler", "delay": "675" },
+
+
+             { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Sound Design", "delay": "2000" },
+                { "type": "text", "path" : "text", "style" : "text_left", "text": "Minh Duc Dao  ", "delay": "675" },
+                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Jason Merse", "delay": "0" },
+
+
+                { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Grafik Design", "delay": "2000" },
+                { "type": "text", "path" : "text", "style" : "text_left", "text": "Jeremy Baltat  ", "delay": "675" },
+                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Loni", "delay": "0" },
+                { "type": "text", "path" : "text", "style" : "text_left", "text": "Sandra Weyand  ", "delay": "675" },
+                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Julia Eiden", "delay": "0" },
+
+
+                { "type": "text", "path" : "thanks", "group" : "title", "style" : "title_center", "text": "Thank you for playing!", "delay": "2000" }
             ],
             "animations": [
                 { "time": 0, "animation": "construct", "animationTime": 1000, "group": "title",
@@ -83,7 +131,7 @@
                     "minCurveAngle": 25, "maxCurveAngle": 55,
                     "trailMaxSteps": 3, "trailStepTime": 50
                 },
-                
+
                 { "time": 0, "animation": "untype_instant", "group": "btw" },
                 { "time": 0, "animation": "untype_instant", "group": "git1" },
                 { "time": 0, "animation": "untype_instant", "group": "git1b" },
@@ -97,6 +145,18 @@
 
                 { "time": 14000, "animation": "fade_out", "animationTime": 2000, "group": "*" }
             ]
+        },
+        "stuff": {
+            "time": 3000,
+            "items": [
+                {"type":"animation","path":"unicorn1", "resource":"unicorn_walking","delay":5000},
+                {"type":"texture","path":"chase1", "resource":"bubblegum_rainbow", "oriented":"true", "delay":10000},
+                {"type":"animation","path":"chase1", "resource":"unicorn_walking", "oriented":"true","delay":250},
+                {"type":"texture","path":"chase2","resource":"bubblegum_rainbow","oriented":"true", "delay":10000},
+                {"type":"animation","path":"chase2","resource":"unicorn_walking","oriented":"true","delay":250},
+                {"type":"texture","path":"nomnom","resource":"trex_mirror","oriented":"false","delay":0}
+            ],
+            "animations":[]
         }
     }
 }

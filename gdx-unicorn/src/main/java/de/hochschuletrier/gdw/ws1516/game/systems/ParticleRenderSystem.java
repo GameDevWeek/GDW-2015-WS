@@ -3,34 +3,89 @@ package de.hochschuletrier.gdw.ws1516.game.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter.RangedNumericValue;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter.ScaledNumericValue;
+import com.badlogic.gdx.utils.Array;
 
 import de.hochschuletrier.gdw.commons.gdx.ashley.SortedSubIteratingSystem;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.LookDirection;
 import de.hochschuletrier.gdw.ws1516.game.components.ParticleComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 
-public class ParticleRenderSystem extends SortedSubIteratingSystem.SubSystem 
+public class ParticleRenderSystem extends SortedSubIteratingSystem.SubSystem
 {
-    public ParticleRenderSystem() 
+    public ParticleRenderSystem()
     {
         super(Family.all(PositionComponent.class, ParticleComponent.class).get());
     }
 
     @Override
-    public void processEntity(Entity entity, float deltaTime) 
+    public void processEntity(Entity entity, float deltaTime)
     {
-        ParticleComponent component = ComponentMappers.particleTest.get(entity);
+        ParticleComponent particleComponent = ComponentMappers.foregroundParticle.get(entity);
+        MovementComponent movementComponent = ComponentMappers.movement.get(entity);
+        PositionComponent positionComponent = ComponentMappers.position.get(entity);
+
+        if (movementComponent != null) {
+            boolean flip = ((movementComponent.lookDirection) == (MovementComponent.LookDirection.LEFT));
+            if (flip != particleComponent.isFlippedHorizontal)
+                flipHorizontal(particleComponent);
+        }
+
+        boolean isMoving = movementComponent != null && Math.abs(movementComponent.velocityX) > 0.01f;
         
-        PositionComponent position = ComponentMappers.position.get(entity);
-        
-        for(ParticleEmitter emitter : component.effect.getEmitters())
+        for(int i = 0; i < particleComponent.effect.getEmitters().size; ++i)
         {
-            emitter.start();
-            emitter.setPosition(position.x, position.y);
+            ParticleEmitter emitter = particleComponent.effect.getEmitters().get(i);
+            if(movementComponent != null && particleComponent.reduceEmissionIfIdle)
+            {
+                reduceEmissionIfIdle(particleComponent, emitter, isMoving, i);
+            }
+            float xOffset = 0f;
+            if(isMoving)
+            {
+                xOffset = movementComponent.lookDirection == LookDirection.RIGHT ? particleComponent.offsetWhenMoving : -particleComponent.offsetWhenMoving;
+            }
+            emitter.setPosition(positionComponent.x + xOffset, positionComponent.y);
             emitter.draw(DrawUtil.batch, deltaTime);
         }
-        component.effect.setPosition(position.x, position.y);
-        component.effect.draw(DrawUtil.batch);
+        
+        particleComponent.effect.setPosition(positionComponent.x, positionComponent.y);
+        particleComponent.effect.draw(DrawUtil.batch);
+    }
+
+    private void reduceEmissionIfIdle(ParticleComponent particleComponent, ParticleEmitter emitter, boolean isMoving, int emitterIndex)
+    {
+        float highMax = emitter.getEmission().getHighMax();
+        if(isMoving && highMax < particleComponent.startEmissionHighMax[emitterIndex])
+        {
+            emitter.getEmission().setHigh(particleComponent.startEmissionHighMin[emitterIndex], particleComponent.startEmissionHighMax[emitterIndex]);
+            emitter.getEmission().setLow(particleComponent.startEmissionLowMin[emitterIndex], particleComponent.startEmissionLowMax[emitterIndex]);
+            emitter.start();
+        }
+        else if(!isMoving && highMax > particleComponent.startEmissionHighMax[emitterIndex] * GameConstants.IDLE_PARTICLE_REDUCTION)
+        {
+            emitter.getEmission().setHigh(particleComponent.startEmissionHighMin[emitterIndex] * GameConstants.IDLE_PARTICLE_REDUCTION , particleComponent.startEmissionHighMax[emitterIndex] * GameConstants.IDLE_PARTICLE_REDUCTION);
+            emitter.getEmission().setLow(particleComponent.startEmissionLowMin[emitterIndex] * GameConstants.IDLE_PARTICLE_REDUCTION, particleComponent.startEmissionLowMax[emitterIndex] * GameConstants.IDLE_PARTICLE_REDUCTION);
+            emitter.start();
+        }
+    }
+
+    private void flipHorizontal(ParticleComponent particleComponent)
+    {
+        Array<ParticleEmitter> emitters = particleComponent.effect.getEmitters();        
+        for (int i = 0; i < emitters.size; i++) {                          
+           ScaledNumericValue angle = emitters.get(i).getAngle();                                   
+           angle.setHigh(180 - angle.getHighMin(), 180 - angle.getHighMax());
+
+           RangedNumericValue xOffsetValue = emitters.get(i).getXOffsetValue();
+           xOffsetValue.setLow(-xOffsetValue.getLowMin(), -xOffsetValue.getLowMax());
+        }
+        
+        particleComponent.isFlippedHorizontal = !particleComponent.isFlippedHorizontal;
     }
 }
