@@ -15,6 +15,8 @@ public class Canvas {
     private final Color pixelColor = new Color();
     private final Texture texture = new Texture(pixmap);
     private float pctFilled;
+    private float bluePct;
+    private float redPct;
     private final Texture background;
     private final Texture wall;
     
@@ -27,6 +29,14 @@ public class Canvas {
         return pctFilled;
     }
 
+    public float getBluePct() {
+        return bluePct;
+    }
+
+    public float getRedPct() {
+        return redPct;
+    }
+    
     public void clear() {
         pctFilled = 0;
         pixmap.setColor(clearColor);
@@ -58,20 +68,35 @@ public class Canvas {
     }
 
     public void updatePctFilled() {
-        int drawnPixels = 0;
-        int totalPixels = 0;
         int sx = GameConstants.BORDER_SIZE;
         int sy = GameConstants.BORDER_SIZE;
         int mx = GameConstants.WINDOW_WIDTH - GameConstants.BORDER_SIZE;
         int my = GameConstants.WINDOW_HEIGHT - GameConstants.BORDER_SIZE;
+        
+        int drawnPixels = 0;
+        int totalPixels = 0;
+        int pixelsRed = 0;
+        int pixelsBlue = 0;
+        
         for(int x=sx; x<mx; x++) {
             for(int y=sy; y<my; y++) {
                 pixelColor.set(pixmap.getPixel(x, y));
-                if(pixelColor.a > 0)
+                if(pixelColor.a > 0) {
                     drawnPixels++;
+                    if(colorsEqual(pixelColor, PlayerColor.RED.color)) 
+                        pixelsRed++;
+                    else if(colorsEqual(pixelColor, PlayerColor.BLUE.color)) 
+                        pixelsBlue++;
+                }
                 totalPixels++;
             }
         }
         pctFilled =  drawnPixels / (float)totalPixels;
+        bluePct = pixelsBlue / (float)totalPixels;
+        redPct = pixelsRed / (float)totalPixels;
+    }
+
+    private boolean colorsEqual(Color c1, Color c2) {
+        return c1.r == c2.r && c1.g == c2.g && c1.b == c2.b;
     }
 }
