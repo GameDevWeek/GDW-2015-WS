@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.Main;
+import de.hochschuletrier.gdw.ws1516.events.EndgameEvent;
 import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
 import de.hochschuletrier.gdw.ws1516.events.SetCountdownEvent;
 import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
@@ -18,12 +19,12 @@ public class CountdownSystem extends EntitySystem implements SetCountdownEvent.L
         ENDGAME,
         GAMEOVER
     };
-    
+
     private State state = State.GAME;
     private float timeLeft =  GameConstants.COUNTDOWN_TIME;
     private final BitmapFont font;
     private final Color color = Color.WHITE;
-    
+
     public CountdownSystem(int priority) {
         super(priority);
         font = Main.getInstance().getAssetManager().getFont("midnight_48");
@@ -49,10 +50,11 @@ public class CountdownSystem extends EntitySystem implements SetCountdownEvent.L
     public void update(float deltaTime) {
         if(timeLeft > 0) {
             timeLeft -= deltaTime;
-            if (timeLeft <= 10 && state == State.GAME) {
+            if (timeLeft <= GameConstants.ENDGAME_DURATION && state == State.GAME) {
                 state = State.ENDGAME;
                 Main.playMusic("endgame");
                 SoundEvent.emit(null, "alarm");
+                EndgameEvent.emit();
             }
             if(timeLeft <= 0) {
                 Main.playMusic("normal");
@@ -75,9 +77,13 @@ public class CountdownSystem extends EntitySystem implements SetCountdownEvent.L
                 result += "0";
             result += seconds;
         }
-        
+
         BitmapFont.TextBounds bounds = font.getBounds(result);
         float x = (GameConstants.WINDOW_WIDTH - bounds.width) * 0.5f;
         font.draw(DrawUtil.batch, result, x, 2);
+    }
+
+    public State getState() {
+        return state;
     }
 }

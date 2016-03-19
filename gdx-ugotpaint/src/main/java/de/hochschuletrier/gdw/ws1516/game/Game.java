@@ -40,7 +40,7 @@ public class Game extends InputAdapter {
     private final EntityFactory<EntityFactoryParam> entityFactory = new EntityFactory("data/json/entities.json", Game.class);
     private final PickupSystem pickupSystem = new PickupSystem(this);
     private final SplashSystem splashSystem = new SplashSystem(this);
-    private final PlayerDeathSystem playerDeathSystem = new PlayerDeathSystem();
+    private final PlayerDeathSystem playerDeathSystem = new PlayerDeathSystem(this);
     private final ParticleRenderSystem particleRenderSystem = new ParticleRenderSystem(this, GameConstants.PRIORITY_ANIMATIONS-1);
     private final EndExplosionSystem endExplosionSystem = new EndExplosionSystem();
 
@@ -89,7 +89,6 @@ public class Game extends InputAdapter {
     }
 
     private void addSystems() {
-        engine.addSystem(new EndgameSystem(GameConstants.PRIORITY_ENDGAME));
         engine.addSystem(new ShootSystem(this, GameConstants.PRIORITY_SHOOT));
         engine.addSystem(new UpdatePlayerSystem(GameConstants.PRIORITY_PHYSIX));
         engine.addSystem(new UpdateProjectileSystem(GameConstants.PRIORITY_PHYSIX));
@@ -100,8 +99,12 @@ public class Game extends InputAdapter {
         engine.addSystem(new KeyboardInputSystem());
         engine.addSystem(new InputSystem());
         engine.addSystem(new UpdateSoundEmitterSystem());
-        engine.addSystem(new CountdownSystem(GameConstants.PRIORITY_HUD));
+
+        // pickup- and countdown system needs to be added before the endgame system
         engine.addSystem(pickupSystem);
+        engine.addSystem(new CountdownSystem(GameConstants.PRIORITY_HUD));
+        engine.addSystem(new EndgameSystem(GameConstants.PRIORITY_ENDGAME));
+
         engine.addSystem(splashSystem);
         engine.addSystem(playerDeathSystem);
         engine.addSystem(particleRenderSystem);
