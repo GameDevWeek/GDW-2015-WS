@@ -324,10 +324,11 @@
             "Position": {},
             "BackgroundParticle": {
                 "effect": "blood_splatter",
-                "kill_when_finished": true
+                "kill_when_finished": true,
+                "flipVertical": true
             },
             "RenderLayer": {
-                "layer": 55
+                "layer": 150
             }
         }
     },

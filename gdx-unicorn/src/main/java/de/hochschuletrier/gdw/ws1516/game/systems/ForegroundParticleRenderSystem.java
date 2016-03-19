@@ -48,6 +48,11 @@ public class ForegroundParticleRenderSystem extends SortedSubIteratingSystem.Sub
         for(int i = 0; i < particleComponent.effect.getEmitters().size; ++i)
         {
             ParticleEmitter emitter = particleComponent.effect.getEmitters().get(i);
+            if(particleComponent.isFlippedVertical != particleComponent.flipVertical)
+            {
+                emitter.flipY();
+                particleComponent.isFlippedVertical = particleComponent.flipVertical;
+            }
             if(movementComponent != null && particleComponent.reduceEmissionIfIdle)
             {
                 reduceEmissionIfIdle(particleComponent, emitter, isMoving, i);

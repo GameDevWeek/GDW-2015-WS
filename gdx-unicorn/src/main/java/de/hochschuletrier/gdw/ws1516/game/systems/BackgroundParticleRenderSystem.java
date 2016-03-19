@@ -30,10 +30,6 @@ public class BackgroundParticleRenderSystem extends SortedSubIteratingSystem.Sub
         BackgroundParticleComponent particleComponent = ComponentMappers.backgroundParticle.get(entity);
         MovementComponent movementComponent = ComponentMappers.movement.get(entity);
         PositionComponent positionComponent = ComponentMappers.position.get(entity);
-
-        if(particleComponent.killWhenFinished){
-            Math.sin(0);
-        }
         
         boolean isDestroyed = destroyIfFinished(entity, particleComponent);
         if(isDestroyed)
@@ -52,6 +48,11 @@ public class BackgroundParticleRenderSystem extends SortedSubIteratingSystem.Sub
         for(int i = 0; i < particleComponent.effect.getEmitters().size; ++i)
         {
             ParticleEmitter emitter = particleComponent.effect.getEmitters().get(i);
+            if(particleComponent.isFlippedVertical != particleComponent.flipVertical)
+            {
+                emitter.flipY();
+                particleComponent.isFlippedVertical = particleComponent.flipVertical;
+            }
             if(movementComponent != null && particleComponent.reduceEmissionIfIdle)
             {
                 reduceEmissionIfIdle(particleComponent, emitter, isMoving, i);

@@ -124,7 +124,7 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
         Pattern extractFileName = Pattern.compile("^.*/(.*)\\.tmx$");
         Matcher extractFileNameMatcher = extractFileName.matcher(map.getFilename());
         extractFileNameMatcher.matches();
-        String mapName = extractFileNameMatcher.group(1);
+        String mapName = extractFileNameMatcher.group(1) + "_background";
         
         // DEBUG
         System.out.println(mapName);

@@ -38,6 +38,7 @@ public class ForegroundParticleComponentFactory extends ComponentFactory<EntityF
             component.startEmissionLowMin[i] = emitter.getEmission().getLowMin();
         }
         component.isFlippedHorizontal = properties.getBoolean("flipHorizontal", false);
+        component.flipVertical = properties.getBoolean("flipVertical", false);
         component.reduceEmissionIfIdle = properties.getBoolean("reduceEmissionIfIdle", false);
         component.offsetWhenMoving = properties.getFloat("offsetWhenMoving", 0);
         component.killWhenFinished = properties.getBoolean("kill_when_finished", false);

@@ -12,6 +12,8 @@ public class ForegroundParticleComponent extends Component implements Pool.Poola
     public float[] startEmissionLowMin;
     public float[] startEmissionLowMax;
     public boolean isFlippedHorizontal;
+    public boolean isFlippedVertical;
+    public boolean flipVertical;
     public boolean reduceEmissionIfIdle;
     public float offsetWhenMoving;
     public boolean killWhenFinished;
