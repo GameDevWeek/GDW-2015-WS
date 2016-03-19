@@ -106,6 +106,11 @@ public class MenuPage extends Group {
         TextButton button = addButton(x, y, width, height, text, runnable, "default",sound);
         button.getLabel().setAlignment(Align.left);
     }
+    
+    protected final void addRightAlignedButton(int x, int y, int width, int height, String text,Runnable runnable,String sound) {
+        TextButton button = addButton(x, y, width, height, text, runnable, "default",sound);
+        button.getLabel().setAlignment(Align.right);
+    }
 
     protected final void addCenteredButton(int x, int y, int width, int height, String text, Runnable runnable,String sound) {
         TextButton button = addButton(x - width / 2, y - height / 2, width, height, text, runnable, "default",sound);

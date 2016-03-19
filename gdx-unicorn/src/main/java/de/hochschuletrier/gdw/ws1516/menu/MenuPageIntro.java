@@ -11,6 +11,7 @@ import de.hochschuletrier.gdw.commons.gdx.assets.AnimationExtended;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.Hotkey;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.HotkeyModifier;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
+import de.hochschuletrier.gdw.commons.gdx.menu.widgets.DecoImage;
 import de.hochschuletrier.gdw.commons.gdx.sceneanimator.SceneAnimator;
 import de.hochschuletrier.gdw.commons.gdx.sceneanimator.SceneAnimatorActor;
 import de.hochschuletrier.gdw.commons.gdx.sceneanimator.SceneAnimatorListener;
@@ -18,9 +19,9 @@ import de.hochschuletrier.gdw.ws1516.Main;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter, SceneAnimatorListener {
+public class MenuPageIntro extends MenuPage implements SceneAnimator.Getter, SceneAnimatorListener {
 
-    private static final Logger logger = LoggerFactory.getLogger(MenuPageCredits.class);
+    private static final Logger logger = LoggerFactory.getLogger(MenuPageIntro.class);
     private final Hotkey increaseSpeed = new Hotkey(this::increaseSpeed, Input.Keys.PAGE_UP, HotkeyModifier.CTRL);
     private final Hotkey decreaseSpeed = new Hotkey(this::decreaseSpeed, Input.Keys.PAGE_DOWN, HotkeyModifier.CTRL);
     private final Hotkey resetSpeed = new Hotkey(this::resetSpeed, Input.Keys.HOME, HotkeyModifier.CTRL);
@@ -28,6 +29,7 @@ public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter, S
     private MenuManager menuManager;
 
     private SceneAnimator sceneAnimator;
+    private final LevelSelectionPage levelSelectionPage;
 
     private void increaseSpeed() {
         sceneAnimator.setTimeFactor(Math.min(10.0f, sceneAnimator.getTimeFactor() + 1.f));
@@ -41,11 +43,11 @@ public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter, S
         sceneAnimator.setTimeFactor(1.0f);
     }
 
-    public MenuPageCredits(Skin skin, MenuManager menuManager) {
-        super(skin, "menu_bg");
+    public MenuPageIntro(Skin skin, MenuManager menuManager) {
+        super(skin, "intro_bg");
         this.menuManager = menuManager;
         try {
-            sceneAnimator = new SceneAnimator(this, "data/json/endSequence.json");
+            sceneAnimator = new SceneAnimator(this, "data/json/intro.json");
             sceneAnimator.addListener(this);
             final SceneAnimatorActor sceneAnimatorActor = new SceneAnimatorActor(sceneAnimator);
             menuManager.getStage().addListener(new ClickListener() {
@@ -56,10 +58,15 @@ public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter, S
             });
             addActor(sceneAnimatorActor);
         } catch (Exception ex) {
-            logger.error("Error loading credits", ex);
+            logger.error("Error loading intro", ex);
         }
 
         addLeftAlignedButton(55, 40, 100, 50, "Menu", () -> menuManager.popPage(),"buttonSound");
+        
+        levelSelectionPage = new LevelSelectionPage(skin, menuManager);
+        menuManager.addLayer(levelSelectionPage);
+        
+        addRightAlignedButton(Main.WINDOW_WIDTH - 155, 40, 100, 50, "Skip", this::skip,"buttonSound");
     }
     
     @Override
@@ -81,6 +88,11 @@ public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter, S
         if(sceneAnimator != null && visible)
             sceneAnimator.reset();
     }
+    
+    private void skip() {
+        menuManager.popPage();
+        menuManager.pushPage(levelSelectionPage);
+    }
 
     @Override
     public BitmapFont getFont(String name) {
@@ -99,8 +111,7 @@ public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter, S
 
     @Override
     public void onSceneEnd() {
-        sceneAnimator.reset();
-        menuManager.popPage();
+        skip();
     }
 
     @Override
