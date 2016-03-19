@@ -32,6 +32,7 @@ import de.hochschuletrier.gdw.commons.tiled.LayerObject;
 import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
+import de.hochschuletrier.gdw.ws1516.events.GameRestartEvent;
 import de.hochschuletrier.gdw.ws1516.events.PaparazziShootEvent;
 import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
@@ -51,6 +52,7 @@ import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BubblegumSpitListener
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BulletListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.ImpactSoundListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerContactListener;
+import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerPlatformListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.TriggerListener;
 import de.hochschuletrier.gdw.ws1516.game.systems.BlockingGumSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BubbleGlueSystem;
@@ -81,8 +83,9 @@ import de.hochschuletrier.gdw.ws1516.game.utils.MapLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
 import de.hochschuletrier.gdw.ws1516.menu.MenuPageOptions;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.DummyEnemyExecutionSystem;
+import de.hochschuletrier.gdw.ws1516.states.GameplayState;
 
-public class Game extends InputAdapter {
+public class Game extends InputAdapter implements GameRestartEvent.Listener {
 
     private static final Logger logger = LoggerFactory.getLogger(Game.class);
     
@@ -98,7 +101,7 @@ public class Game extends InputAdapter {
     private Hotkey healCheating = null;
     private Hotkey rainbow=null;
     
-    private static boolean PAUSE_ENGINE = false;
+    public static boolean PAUSE_ENGINE = false;
 
 
 
@@ -137,7 +140,7 @@ public class Game extends InputAdapter {
     private final SoundSystem soundSystem = new SoundSystem(null);
     private final HitPointManagementSystem hitPointSystem = new HitPointManagementSystem();
     private final DummyEnemyExecutionSystem dummyEnemySystem = new DummyEnemyExecutionSystem();    
-    private final EnemyHandlingSystem enemyHandlingSystem = new EnemyHandlingSystem();
+    private final EnemyHandlingSystem enemyHandlingSystem = new EnemyHandlingSystem(nameSystem);
     private final EntitySystem enemyVisionSystem = new EnemyVisionSystem();
     private final ScoreSystem scoreBoardSystem = new ScoreSystem();
     private final PlayerStateSystem playerStateSystem = new PlayerStateSystem();
@@ -157,9 +160,11 @@ public class Game extends InputAdapter {
             pauseGame.register();
             winGameCheat.register();
         }
+        GameRestartEvent.register(this);
     }
 
     public void dispose() {
+        GameRestartEvent.unregister(this);
         togglePhysixDebug.unregister();
         scoreCheating.unregister();
         pauseGame.unregister();
@@ -180,7 +185,7 @@ public class Game extends InputAdapter {
         }
     }
 
-    public void init(AssetManagerX assetManager) {
+    public void init(AssetManagerX assetManager, String mapFilename) {
         PAUSE_ENGINE = false;
         Main.getInstance().console.register(physixDebug);
         physixDebug.addListener((CVar) -> physixDebugRenderSystem.setProcessing(physixDebug.get()));
@@ -194,16 +199,16 @@ public class Game extends InputAdapter {
         EntityCreator.setGame(this);
         EntityCreator.setEntityFactory(entityFactory);
         
-        loadMap("data/maps/lvl1.tmx");
+        loadMap(mapFilename);
         mapRenderSystem.initialzeRenderer(map, "map_background", cameraSystem);
         
         //test: 
         // take it out
-        Entity unicorn = EntityCreator.createEntity("unicorn", 9000, 500);
+        Entity unicorn = EntityCreator.createEntity("unicorn", 8800, 500);
         Entity entity=EntityCreator.createEntity("hunter", 9000, 700);
-        PathComponent pathComponent =ComponentMappers.path.get(entity);
-        pathComponent.points.add(new Vector2(1000, 100));
-        pathComponent.points.add(new Vector2(800,100));
+        PathComponent pathComponent = ComponentMappers.path.get(entity);
+        pathComponent.points.add(new Vector2(10000, 700));
+        pathComponent.points.add(new Vector2(8800,100));
 //        Entity platform = EntityCreator.createEntity("platform", 1700, 100);
 /*        healCheating = new Hotkey(() -> HealEvent.emit(unicorn, 1), Input.Keys.F4,
         HotkeyModifier.CTRL);
@@ -222,6 +227,15 @@ public class Game extends InputAdapter {
     }
 
 
+    @Override
+    public void onGameRestartEvent() {      
+        Game game = new Game();
+        final Main main = Main.getInstance();
+        final AssetManagerX assetManager = main.getAssetManager();
+        game.init(assetManager, map.getFilename());
+        main.changeState(new GameplayState(assetManager, game));
+    }
+
     /**
      * 
      * @param filename
@@ -232,7 +246,7 @@ public class Game extends InputAdapter {
         try {
             map = new TiledMap(filename, LayerObject.PolyMode.ABSOLUTE);
         } catch (Exception ex) {
-            throw new IllegalArgumentException("Map konnte nicht geladen werden: " + filename);
+            throw new IllegalArgumentException("Map konnte nicht geladen werden: " + filename, ex);
         }
 
         // Wenn map geladen wurde
@@ -283,6 +297,7 @@ public class Game extends InputAdapter {
         contactListener.addListener(PlayerComponent.class, new PlayerContactListener());
         contactListener.addListener(BulletComponent.class, new BulletListener());
         contactListener.addListener(BubblegumSpitComponent.class, new BubblegumSpitListener());
+        contactListener.addListener(PlayerComponent.class, new PlayerPlatformListener());
         contactListener.addListener(BlockingGumComponent.class, new BlockingGumListener());
     }
 

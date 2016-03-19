@@ -42,7 +42,10 @@
                 "effect": "unicornTrail",
                 "reduceEmissionIfIdle": true,
                 "offsetWhenMoving": 15
-            }
+            },
+            "SoundEmitter":{}
+            
+            
         }
     },
     "hunter": {
@@ -51,31 +54,35 @@
             "Position": {},
 	    "Path":{},
             "Movable":{
-                "state":"on_ground"
+                "state":"on_ground",
+                "speed": 100.0
                 },
             "EnemyType": {
                 "type" : "hunter"
             },
             "Behaviour": {
-		"cooldown":2.0
-	    },
+        		"cooldown":1.35
+        	    },
             "Animation": {
+                "name": "Hunter",
                 "on_ground_idle": "hunter_walking",
                 "on_ground_walking": "hunter_walking",
                 "flying": "hunter_walking",
                 "falling": "hunter_walking",
-                "jumping": "hunter_walking"
+                "jumping": "hunter_walking",
+                "flip_horizontal": true
             },
             "PhysixBody": {
                 "type": "enemy",
                 "size": 30,
                 "density": 5,
-                "friction": 0.2,
-                "restitution": 0.4
+                "friction": 0,
+                "restitution": 0
             },
             "RenderLayer": {
                 "layer": 50
-            }
+            },
+            "SoundEmitter":{}
         }
     },
     "tourist": {
@@ -84,7 +91,8 @@
             "Position": {},
 	    "Path":{},
             "Movable":{
-                "state":"on_ground"
+                "state":"on_ground",
+                "speed": 275.0
                 },
             "EnemyType": {
                 "type" : "paparazzi"
@@ -93,22 +101,25 @@
 		"cooldown":1.5
 	    },
             "Animation": {
+                "name": "Paparazzi",
                 "on_ground_idle": "paparazzi_walking",
                 "on_ground_walking": "paparazzi_walking",
                 "flying": "paparazzi_walking",
                 "falling": "paparazzi_walking",
-                "jumping": "paparazzi_walking"
+                "jumping": "paparazzi_walking",
+                "flip_horizontal": true
             },
             "PhysixBody": {
                 "type": "enemy",
                 "size": 30,
                 "density": 5,
-                "friction": 0.2,
-                "restitution": 0.4
+                "friction": 0,
+                "restitution": 0
             },
             "RenderLayer": {
                 "layer": 50
-            }
+            },
+            "SoundEmitter":{}
         }
     },
     "platform": {
@@ -141,12 +152,17 @@
             "Texture": {
                 "texture": "bubblegum_blue"
             },
+            "Collectable":{
+                "type" : "blue_gum"
+            },
             "PhysixBody": {
                 "type": "circle",
                 "size": 30,
                 "density": 5,
                 "friction": 0.2,
-                "restitution": 0.4
+                "restitution": 0.4,
+                "gravity" : 0.0,
+                "isSensor" : true
             },
             "RenderLayer": {
                 "layer": 60
@@ -160,12 +176,17 @@
             "Texture": {
                 "texture": "bubblegum_rainbow"
             },
+            "Collectable":{
+                "type" : "rainbow_gum"
+            },
             "PhysixBody": {
                 "type": "circle",
                 "size": 30,
                 "density": 5,
                 "friction": 0.2,
-                "restitution": 0.4
+                "restitution": 0.4,
+                "gravity": 0.0,
+                "isSensor": true
             },
             "RenderLayer": {
                 "layer": 60
@@ -257,6 +278,54 @@
             },
             "PhysixBody": {
                 "type": "circle",
+                "size": 20,
+                "density": 5,
+                "friction": 0.0,
+                "restitution": 0.0,
+                "isSensor": true,
+                "gravity" : 0.0
+            },
+            "RenderLayer": {
+                "layer": 59
+            }
+        }
+    },
+    "bonbon": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Texture": {
+                "texture": "drop"
+            },
+            "Collectable":{
+                "type" : "bonbon"
+            },
+            "PhysixBody": {
+                "type": "circle",
+                "size": 30,
+                "density": 5,
+                "friction": 0.0,
+                "restitution": 0.0,
+                "isSensor": true,
+                "gravity" : 0.0
+            },
+            "RenderLayer": {
+                "layer": 59
+            }
+        }
+    },
+    "safe_point": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Texture": {
+                "texture": "bubblegum_rainbow"
+            },
+            "Collectable":{
+                "type" : "spawn_point"
+            },
+            "PhysixBody": {
+                "type": "circle",
                 "size": 30,
                 "density": 5,
                 "friction": 0.2,
@@ -265,7 +334,7 @@
                 "gravity" : 0.0
             },
             "RenderLayer": {
-                "layer": 59
+                "layer": 58
             }
         }
     },

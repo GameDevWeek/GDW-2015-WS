@@ -1,18 +1,18 @@
 {
     "hunter_walking": {
-        "filename": "data/graphics/enemy_hunter.png",
-        "frames" : 1,
+        "filename": "data/graphics/spritesheets/hunter_walking.png",
+        "frames" : 5,
         "frameDuration": [0.15],
         "playType" : "LOOP",
-        "columns": 1,
+        "columns": 5,
         "rows" : 1
     },
     "paparazzi_walking": {
-        "filename": "data/graphics/enemy_paparazzi.png",
-        "frames" : 1,
+        "filename": "data/graphics/spritesheets/paparazzi_walking.png",
+        "frames" : 5,
         "frameDuration": [0.15],
         "playType" : "LOOP",
-        "columns": 1,
+        "columns": 5,
         "rows" : 1
     },
     "unicorn_walking": {

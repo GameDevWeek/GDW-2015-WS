@@ -40,7 +40,8 @@ public class AnimationComponentFactory extends ComponentFactory<EntityFactoryPar
             }
         }
         
-        component.flipHorizontal = properties.getBoolean("flipHorizontal", false);
+        component.flipHorizontal = properties.getBoolean("flip_horizontal", false);
+        component.name = properties.getString("name", "");
         
         entity.add(component);
     }
