@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixContact;
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixContactAdapter;
+import de.hochschuletrier.gdw.ws1516.events.ActivateSafePointEvent;
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.EndContactEvent;
 import de.hochschuletrier.gdw.ws1516.events.HealEvent;
@@ -122,8 +123,9 @@ public class PlayerContactListener extends PhysixContactAdapter {
                     break;
                     case SPAWN_POINT:
                             start.x = collectPos.x;
-                            start.y = collectPos.y;         
+                            start.y = collectPos.y;  
                             
+                            ActivateSafePointEvent.emit(playerEn,otherEn);
                             /// TODO Change animation
                             HealEvent.emit(playerEn, player.maxHitpoints);
                         break;                        
