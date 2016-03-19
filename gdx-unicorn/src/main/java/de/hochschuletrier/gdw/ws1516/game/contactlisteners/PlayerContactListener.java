@@ -62,17 +62,17 @@ public class PlayerContactListener extends PhysixContactAdapter {
             return;
         }
         Entity otherEntity = contact.getOtherComponent().getEntity();
-        // for Jumps:
-//        if ("foot".equals(contact.getMyFixture().getUserData())) {
-//            if (!contact.getOtherFixture().isSensor()) {
-//                logger.debug("landing{}");
-//                MovementComponent.State oldState = ComponentMappers.movement.get(myEntity).state;
-//                MovementComponent.State newState = MovementComponent.State.LANDING;
-//                MovementStateChangeEvent.emit(myEntity, oldState, newState);
-//                ComponentMappers.movement.get(myEntity).state = newState;
-//            }
-//            // TODO: Platfom, killsPlayerOnContact, ...
-//        }
+         //for Jumps:
+        if ("foot".equals(contact.getMyFixture().getUserData())) {
+            if (!contact.getOtherFixture().isSensor()) {
+                logger.debug("landing{}");
+                MovementComponent.State oldState = ComponentMappers.movement.get(myEntity).state;
+                MovementComponent.State newState = MovementComponent.State.LANDING;
+                MovementStateChangeEvent.emit(myEntity, oldState, newState);
+                ComponentMappers.movement.get(myEntity).state = newState;
+            }
+            // TODO: Platfom, killsPlayerOnContact, ...
+        }
         
         Entity playerEn = myEntity;
         Entity otherEn = otherEntity;
@@ -136,17 +136,16 @@ public class PlayerContactListener extends PhysixContactAdapter {
             }
           
         }
-        // if(ComponentMappers.enemyType.has(myEntity)&&ComponentMappers.player.has(otherEntity)){
-        // PlayerComponent
-        // player=otherEntity.getComponent(PlayerComponent.class);
-        // if(player.state==PlayerComponent.State.HORNATTACK&&"horn".equals(contact.getOtherFixture().getUserData())){
-        // HornCollisionEvent.emit(otherEntity, myEntity);
-        // logger.debug("hornKollision {}");
-        // }else{
-        // UnicornEnemyCollisionEvent.emit(myEntity, otherEntity);
-        // logger.debug("gegnerKollision {}");
-        // }
-        // }
+        if (ComponentMappers.enemyType.has(myEntity) && ComponentMappers.player.has(otherEntity)) {
+            PlayerComponent player = otherEntity.getComponent(PlayerComponent.class);
+            if (player.state == PlayerComponent.State.HORNATTACK && "horn".equals(contact.getOtherFixture().getUserData())) {
+                HornCollisionEvent.emit(otherEntity, myEntity);
+                logger.debug("hornKollision {}");
+            } else {
+                UnicornEnemyCollisionEvent.emit(myEntity, otherEntity);
+                logger.debug("gegnerKollision {}");
+            }
+        }
         
         return;
         
