@@ -230,8 +230,8 @@
  </tileset>
  <tileset firstgid="101" source="tilesets/entities_tileset_final.tsx"/>
  <tileset firstgid="201" source="tilesets/characters_tileset_final.tsx"/>
- <tileset firstgid="210" source="tilesets/platform3x1.tsx"/>
- <tileset firstgid="211" source="tilesets/platform4x1.tsx"/>
+ <tileset firstgid="210" source="tilesets/platform_3x1.tsx"/>
+ <tileset firstgid="211" source="tilesets/platform_4x1.tsx"/>
  <tileset firstgid="212" name="chocolateriver_ani" tilewidth="64" tileheight="64" tilecount="8" columns="4">
   <image source="tilesets/chocolateriver_ani.png" width="256" height="128"/>
  </tileset>
