@@ -205,10 +205,9 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
         EntityCreator.setGame(this);
         EntityCreator.setEntityFactory(entityFactory);
         
-        EntityCreator.createEntity("bubblegum_rainbow", 1250, 2911);
         loadMap(mapFilename);
         mapRenderSystem.initialzeRenderer(map, "map_background", cameraSystem);
-        
+        playerStateSystem.initializeDeathBorders(map);
     }
 
 
