@@ -203,19 +203,13 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
     @Override
     public void onRainbowCollect(Entity player) {
         MusicManager.play(rainbowMusic, GameConstants.MUSIC_FADE_TIME);
-        generalVolume = Settings.generalValue.get();
-        musicVolume = Settings.musicValue.get();
-        Settings.generalValue.set(100);
-        Settings.musicValue.set(100);
-        
+              
     }
 
 
     @Override
     public void onRainbowModeEnd(Entity player) {
         MusicManager.play(music, GameConstants.MUSIC_FADE_TIME);
-        Settings.generalValue.set(generalVolume);
-        Settings.musicValue.set(musicVolume);
-        
+             
     }
 }
