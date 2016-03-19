@@ -66,6 +66,7 @@ public class GameConstants {
     public static final float SPIT_COOLDOWN = 1.0f;
     public static final float SPIT_BLOCKING_ORIGINX = 32.0f;
     public static final float SPIT_BLOCKING_ORIGINY = 16.0f;
+    public static final float SPIT_BLOCKING_ALPHA_START = 0.5f;
     
     public static float MUSIC_FADE_TIME = 2;
     
