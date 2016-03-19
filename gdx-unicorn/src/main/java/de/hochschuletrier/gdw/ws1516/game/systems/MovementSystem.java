@@ -33,11 +33,10 @@ import de.hochschuletrier.gdw.ws1516.game.components.factories.PhysixBodyCompone
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 
 public class MovementSystem extends IteratingSystem implements StartFlyEvent.Listener, EndFlyEvent.Listener, JumpEvent.Listener, MovementEvent.Listener, HornAttackEvent.Listener, ThrowBackEvent.Listener {
-    private static final Logger logger = LoggerFactory
-            .getLogger(MovementSystem.class);
-
-    private PhysixSystem physixSystem;
-
+    private static final Logger logger = LoggerFactory.getLogger(MovementSystem.class);
+    
+    private PhysixSystem        physixSystem;
+    
     // public MovementSystem(){
     // super(0);
     // }
@@ -80,12 +79,13 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         PlayerComponent playerComp = ComponentMappers.player.get(entity);
         
         if (movement != null & input != null) {
-            if (movement.lookDirection != input.lookDirection) { //richtung hat sich geaendert
+            if (movement.lookDirection != input.lookDirection) { // richtung hat
+                                                                 // sich
+                                                                 // geaendert
                 movement.lookDirection = input.lookDirection;
                 PhysixBodyComponentFactory.recreatePlayerFixturesForDirection(physix, physixSystem, movement.lookDirection);
             }
         }
-            
         
         if (movement != null) {
             switch (movement.state) {
@@ -113,19 +113,15 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         MovementComponent movement = ComponentMappers.movement.get(entity);
         PlayerComponent playerComp = ComponentMappers.player.get(entity);
         EnemyTypeComponent enemyType = ComponentMappers.enemyType.get(entity);
-                
+        
         if (input != null) {
-            
             
             MovementEvent.emit(entity, input.directionX);
             if (input.startJump && (movement.state == MovementComponent.State.ON_GROUND || movement.state == MovementComponent.State.LANDING)) {
                 JumpEvent.emit(entity);
             }
             
-            boolean inAir = movement != null && (
-                    movement.state == MovementComponent.State.FLYING ||
-                    movement.state == MovementComponent.State.FALLING ||
-                    movement.state == MovementComponent.State.JUMPING);
+            boolean inAir = movement != null && (movement.state == MovementComponent.State.FLYING || movement.state == MovementComponent.State.FALLING || movement.state == MovementComponent.State.JUMPING);
             if ((inAir || input.directionX != 0 || input.directionY != 0) && physix != null) {
                 physix.getFixtureByUserData("body").setFriction(0.0f);
             } else {
@@ -140,10 +136,12 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
                 physix.setLinearVelocityX(movement.velocityX);
             }
         }
-        /** Gegner wollen sich auch bewegen
+        /**
+         * Gegner wollen sich auch bewegen
+         * 
          * @author Tobi - GameLogic
          */
-        if (enemyType != null ) {
+        if (enemyType != null) {
             if (movement.isOnPlatform) {
                 physix.setLinearVelocityX(movement.velocityX + movement.onPlatformBody.getLinearVelocity().x);
             } else {
@@ -180,7 +178,13 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         // TODO Auto-generated method stub
         MovementComponent movement = ComponentMappers.movement.get(entity);
         if (movement != null) {
-            MovementComponent.State newState=MovementComponent.State.FALLING;
+            MovementComponent.State newState;
+            if (movement.contacts.isEmpty()) {
+                newState = MovementComponent.State.FALLING;
+            } else {
+                newState = MovementComponent.State.ON_GROUND;
+            }
+            
             MovementStateChangeEvent.emit(entity, movement.state, newState);
             movement.state = newState;
         }
@@ -196,7 +200,7 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         // TODO Auto-generated method stub
         MovementComponent movement = ComponentMappers.movement.get(entity);
         if (movement != null) {
-            MovementComponent.State newState=MovementComponent.State.FLYING;
+            MovementComponent.State newState = MovementComponent.State.FLYING;
             MovementStateChangeEvent.emit(entity, movement.state, newState);
             movement.state = newState;
             movement.remainingStateTime = time;
@@ -213,10 +217,9 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         // TODO Auto-generated method stub
         MovementComponent movement = ComponentMappers.movement.get(entity);
         PhysixBodyComponent physix = ComponentMappers.physixBody.get(entity);
-        MovementComponent.State newState=MovementComponent.State.JUMPING;
+        MovementComponent.State newState = MovementComponent.State.JUMPING;
         MovementStateChangeEvent.emit(entity, movement.state, newState);
         movement.state = newState;
-        physix.setLinearVelocity(0, 0); //kills any movement
         physix.applyImpulse(0, movement.jumpImpulse);
     }
     
@@ -224,6 +227,15 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
     public void onMovementEvent(Entity entity, float dirX) {
         MovementComponent movement = ComponentMappers.movement.get(entity);
         movement.velocityX = movement.speed * Math.max(Math.min(dirX, 1.0f), -1.0f);
+        
+        EnemyTypeComponent enemyType = ComponentMappers.enemyType.get(entity);
+        if (enemyType != null) {
+            if (dirX > 0.01) {
+                movement.lookDirection = MovementComponent.LookDirection.RIGHT;
+            } else if (dirX < -0.01) {
+                movement.lookDirection = MovementComponent.LookDirection.LEFT;
+            }
+        }
         
     }
     
@@ -234,7 +246,7 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         InputComponent input = ComponentMappers.input.get(player);
         MovementComponent movement = ComponentMappers.movement.get(player);
         if (physix != null && input != null && movement != null) {
-            physix.applyImpulse(movement.lookDirection.getCosine()*GameConstants.HORNATTACK_IMPULSE, 0);
+            physix.applyImpulse(movement.lookDirection.getCosine() * GameConstants.HORNATTACK_IMPULSE, 0);
             
             // movement.velocityX = movement.speed * 1000 * input.directionX;
         }
@@ -246,21 +258,21 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         // TODO Auto-generated method stub
         
     }
-
+    
     @Override
     public void onThrowBackEventStart(Entity unicorn, float dirX) {
         PhysixBodyComponent physix = ComponentMappers.physixBody.get(unicorn);
         MovementComponent movement = ComponentMappers.movement.get(unicorn);
         
-        if (physix != null && movement != null) {            
-            MovementComponent.State newState=MovementComponent.State.FALLING;
+        if (physix != null && movement != null) {
+            MovementComponent.State newState = MovementComponent.State.FALLING;
             MovementStateChangeEvent.emit(unicorn, movement.state, newState);
             movement.state = newState;
-            physix.setLinearVelocity(0, 0); //kills any movement
+            physix.setLinearVelocity(0, 0); // kills any movement
             physix.applyImpulse(dirX * GameConstants.THROWBACK_FORCE, -1.0f * GameConstants.THROWBACK_FORCE);
         }
     }
-
+    
     @Override
     public void onThrowBackEventStop(Entity unicorn) {
     }

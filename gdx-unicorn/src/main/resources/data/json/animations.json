@@ -79,7 +79,10 @@
         "columns": 4,
         "rows" : 1
     },
-    "unicorn_walking": {
+    
+    
+    
+    "pink_unicorn_walking": {
         "filename": "data/graphics/spritesheets/unicorn_running_pink_spritesheet.png",
         "frames" : 8,
         "frameDuration": [0.10],
@@ -87,7 +90,7 @@
         "columns": 8,
         "rows" : 1
     },
-    "unicorn_idle": {
+    "pink_unicorn_idle": {
         "filename": "data/graphics/spritesheets/unicorn_idle_pink_spritesheet.png",
         "frames" : 9,
         "frameDuration": [2, 0.1, 0.1, 0.1, 0.1, 0.1, 0.3, 0.1, 0.1],
@@ -95,7 +98,7 @@
         "columns": 9,
         "rows" : 1
     },
-    "unicorn_falling": {
+    "pink_unicorn_falling": {
         "filename": "data/graphics/spritesheets/unicorn_jumping_fly_pink_spritesheet.png",
         "frames" : 3,
         "frameDuration": [0.10],
@@ -103,7 +106,7 @@
         "columns": 3,
         "rows" : 1
     },
-    "unicorn_flying": {
+    "pink_unicorn_flying": {
         "filename": "data/graphics/unicorn_s.png",
         "frames": 1,
         "frameDuration": [0.15],
@@ -111,7 +114,7 @@
         "columns": 1,
         "rows": 1
     },
-    "unicorn_jumping": {
+    "pink_unicorn_jumping": {
         "filename": "data/graphics/spritesheets/unicorn_jumping_fly_pink_spritesheet.png",
         "frames" : 3,
         "frameDuration": [0.10],
@@ -119,7 +122,7 @@
         "columns": 3,
         "rows" : 1
     },
-    "unicorn_landing": {
+    "pink_unicorn_landing": {
         "filename": "data/graphics/spritesheets/unicorn_jumping_down_pink_spritesheet.png",
         "frames" : 3,
         "frameDuration": [0.1, 0.1, 0.1],
@@ -128,12 +131,128 @@
         "rows" : 1
     },
     
+    "blue_unicorn_walking": {
+        "filename": "data/graphics/spritesheets/unicorn_running_blue_spritesheet.png",
+        "frames" : 8,
+        "frameDuration": [0.10],
+        "playType" : "LOOP",
+        "columns": 8,
+        "rows" : 1
+    },
+    "blue_unicorn_idle": {
+        "filename": "data/graphics/spritesheets/unicorn_idle_blue_spritesheet.png",
+        "frames" : 9,
+        "frameDuration": [2, 0.1, 0.1, 0.1, 0.1, 0.1, 0.3, 0.1, 0.1],
+        "playType" : "LOOP",
+        "columns": 9,
+        "rows" : 1
+    },
+    "blue_unicorn_falling": {
+        "filename": "data/graphics/spritesheets/unicorn_jumping_fly_blue_spritesheet.png",
+        "frames" : 3,
+        "frameDuration": [0.10],
+        "playType" : "NORMAL",
+        "columns": 3,
+        "rows" : 1
+    },
+    "blue_unicorn_flying": {
+        "filename": "data/graphics/unicorn_s.png",
+        "frames": 1,
+        "frameDuration": [0.15],
+        "playType": "LOOP",
+        "columns": 1,
+        "rows": 1
+    },
+    "blue_unicorn_jumping": {
+        "filename": "data/graphics/spritesheets/unicorn_jumping_fly_blue_spritesheet.png",
+        "frames" : 3,
+        "frameDuration": [0.10],
+        "playType" : "NORMAL",
+        "columns": 3,
+        "rows" : 1
+    },
+    "blue_unicorn_landing": {
+        "filename": "data/graphics/spritesheets/unicorn_jumping_down_blue_spritesheet.png",
+        "frames" : 3,
+        "frameDuration": [0.1, 0.1, 0.1],
+        "playType" : "NORMAL",
+        "columns": 3,
+        "rows" : 1
+    },
+    
+    "rainbow_unicorn_walking": {
+        "filename": "data/graphics/spritesheets/unicorn_running_rainbow_spritesheet.png",
+        "frames" : 8,
+        "frameDuration": [0.10],
+        "playType" : "LOOP",
+        "columns": 8,
+        "rows" : 1
+    },
+    "rainbow_unicorn_idle": {
+        "filename": "data/graphics/spritesheets/unicorn_idle_rainbow_spritesheet.png",
+        "frames" : 9,
+        "frameDuration": [2, 0.1, 0.1, 0.1, 0.1, 0.1, 0.3, 0.1, 0.1],
+        "playType" : "LOOP",
+        "columns": 9,
+        "rows" : 1
+    },
+    "rainbow_unicorn_falling": {
+        "filename": "data/graphics/spritesheets/unicorn_jumping_fly_rainbow_spritesheet.png",
+        "frames" : 3,
+        "frameDuration": [0.10],
+        "playType" : "NORMAL",
+        "columns": 3,
+        "rows" : 1
+    },
+    "rainbow_unicorn_flying": {
+        "filename": "data/graphics/unicorn_s.png",
+        "frames": 1,
+        "frameDuration": [0.15],
+        "playType": "LOOP",
+        "columns": 1,
+        "rows": 1
+    },
+    "rainbow_unicorn_jumping": {
+        "filename": "data/graphics/spritesheets/unicorn_jumping_fly_rainbow_spritesheet.png",
+        "frames" : 3,
+        "frameDuration": [0.10],
+        "playType" : "NORMAL",
+        "columns": 3,
+        "rows" : 1
+    },
+    "rainbow_unicorn_landing": {
+        "filename": "data/graphics/spritesheets/unicorn_jumping_down_rainbow_spritesheet.png",
+        "frames" : 3,
+        "frameDuration": [0.1, 0.1, 0.1],
+        "playType" : "NORMAL",
+        "columns": 3,
+        "rows" : 1
+    },
+    
+    
+    
     "walking": {
         "filename": "data/animations/walking.png",
         "frames" : 7,
         "frameDuration": [0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15],
         "playType" : "LOOP",
         "columns": 7,
+        "rows" : 1
+    },
+    "chocolate_river_top": {
+        "filename": "data/maps/tilesets/chocolateriver_ani_top.png",
+        "frames" : 4,
+        "frameDuration": [0.4],
+        "playType" : "LOOP",
+        "columns": 4,
+        "rows" : 1
+    },
+    "chocolate_river_body": {
+        "filename": "data/maps/tilesets/chocolateriver_ani_body.png",
+        "frames" : 4,
+        "frameDuration": [0.4],
+        "playType" : "LOOP",
+        "columns": 4,
         "rows" : 1
     },
     "ball": {

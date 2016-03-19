@@ -40,12 +40,24 @@ public class AnimationComponentFactory extends ComponentFactory<EntityFactoryPar
             }
         }
         
+        // default animation
+        String stateString = properties.getString("default_animation");
+        if(stateString != null)
+        {
+            component.animationMap.put("default_animation", assetManager.getAnimation(stateString));
+        }
+        
+        fillAnimationComponent(component, properties);
+        
+        entity.add(component);
+    }
+    
+    protected void fillAnimationComponent(AnimationComponent component, SafeProperties properties)
+    {
         component.flipHorizontal = properties.getBoolean("flip_horizontal", false);
         component.name = properties.getString("name", "");
         component.xOffset = properties.getFloat("x_offset", 0f);
         component.yOffset = properties.getFloat("y_offset", 0f);
         component.alpha = properties.getFloat("alpha", 1.0f);
-        
-        entity.add(component);
     }
 }

@@ -2,7 +2,7 @@ package de.hochschuletrier.gdw.ws1516.game.components;
 
 import com.badlogic.gdx.graphics.Texture;
 
-public class CheckpointTextureComponent extends TextureComponent {
+public class SafePointTextureComponent extends TextureComponent {
     public Texture activatedTexture;
     public Texture deactivatedTexture;
     
