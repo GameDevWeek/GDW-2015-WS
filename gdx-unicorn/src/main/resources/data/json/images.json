@@ -63,7 +63,7 @@
     "data/maps/lvl4.tmx": "data/ui/menu/menu_level04.png",
     
     "lvl1_background": "data/graphics/background_lvl1_big.png",
-    "lvl2_background": "data/graphics/background_lvl1_big.png",
+    "lvl2_background": "data/graphics/background_lvl2_big.png",
     "lvl3_background": "data/graphics/background_lvl1_big.png",
     "lvl4_background": "data/graphics/background_lvl4_big.png"
 }

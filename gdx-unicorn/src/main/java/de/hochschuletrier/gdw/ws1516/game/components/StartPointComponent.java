@@ -59,7 +59,8 @@ public class StartPointComponent extends Component implements Poolable {
                 }
             }
             if ( pathComp != null ) {
-                path = new ArrayList<Vector2>(pathComp.points);
+                path = new ArrayList<Vector2>( pathComp.points.size() );
+                for(Vector2 v:pathComp.points) path.add(new Vector2(v.x,v.y));
             }
             if ( pos != null ) {
                 position = new Vector2(pos.x,pos.y);

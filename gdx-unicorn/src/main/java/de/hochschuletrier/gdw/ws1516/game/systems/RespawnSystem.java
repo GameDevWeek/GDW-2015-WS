@@ -17,6 +17,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
@@ -45,7 +46,7 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
     
     public RespawnSystem()
     {
-        super(Family.all(PlayerComponent.class).get());
+        super(Family.all(PlayerComponent.class).get(),100);
     }
     
    @Override
@@ -87,9 +88,10 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
     private void revive(SavedEntities save) {
         save.saved = EntityCreator.createEntity(save.entityType.entityName().toLowerCase(), save.position.x, save.position.y);
         PathComponent path = ComponentMappers.path.get(save.saved);
-        if (path != null)
+        if (path != null && save.path != null)
         {
-            path.points = save.path;
+            path.points = new ArrayList<Vector2>( save.path.size() );
+            for(Vector2 v:save.path) path.points.add(new Vector2(v.x,v.y));
         }
     }
 
