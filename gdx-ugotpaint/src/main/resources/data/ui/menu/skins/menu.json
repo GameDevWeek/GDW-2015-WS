@@ -1,6 +1,7 @@
 {
     "com.badlogic.gdx.graphics.g2d.BitmapFont": {
         "default-font": {"file": "data/fonts/dry_brush_64_b.fnt"},
+        "label_font": {"file": "data/fonts/dry_brush_48_b.fnt"},
         "credits_title_font": {"file": "data/fonts/dry_brush_64_b.fnt"},
         "credits_name_font": {"file": "data/fonts/dry_brush_48_b.fnt"}
     },
@@ -49,7 +50,7 @@
         "default-horizontal": {"background": "default-slider", "knob": "default-slider-knob"}
     },
     "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
-        "default": {"font": "default-font", "fontColor": "white"}
+        "default": {"font": "label_font", "fontColor": "black"}
     },
     "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
         "default": {"selection": "selection", "background": "textfield", "font": "default-font", "fontColor": "white", "cursor": "cursor"}

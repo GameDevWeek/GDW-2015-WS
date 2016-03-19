@@ -22,6 +22,7 @@ public class MenuPage extends Group {
     public static final int MENU_X = 50;
     public static final int MENU_Y = 470;
     public static final int MENU_STEP = 55;
+    public static final int LABEL_STEP = 40;
     
     protected Main main = Main.getInstance();
     protected AssetManagerX assetManager = main.getAssetManager();
