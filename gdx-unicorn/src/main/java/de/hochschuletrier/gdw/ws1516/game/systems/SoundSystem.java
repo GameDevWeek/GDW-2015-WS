@@ -227,6 +227,7 @@ public class SoundSystem extends IteratingSystem
     @Override
     public void onEndFlyEvent(Entity entity) {
         SoundEvent.stopSound("aufblasen",entity);
+        SoundEvent.emit("splatter", entity);
     }
 
     @Override

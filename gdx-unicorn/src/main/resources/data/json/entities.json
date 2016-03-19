@@ -14,13 +14,14 @@
             "Movable":{
                 "state": "falling"
                 },
-            "Animation": {
-                "on_ground_idle": "unicorn_idle",
-                "on_ground_walking": "unicorn_walking",
-                "flying": "unicorn_flying",
-                "falling": "unicorn_falling", 
-                "jumping": "unicorn_jumping",
-                "landing": "unicorn_landing"
+            "UnicornAnimation": {
+                "name": "unicorn",
+                "pink_on_ground_idle": "unicorn_idle",
+                "pink_on_ground_walking": "unicorn_walking",
+                "pink_flying": "unicorn_flying",
+                "pink_falling": "unicorn_falling", 
+                "pink_jumping": "unicorn_jumping",
+                "pink_landing": "unicorn_landing"
             },
             "PhysixBody": {
                 "type": "player",
@@ -65,12 +66,16 @@
                 },
             "Animation": {
                 "name": "Hunter",
-                "on_ground_idle": "hunter_walking",
+                "on_ground_idle": "hunter_idle",
                 "on_ground_walking": "hunter_walking",
-                "flying": "hunter_walking",
-                "falling": "hunter_walking",
-                "jumping": "hunter_walking",
-                "flip_horizontal": true
+                "flying": "hunter_idle",
+                "falling": "hunter_idle",
+                "jumping": "hunter_idle",
+                "landing": "hunter_idle",
+                "glued": "hunter_glued",
+                "shooting": "hunter_shooting",
+                "flip_horizontal": true,
+                "x_offset": 20
             },
             "PhysixBody": {
                 "type": "enemy",
@@ -102,12 +107,16 @@
         },
             "Animation": {
                 "name": "Paparazzi",
-                "on_ground_idle": "paparazzi_walking",
+                "on_ground_idle": "paparazzi_idle",
                 "on_ground_walking": "paparazzi_walking",
-                "flying": "paparazzi_walking",
-                "falling": "paparazzi_walking",
-                "jumping": "paparazzi_walking",
-                "flip_horizontal": true
+                "flying": "paparazzi_idle",
+                "falling": "paparazzi_idle",
+                "jumping": "paparazzi_idle",
+                "landing": "paparazzi_idle",
+                "glued": "paparazzi_glued",
+                "shooting": "paparazzi_shooting",
+                "flip_horizontal": true,
+                "x_offset": 12
             },
             "PhysixBody": {
                 "type": "enemy",
