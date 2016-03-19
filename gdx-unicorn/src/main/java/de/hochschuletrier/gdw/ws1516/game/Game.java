@@ -54,6 +54,7 @@ import de.hochschuletrier.gdw.ws1516.game.contactlisteners.ImpactSoundListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerContactListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerPlatformListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.TriggerListener;
+import de.hochschuletrier.gdw.ws1516.game.systems.AnimationEventHandlerSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BlockingGumSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BubbleGlueSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BubblegumSpitSystem;
@@ -128,6 +129,7 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
     private final HudRenderSystem hudRenderSystem = new HudRenderSystem(GameConstants.PRIORITY_HUD);
     
     private final MapRenderSystem mapRenderSystem = new MapRenderSystem(GameConstants.PRIORITY_MAP_RENDERING);
+    private final AnimationEventHandlerSystem animationEventHandlerSystem = new AnimationEventHandlerSystem(GameConstants.PRIORITY_ANIMATION_EVENTS);
     
     private final SplatterSystem splatterSystem = new SplatterSystem(GameConstants.PRIORITY_SPLATTER);
     private final EffectsRenderSystem effectsRenderSystem = new EffectsRenderSystem(GameConstants.PRIORITY_EFFECTS_RENDERING);
@@ -246,6 +248,7 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
         engine.addSystem(physixDebugRenderSystem);
         engine.addSystem(cameraSystem);
         engine.addSystem(renderSystem);
+        engine.addSystem(animationEventHandlerSystem);
         engine.addSystem(updatePositionSystem);
         engine.addSystem(nameSystem);
         engine.addSystem(keyBoardInputSystem);
