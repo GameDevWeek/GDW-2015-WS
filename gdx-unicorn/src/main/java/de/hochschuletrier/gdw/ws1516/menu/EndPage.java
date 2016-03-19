@@ -61,26 +61,29 @@ public class EndPage extends MenuPage {
         {
             message="Gewonnen!";
             label = new Label(message, skin, "win");
-            endImage = assetManager.getTexture("drop");
+           // endImage = assetManager.getTexture("drop");
             sound = assetManager.getSound("win_sound");
             DecoImage bonbons_image = new DecoImage(bonbons);
             DecoImage chocoCoins_image = new DecoImage(chocoCoins);
-            chocoScore = new Label("x " + scoreComp.chocoCoins + " (1 Punkt)", skin, "default");
-            bonbonScore = new Label("x " + scoreComp.bonbons + " (3 Punkte)", skin, "default");
-            Label trennstrich = new Label("_______________________", skin, "default");
+            chocoScore = new Label("    x " + scoreComp.chocoCoins + " (1 Punkt) =                       " + scoreComp.chocoCoins, skin, "default");
             
-            long timeScore = (long) (scoreComp.playedSeconds*GameConstants.SCORE_TIME_POINTS);
-            Label timeScore_label = new Label(""+timeScore + " (" + String.valueOf((int) (GameConstants.SCORE_TIME_POINTS*60))+" Punkte pro Minute)", skin, "default");
+            bonbonScore = new Label("    x " + scoreComp.bonbons + " (3 Punkte) =                     " + scoreComp.bonbons*3, skin, "default");
+            Label trennstrich = new Label("___________________________________________________", skin, "default");
+            
+            long timeScore = (long) (GameConstants.SCORE_TIME_POINTS - scoreComp.playedSeconds);
+            //Label timeScore_label = new Label(""+timeScore + " (" + String.valueOf((int) (GameConstants.SCORE_TIME_POINTS))+" Abzug pro Sekunde)", skin, "default");
+            Label timeScore_label = new Label("Zeitbonus              =                     "+ timeScore , skin, "default");
             
             Label finalScore = new Label(String.valueOf(scoreComp.bonbons*3+scoreComp.chocoCoins+timeScore), skin, "win");
             
-            chocoCoins_image.setPosition(20, 420);
-            bonbons_image.setPosition(20, 350);
-            chocoScore.setPosition(20+70, 420);
-            bonbonScore.setPosition(20+70, 350);
-            timeScore_label.setPosition(20+70, 300);
-            trennstrich.setPosition(20+70, 280);
-            finalScore.setPosition(100, 190);
+            chocoCoins_image.setPosition(200, 600);
+     
+            chocoScore.setPosition(200+70, 600);
+            bonbons_image.setPosition(200, 550);
+            bonbonScore.setPosition(200+70, 550);
+            timeScore_label.setPosition(200, 450);
+            trennstrich.setPosition(180, 400);
+            finalScore.setPosition(300, 350);
             super.addActor(bonbonScore);
             super.addActor(chocoScore);
             super.addActor(bonbons_image);
@@ -92,21 +95,21 @@ public class EndPage extends MenuPage {
             
         }
         
-        label.setPosition(400, 350);
+        label.setPosition(200, 600);
         SoundEmitter.playGlobal(sound, false);
         
-        DecoImage endPicture = new DecoImage(endImage);
-        endPicture.setPosition(300, 50);
-        addCenteredButton(430, 330, 100, 50, "Nochmal versuchen", this::startGame, "einhornMotivated");
-        addCenteredButton(620, 330, 100, 50, "Ins Hauptmenü", this::stopGame, "menu");
-        super.addActor(label);
-        super.addActor(endPicture);
+        //DecoImage endPicture = new DecoImage(endImage);
+       //endPicture.setPosition(300, 50);
+       
+                
+       addCenteredButton(200, 200, 100, 50, "Nochmal versuchen", this::startGame, "einhornMotivated");
+        addCenteredButton(500, 200, 100, 50, "Ins Hauptmenü", this::stopGame, "menu");
+       super.addActor(label);
+       //super.addActor(endPicture);
         
         
     }
-    
-    
-    
+
     private void startGame() {
         GameRestartEvent.emit();
     }
@@ -115,10 +118,6 @@ public class EndPage extends MenuPage {
         if (!main.isTransitioning()) {
             main.changeState(main.getPersistentState(MainMenuState.class));
             
-        }
-        
+        }  
     }
-
-    
-
 }

@@ -18,14 +18,12 @@ public class TextureItem extends Item {
     protected float angleAdd;
     protected float scale;
     protected final TextureRegion region = new TextureRegion();
-    private final Getter getter;
 
     public TextureItem(String group, float scale, float startTime, float angle, boolean oriented, float opacity, String texture, Getter getter) {
-        super(group, startTime, 0, oriented, opacity);
+        super(group, startTime, 0, oriented, opacity, getter);
         this.angleAdd = angle;
         this.scale = scale;
         this.startTime = startTime;
-        this.getter = getter;
         this.animationTime = 0;
         region.setRegion(getter.getTexture(texture));
     }
