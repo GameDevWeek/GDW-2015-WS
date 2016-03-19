@@ -82,7 +82,6 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         Texture blue_gum = assetManager.getTexture("gum_hud");
         Texture hornAttackRdy = assetManager.getTexture("dash_offCooldown");
         Texture hornAttackCd_Ver2 = assetManager.getTexture("dash_Cooldown_V2");
-        Texture hornAttackCd = assetManager.getTexture("dash_Cooldown");
         Texture clock = assetManager.getTexture("clock_hud");
         
         if(playerComp.hitpoints==3) {
