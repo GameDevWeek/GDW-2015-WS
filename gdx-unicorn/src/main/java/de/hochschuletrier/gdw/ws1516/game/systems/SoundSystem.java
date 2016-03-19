@@ -54,6 +54,8 @@ public class SoundSystem extends IteratingSystem
         super.addedToEngine(engine);
         SoundEvent.register(this);
         DeathEvent.register(this);
+        StartFlyEvent.register(this);
+        EndFlyEvent.register(this);
         BubblegumSpitSpawnEvent.register(this);
         this.engine = engine;
     }
@@ -63,6 +65,8 @@ public class SoundSystem extends IteratingSystem
         super.removedFromEngine(engine);
         SoundEvent.unregister(this);
         DeathEvent.unregister(this);
+        StartFlyEvent.unregister(this);
+        EndFlyEvent.unregister(this);
         BubblegumSpitSpawnEvent.unregister(this);
         this.engine = null;
     };
