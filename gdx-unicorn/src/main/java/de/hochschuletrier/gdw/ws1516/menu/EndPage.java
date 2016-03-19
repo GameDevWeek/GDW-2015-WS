@@ -77,6 +77,7 @@ public class EndPage extends MenuPage {
             Label finalScore = new Label(String.valueOf(scoreComp.bonbons*3+scoreComp.chocoCoins+timeScore), skin, "win");
             
             chocoCoins_image.setPosition(200, 600);
+     
             chocoScore.setPosition(200+70, 600);
             bonbons_image.setPosition(200, 550);
             bonbonScore.setPosition(200+70, 550);
@@ -102,7 +103,7 @@ public class EndPage extends MenuPage {
        
                 
        addCenteredButton(200, 200, 100, 50, "Nochmal versuchen", this::startGame, "einhornMotivated");
-        addCenteredButton(300, 200, 100, 50, "Ins Hauptmenü", this::stopGame, "menu");
+        addCenteredButton(500, 200, 100, 50, "Ins Hauptmenü", this::stopGame, "menu");
        super.addActor(label);
        //super.addActor(endPicture);
         
