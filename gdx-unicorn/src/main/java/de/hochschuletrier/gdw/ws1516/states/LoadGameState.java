@@ -57,14 +57,10 @@ public class LoadGameState extends BaseGameState {
     public void render() {
         Main.getInstance().screenCamera.bind();
         
-       
-        
-       // DrawUtil.fillRect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Color.PURPLE);
         DrawUtil.draw(background, Gdx.graphics.getWidth() / 2 - 512, Gdx.graphics.getHeight()/2-300);
         DrawUtil.fillRect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new Color(0,0,0,0.5F));
         float drawWidth = 1024;
-     //   float drawWidth = Gdx.graphics.getWidth() - 100.0f;
-     
+         
         DrawUtil.draw(rectTexture, Gdx.graphics.getWidth()/2 - 512, Gdx.graphics.getHeight() / 2 - 25, (int) (drawWidth * assetManager.getProgress()), 50);
 
         TextureRegion keyFrame = anim.getKeyFrame(stateTime);
