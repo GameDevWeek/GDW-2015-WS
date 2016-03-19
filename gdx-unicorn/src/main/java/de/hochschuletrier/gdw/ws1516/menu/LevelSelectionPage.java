@@ -39,7 +39,7 @@ public class LevelSelectionPage extends MenuPage {
     public LevelSelectionPage(Skin skin, MenuManager menuManager) {
         super(skin, "menu_bg");
         int xOffset=20;
-        int xStep=125;
+        int xStep=150;
         int i = 0;
         Main.getInstance().screenCamera.bind();
         
@@ -62,29 +62,29 @@ public class LevelSelectionPage extends MenuPage {
         Texture buttonNext_texture = assetManager.getTexture("next_Button");
 
 
-        addLayer("tutorial");
-//    
-//        
-//        level_previews = new Texture[level_preview_count];
-//      
-//        level_previews[0] = assetManager.getTexture("level1");
-//        level_previews[1] = assetManager.getTexture("level2");
-//        level_previews[2] = assetManager.getTexture("level3");
-//        level_previews[3] = assetManager.getTexture("level4");
-//        
-//        level_preview = createImageButton(level_previews[level_preview_index], 312, 260, 50, 50, this::nextLevel, "einhornMotivated", true, false);
-//
-//        level_previews = new Texture[levelNames.size()];
-//        for (String levelName : levelNames) {
-//            level_previews[level_preview_count] = assetManager.getTexture(levelName);
-//            level_preview_count++;
-//        }
-//      
-//        level_preview = createImageButton(level_previews[level_preview_index], 312, 280, 50, 50, this::nextLevel, "einhornMotivated", true, false);
-//
-//                    
-//        createImageButton(buttonBack_texture, 310-20-buttonBack_texture.getWidth(), 260, 50, 50, this::previousLevel, "buttonSound", true, true);
-//        createImageButton(buttonNext_texture, 310+level_preview_texture.getWidth()+20, 260, 50, 50, this::nextLevel, "buttonSound", true, true);
+      
+    
+        
+        level_previews = new Texture[level_preview_count];
+      
+        level_previews[0] = assetManager.getTexture("level1");
+        level_previews[1] = assetManager.getTexture("level2");
+        level_previews[2] = assetManager.getTexture("level3");
+        level_previews[3] = assetManager.getTexture("level4");
+        
+        level_preview = createImageButton(level_previews[level_preview_index], 312, 260, 50, 50, this::nextLevel, "einhornMotivated", true, false);
+
+        level_previews = new Texture[levelNames.size()];
+        for (String levelName : levelNames) {
+            level_previews[level_preview_count] = assetManager.getTexture(levelName);
+            level_preview_count++;
+        }
+      
+        level_preview = createImageButton(level_previews[level_preview_index], 312, 280, 50, 50, this::nextLevel, "einhornMotivated", true, false);
+
+                    
+        createImageButton(buttonBack_texture, 310-20-buttonBack_texture.getWidth(), 260, 50, 50, this::previousLevel, "buttonSound", true, true);
+        createImageButton(buttonNext_texture, 310+level_preview_texture.getWidth()+20, 260, 50, 50, this::nextLevel, "buttonSound", true, true);
 
         level_preview_d = new DecoImage(assetManager.getTexture(levelNames.get(level_preview_index)));
         
@@ -103,10 +103,14 @@ public class LevelSelectionPage extends MenuPage {
         
         addCenteredButton(512, 200, 50, 50, "Spielen", this::startGame, "einhornMotivated");
         addLeftAlignedButton(55, 40, 100, 50, "Zurück", () -> menuManager.popPage(),"zurueck");
-//        addLabeledTexture("heart3", "Leben",xOffset+xStep*(i++),550,0,40,40);
-//        addLabeledTexture("coin_hud", "1 Punkte", xOffset+xStep*(i++)-15,550,0,40,40);
-//        addLabeledTexture("drop", "3 Punkte", xOffset+xStep*(i++), 550,0,40,40);
-//        addLabeledTexture("gum_hud", "Kaugummi", xOffset+xStep*(i++), 550,0,40,40);
+        
+        addLabeledTexture("heart3", "Leben",xOffset+xStep*(i++),550,0,0,40,40);
+        addLabeledTexture("coin_hud", "1 Punkte", xOffset+xStep*(i++)-15,550,0,0,40,40);
+        addLabeledTexture("drop", "3 Punkte", xOffset+xStep*(i++), 550,0,0,40,40);
+        addLabeledTexture("gum_hud", "Kaugummi", xOffset+xStep*(i++), 550,0,0,40,40);
+        addLabeledTexture("hunter", "Jäger",xOffset-5,450,20,0,64,64);
+        addLabeledTexture("paparazzi", "Paparazzi",xOffset-10,300,5,0,64,64);
+        
         super.addActor(level_preview_d);
         
         
