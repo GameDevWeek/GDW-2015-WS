@@ -103,6 +103,7 @@ public class LevelSelectionPage extends MenuPage {
         
         addCenteredButton(512, 200, 50, 50, "Spielen", this::startGame, "einhornMotivated");
         addLeftAlignedButton(55, 40, 100, 50, "Zurück", () -> menuManager.popPage(),"zurueck");
+
         
         addLabeledTexture("heart3", "Leben",xOffset+xStep*(i++),550,0,0,40,40);
         addLabeledTexture("coin_hud", "1 Punkte", xOffset+xStep*(i++)-15,550,0,0,40,40);
@@ -110,6 +111,8 @@ public class LevelSelectionPage extends MenuPage {
         addLabeledTexture("gum_hud", "Kaugummi", xOffset+xStep*(i++), 550,0,0,40,40);
         addLabeledTexture("hunter", "Jäger",xOffset-5,450,20,0,64,64);
         addLabeledTexture("paparazzi", "Paparazzi",xOffset-10,300,5,0,64,64);
+
+
         
         super.addActor(level_preview_d);
         
@@ -119,7 +122,8 @@ public class LevelSelectionPage extends MenuPage {
     }
     
     private void setLevel(int index) {
-        level_preview_d.setTexture(assetManager.getTexture(levelNames.get(index)));
+     //   level_preview_d.setTexture(assetManager.getTexture(levelNames.get(index)));
+        level_preview_d.setTexture(level_previews[level_preview_index]);
     }
     private void nextLevel() {
         level_preview_index++;
