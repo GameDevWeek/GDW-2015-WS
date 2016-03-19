@@ -97,6 +97,6 @@ public class GameConstants {
     public static final float IDLE_PARTICLE_REDUCTION = 0.2f;
     
     // Animation parameters
-    public static final float TIME_TO_WAIT_TO_SHOOT = 1.0f;
     public static final double THROWBACK_ANIMATION_PERIODS = 3;
+    public static final float TIME_TO_WAIT_TO_SHOOT = 0.5f;
 }
