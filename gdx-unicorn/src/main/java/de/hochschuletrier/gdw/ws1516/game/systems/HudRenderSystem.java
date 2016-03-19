@@ -24,7 +24,9 @@ import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.Game;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent.State;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
 import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
@@ -162,7 +164,22 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         DrawUtil.draw(hornAttackDummy, hornAttackDummy_x, hornAttackDummy_y, 92, 92);
         DrawUtil.draw(clock, clock_x, clock_y, 40,40);
         
-               
+        
+        if (playerComp.hornAttackCooldown != 0.0f && playerComp.state != State.HORNATTACK) {
+            int cooldown = (int) playerComp.hornAttackCooldown + 1;
+            Color originalColor = font.getColor();
+            
+            if (cooldown == 3) {
+                font.setColor(Color.RED);
+            } else if (cooldown == 2) {
+                font.setColor(Color.ORANGE);
+            } else {
+                font.setColor(Color.YELLOW);
+            }
+            
+            font.draw(DrawUtil.batch, String.valueOf(cooldown), hornAttackDummy_x + 120, hornAttackDummy_y + 32);
+            font.setColor(originalColor);
+        }
     }
 
     @Override
