@@ -5,9 +5,9 @@
             "ScoreBoard":{},
             "StartPosition":{},
             "Position": { 
-        "maxHitpoints":3,
-        "hitpoints":3,
-        "lives":3
+                "maxHitpoints":3,
+                "hitpoints":3,
+                "lives":3
             },
             "Input":{},
             "Player":{},
@@ -53,7 +53,7 @@
         "meta": {},
         "components": {
             "Position": {},
-        "Path":{},
+            "Path":{},
             "Movable":{
                 "state":"on_ground",
                 "speed": 100.0

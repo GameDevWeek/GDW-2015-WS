@@ -43,21 +43,6 @@ public class AnimationRenderSystem extends SubSystem
         MovementComponent movement = ComponentMappers.movement.get(entity);
         PhysixBodyComponent physics = ComponentMappers.physixBody.get(entity);
         
-        if(ComponentMappers.player.has(entity))
-        {
-            int i = 0;
-        }
-        
-        EnemyTypeComponent enemyType = ComponentMappers.enemyType.get(entity);
-        EnemyBehaviourComponent enemyBehaviour = ComponentMappers.enemyBehaviour.get(entity);
-        
-        
-        if(animation.name.equals("Paparazzi") || animation.name.equals("Hunter"))
-        {
-//            System.out.println(enemyType.type);
-//            System.out.println(enemyBehaviour.canSeeUnicorn + " " + enemyBehaviour.currentState.toString());
-        }
-        
         animation.stateTime += deltaTime;
         if((movement != null && movement.state != animation.lastRenderedState))
         {
@@ -67,32 +52,32 @@ public class AnimationRenderSystem extends SubSystem
         
         TextureRegion keyFrame = null;
 
-        String stateKey = movement.state.toString().toLowerCase();
-        
-        if(animation.name.equals("Hunter") && uniteruptableAnimationRunning(animation, movement))
+        if(movement != null)
         {
-//            System.out.println(animation.uninteruptableAnimationBool);
-            System.out.println(movement.state.toString());
-            keyFrame = getKeyFrameFromAnimationExtended(animation);
-        }      
-        else if(movement.state == MovementComponent.State.ON_GROUND)
-        {
-            keyFrame = getGroundKeyframe(animation, movement, stateKey);
-        }
-        else if(movement.state == State.SHOOTING)
-        {
-            keyFrame = getShootingKeyFrame(animation, movement, stateKey);
-        }
-        else if((movement.state == State.JUMPING || movement.state == State.FALLING) && physics != null)
-        {
-            keyFrame = getAirKeyframe(animation, movement, physics);
-        }
-        else if(movement.state == State.LANDING)
-        {
-            keyFrame = getLandingKeyframe(entity, animation, movement, stateKey);
-        }
-        else {
-            keyFrame = getOtherKeyframe(animation, stateKey);
+            String stateKey = movement.state.toString().toLowerCase();
+            if(animation.name.equals("Hunter") && uniteruptableAnimationRunning(animation, movement))
+            {
+                keyFrame = getKeyFrameFromAnimationExtended(animation);
+            }      
+            else if(movement.state == MovementComponent.State.ON_GROUND)
+            {
+                keyFrame = getGroundKeyframe(animation, movement, stateKey);
+            }
+            else if(movement.state == State.SHOOTING)
+            {
+                keyFrame = getShootingKeyFrame(animation, movement, stateKey);
+            }
+            else if((movement.state == State.JUMPING || movement.state == State.FALLING) && physics != null)
+            {
+                keyFrame = getAirKeyframe(animation, movement, physics);
+            }
+            else if(movement.state == State.LANDING)
+            {
+                keyFrame = getLandingKeyframe(entity, animation, movement, stateKey);
+            }
+            else {
+                keyFrame = getOtherKeyframe(animation, stateKey);
+            }
         }
         
         if(keyFrame == null)
