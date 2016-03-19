@@ -56,6 +56,13 @@
     "tr_stay" : {
       "type": "linear",
       "destinations":[
+        {"x":700, "y":200, "speed":1},
+        {"x":701, "y":200, "speed":1}
+      ]
+    },
+    "tr_happy" : {
+      "type": "linear",
+      "destinations":[
         {"x":700, "y":184, "speed":1},
         {"x":701, "y":184, "speed":1}
       ]
@@ -124,7 +131,7 @@
       "layer" :3,
       "time" : -1,
       "items" : [
-        {"type":"animation","path":"tr_stay","resource":"trex_happy", "flipX":"true","group":"crying"}
+        {"type":"animation","path":"tr_happy","resource":"trex_happy", "flipX":"true","group":"crying"}
       ],
       "animations" : [
         {"time":0,"animation": "sound/trexHappy", "group":"crying"},
@@ -195,7 +202,7 @@
       "layer" :1,
       "time" : -1,
       "items" : [
-        {"type":"animation", "path":"tr_stay","resource":"trex_plottwist", "flipX":"true"}
+        {"type":"animation", "path":"tr_happy","resource":"trex_plottwist", "flipX":"true"}
       ],
       "animations" : [
         {"time":"0","animation":"pause_path","animationTime":600,"group":"*"}
