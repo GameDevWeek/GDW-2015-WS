@@ -104,7 +104,7 @@
                 { "type": "text", "path" : "text", "style" : "text_center", "text": "Tristan-Philip Semmler", "delay": "675" },
 
 
-             { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Sound Design", "delay": "2000" },
+                { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Sound Design", "delay": "2000" },
                 { "type": "text", "path" : "text", "style" : "text_left", "text": "Minh Duc Dao  ", "delay": "675" },
                 { "type": "text", "path" : "text", "style" : "text_right", "text": "  Jason Merse", "delay": "0" },
 
@@ -114,6 +114,13 @@
                 { "type": "text", "path" : "text", "style" : "text_right", "text": "  Loni", "delay": "0" },
                 { "type": "text", "path" : "text", "style" : "text_left", "text": "Sandra Weyand  ", "delay": "675" },
                 { "type": "text", "path" : "text", "style" : "text_right", "text": "  Julia Eiden", "delay": "0" },
+
+                { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Sequence Animation", "delay": "2000" },
+                { "type": "text", "path" : "text", "style" : "text_left", "text": "Kore Kaluzynski  ", "delay": "675" },
+                { "type": "text", "path" : "text", "style" : "text_right", "text": "  David Siepen", "delay": "0" },
+
+                { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Helfer in Not", "delay": "2000" },
+                { "type": "text", "path" : "text", "style" : "text_center", "text": "Santo Pfingsten", "delay": "675" },
 
 
                 { "type": "text", "path" : "thanks", "group" : "title", "style" : "title_center", "text": "Thank you for playing!", "delay": "2000" }
