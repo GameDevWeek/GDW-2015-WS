@@ -4,16 +4,12 @@ import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.systems.IntervalSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.collision.Segment;
 import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
 import de.hochschuletrier.gdw.ws1516.events.SplashEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
-import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
-import de.hochschuletrier.gdw.ws1516.game.utils.Canvas;
-import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.utils.PlayerColor;
 
 /**
@@ -28,15 +24,8 @@ public class EndExplosionSystem extends IntervalSystem implements GameOverEvent.
     private PlayerComponent player1, player2;
     Entity player1Entity, player2Entity;
 
-    private Entity playerToBeDestroyed;
-    private PlayerComponent playerComponentToBeDestroyed;
-
-    public EndExplosionSystem() {
-        super(0.5f, 0);
-    }
-
     public EndExplosionSystem(int priority) {
-        super(0.5f, priority);
+        super(GameConstants.END_EXPLOSION_INTERVAL, priority);
     }
 
     @Override

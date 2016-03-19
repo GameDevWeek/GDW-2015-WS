@@ -41,7 +41,7 @@ public class Game extends InputAdapter {
     private final SplashSystem splashSystem = new SplashSystem(this);
     private final PlayerDeathSystem playerDeathSystem = new PlayerDeathSystem(this);
     private final ParticleRenderSystem particleRenderSystem = new ParticleRenderSystem(this, GameConstants.PRIORITY_ANIMATIONS-1);
-    private final EndExplosionSystem endExplosionSystem = new EndExplosionSystem();
+    private final EndExplosionSystem endExplosionSystem = new EndExplosionSystem(GameConstants.PRIORITY_ENDGAME);
 
     private final InputForwarder inputForwarder = new InputForwarder();
 

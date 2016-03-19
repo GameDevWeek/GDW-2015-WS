@@ -56,4 +56,5 @@ public class GameConstants {
     public static final int COUNTDOWN_TIME = 65; // 3 minutes
     public static final int ENDGAME_DURATION = 60;
     public static final int RESPAWN_DELAY = 3000; // 3 seconds
+    public static final float END_EXPLOSION_INTERVAL = 0.1F;
 }
