@@ -120,7 +120,11 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
                 JumpEvent.emit(entity);
             }
             
-            if ((input.directionX != 0 || input.directionY != 0) && physix != null) {
+            boolean inAir = movement != null && (
+                    movement.state == MovementComponent.State.FLYING ||
+                    movement.state == MovementComponent.State.FALLING ||
+                    movement.state == MovementComponent.State.JUMPING);
+            if ((inAir || input.directionX != 0 || input.directionY != 0) && physix != null) {
                 physix.getFixtureByUserData("body").setFriction(0.0f);
             } else {
                 physix.getFixtureByUserData("body").setFriction(1.0f);
