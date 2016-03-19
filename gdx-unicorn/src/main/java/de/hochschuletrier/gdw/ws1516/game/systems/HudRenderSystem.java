@@ -169,7 +169,7 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
             int cooldown = (int) playerComp.hornAttackCooldown + 1;
             Color originalColor = font.getColor();
             
-            if (cooldown == 3) {
+            if (cooldown >= 3) {
                 font.setColor(Color.RED);
             } else if (cooldown == 2) {
                 font.setColor(Color.ORANGE);
