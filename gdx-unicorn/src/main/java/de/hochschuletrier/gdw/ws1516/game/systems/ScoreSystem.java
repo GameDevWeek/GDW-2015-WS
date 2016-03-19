@@ -28,6 +28,7 @@ import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
 public class ScoreSystem extends EntitySystem implements EntityListener , ScoreBoardEvent.Listener , PauseGameEvent.Listener, GameOverEvent.Listener{
 
     private static final Logger logger = LoggerFactory.getLogger(ScoreSystem.class);
+    private static long finalScore;
     private ScoreComponent scoreComponent;
     private boolean gameIsPaused;
     
@@ -112,9 +113,9 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
 
     public long getFinalScore()
     {
-        long score = 100 + scoreComponent.chocoCoins * GameConstants.SCORE_CHOCOCOINS_POINTS
+        long score = finalScore = GameConstants.SCORE_BASEPOINTS + scoreComponent.chocoCoins * GameConstants.SCORE_CHOCOCOINS_POINTS
                 + scoreComponent.bonbons * GameConstants.SCORE_BONBONS_POINTS +
-                (long)(GameConstants.SCORE_TIME_POINTS - scoreComponent.playedSeconds  ) +
+                (long)(GameConstants.SCORE_TIME_POINTS * scoreComponent.playedSeconds  ) +
                 scoreComponent.deaths  * GameConstants.SCORE_DEATHS + 
                 scoreComponent.killedEnemies * GameConstants.SCORE_KILLED_ENEMIES  +
                 scoreComponent.killedObstacles * GameConstants.SCORE_KILLED_OBSTACLES +
@@ -137,6 +138,10 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
     public void onPauseChange() {
         onPauseGameEvent(!gameIsPaused);
         
+    }
+
+    public static long getFinalScoreStatic() {
+        return finalScore;
     }
     
     
