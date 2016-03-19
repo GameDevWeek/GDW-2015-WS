@@ -55,7 +55,6 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
            playerComp.hitpoints = playerComp.maxHitpoints;
            playerComp.doRespawn = false;
            /// Welt zurücksetzten
-           logger.debug("all:  {}",respawnPosition.savedEntities );
            for (SavedEntities save : respawnPosition.savedEntities )
            {
                if ( save.saved != null )
@@ -68,7 +67,6 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
                    {
                        saveBody.setPosition(save.position.x, save.position.y);
                    }
-                   logger.debug("zurücksetzten  X : {}, Y : {}",save.position.x,save.position.y);
                } else {
                    logger.debug("revive {}", save);
                    revive(save);
@@ -81,7 +79,6 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
     }
     
     private void revive(SavedEntities save) {
-        logger.debug("type  : {} at x {} , y {}",save.entityType.entityName().toLowerCase(), save.position.x, save.position.y);
         Entity entity = EntityCreator.createEntity(save.entityType.entityName().toLowerCase(), save.position.x, save.position.y);
         PathComponent path = ComponentMappers.path.get(entity);
         if (path != null)
