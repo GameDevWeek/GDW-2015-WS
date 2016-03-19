@@ -87,7 +87,8 @@ public class LevelSelectionPage extends MenuPage {
     }
     
     private void setLevel(int index) {
-        level_preview_d.setTexture(assetManager.getTexture(levelNames.get(index)));
+     //   level_preview_d.setTexture(assetManager.getTexture(levelNames.get(index)));
+        level_preview_d.setTexture(level_previews[level_preview_index]);
     }
     private void nextLevel() {
         level_preview_index++;
