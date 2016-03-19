@@ -55,11 +55,21 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
        PlayerComponent playerComp = ComponentMappers.player.get(entity);
        PhysixBodyComponent physixBody = ComponentMappers.physixBody.get(entity);
        StartPointComponent respawnPosition = ComponentMappers.startPoint.get(entity);
+       PhysixBodyComponent bodyComp = ComponentMappers.physixBody.get(player);
+       MovementComponent move= ComponentMappers.movement.get(player);
        if ( physixBody != null && playerComp.doRespawn)
        {
            physixBody.setPosition(respawnPosition.x,respawnPosition.y);
            playerComp.blueGumStacks = respawnPosition.blueGums;
            playerComp.hitpoints = playerComp.maxHitpoints;
+           if ( bodyComp != null )
+           {
+               bodyComp.setLinearVelocity(0, 0);
+           }
+           if ( move != null )
+           {
+               move.reset();
+           }
            playerComp.doRespawn = false;
            /// Welt zurücksetzten
            for (SavedEntities save : respawnPosition.savedEntities )
@@ -75,7 +85,6 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
                        saveBody.setPosition(save.position.x, save.position.y);
                    }
                } else {
-                   logger.debug("revive {}", save);
                    revive(save);
                }
            }
@@ -98,15 +107,11 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
     @Override
     public void onGameRepawnEvent() {
         PlayerComponent playerComp = ComponentMappers.player.get(player);
-        MovementComponent move= ComponentMappers.movement.get(player);
+        PhysixBodyComponent bodyComp = ComponentMappers.physixBody.get(player);
         if ( playerComp != null )
         {   /// resets game later (for the physixs)
             playerComp.doRespawn = true;
             playerComp.invulnerableTimer=1.0f;
-            if ( move != null )
-            {
-                move.reset();
-            }
             
         }else
         {
