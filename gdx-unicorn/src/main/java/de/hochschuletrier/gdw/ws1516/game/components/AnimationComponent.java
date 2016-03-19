@@ -15,7 +15,10 @@ public class AnimationComponent extends Component implements Pool.Poolable
     public boolean currentlyFlipped;
     public MovementComponent.State lastRenderedState;
     public AnimationExtended uninteruptableAnimation = null;
-
+    public float xOffset;
+    public float yOffset;
+    public boolean lastRenderedIdle;    
+    public float alpha;
     
     @Override
     public void reset() {

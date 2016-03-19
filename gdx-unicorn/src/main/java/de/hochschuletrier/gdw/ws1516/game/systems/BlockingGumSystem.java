@@ -137,7 +137,7 @@ public class BlockingGumSystem extends IteratingSystem implements BlockingGumSpa
             if (blockingComponent.timeToDespawn <= GameConstants.SPIT_BLOCKING_ALPHA_START) {
                 TextureComponent texture = ComponentMappers.texture.get(entity);
                 if (texture != null && GameConstants.SPIT_BLOCKING_ALPHA_START > 0.0f) {
-                    texture.alpha = 1.0f - (blockingComponent.timeToDespawn / GameConstants.SPIT_BLOCKING_ALPHA_START);
+                    texture.alpha = blockingComponent.timeToDespawn / GameConstants.SPIT_BLOCKING_ALPHA_START;
                 }
             }
             

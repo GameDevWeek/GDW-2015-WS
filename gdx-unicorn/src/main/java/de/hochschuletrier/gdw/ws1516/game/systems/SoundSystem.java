@@ -150,7 +150,10 @@ public class SoundSystem extends IteratingSystem
         CollectableComponent collect = ComponentMappers.collectable.get(entity);
         EnemyTypeComponent enemy = ComponentMappers.enemyType.get(entity);
         if (player != null) {
-            if (collect != null) {
+            if (entity==player){
+                SoundEvent.emit("splatter", player);
+                //SoundEvent.emit("einhorndying", player);
+            }else if (collect != null) {
                 switch (collect.type) {
                 case BONBON:
                 case BLUE_GUM:

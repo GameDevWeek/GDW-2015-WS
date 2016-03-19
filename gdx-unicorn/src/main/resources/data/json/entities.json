@@ -73,7 +73,8 @@
                 "landing": "hunter_idle",
                 "glued": "hunter_glued",
                 "shooting": "hunter_shooting",
-                "flip_horizontal": true
+                "flip_horizontal": true,
+                "x_offset": 20
             },
             "PhysixBody": {
                 "type": "enemy",
@@ -113,7 +114,8 @@
                 "landing": "paparazzi_idle",
                 "glued": "paparazzi_glued",
                 "shooting": "paparazzi_shooting",
-                "flip_horizontal": true
+                "flip_horizontal": true,
+                "x_offset": 12
             },
             "PhysixBody": {
                 "type": "enemy",
@@ -135,7 +137,8 @@
         "Platform":{},
         "Path":{},
             "Texture": {
-                "texture" : "bubble"
+                "texture" : "platform4x1",
+                "flipVertical" : true
             },
             "PhysixBody": {
                 "type": "platform",
