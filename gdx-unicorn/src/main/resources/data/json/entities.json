@@ -413,6 +413,8 @@
     "chocolate_river_top": {
         "meta": {},
         "components": {
+            "Position": {
+            },
             "Animation": {
                 "animation": "chocolate_river_top"
             },
@@ -424,6 +426,8 @@
     "chocolate_river_body": {
         "meta": {},
         "components": {
+            "Position": {
+            },
             "Animation": {
                 "animation": "chocolate_river_body"
             },
