@@ -19,6 +19,7 @@ import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixModifierCompon
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
 import de.hochschuletrier.gdw.ws1516.events.BlockingGumSpawnEvent;
 import de.hochschuletrier.gdw.ws1516.events.BubblegumSpitSpawnEvent;
+import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.BubblegumGlueSpawnEvent;
 import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
@@ -59,12 +60,16 @@ public class BubblegumSpitSystem extends IteratingSystem implements BubblegumSpi
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
         BubblegumSpitSpawnEvent.register(this);
+        BubblegumGlueSpawnEvent.register(this);
+        RainbowEvent.register(this);
     }   
     
     @Override
     public void removedFromEngine (Engine engine) {
         super.removedFromEngine(engine);
         BubblegumSpitSpawnEvent.unregister(this);
+        BubblegumGlueSpawnEvent.unregister(this);
+        RainbowEvent.unregister(this);
     }
 
     @Override
@@ -178,6 +183,7 @@ public class BubblegumSpitSystem extends IteratingSystem implements BubblegumSpi
         glueEntity.add(glueComponent);
             
         engine.addEntity(glueEntity);
+        DeathEvent.emit(gum);
     }
     
     @Override
