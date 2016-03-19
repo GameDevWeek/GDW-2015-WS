@@ -64,6 +64,9 @@ public class PhysixBodyComponentFactory extends
             case "platform":
                 addPlatform(param, entity, properties);
                 break;
+            case "checkpoint":
+                addCheckpoint(param, entity, properties);
+                break;
             default:
                 logger.error("Unknown type: {}", type);
                 break;
@@ -72,8 +75,6 @@ public class PhysixBodyComponentFactory extends
         entity.add(modifyComponent);
     }
 
-    
-    
     private void addPlayer(EntityFactoryParam param, Entity entity,
             SafeProperties properties) {
 
@@ -190,6 +191,20 @@ public class PhysixBodyComponentFactory extends
         logger.debug("{}", fixtureDef.friction);       
         
         
+        entity.add(bodyComponent);
+    }
+    
+    private void addCheckpoint(EntityFactoryParam param, Entity entity, SafeProperties properties) {
+        PhysixBodyComponent bodyComponent = engine.createComponent(PhysixBodyComponent.class);
+        PhysixBodyDef bodyDef = new PhysixBodyDef(BodyDef.BodyType.StaticBody, physixSystem)
+        .position(param.x, param.y).fixedRotation(false);
+        bodyComponent.init(bodyDef, physixSystem, entity);
+        
+        PhysixFixtureDef fixtureDef = getFixtureDef(properties).shapeBox(properties.getFloat("size", 5), properties.getFloat("size", 5));
+        fixtureDef.isSensor = properties.getBoolean("isSensor",false);
+        
+        bodyComponent.createFixture(fixtureDef);
+        bodyComponent.setAngle(0.0f);
         entity.add(bodyComponent);
     }
 
