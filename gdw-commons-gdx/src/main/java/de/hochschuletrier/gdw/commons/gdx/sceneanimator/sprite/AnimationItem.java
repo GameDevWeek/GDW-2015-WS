@@ -17,14 +17,12 @@ public class AnimationItem extends Item {
     protected float angleAdd;
     protected float scale;
     protected AnimationExtended animation;
-    private final Getter getter;
 
     public AnimationItem(String group, float scale, float startTime, float angle, boolean oriented, float opacity, String animation, Getter getter) {
-        super(group, startTime, 0, oriented, opacity);
+        super(group, startTime, 0, oriented, opacity, getter);
         this.angleAdd = angle;
         this.scale = scale;
         this.startTime = startTime;
-        this.getter = getter;
         this.animationTime = 0;
         this.animation = getter.getAnimation(animation);
     }
