@@ -90,9 +90,7 @@
             "items" : [
                 {"type":"animation","path":"tr1","resource":"trex_run", "flipX":"true"}
             ],
-            "animations":[
-                {"time":1000,"animation":"pause_path","animationTime":4000,"group":"*"}
-            ],
+            "animations":[],
             "finalNext" : "trexQ2"
         },
         "trexQ2":{
@@ -167,8 +165,8 @@
             "time": 1000,
             "items" : [
                 {"type":"text","x":512, "y": 100,"style":"name","text":"Because of his short arms"},
-                {"type":"text","x":512, "y": 75,"style":"name","delay": 3000,"text":"The T-Rex can't eat his bubblegum!"},
-                {"type":"text","x":512, "y": 100,"style":"name","delay":7000,"text":"You have to help him!"}
+                {"type":"text","x":512, "y": 75,"style":"name","delay": 2000,"text":"The T-Rex can't eat his bubblegum!"},
+                {"type":"text","x":512, "y": 100,"style":"name","delay":5000,"text":"You have to help him!"}
             ],
             "animations" : [
                 {"time":0, "animation":"untype_instant"},
