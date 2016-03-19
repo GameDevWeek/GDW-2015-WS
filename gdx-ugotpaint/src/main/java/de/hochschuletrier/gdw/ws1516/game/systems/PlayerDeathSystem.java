@@ -8,7 +8,6 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
 import de.hochschuletrier.gdw.commons.utils.Timer;
 import de.hochschuletrier.gdw.ws1516.events.EndgameEvent;
-import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
 import de.hochschuletrier.gdw.ws1516.events.PlayerDeathEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.Game;
@@ -26,7 +25,7 @@ import static de.hochschuletrier.gdw.ws1516.game.GameConstants.*;
 /**
  * Created by glumbatsch on 18.03.2016.
  */
-public class PlayerDeathSystem extends EntitySystem implements PlayerDeathEvent.Listener ,EndgameEvent.Listener {
+public class PlayerDeathSystem extends EntitySystem implements PlayerDeathEvent.Listener, EndgameEvent.Listener {
 
     private Random rnd = new Random();
 
@@ -35,8 +34,6 @@ public class PlayerDeathSystem extends EntitySystem implements PlayerDeathEvent.
     private Vector2 direction;
 
     private Entity playerRed, playerBlue;
-
-    private Entity currentlyDeadPlayer;
 
     private LinkedList<PlayerColor> deadPlayers = new LinkedList<>();
 
@@ -62,6 +59,7 @@ public class PlayerDeathSystem extends EntitySystem implements PlayerDeathEvent.
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
         PlayerDeathEvent.register(this);
+        EndgameEvent.register(this);
         this.engine = engine;
         players = engine.getEntitiesFor(Family.all(PlayerComponent.class).get());
 
@@ -71,11 +69,15 @@ public class PlayerDeathSystem extends EntitySystem implements PlayerDeathEvent.
     public void removedFromEngine(Engine engine) {
         super.removedFromEngine(engine);
         PlayerDeathEvent.unregister(this);
+        EndgameEvent.unregister(this);
     }
 
-    @Override
-    public void onPlayerDeathEvent(Entity player) {
 
+    @Override
+    /** Kills the player, removes it from the engine
+     * and adds it to the dead players list to schedule them for respawn
+     */
+    public void onPlayerDeathEvent(Entity player) {
         timer = new Timer();
         timer.reset();
 
@@ -95,6 +97,12 @@ public class PlayerDeathSystem extends EntitySystem implements PlayerDeathEvent.
 
     }
 
+    /**
+     * Creates a new player entity according to the dead one and spawns it into the level.
+     * Currently the path is not set correctly due to a problem with the entity creation.
+     *
+     * @param player the player that is to be respawned.
+     */
     private void respawnPlayer(PlayerColor player) {
 
         Vector2 respawnLocation;
@@ -151,21 +159,24 @@ public class PlayerDeathSystem extends EntitySystem implements PlayerDeathEvent.
     }
 
     @Override
+    /** Calls respawnPlayer for every dead player after the timer has run out
+     *  or calls it immediately if the game is in the endgame state.
+     */
     public void update(float deltaTime) {
         super.update(deltaTime);
 
-        // if respawn delay has passed respawn the player
-        if (timer != null) {
-            if (timer.get() >= GameConstants.RESPAWN_DELAY) {
-                for (PlayerColor pc : deadPlayers) {
-                    respawnPlayer(pc);
+        if (!deadPlayers.isEmpty()) {
+            if (endGame || timer != null) {
+                if (endGame || timer.get() >= GameConstants.RESPAWN_DELAY) {
+                    deadPlayers.forEach(this::respawnPlayer);
+                    deadPlayers.clear();
                 }
-                deadPlayers.clear();
             }
         }
     }
 
     @Override
+    /** Sets the endGame bool to manage faster respawn */
     public void onEndgameEvent() {
         endGame = true;
     }
