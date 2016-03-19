@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import de.hochschuletrier.gdw.commons.gdx.audio.SoundEmitter;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
 import de.hochschuletrier.gdw.ws1516.Main;
+import de.hochschuletrier.gdw.ws1516.events.ShowCreditsEvent;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
 import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
@@ -16,6 +17,7 @@ import de.hochschuletrier.gdw.ws1516.states.GameplayState;
 
 public class EndPage extends MenuPage {
     private final String mapToLoad;
+    private final MenuManager menuManager;
 
     public enum Type {
 
@@ -25,6 +27,7 @@ public class EndPage extends MenuPage {
     
     public EndPage(Skin skin, MenuManager menuManager, String background, Type type, ScoreComponent scoreComp, String mapToLoad) {
         super(skin, background);
+        this.menuManager = menuManager;
         this.mapToLoad = mapToLoad;
 
         String message,messageStyle;
@@ -72,10 +75,18 @@ public class EndPage extends MenuPage {
         addLabel(x + 200, y, "=", "default");
         addLabel(x + 220, y, "" + value, "default");
     }
+    
+    private void onOutroSkipped() {
+        main.changeState(main.getPersistentState(MainMenuState.class));
+        ShowCreditsEvent.emit();
+    }
 
     private void nextLevel() {
         if(mapToLoad == null) {
-            // todo
+            menuManager.popPage();
+            MenuPageScene outroPage = new MenuPageScene(skin, menuManager, "data/json/endSequence.json", this::onOutroSkipped);
+            menuManager.addLayer(outroPage);
+            menuManager.pushPage(outroPage);
         } else {
             Game game = new Game();
             game.init(assetManager, mapToLoad);
