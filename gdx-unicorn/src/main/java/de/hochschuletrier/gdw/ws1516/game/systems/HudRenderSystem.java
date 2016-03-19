@@ -80,8 +80,8 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         Texture heart;
         Texture coin = assetManager.getTexture("coin_hud");
         Texture blue_gum = assetManager.getTexture("gum_hud");
-        Texture hornAttackDummy = assetManager.getTexture("dash_Cooldown");
-        Texture hornAttackRdy;
+        Texture hornAttackRdy = assetManager.getTexture("dash_offCooldown");
+        Texture hornAttackCd = assetManager.getTexture("dash_Cooldown");
         Texture clock = assetManager.getTexture("clock_hud");
         
         if(playerComp.hitpoints==3) {
@@ -97,12 +97,9 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
             heart = assetManager.getTexture("heart0");
         }
         
-//        if(playerComp.hornAttackCooldown==0) {
-//            hornAttackDummy = assetManager.getTexture("dash_offCooldown");
-//        }
-//        else {
-            hornAttackDummy = assetManager.getTexture("dash_offCooldown");
-//        }
+
+           
+
  
      
         
@@ -137,11 +134,10 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         float score_x = time_x;
         float score_y = time_y+45;
         
-        float hornAttackDummy_x = 60;
-        float hornAttackDummy_y = displayHeight - 60;
+        float hornAttack_x = 60;
+        float hornAttack_y = displayHeight - 60;
         
-        float hornAttackRdy_x = 60;
-        float hornAttackRdy_y = displayHeight - 60;
+      
         
         int minutes_int = (int) scoreComp.playedSeconds/60;
         String minutes_string = String.valueOf(minutes_int);
@@ -169,17 +165,17 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         font.draw(DrawUtil.batch, time, time_x, time_y);
         DrawUtil.draw(coin, coin_x, coin_y, 40, 40);
         font.draw(DrawUtil.batch,score, score_x, score_y);
-        //DrawUtil.draw(hornAttackDummy, hornAttackDummy_x, hornAttackDummy_y, 92, 92);
+        DrawUtil.draw(hornAttackCd, hornAttack_x, hornAttack_y, 92, 92);
         DrawUtil.draw(clock, clock_x, clock_y, 40,40);
         
-        CircularProgressRenderer dashCooldownRenderer = new CircularProgressRenderer(hornAttackDummy);
+        CircularProgressRenderer dashCooldownRenderer = new CircularProgressRenderer(hornAttackRdy);
         float hornCooldown;
         if (playerComp.hornAttackCooldown != 0.0f && playerComp.state != State.HORNATTACK) {
             hornCooldown = -(playerComp.hornAttackCooldown / GameConstants.HORN_MODE_COOLDOWN);
         } else {
             hornCooldown = 1.0f;
         }
-        dashCooldownRenderer.draw(DrawUtil.batch, hornAttackDummy_x, hornAttackDummy_y, 92, 92, hornCooldown * 360.0f); 
+        dashCooldownRenderer.draw(DrawUtil.batch, hornAttack_x, hornAttack_y, 92, 92, hornCooldown * 360.0f); 
         
         CircularProgressRenderer flyingCooldownRenderer = new CircularProgressRenderer(blue_gum);
         float flyingCooldown;
