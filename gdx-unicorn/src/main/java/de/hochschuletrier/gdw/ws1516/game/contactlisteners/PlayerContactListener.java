@@ -44,7 +44,6 @@ public class PlayerContactListener extends PhysixContactAdapter {
             if (ComponentMappers.movement.get(myEntity).state == State.ON_GROUND || ComponentMappers.movement.get(myEntity).state == State.LANDING) {                
                 // for Jumps:
                 if ("foot".equals(contact.getMyFixture().getUserData())) {
-                    logger.debug("sollte nicht so sein");
                 }
             }
             if (ComponentMappers.movement.get(myEntity).state == State.FALLING || ComponentMappers.movement.get(myEntity).state == State.JUMPING) {                
@@ -65,7 +64,6 @@ public class PlayerContactListener extends PhysixContactAdapter {
          //for Jumps:
         if ("foot".equals(contact.getMyFixture().getUserData())) {
             if (!contact.getOtherFixture().isSensor()) {
-                logger.debug("landing{}");
                 MovementComponent.State oldState = ComponentMappers.movement.get(myEntity).state;
                 MovementComponent.State newState = MovementComponent.State.LANDING;
                 MovementStateChangeEvent.emit(myEntity, oldState, newState);
@@ -140,10 +138,8 @@ public class PlayerContactListener extends PhysixContactAdapter {
             PlayerComponent player = otherEntity.getComponent(PlayerComponent.class);
             if (player.state == PlayerComponent.State.HORNATTACK && "horn".equals(contact.getOtherFixture().getUserData())) {
                 HornCollisionEvent.emit(otherEntity, myEntity);
-                logger.debug("hornKollision {}");
             } else {
                 UnicornEnemyCollisionEvent.emit(myEntity, otherEntity);
-                logger.debug("gegnerKollision {}");
             }
         }
         
@@ -157,7 +153,6 @@ public class PlayerContactListener extends PhysixContactAdapter {
         MovementComponent movementComp=ComponentMappers.movement.get(myEntity);
         if(movementComp!=null){
             movementComp.contacts.remove(contact.getOtherFixture());
-            logger.debug("Verlassen Kontakte:{}",movementComp.contacts.size());
         }
         
         if (contact.getOtherComponent() == null) {
@@ -168,7 +163,6 @@ public class PlayerContactListener extends PhysixContactAdapter {
                 // for Jumps:
 //                if ("foot".equals(contact.getMyFixture().getUserData())) {
                     if (!contact.getOtherFixture().isSensor()) {
-                        logger.debug("falling{}");
                         MovementComponent.State oldState = ComponentMappers.movement.get(myEntity).state;
                         MovementComponent.State newState = MovementComponent.State.FALLING;
                         MovementStateChangeEvent.emit(myEntity, oldState, newState);
