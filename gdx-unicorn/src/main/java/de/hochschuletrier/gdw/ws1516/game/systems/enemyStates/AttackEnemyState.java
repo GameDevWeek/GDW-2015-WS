@@ -26,6 +26,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 public class AttackEnemyState extends EnemyBaseState {
     private static final Logger logger = LoggerFactory.getLogger(AttackEnemyState.class);
     private boolean soundPlayed = false;
+    private boolean shootAlready=false;
 
     @Override
     public EnemyBaseState _compute(Entity entity, Entity player, float deltaTime) {
@@ -39,19 +40,28 @@ public class AttackEnemyState extends EnemyBaseState {
                 SoundEvent.emit("huntergun", entity);
                 soundPlayed = true;
             }
+            logger.info("{},{}",timePassed,behaviour.cooldown);
             if (timePassed<behaviour.cooldown){
-                if (behaviour.canSeeUnicorn){
+                if (timePassed>behaviour.cooldown-GameConstants.TIME_TO_WAIT_TO_SHOOT){
+                    if (!shootAlready){
+                        shootAlready=true;
+                        EnemyActionEvent.emit(entity, Type.SHOOT, 0.0f);
+                        logger.info("attack");
+                    }
                     return this;
                 }else{
-                    SoundEvent.stopSound("huntergun", entity);
-                    return new FollowPathEnemyState();
+                    if (behaviour.canSeeUnicorn){
+                        return this;
+                    }else{
+                        SoundEvent.stopSound("huntergun", entity);
+                        return new FollowPathEnemyState();
+                    }
                 }
             }
             int direction = GameConstants.HUNTER_BULLET_OFFSET;
             if (playerPosition.x<enemyPosition.x){
                 direction=-direction;
             }
-            EnemyActionEvent.emit(entity, Type.SHOOT, 0.0f);
             BulletSpawnEvent.emit(enemyPosition.x+direction, enemyPosition.y,
                     playerPosition.x-(enemyPosition.x+direction), playerPosition.y-enemyPosition.y,
                     (bullet,target)->{HitEvent.emit(target, bullet, 1);}, (source,target)->{}, (e)->{DeathEvent.emit(e);});
