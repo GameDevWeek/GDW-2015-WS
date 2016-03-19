@@ -55,51 +55,7 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
             SHOOT,
             SHOOT_ABORT
         }
-        public T  data;
-        /**
-         * 
-         * @param d
-         *      Grants Access to the PatternWide Data
-         */
-        public Action(T d)
-        {
-            data = d;
-        }
-        /**
-         * Is called every update
-         * @param entity
-         *      the enemy that is about to move
-         * @param unicorn
-         *      the unicorn/player
-         * @return
-         *      next State to enter
-         */
-        protected abstract int doStep(Entity entity,Entity unicorn);   
-        protected void initStep(){};
-        /**
-         * gets called on switching to this step
-         */
-        private final void init()
-        {
-            data.seconds = 0;
-            initStep();
-        }
-        /**
-         * Is called every update
-         * @param entity
-         *      the enemy that is about to move
-         * @param unicorn
-         *      the unicorn/player
-         * @param deltaTime
-         *      time that passed
-         * @return
-         *      next State to enter
-         */
-        private final int apply(Entity entity,Entity unicorn, float deltaTime)
-        {
-            data.seconds+=deltaTime;
-            return doStep(entity,unicorn);
-        }
+        
     }
 
     private static final Logger logger = LoggerFactory.getLogger(EnemyHandlingSystem.class);
@@ -108,7 +64,7 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
 
     
     public EnemyHandlingSystem(NameSystem nameSys) {
-        super(Family.all(EnemyBehaviourComponent.class,EnemyTypeComponent.class).get());
+        super(Family.all(EnemyBehaviourComponent.class,EnemyTypeComponent.class).get(),90);
         nameSystem = nameSys;
     }
     
@@ -124,11 +80,9 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
         engine.removeEntityListener(this);
     }
 
-
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         EnemyBehaviourComponent behaviour = ComponentMappers.enemyBehaviour.get(entity);
-        EnemyTypeComponent type = ComponentMappers.enemyType.get(entity);
         EnemyTypeComponent enemy = ComponentMappers.enemyType.get(entity);
         PathComponent path = ComponentMappers.path.get(entity);
         
@@ -149,9 +103,6 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
         
     }
 
-
-
-
     @Override
     public void entityAdded(Entity entity) {
         if ( ComponentMappers.player.has(entity) )
@@ -159,8 +110,6 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
             unicorn = entity;
         }
     }
-
-
 
     @Override
     public void entityRemoved(Entity entity) {
@@ -171,7 +120,4 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
         
     }
     
-
-    
-
 }

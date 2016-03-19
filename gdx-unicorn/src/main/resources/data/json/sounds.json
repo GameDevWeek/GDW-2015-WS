@@ -17,5 +17,12 @@
     "spuckCharge":"data/sounds/spuckenCharge.wav",
     "spucken":"data/sounds/spuckenAttack.wav",
     "splatter":"data/sounds/splatter.wav",
-    "einhorndying":"data/sounds/EinhornDying.wav"
+    "einhorndying":"data/sounds/EinhornDying.wav",
+    "aufblasen":"data/sounds/Kaugummi.wav",
+    "einhornWiehern":"data/sounds/Einhornwiehern.wav",
+    "pop":"data/sounds/pop.wav",
+    "trex":"data/sounds/Trex.wav",
+    "trexDead":"data/sounds/TrexDead.wav",
+    "trexHappy":"data/sounds/TrexHappy.wav",
+    "trexSad":"data/sounds/TrexSad.wav"
 }

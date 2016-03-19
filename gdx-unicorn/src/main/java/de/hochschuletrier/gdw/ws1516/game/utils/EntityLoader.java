@@ -18,6 +18,7 @@ import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyBehaviourComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.NameComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PathComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PlatformComponent;
 
 public class EntityLoader implements MapLoader {
 
@@ -50,7 +51,6 @@ public class EntityLoader implements MapLoader {
 
     private void addEntity(PooledEngine engine, LinkedList<String> names, LayerObject obj) {
         String entity_type = obj.getProperty("entity_type", null);
-            logger.info("entity_type{}", entity_type);
         if (entity_type != null) {
             final String name = obj.getProperty("name", null);
             final float x = obj.getX() + obj.getWidth() * 0.5f;
@@ -60,6 +60,7 @@ public class EntityLoader implements MapLoader {
             final String path = obj.getProperty("path",null);
             Entity e = EntityCreator.createEntity(entity_type, name, x, y, speed, loop);
             EnemyBehaviourComponent behave =  ComponentMappers.enemyBehaviour.get(e);
+            PlatformComponent platform = ComponentMappers.platform.get(e);
             NameComponent nc = engine.createComponent(NameComponent.class);
             nc.name = name;
             e.add(nc);
@@ -68,11 +69,14 @@ public class EntityLoader implements MapLoader {
                 for (Point p : obj.getPoints()) {
                     pc.points.add(new Vector2(p.x, p.y));
                 }
-                logger.info("{}", e.getComponent(PathComponent.class).points);
             }
             if (  behave!= null )
             {   /// pfadstring and
                 behave.pathID = path;
+            }
+            if (  platform != null )
+            {   /// pfadstring and
+                platform.pathID = path;
             }
             names.add(entity_type);
         }

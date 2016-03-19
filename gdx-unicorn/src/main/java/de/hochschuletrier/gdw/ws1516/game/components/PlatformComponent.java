@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 
 public class PlatformComponent extends Component implements Poolable{
 
+    public String pathID;
     public boolean loop;
     public int pathIndex;
     public float positionX;
@@ -13,6 +14,7 @@ public class PlatformComponent extends Component implements Poolable{
     
     @Override
     public void reset() {
+        pathID = null;
         loop = false;
         pathIndex = 0;
         positionX = 0;

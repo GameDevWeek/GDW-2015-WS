@@ -66,7 +66,7 @@ public class AttackEnemyState extends EnemyBaseState {
             if (playerPosition.x<enemyPosition.x){
                 direction=-direction;
             }
-            BulletSpawnEvent.emit(enemyPosition.x+direction, enemyPosition.y,
+            BulletSpawnEvent.emit(enemyPosition.x+direction, enemyPosition.y-GameConstants.TILESIZE_Y/4,
                     playerPosition.x-(enemyPosition.x+direction), playerPosition.y-enemyPosition.y,
                     (bullet,target)->{HitEvent.emit(target, bullet, 1);}, (source,target)->{}, (e)->{DeathEvent.emit(e);});
             return new FollowPathEnemyState();

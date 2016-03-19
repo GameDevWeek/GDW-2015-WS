@@ -54,6 +54,7 @@ import de.hochschuletrier.gdw.ws1516.game.contactlisteners.ImpactSoundListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerContactListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerPlatformListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.TriggerListener;
+import de.hochschuletrier.gdw.ws1516.game.systems.AnimationEventHandlerSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BlockingGumSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BubbleGlueSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BubblegumSpitSystem;
@@ -68,6 +69,7 @@ import de.hochschuletrier.gdw.ws1516.game.systems.KeyboardInputSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.MapRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.MovementSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.NameSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.PlatformHandlingSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.PlatformSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.PlayerStateSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RenderSystem;
@@ -128,6 +130,7 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
     private final HudRenderSystem hudRenderSystem = new HudRenderSystem(GameConstants.PRIORITY_HUD);
     
     private final MapRenderSystem mapRenderSystem = new MapRenderSystem(GameConstants.PRIORITY_MAP_RENDERING);
+    private final AnimationEventHandlerSystem animationEventHandlerSystem = new AnimationEventHandlerSystem(GameConstants.PRIORITY_ANIMATION_EVENTS);
     
     private final SplatterSystem splatterSystem = new SplatterSystem(GameConstants.PRIORITY_SPLATTER);
     private final EffectsRenderSystem effectsRenderSystem = new EffectsRenderSystem(GameConstants.PRIORITY_EFFECTS_RENDERING);
@@ -149,6 +152,7 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
     private final BubblegumSpitSystem bubblegumSpitSystem = new BubblegumSpitSystem(engine);
     private final UpdatePlatformPositionSystem updatePlatformPositionSystem = new UpdatePlatformPositionSystem();
     private final PlatformSystem platformSystem = new PlatformSystem();
+    private final PlatformHandlingSystem platformHandlingSystem = new PlatformHandlingSystem(nameSystem);
     private final BulletSystem bulletSystem = new BulletSystem(engine);
     private final BlockingGumSystem blockingGumSystem = new BlockingGumSystem(engine);
     
@@ -201,31 +205,10 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
         EntityCreator.setGame(this);
         EntityCreator.setEntityFactory(entityFactory);
         
+        EntityCreator.createEntity("bubblegum_rainbow", 1250, 2911);
         loadMap(mapFilename);
         mapRenderSystem.initialzeRenderer(map, "map_background", cameraSystem);
         
-        //test: 
-        // take it out
-        Entity unicorn = EntityCreator.createEntity("unicorn", 8800, 500);
-        Entity entity=EntityCreator.createEntity("hunter", 9000, 700);
-        PathComponent pathComponent = ComponentMappers.path.get(entity);
-        pathComponent.points.add(new Vector2(10000, 700));
-        pathComponent.points.add(new Vector2(8800,100));
-//        Entity platform = EntityCreator.createEntity("platform", 1700, 100);
-/*        healCheating = new Hotkey(() -> HealEvent.emit(unicorn, 1), Input.Keys.F4,
-        HotkeyModifier.CTRL);
-        healCheating.register();
-        rainbow = new Hotkey(() -> RainbowEvent.start(unicorn), Input.Keys.F3,
-                HotkeyModifier.CTRL);
-        rainbow.register();
-*/
-        Entity platform = EntityCreator.createEntity("platform", 9000, 700);
-        PlatformComponent platformComp = ComponentMappers.platform.get(platform);
-        //platformComp.loop = true;
-        pathComponent =ComponentMappers.path.get(platform);
-        pathComponent.points.add(new Vector2(9000, 700));
-        pathComponent.points.add(new Vector2(9500, 700));
-
     }
 
 
@@ -267,6 +250,7 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
         engine.addSystem(physixDebugRenderSystem);
         engine.addSystem(cameraSystem);
         engine.addSystem(renderSystem);
+        engine.addSystem(animationEventHandlerSystem);
         engine.addSystem(updatePositionSystem);
         engine.addSystem(nameSystem);
         engine.addSystem(keyBoardInputSystem);
@@ -288,6 +272,7 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
         engine.addSystem(bubbleGlueSystem);
         engine.addSystem(playerStateSystem);
         engine.addSystem(updatePlatformPositionSystem);
+        engine.addSystem(platformHandlingSystem);
         engine.addSystem(platformSystem);
         engine.addSystem(blockingGumSystem);
     }

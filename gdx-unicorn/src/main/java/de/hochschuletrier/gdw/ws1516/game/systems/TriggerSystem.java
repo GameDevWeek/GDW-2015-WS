@@ -85,7 +85,10 @@ public class TriggerSystem extends EntitySystem implements TriggerEvent.Listener
                 }                 
             break; 
         case WINING_ZONE:
-                GameOverEvent.emit(true);
+                if ( playerComp != null )
+                {
+                    GameOverEvent.emit(true);
+                }
             break;
            
         default:

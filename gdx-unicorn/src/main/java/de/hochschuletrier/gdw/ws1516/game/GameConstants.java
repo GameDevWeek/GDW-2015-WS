@@ -19,6 +19,7 @@ public class GameConstants {
     public static final int PRIORITY_HUD = 40;
     public static final int PRIORITY_NAME = 50;
     public static final int PRIORITY_REMOVE_ENTITIES = 1000;
+    public static final int PRIORITY_ANIMATION_EVENTS = 999;
 
     // PooledEngine parameters
     public static final int ENTITY_POOL_INITIAL_SIZE = 32;
@@ -71,7 +72,7 @@ public class GameConstants {
     public static float MUSIC_FADE_TIME = 2;
     
     // Scoreborad-Constant
-    public static final float SCORE_TIME_POINTS = - 100F / 60;
+    public static final float SCORE_TIME_POINTS = 1000;
     public static final int SCORE_CHOCOCOINS_POINTS = 1;
     public static final int SCORE_BONBONS_POINTS = 3;
     public static final int SCORE_DEATHS = 0; // negative Points ??
@@ -97,5 +98,6 @@ public class GameConstants {
     public static final float IDLE_PARTICLE_REDUCTION = 0.2f;
     
     // Animation parameters
-    public static final float TIME_TO_WAIT_TO_SHOOT = 1.0f;
+    public static final double THROWBACK_ANIMATION_PERIODS = 3;
+    public static final float TIME_TO_WAIT_TO_SHOOT = 0.5f;
 }

@@ -28,6 +28,7 @@ import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent.State;
@@ -70,7 +71,8 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         // TODO Auto-generated method stub
         ScoreComponent scoreComp = ComponentMappers.score.get(entity);
         PlayerComponent playerComp = ComponentMappers.player.get(entity);
-        
+        InputComponent inputComp = ComponentMappers.input.get(entity);
+        PositionComponent posComp = ComponentMappers.position.get(entity);
         
         Main.getInstance().screenCamera.bind();
         
@@ -80,7 +82,8 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         Texture heart;
         Texture coin = assetManager.getTexture("coin_hud");
         Texture blue_gum = assetManager.getTexture("gum_hud");
-        Texture hornAttackDummy;
+        Texture hornAttackRdy = assetManager.getTexture("dash_offCooldown");
+        Texture hornAttackCd_Ver2 = assetManager.getTexture("dash_Cooldown_V2");
         Texture clock = assetManager.getTexture("clock_hud");
         
         if(playerComp.hitpoints==3) {
@@ -96,12 +99,9 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
             heart = assetManager.getTexture("heart0");
         }
         
-        if(playerComp.hornAttackCooldown==0) {
-            hornAttackDummy = assetManager.getTexture("heart3");
-        }
-        else {
-            hornAttackDummy = assetManager.getTexture("dash_Cooldown");
-        }
+
+           
+
  
      
         
@@ -136,8 +136,10 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         float score_x = time_x;
         float score_y = time_y+45;
         
-        float hornAttackDummy_x = 60;
-        float hornAttackDummy_y = displayHeight - 60;
+        float hornAttack_x = 60;
+        float hornAttack_y = displayHeight - 60;
+        
+      
         
         int minutes_int = (int) scoreComp.playedSeconds/60;
         String minutes_string = String.valueOf(minutes_int);
@@ -165,18 +167,25 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         font.draw(DrawUtil.batch, time, time_x, time_y);
         DrawUtil.draw(coin, coin_x, coin_y, 40, 40);
         font.draw(DrawUtil.batch,score, score_x, score_y);
-        //DrawUtil.draw(hornAttackDummy, hornAttackDummy_x, hornAttackDummy_y, 92, 92);
+        DrawUtil.draw(hornAttackRdy, hornAttack_x-46, hornAttack_y-46, 92, 92);
         DrawUtil.draw(clock, clock_x, clock_y, 40,40);
         
-        CircularProgressRenderer dashCooldownRenderer = new CircularProgressRenderer(hornAttackDummy);
+        CircularProgressRenderer dashCooldownRenderer = new CircularProgressRenderer(hornAttackCd_Ver2);
+        //CircularProgressRenderer dashCooldownRenderer = new CircularProgressRenderer(hornAttackCd);
         float hornCooldown;
         if (playerComp.hornAttackCooldown != 0.0f && playerComp.state != State.HORNATTACK) {
             hornCooldown = -(playerComp.hornAttackCooldown / GameConstants.HORN_MODE_COOLDOWN);
         } else {
             hornCooldown = 1.0f;
         }
-        dashCooldownRenderer.draw(DrawUtil.batch, hornAttackDummy_x, hornAttackDummy_y, 92, 92, hornCooldown * 360.0f); 
         
+        if(playerComp.hornAttackCooldown!=0){
+        dashCooldownRenderer.draw(DrawUtil.batch, hornAttack_x, hornAttack_y, 92, 92, hornCooldown * 360.0f);  
+        }
+        else{
+            DrawUtil.draw(hornAttackRdy, hornAttack_x-46, hornAttack_y-46, 92, 92);
+        }
+            
         CircularProgressRenderer flyingCooldownRenderer = new CircularProgressRenderer(blue_gum);
         float flyingCooldown;
         if (playerComp.flyingCooldown != 0.0f) {
@@ -185,6 +194,23 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
             flyingCooldown = 1.0f;
         }
         flyingCooldownRenderer.draw(DrawUtil.batch, gum_x, gum_y, 40, 40, flyingCooldown * 360.0f);
+        
+       
+        
+        float spitState = inputComp.gumSpitCharge;
+        
+        if(spitState>0.0) {
+        float chargeBar_x = posComp.x - CameraSystem.getCameraPosition().x + Gdx.graphics.getWidth()/2 - 40;
+        float chargeBar_y = posComp.y - CameraSystem.getCameraPosition().y + Gdx.graphics.getHeight()/2 - 60;
+        float chargeBar_width = 80;
+        float chargeBar_height = 15;
+        float inside_x = chargeBar_x+1;
+        float inside_y = chargeBar_y+1;
+        float inside_width = chargeBar_width-1;
+        float inside_height = chargeBar_height-2;
+        DrawUtil.drawRect(chargeBar_x,chargeBar_y,chargeBar_width,chargeBar_height,  Color.BLACK);
+        DrawUtil.fillRect(inside_x, inside_y, spitState * inside_width, inside_height, new Color(0xff/256F,0x35/256F,0xD2/256F, 1f));
+        }
     }
 
     @Override
