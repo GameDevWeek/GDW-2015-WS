@@ -111,8 +111,5 @@ public class EndExplosionSystem extends IntervalSystem implements GameOverEvent.
 
     private void splash(final Vector2 point, final PlayerColor color) {
         SplashEvent.emit(point, color);
-        Canvas canvas = Main.getCanvas();
-        canvas.setColor(color.color);
-        canvas.drawPoint(point, GameConstants.PAINT_RADIUS_BIG);
     }
 }

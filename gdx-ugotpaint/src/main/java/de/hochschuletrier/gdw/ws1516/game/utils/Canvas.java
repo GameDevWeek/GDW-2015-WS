@@ -37,8 +37,8 @@ public class Canvas {
         pixmap.setColor(tint);
     }
     
-    public void drawPoint(Vector2 position, int radius) {
-        pixmap.fillCircle((int)position.x, (int)position.y, radius);
+    public void drawPoint(Vector2 position) {
+        pixmap.fillCircle((int)position.x, (int)position.y, GameConstants.PAINT_RADIUS);
     }
     
     public void render(boolean drawPainted, Batch batch, Vector2 pos, float scale, boolean flipY) {
