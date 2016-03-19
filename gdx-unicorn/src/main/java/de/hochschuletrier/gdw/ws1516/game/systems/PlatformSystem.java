@@ -54,20 +54,35 @@ public class PlatformSystem extends IteratingSystem{
             Vector2 nextTarget = pathComponent.points.get(pathIndex);
             
             
-            if (nextTarget.x < position.x) {
+            if (nextTarget.x < position.x +10) {
                 bodyComponent.setLinearVelocityX(-1.0f * GameConstants.PLATFORM_SPEED);
-            } else if (nextTarget.x > position.x) {
+            } 
+            else if (nextTarget.x > position.x -10) {
                 bodyComponent.setLinearVelocityX(1.0f * GameConstants.PLATFORM_SPEED);
+                logger.debug("TargetX {}", nextTarget.x);
+                logger.debug("PositionX {}", position.x);
             }
             
-            if (nextTarget.y < position.y) {
+            if (nextTarget.y < position.y +10) {
                 bodyComponent.setLinearVelocityY(-1.0f * GameConstants.PLATFORM_SPEED);
-            } else if (nextTarget.y > position.y) {
+                logger.debug("TargetY {}", nextTarget.y);
+                logger.debug("PositionY {}", position.x);
+            } 
+            else if (nextTarget.y > position.y -10) {
                 bodyComponent.setLinearVelocityY(1.0f * GameConstants.PLATFORM_SPEED);
             }
             
+            if(Math.abs(nextTarget.x-position.x) < 5)
+            {
+                bodyComponent.setLinearVelocityX(0);
+            }
+            if(Math.abs(nextTarget.y-position.y) < 5)
+            {
+                bodyComponent.setLinearVelocityY(0);
+            }
+            
             //if ( nextTarget.dst2(position.x,position.y) < 100 )
-            if (Math.abs(nextTarget.x - position.x)< 5 && Math.abs(nextTarget.y - position.y)<5)
+            if (Math.abs(nextTarget.x - position.x)< 12 & Math.abs(nextTarget.y - position.y)<12)
             {
                 if(!platformComponent.loop)
                 {
