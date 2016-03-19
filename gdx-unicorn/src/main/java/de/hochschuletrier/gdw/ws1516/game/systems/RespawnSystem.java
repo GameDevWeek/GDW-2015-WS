@@ -1,6 +1,7 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
 import java.rmi.activation.ActivationSystem;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import de.hochschuletrier.gdw.ws1516.events.GameRespawnEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.CollectableComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PathComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.StartPointComponent;
@@ -53,18 +55,22 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
            playerComp.hitpoints = playerComp.maxHitpoints;
            playerComp.doRespawn = false;
            /// Welt zurücksetzten
+           logger.debug("all:  {}",respawnPosition.savedEntities );
            for (SavedEntities save : respawnPosition.savedEntities )
            {
                if ( save.saved != null )
                {
                    PhysixBodyComponent saveBody = ComponentMappers.physixBody.get(save.saved);
                    PositionComponent savePos = ComponentMappers.position.get(save.saved);
+                   PathComponent path = ComponentMappers.path.get(save.saved);
+                   
                    if ( saveBody != null && save.position!= null )
                    {
                        saveBody.setPosition(save.position.x, save.position.y);
                    }
-                   logger.debug("X : {}, Y : {}",save.position.x,save.position.y);
+                   logger.debug("zurücksetzten  X : {}, Y : {}",save.position.x,save.position.y);
                } else {
+                   logger.debug("revive {}", save);
                    revive(save);
                }
            }
@@ -75,7 +81,13 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
     }
     
     private void revive(SavedEntities save) {
-        EntityCreator.createEntity(save.entityType.entityName().toLowerCase(), save.position.x, save.position.y);
+        logger.debug("type  : {} at x {} , y {}",save.entityType.entityName().toLowerCase(), save.position.x, save.position.y);
+        Entity entity = EntityCreator.createEntity(save.entityType.entityName().toLowerCase(), save.position.x, save.position.y);
+        PathComponent path = ComponentMappers.path.get(entity);
+        if (path != null)
+        {
+            path.points = save.path;
+        }
     }
 
     @Override
@@ -83,7 +95,7 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
         PlayerComponent playerComp = ComponentMappers.player.get(player);
         MovementComponent move= ComponentMappers.movement.get(player);
         if ( playerComp != null )
-        {
+        {   /// resets game later (for the physixs)
             playerComp.doRespawn = true;
             playerComp.invulnerableTimer=1.0f;
             if ( move != null )
@@ -140,13 +152,19 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
             player = null;
         } else
         {   /// check if an saved enemy died 
-            StartPointComponent start = ComponentMappers.startPoint.get(player);
-            Iterator<SavedEntities> iter = start.savedEntities.iterator();
-            while ( iter.hasNext() )
+            if ( player != null )
             {
-                SavedEntities save = iter.next();
-                /// Entity no longer exist
-                save.saved = null;
+                StartPointComponent start = ComponentMappers.startPoint.get(player);
+                Iterator<SavedEntities> iter = start.savedEntities.iterator();
+                while ( iter.hasNext() )
+                {
+                    SavedEntities save = iter.next();
+                    /// Entity no longer exist
+                    if ( save.saved == entity )
+                    {
+                        save.saved = null;
+                    }
+                }
             }
         }
         
