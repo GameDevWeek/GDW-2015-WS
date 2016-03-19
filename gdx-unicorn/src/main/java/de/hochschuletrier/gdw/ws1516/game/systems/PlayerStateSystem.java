@@ -28,7 +28,7 @@ import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
 import de.hochschuletrier.gdw.ws1516.events.ThrowBackEvent;
 
 public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.Listener,
-    HornAttackEvent.Listener, StartFlyEvent.Listener, EndFlyEvent.Listener, ThrowBackEvent.Listener, MovementStateChangeEvent.Listener
+    HornAttackEvent.Listener, StartFlyEvent.Listener, EndFlyEvent.Listener, ThrowBackEvent.Listener
     {
 
     private static final Logger logger = LoggerFactory.getLogger(PlayerStateSystem.class);
@@ -47,7 +47,6 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         StartFlyEvent.register(this);
         EndFlyEvent.register(this);
         ThrowBackEvent.register(this);
-        MovementStateChangeEvent.register(this);
     }
     
     @Override
@@ -59,7 +58,6 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         StartFlyEvent.unregister(this);
         EndFlyEvent.unregister(this);
         ThrowBackEvent.unregister(this);
-        MovementStateChangeEvent.unregister(this);
     }
     
     @Override
@@ -198,28 +196,6 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
             playerComp.state = State.NORMAL;
         }
     }
-
-    @Override
-    public void onMovementStateChangeEvent(Entity entity,
-            de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State oldState,
-            de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State newState) {
-        MovementComponent move = ComponentMappers.movement.get(entity);
-        PhysixBodyComponent body = ComponentMappers.physixBody.get(entity);
-        PlayerComponent player = ComponentMappers.player.get(entity);
-        if ( player != null && player.state != PlayerComponent.State.RAINBOW )
-        {
-            if ( newState == MovementComponent.State.LANDING )
-            {
-                move.speed = GameConstants.PLAYER_SPEED * 0.5f;
-            } 
-            if ( oldState == MovementComponent.State.LANDING )
-            {
-                move.speed = GameConstants.PLAYER_SPEED ;
-            } 
-        }
-        
-    }
-    
 
     
 }
