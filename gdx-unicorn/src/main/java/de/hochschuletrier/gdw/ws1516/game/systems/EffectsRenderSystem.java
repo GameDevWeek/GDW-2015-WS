@@ -27,10 +27,11 @@ import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.CameraTargetComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
+import de.hochschuletrier.gdw.ws1516.events.TriggerEvent;;
 
 
 
-public class EffectsRenderSystem extends IteratingSystem implements PaparazziShootEvent.Listener, DeathEvent.Listener {
+public class EffectsRenderSystem extends IteratingSystem implements PaparazziShootEvent.Listener, DeathEvent.Listener, TriggerEvent.Listener {
     
     private float paparazziEffectRemainingDuration;
     private float paparazziEffectDuration;
@@ -101,6 +102,9 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
         super.removedFromEngine(engine);
     }
     
+    
+    // PAPARAZZI
+    
     @Override
     public void onPaparazziShootEvent(float distance) {
         startPaparazzi(distance, GameConstants.PAPARAZZI_DURATION, new Vector2(distance, distance*2));
@@ -150,6 +154,23 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
             resetPaparazzi();
         }
     }
+    
+    // CAVE ENTER/CAVE EXIT
+    public void onTriggerEvent(TriggerEvent.Action action, Entity triggeringEntity) {
+        
+        switch (action) {
+            case CAVE_ENTER:
+                
+                break;
+            case CAVE_EXIT:
+                
+                break;
+        }
+        
+    };
+    
+    
+    // UPDATE
     
     private Vector2 cameraScreenToShaderScreenCoords(Vector2 in)
     {
