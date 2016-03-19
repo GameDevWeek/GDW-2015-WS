@@ -50,8 +50,8 @@
     "jump_Key": "data/ui/menu/space_key.png",
  
     
-    "platform3x1": "data/maps/tilesets/platform_3x1.png",
-    "platform4x1": "data/maps/tilesets/platform_4x1.png",
+    "platform_3x1": "data/maps/tilesets/platform_3x1.png",
+    "platform_4x1": "data/maps/tilesets/platform_4x1.png",
     "tutorial":"data/ui/menu/Tutorial.png",
 
     "data/maps/lvl1.tmx": "data/ui/menu/menu_level01.png",

@@ -216,7 +216,6 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         MovementComponent.State newState=MovementComponent.State.JUMPING;
         MovementStateChangeEvent.emit(entity, movement.state, newState);
         movement.state = newState;
-        physix.setLinearVelocity(0, 0); //kills any movement
         physix.applyImpulse(0, movement.jumpImpulse);
     }
     

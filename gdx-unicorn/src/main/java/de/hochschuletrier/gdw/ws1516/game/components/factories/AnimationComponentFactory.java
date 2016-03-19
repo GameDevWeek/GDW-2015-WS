@@ -40,13 +40,17 @@ public class AnimationComponentFactory extends ComponentFactory<EntityFactoryPar
             }
         }
         
-        component.flipHorizontal = properties.getBoolean("flip_horizontal", false);
-        component.name = properties.getString("name", "");
-        component.xOffset = properties.getFloat("xOffset", 0f);
-        component.yOffset = properties.getFloat("yOffset", 0f);
-        component.alpha = properties.getFloat("alpha", 1.0f);
-        System.out.println("--> <> <-- " + properties.getString("name", ""));
+        fillAnimationComponent(component, properties);
         
         entity.add(component);
+    }
+    
+    protected void fillAnimationComponent(AnimationComponent component, SafeProperties properties)
+    {
+        component.flipHorizontal = properties.getBoolean("flip_horizontal", false);
+        component.name = properties.getString("name", "");
+        component.xOffset = properties.getFloat("x_offset", 0f);
+        component.yOffset = properties.getFloat("y_offset", 0f);
+        component.alpha = properties.getFloat("alpha", 1.0f);
     }
 }
