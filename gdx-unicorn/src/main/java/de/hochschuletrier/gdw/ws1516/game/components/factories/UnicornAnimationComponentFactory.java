@@ -21,6 +21,7 @@ public class UnicornAnimationComponentFactory extends AnimationComponentFactory 
     public void run(Entity entity, SafeProperties meta, SafeProperties properties, EntityFactoryParam param) 
     {
         UnicornAnimationComponent component = engine.createComponent(UnicornAnimationComponent.class);
+        component.unicornColoredAnimations = new HashMap<>();
         
         for(UnicornAnimationComponent.UnicornColor color : UnicornAnimationComponent.UnicornColor.values())
         {

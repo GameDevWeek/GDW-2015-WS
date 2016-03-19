@@ -19,6 +19,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.UnicornAnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.systems.EnemyHandlingSystem.Action.Type;
 import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 
@@ -26,15 +27,26 @@ public class AnimationRenderSystem extends SubSystem
     implements MovementStateChangeEvent.Listener, PlayerStateChangeEvent.Listener, EnemyActionEvent.Listener
 {
     public AnimationRenderSystem() {
-        super(Family.all(PositionComponent.class, AnimationComponent.class).get());
+        super(Family.all(PositionComponent.class).one(AnimationComponent.class, UnicornAnimationComponent.class).get());
     }
 
     @Override
     public void processEntity(Entity entity, float deltaTime) {
         AnimationComponent animation = ComponentMappers.animation.get(entity);
+        
+        if(animation == null)
+        {
+            animation = ComponentMappers.unicornAnimation.get(entity);
+        }
+        
         PositionComponent position = ComponentMappers.position.get(entity);
         MovementComponent movement = ComponentMappers.movement.get(entity);
         PhysixBodyComponent physics = ComponentMappers.physixBody.get(entity);
+        
+        if(ComponentMappers.player.has(entity))
+        {
+            int i = 0;
+        }
         
         EnemyTypeComponent enemyType = ComponentMappers.enemyType.get(entity);
         EnemyBehaviourComponent enemyBehaviour = ComponentMappers.enemyBehaviour.get(entity);

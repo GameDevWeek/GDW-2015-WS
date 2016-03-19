@@ -15,6 +15,7 @@
                 "state": "falling"
                 },
             "UnicornAnimation": {
+                "name": "unicorn",
                 "pink_on_ground_idle": "unicorn_idle",
                 "pink_on_ground_walking": "unicorn_walking",
                 "pink_flying": "unicorn_flying",
