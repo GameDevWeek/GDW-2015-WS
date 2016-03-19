@@ -28,6 +28,7 @@ import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent.State;
@@ -70,7 +71,8 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         // TODO Auto-generated method stub
         ScoreComponent scoreComp = ComponentMappers.score.get(entity);
         PlayerComponent playerComp = ComponentMappers.player.get(entity);
-        
+        InputComponent inputComp = ComponentMappers.input.get(entity);
+        PositionComponent posComp = ComponentMappers.position.get(entity);
         
         Main.getInstance().screenCamera.bind();
         
@@ -82,7 +84,6 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         Texture blue_gum = assetManager.getTexture("gum_hud");
         Texture hornAttackRdy = assetManager.getTexture("dash_offCooldown");
         Texture hornAttackCd_Ver2 = assetManager.getTexture("dash_Cooldown_V2");
-        Texture hornAttackCd = assetManager.getTexture("dash_Cooldown");
         Texture clock = assetManager.getTexture("clock_hud");
         
         if(playerComp.hitpoints==3) {
@@ -193,6 +194,23 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
             flyingCooldown = 1.0f;
         }
         flyingCooldownRenderer.draw(DrawUtil.batch, gum_x, gum_y, 40, 40, flyingCooldown * 360.0f);
+        
+       
+        
+        float spitState = inputComp.gumSpitCharge;
+        
+        if(spitState>0.0) {
+        float chargeBar_x = posComp.x - CameraSystem.getCameraPosition().x + Gdx.graphics.getWidth()/2 - 40;
+        float chargeBar_y = posComp.y - CameraSystem.getCameraPosition().y + Gdx.graphics.getHeight()/2 - 60;
+        float chargeBar_width = 80;
+        float chargeBar_height = 15;
+        float inside_x = chargeBar_x+1;
+        float inside_y = chargeBar_y+1;
+        float inside_width = chargeBar_width-1;
+        float inside_height = chargeBar_height-2;
+        DrawUtil.drawRect(chargeBar_x,chargeBar_y,chargeBar_width,chargeBar_height,  Color.BLACK);
+        DrawUtil.fillRect(inside_x, inside_y, spitState * inside_width, inside_height, new Color(0xff/256F,0x35/256F,0xD2/256F, 1f));
+        }
     }
 
     @Override

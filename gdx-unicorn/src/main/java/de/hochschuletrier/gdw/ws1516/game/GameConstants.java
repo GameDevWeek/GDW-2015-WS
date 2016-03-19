@@ -19,6 +19,7 @@ public class GameConstants {
     public static final int PRIORITY_HUD = 40;
     public static final int PRIORITY_NAME = 50;
     public static final int PRIORITY_REMOVE_ENTITIES = 1000;
+    public static final int PRIORITY_ANIMATION_EVENTS = 999;
 
     // PooledEngine parameters
     public static final int ENTITY_POOL_INITIAL_SIZE = 32;

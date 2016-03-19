@@ -14,6 +14,7 @@ import de.hochschuletrier.gdw.commons.gdx.input.hotkey.Hotkey;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.HotkeyModifier;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.components.SafePointTextureComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.TextureComponent;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityCreator;
@@ -23,14 +24,19 @@ import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 public class TextureRenderSystem extends SubSystem {
     private static final Logger logger = LoggerFactory.getLogger(TextureRenderSystem.class);
     
+    @SuppressWarnings("unchecked")
     public TextureRenderSystem() {
-        super(Family.all(TextureComponent.class, PositionComponent.class).get());
+        super(Family.all(PositionComponent.class).one(TextureComponent.class, SafePointTextureComponent.class).get());
     }
 
     @Override
     public void processEntity(Entity entity, float deltaTime) {
         TextureComponent texture = ComponentMappers.texture.get(entity);
         PositionComponent position = ComponentMappers.position.get(entity);
+        
+        if(texture == null) {
+            texture = ComponentMappers.safePointTexture.get(entity);
+        }
         
         if(texture.texture != null && position != null) {
             drawRotated(texture.texture, position.x, position.y, position.rotation,

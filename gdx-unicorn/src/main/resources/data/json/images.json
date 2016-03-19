@@ -20,6 +20,7 @@
     "unicorn": "data/graphics/unicorn_s.png",
     "unicorn_mirror" : "data/graphics/unicorn_mirror.png",
     "trex" : "data/graphics/trex.png",
+    "mini_trex" : "data/graphics/mini_trex.png",
     "trex_mirror" : "data/graphics/trex_mirror.png",
     "cookie" : "data/graphics/cookie.png",
     "drop" : "data/graphics/drop.png",

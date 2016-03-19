@@ -189,7 +189,6 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
                     HornAttackEvent.start(entity);
                 }
             }
-            hornAttack=false;
         }
         input.hornAttack = hornAttack;
         input.startJump = jump;
