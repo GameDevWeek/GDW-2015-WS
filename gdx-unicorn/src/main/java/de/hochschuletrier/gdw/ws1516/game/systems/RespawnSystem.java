@@ -39,6 +39,9 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
            physixBody.setPosition(respawnPosition.x,respawnPosition.y);
            playerComp.hitpoints = playerComp.maxHitpoints;
            playerComp.doRespawn = false;
+           playerComp.flyingCooldown = 0;
+           playerComp.hornAttackCooldown = 0;
+           playerComp.throwBackCooldown = 0;
        }
     }
     

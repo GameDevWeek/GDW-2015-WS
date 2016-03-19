@@ -129,7 +129,8 @@
         "Platform":{},
         "Path":{},
             "Texture": {
-                "texture" : "bubble"
+                "texture" : "platform4x1",
+                "flipVertical" : true
             },
             "PhysixBody": {
                 "type": "platform",
