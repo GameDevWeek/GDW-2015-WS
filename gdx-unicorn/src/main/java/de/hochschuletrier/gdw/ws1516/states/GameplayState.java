@@ -28,7 +28,6 @@ import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
 import de.hochschuletrier.gdw.ws1516.menu.EndPage;
 import de.hochschuletrier.gdw.ws1516.menu.MainMenuPage;
-import de.hochschuletrier.gdw.ws1516.menu.Settings;
 import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
 import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
 import de.hochschuletrier.gdw.ws1516.events.FinalScoreEvent;
@@ -131,9 +130,7 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
 
     @Override
     public void onEnter(BaseGameState previousState) {
-        //MusicManager.setGlobalVolume(0);
         System.out.println("enterGamestate");
-        MusicManager.setGlobalVolume(Settings.musicValue.get());
         MusicManager.play(music, GameConstants.MUSIC_FADE_TIME);
         
         
