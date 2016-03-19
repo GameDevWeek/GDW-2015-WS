@@ -108,7 +108,7 @@ public class GameLogicTest extends SandboxGame {
 
     private final DummyEnemyExecutionSystem dummyEnemySystem = new DummyEnemyExecutionSystem();
     
-    private final EnemyHandlingSystem enemyHandlingSystem = new EnemyHandlingSystem();
+    private final EnemyHandlingSystem enemyHandlingSystem = new EnemyHandlingSystem(null);
 
     private final EntitySystem enemyVisionSystem = new EnemyVisionSystem();
 

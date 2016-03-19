@@ -22,7 +22,7 @@ public class RenderSystem extends SortedSubIteratingSystem {
 
     private BackgroundParticleRenderSystem backgroundParticleRenderSystem;
     private AnimationRenderSystem animationRenderSystem;
-    private ParticleRenderSystem particleRenderSystem;
+    private ForegroundParticleRenderSystem particleRenderSystem;
     
     @SuppressWarnings("unchecked")
     public RenderSystem(int priority) {
@@ -33,7 +33,7 @@ public class RenderSystem extends SortedSubIteratingSystem {
         animationRenderSystem = new AnimationRenderSystem();
         addSubSystem(animationRenderSystem);
         addSubSystem(new TextureRenderSystem());
-        particleRenderSystem = new ParticleRenderSystem();
+        particleRenderSystem = new ForegroundParticleRenderSystem();
         addSubSystem(particleRenderSystem);
     }
     

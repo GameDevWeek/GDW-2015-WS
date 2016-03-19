@@ -16,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
+import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.BubbleGlueComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
@@ -46,11 +47,7 @@ public class BubbleGlueSystem extends EntitySystem {
                     engine.removeEntity(entity);
                     continue;
                 }
-                
-                //If the glued entity has a movement component, set it to glued
-                if (movement != null) 
-                    movement.state = MovementComponent.State.GLUED;
-                
+                                
                 //Set entity to ground and arrest momentum
                 checkIfEntityIsOnGround(glueComponent.gluedEntity, engine);
                 if (!groundTraceResult) {
@@ -61,6 +58,10 @@ public class BubbleGlueSystem extends EntitySystem {
                     
                     //Arresto momentum
                     body.setLinearVelocity(0, 0);
+                    
+                    //If the glued entity has a movement component, set it to glued
+                    if (movement != null) 
+                        movement.state = MovementComponent.State.GLUED;
                     
                 } else {
                     
@@ -78,7 +79,7 @@ public class BubbleGlueSystem extends EntitySystem {
                     
                 //Unglued entity
                 if (glueComponent.timeRemaining <= 0) {
-                    engine.removeEntity(entity);
+                    DeathEvent.emit(entity);
                     if (movement != null)
                         movement.state = MovementComponent.State.FALLING;
                 }
