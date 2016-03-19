@@ -162,7 +162,7 @@
         },
         "story1Q" :{
             "layer": 2,
-            "time": 0,
+            "time": 1000,
             "items" : [
                 {"type":"text","x":512, "y": 100,"style":"name","text":"Because of his short arms"},
                 {"type":"text","x":512, "y": 75,"style":"name","delay": 3000,"text":"The T-Rex can't eat his bubblegum!"},
