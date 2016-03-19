@@ -14,5 +14,9 @@
     "paparazzi":{
         "vertex": "data/shaders/paparazziVertexShader.glsl",
         "fragment": "data/shaders/paparazziFragmentShader.glsl"
+    },
+    "alphaTexture":{
+        "vertex": "data/shaders/alphaTextureVertexShader.glsl",
+        "fragment": "data/shaders/alphaTextureFragmentShader.glsl"
     }
 }

@@ -19,6 +19,7 @@ public class TextureComponentFactory extends ComponentFactory<EntityFactoryParam
         component.texture = assetManager.getTexture(properties.getString("texture"));
         component.flipHorizontal = properties.getBoolean("flipHorizontal", false);
         component.flipVertical = properties.getBoolean("flipVertical", false);
+        component.alpha = properties.getFloat("alpha", 1.0f);
         
         entity.add(component);
     }

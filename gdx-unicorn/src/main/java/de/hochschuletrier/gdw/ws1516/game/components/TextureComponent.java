@@ -13,6 +13,8 @@ public class TextureComponent extends Component implements Pool.Poolable
     public float originX;
     public float originY;
     
+    public float alpha;
+    
     @Override
     public void reset() {
         texture = null;

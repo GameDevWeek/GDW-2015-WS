@@ -5,7 +5,8 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import de.hochschuletrier.gdw.ws1516.Main;
 
 public class ShaderLoader {
-    
+
+    private static ShaderProgram alphaTextureShader;
     private static ShaderProgram fancyRainbowShader;
     private static ShaderProgram simpleRainbowShader;
     private static ShaderProgram oldRainbowShader;
@@ -14,6 +15,16 @@ public class ShaderLoader {
     static
     {
         ShaderProgram.pedantic = false;
+    }
+    
+    public static ShaderProgram getAlphaTextureShader()
+    {
+        if(alphaTextureShader == null)
+        {
+            alphaTextureShader = Main.getInstance().getAssetManager().getShaderProgram("alphaTexture");
+            System.out.println(alphaTextureShader.getLog());
+        }
+        return alphaTextureShader;
     }
     
     public static ShaderProgram getFancyRainbowShader()
