@@ -1,5 +1,7 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
+import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +14,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyBehaviourComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PathComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 /**
  * @author Tobi
@@ -27,6 +30,12 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
          */        
         public float seconds;
     }
+    /**
+     * no longer needed ?? denke ich
+     * @author Tobi
+     *
+     * @param <T>
+     */
     public static abstract class Action<T extends ActionData>
     { 
         public static enum Type
@@ -94,10 +103,12 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
 
     private static final Logger logger = LoggerFactory.getLogger(EnemyHandlingSystem.class);
     private Entity unicorn;
+    private NameSystem nameSystem;
 
     
-    public EnemyHandlingSystem() {
+    public EnemyHandlingSystem(NameSystem nameSys) {
         super(Family.all(EnemyBehaviourComponent.class,EnemyTypeComponent.class).get());
+        nameSystem = nameSys;
     }
     
     @Override
@@ -117,7 +128,24 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
     protected void processEntity(Entity entity, float deltaTime) {
         EnemyBehaviourComponent behaviour = ComponentMappers.enemyBehaviour.get(entity);
         EnemyTypeComponent type = ComponentMappers.enemyType.get(entity);
+        EnemyTypeComponent enemy = ComponentMappers.enemyType.get(entity);
+        PathComponent path = ComponentMappers.path.get(entity);
         
+        if ( enemy != null && behaviour.pathID != null && (path.points == null || path.points.isEmpty() ))
+        {
+            Entity pathEntity = nameSystem.getEntityByName(behaviour.pathID);
+            if ( pathEntity != null )
+            {
+                PathComponent foundPath = ComponentMappers.path.get(pathEntity);
+                logger.debug("found the path ? : {}",behaviour.pathID);
+                path.points = new ArrayList<>(foundPath.points);  
+                
+            }else
+            {
+                logger.debug("not found"); 
+                behaviour.pathID  = null;
+            }
+        }
         behaviour.currentState = behaviour.currentState.compute(entity, unicorn, deltaTime);
         
     }
@@ -127,7 +155,7 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
 
     @Override
     public void entityAdded(Entity entity) {
-        if ( ComponentMappers.player.get(entity) != null)
+        if ( ComponentMappers.player.has(entity) )
         {
             unicorn = entity;
         }

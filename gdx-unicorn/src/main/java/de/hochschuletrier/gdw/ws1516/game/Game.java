@@ -138,7 +138,7 @@ public class Game extends InputAdapter {
     private final SoundSystem soundSystem = new SoundSystem(null);
     private final HitPointManagementSystem hitPointSystem = new HitPointManagementSystem();
     private final DummyEnemyExecutionSystem dummyEnemySystem = new DummyEnemyExecutionSystem();    
-    private final EnemyHandlingSystem enemyHandlingSystem = new EnemyHandlingSystem();
+    private final EnemyHandlingSystem enemyHandlingSystem = new EnemyHandlingSystem(nameSystem);
     private final EntitySystem enemyVisionSystem = new EnemyVisionSystem();
     private final ScoreSystem scoreBoardSystem = new ScoreSystem();
     private final PlayerStateSystem playerStateSystem = new PlayerStateSystem();
