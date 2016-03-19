@@ -14,7 +14,11 @@ public class AnimationComponent extends Component implements Pool.Poolable
     public boolean flipHorizontal;
     public boolean currentlyFlipped;
     public MovementComponent.State lastRenderedState;
-
+    public float xOffset;
+    public float yOffset;
+    public boolean lastRenderedIdle;
+    
+    public float alpha;
     
     @Override
     public void reset() {

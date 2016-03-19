@@ -34,19 +34,23 @@ public class AttackEnemyState extends EnemyBaseState {
         PositionComponent enemyPosition = ComponentMappers.position.get(entity);
         PositionComponent playerPosition = ComponentMappers.position.get(player);
         EnemyTypeComponent type=ComponentMappers.enemyType.get(entity);
+
+        MovementComponent movementComp=ComponentMappers.movement.get(entity);
         behaviour.cooldown=behaviour.maxCooldown;
+        if (movementComp.state == State.GLUED){
+            SoundEvent.stopSound("huntergun", entity);
+            return new FollowPathEnemyState();
+        }
         if (type.type==EnemyType.HUNTER){
             if (!soundPlayed) {
                 SoundEvent.emit("huntergun", entity);
                 soundPlayed = true;
             }
-            logger.info("{},{}",timePassed,behaviour.cooldown);
             if (timePassed<behaviour.cooldown){
                 if (timePassed>behaviour.cooldown-GameConstants.TIME_TO_WAIT_TO_SHOOT){
                     if (!shootAlready){
                         shootAlready=true;
                         EnemyActionEvent.emit(entity, Type.SHOOT, 0.0f);
-                        logger.info("attack");
                     }
                     return this;
                 }else{
