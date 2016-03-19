@@ -22,6 +22,7 @@ public class StartPointComponent extends Component implements Poolable {
         /// Das war dumm
         public static enum SaveableEntity  {
             BLUE_GUM("bubblegum_blue"),
+            RAINBOW_GUM("bubblegum_rainbow"),
             HUNTER("hunter"),
             PAPARAZII("tourist");
             private String name;
@@ -53,6 +54,8 @@ public class StartPointComponent extends Component implements Poolable {
             } else if ( collect != null ) {
                 if ( collect.type == CollectableType.BLUE_GUM ) {
                     entityType = SaveableEntity.BLUE_GUM;
+                } else if ( collect.type == CollectableType.RAINBOW_GUM ) {
+                    entityType = SaveableEntity.RAINBOW_GUM;
                 }
             }
             if ( pathComp != null ) {
