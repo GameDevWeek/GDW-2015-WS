@@ -54,11 +54,11 @@ public class PlatformSystem extends IteratingSystem{
             Vector2 nextTarget = pathComponent.points.get(pathIndex);
             
             
-            if(Math.abs(pathComponent.points.get(0).x - pathComponent.points.get(1).x) < 10)
+            if((Math.abs(pathComponent.points.get(0).x - pathComponent.points.get(1).x) < Math.abs(pathComponent.points.get(0).y - pathComponent.points.get(1).y)))
             {
                 moveDirX = false;
             }
-            if(Math.abs(pathComponent.points.get(0).y - pathComponent.points.get(1).y) < 10)
+            else
             {
                 moveDirX = true;
             }
@@ -88,7 +88,7 @@ public class PlatformSystem extends IteratingSystem{
 //            }
             
             //if ( nextTarget.dst2(position.x,position.y) < 100 )
-            if (Math.abs(nextTarget.x - position.x)< 12 & Math.abs(nextTarget.y - position.y)<12)
+            if ((Math.abs(nextTarget.x - position.x)< 12 && moveDirX)  || (Math.abs(nextTarget.y - position.y)<12 && !moveDirX))
             {
                 if(!platformComponent.loop)
                 {

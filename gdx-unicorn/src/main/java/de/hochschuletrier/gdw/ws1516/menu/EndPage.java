@@ -20,6 +20,7 @@ import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
+import de.hochschuletrier.gdw.ws1516.game.systems.ScoreSystem;
 import de.hochschuletrier.gdw.ws1516.states.GameplayState;
 import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
 import de.hochschuletrier.gdw.ws1516.events.FinalScoreEvent;
@@ -65,25 +66,27 @@ public class EndPage extends MenuPage {
             sound = assetManager.getSound("win_sound");
             DecoImage bonbons_image = new DecoImage(bonbons);
             DecoImage chocoCoins_image = new DecoImage(chocoCoins);
-            chocoScore = new Label("    x " + scoreComp.chocoCoins + " (1 Punkt) =                       " + scoreComp.chocoCoins, skin, "default");
+            chocoScore = new Label("    x " + scoreComp.chocoCoins + " (" + String.valueOf(GameConstants.SCORE_CHOCOCOINS_POINTS) + 
+                    " Punkt) =                       " + scoreComp.chocoCoins, skin, "default");
             
-            bonbonScore = new Label("    x " + scoreComp.bonbons + " (3 Punkte) =                     " + scoreComp.bonbons*3, skin, "default");
+            bonbonScore = new Label("    x " + scoreComp.bonbons + " (" + String.valueOf(GameConstants.SCORE_BONBONS_POINTS) + " Punkte) =                     " + 
+                    scoreComp.bonbons*GameConstants.SCORE_BONBONS_POINTS, skin, "default");
             Label trennstrich = new Label("___________________________________________________", skin, "default");
             
-            long timeScore = (long) (GameConstants.SCORE_TIME_POINTS - scoreComp.playedSeconds);
+            long timeScore = (long) (GameConstants.SCORE_TIME_POINTS * scoreComp.playedSeconds);
             //Label timeScore_label = new Label(""+timeScore + " (" + String.valueOf((int) (GameConstants.SCORE_TIME_POINTS))+" Abzug pro Sekunde)", skin, "default");
             Label timeScore_label = new Label("Zeitbonus              =                     "+ timeScore , skin, "default");
             
-            Label finalScore = new Label(String.valueOf(scoreComp.bonbons*3+scoreComp.chocoCoins+timeScore), skin, "win");
+            Label finalScore = new Label(String.valueOf(ScoreSystem.getFinalScoreStatic()), skin, "win");
             
-            chocoCoins_image.setPosition(200, 600);
+            chocoCoins_image.setPosition(275, 470);
      
-            chocoScore.setPosition(200+70, 600);
-            bonbons_image.setPosition(200, 550);
-            bonbonScore.setPosition(200+70, 550);
-            timeScore_label.setPosition(200, 450);
-            trennstrich.setPosition(180, 400);
-            finalScore.setPosition(300, 350);
+            chocoScore.setPosition(345, 470);
+            bonbons_image.setPosition(275, 420);
+            bonbonScore.setPosition(345, 420);
+            timeScore_label.setPosition(275, 320);
+            trennstrich.setPosition(250, 270);
+            finalScore.setPosition(375, 200);
             super.addActor(bonbonScore);
             super.addActor(chocoScore);
             super.addActor(bonbons_image);
