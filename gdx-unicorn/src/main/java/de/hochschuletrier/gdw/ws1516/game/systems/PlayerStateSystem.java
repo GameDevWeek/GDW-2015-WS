@@ -172,7 +172,7 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         
         if (getEntities().size()>0){
             PlayerComponent playerComp = ComponentMappers.player.get(unicorn);
-            playerComp.throwBackCooldown = GameConstants.THROWBACK_MODE_COOLDOWN;
+            playerComp.throwBackCooldown = 0;
             playerComp.state = State.NORMAL;
         }
     }

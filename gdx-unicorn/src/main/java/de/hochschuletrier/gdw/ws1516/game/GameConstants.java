@@ -98,4 +98,5 @@ public class GameConstants {
     
     // Animation parameters
     public static final float TIME_TO_WAIT_TO_SHOOT = 0.5f;
+    public static final double THROWBACK_ANIMATION_PERIODS = 3;
 }

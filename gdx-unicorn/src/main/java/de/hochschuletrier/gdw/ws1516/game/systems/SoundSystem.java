@@ -28,13 +28,15 @@ import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.GameLogicTest;
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
 import de.hochschuletrier.gdw.ws1516.events.BubblegumSpitSpawnEvent;
+import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
+import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
 
 /**
  * @author phili_000
  *
  */
 public class SoundSystem extends IteratingSystem
-        implements SoundEvent.Listener, DeathEvent.Listener, BubblegumSpitSpawnEvent.Listener {
+        implements SoundEvent.Listener, DeathEvent.Listener, BubblegumSpitSpawnEvent.Listener,StartFlyEvent.Listener,EndFlyEvent.Listener {
 
     private static final Logger logger = LoggerFactory.getLogger(GameLogicTest.class);
     private Vector2 camera;
@@ -52,6 +54,8 @@ public class SoundSystem extends IteratingSystem
         super.addedToEngine(engine);
         SoundEvent.register(this);
         DeathEvent.register(this);
+        StartFlyEvent.register(this);
+        EndFlyEvent.register(this);
         BubblegumSpitSpawnEvent.register(this);
         this.engine = engine;
     }
@@ -61,6 +65,8 @@ public class SoundSystem extends IteratingSystem
         super.removedFromEngine(engine);
         SoundEvent.unregister(this);
         DeathEvent.unregister(this);
+        StartFlyEvent.unregister(this);
+        EndFlyEvent.unregister(this);
         BubblegumSpitSpawnEvent.unregister(this);
         this.engine = null;
     };
@@ -151,8 +157,7 @@ public class SoundSystem extends IteratingSystem
         EnemyTypeComponent enemy = ComponentMappers.enemyType.get(entity);
         if (player != null) {
             if (entity==player){
-                SoundEvent.emit("splatter", player);
-                //SoundEvent.emit("einhorndying", player);
+                SoundEvent.emit("einhorndying", player);
             }else if (collect != null) {
                 switch (collect.type) {
                 case BONBON:
@@ -217,5 +222,15 @@ public class SoundSystem extends IteratingSystem
             }
         }
 
+    }
+
+    @Override
+    public void onEndFlyEvent(Entity entity) {
+        SoundEvent.stopSound("aufblasen",entity);
+    }
+
+    @Override
+    public void onStartFlyEvent(Entity entity, float time) {
+        SoundEvent.emit("aufblasen", entity);
     }
 }
