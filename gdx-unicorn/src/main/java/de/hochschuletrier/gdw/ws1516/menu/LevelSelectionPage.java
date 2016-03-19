@@ -37,7 +37,7 @@ public class LevelSelectionPage extends MenuPage {
     
     public LevelSelectionPage(Skin skin, MenuManager menuManager) {
         super(skin, "menu_bg");
-        int xOffset=400;
+        int xOffset=310;
         int xStep=120;
         int i = 0;
         Main.getInstance().screenCamera.bind();
@@ -80,8 +80,13 @@ public class LevelSelectionPage extends MenuPage {
         addLabeledTexture("coin_hud", "1 Punkt", xOffset+xStep*(i++)-15,550,-15,0,40,40);
         addLabeledTexture("drop", "3 Punkte", xOffset+xStep*(i++), 550,-15,0,62,40);
         addLabeledTexture("gum_hud", "Kaugummi", xOffset+xStep*(i++), 550,-27,0,40,40);
-        addLabeledTexture("hunter", "Jäger",xOffset+500,250,20,0,64,64);
-        addLabeledTexture("paparazzi", "Paparazzi",xOffset+500,150,5,0,64,64);
+        addLabeledTexture("hunter", "Jäger",xOffset+xStep*(i++),450,20,0,64,64);
+        addLabeledTexture("paparazzi", "Paparazzi",xOffset+xStep*(i++),450,20,0,64,64);
+        addLabeledTexture("arrow_Keys", "Bewegen",xOffset+350,50,35,0,152,90);
+        addLabeledTexture("dash_Key", "Paparazzi",xOffset,200,5,0,44,40);
+        addLabeledTexture("fly_Key", "Paparazzi",xOffset,300,5,0,44,40);
+        addLabeledTexture("spit_Key", "Paparazzi",xOffset,400,5,0,44,40);
+        addLabeledTexture("jump_Key", "Springen",xOffset+150,50,60,0,129,40);
         
         super.addActor(level_preview_d);
         
