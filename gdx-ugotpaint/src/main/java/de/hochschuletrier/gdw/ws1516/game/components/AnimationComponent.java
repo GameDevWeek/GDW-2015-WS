@@ -10,6 +10,7 @@ public class AnimationComponent extends Component implements Pool.Poolable {
     public float stateTime;
     public float rotation;
     public float alpha = 1;
+    public float scale = 1;
 
     @Override
     public void reset() {
