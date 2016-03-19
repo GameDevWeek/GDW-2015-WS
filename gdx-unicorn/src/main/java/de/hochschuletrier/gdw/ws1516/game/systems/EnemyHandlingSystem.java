@@ -43,7 +43,8 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
              * Shoots with strength as ?range? 
              * direction towards Enemy looking to
              */
-            SHOOT
+            SHOOT,
+            SHOOT_ABORT
         }
         public T  data;
         /**

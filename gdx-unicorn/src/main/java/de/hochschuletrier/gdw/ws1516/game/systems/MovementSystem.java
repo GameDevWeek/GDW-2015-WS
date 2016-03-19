@@ -94,6 +94,7 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
                 case FALLING:
                 case JUMPING:
                 case ON_GROUND:
+                case LANDING:
                 default:
                     defaultMovement(entity);
                     break;
@@ -116,7 +117,7 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
             
             
             MovementEvent.emit(entity, input.directionX);
-            if (input.startJump && movement.state == MovementComponent.State.ON_GROUND) {
+            if (input.startJump && (movement.state == MovementComponent.State.ON_GROUND || movement.state == MovementComponent.State.LANDING)) {
                 JumpEvent.emit(entity);
             }
             
@@ -211,7 +212,7 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         InputComponent input = ComponentMappers.input.get(player);
         MovementComponent movement = ComponentMappers.movement.get(player);
         if (physix != null && input != null && movement != null) {
-            physix.applyImpulse(input.directionX*GameConstants.HORNATTACK_IMPULSE, 0);
+            physix.applyImpulse(movement.lookDirection.getCosine()*GameConstants.HORNATTACK_IMPULSE, 0);
             
             // movement.velocityX = movement.speed * 1000 * input.directionX;
         }
