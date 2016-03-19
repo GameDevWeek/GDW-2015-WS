@@ -7,8 +7,8 @@
         "tr1" : {
             "type": "linear",
             "destinations":[
-                {"x":660, "y":200, "speed":60},
-                {"x":600, "y":200, "speed":60}
+                {"x":660, "y":184, "speed":60},
+                {"x":600, "y":184, "speed":60}
             ]
         },
         "bg" : {
@@ -21,21 +21,21 @@
         "trex_stay" : {
             "type": "linear",
             "destinations":[
-                {"x":600, "y":200, "speed":0.4},
-                {"x":601, "y":200, "speed":0.2}
+                {"x":600, "y":184, "speed":0.4},
+                {"x":601, "y":184, "speed":0.2}
             ]
         },
         "trex_stay_crying" : {
             "type": "linear",
             "destinations":[
-                {"x":600, "y":216, "speed":0.4},
-                {"x":601, "y":216, "speed":0.2}
+                {"x":600, "y":200, "speed":0.4},
+                {"x":601, "y":200, "speed":0.2}
             ]
         },
         "g1" : {
             "type":"linear",
             "destinations":[
-                {"x":670,"y":200,"speed":70},
+                {"x":670,"y":184,"speed":70},
                 {"x":650,"y":300,"speed":70}
             ]
         },
@@ -43,43 +43,43 @@
             "type":"linear",
             "destinations":[
                 {"x":650,"y":300,"speed":200},
-                {"x":620,"y":200,"speed":200}
+                {"x":620,"y":184,"speed":200}
             ]
         },
         "tr2" :{
             "type":"linear",
             "destinations":[
-                {"x":601,"y":200,"speed":300},
-                {"x":1060,"y":200,"speed":300}
+                {"x":601,"y":184,"speed":300},
+                {"x":1060,"y":184,"speed":300}
             ]
         },
         "uc1":{
             "type":"linear",
             "destinations":[
-                {"x":64,"y":200,"speed":300},
-                {"x":610,"y":200,"speed":300}
+                {"x":64,"y":152,"speed":300},
+                {"x":610,"y":152,"speed":300}
             ]
         },
         "uc_stay":{
             "type":"linear",
             "destinations":[
-                {"x":610,"y":216,"speed":0.75},
-                {"x":611,"y":216,"speed":1}
+                {"x":610,"y":168,"speed":0.75},
+                {"x":611,"y":168,"speed":1}
             ]
         },
 
         "uc_stay_start":{
             "type":"linear",
             "destinations":[
-                {"x":64,"y":200,"speed":0.1},
-                {"x":65,"y":200,"speed":0.1}
+                {"x":64,"y":152,"speed":0.15},
+                {"x":65,"y":152,"speed":0.1}
             ]
         },
         "uc2":{
             "type":"linear",
             "destinations":[
-                {"x":610,"y":200,"speed":300},
-                {"x":1400,"y":200,"speed":300}
+                {"x":610,"y":152,"speed":300},
+                {"x":1400,"y":152,"speed":300}
             ]
         }
        },
@@ -126,7 +126,7 @@
             "layer" :1,
             "time" : -1,
             "items" : [
-                {"type":"animation", "path":"uc1","resource":"unicorn_walking"}
+                {"type":"animation", "path":"uc1","resource":"pink_unicorn_walking"}
             ],
             "animations" : [],
             "finalNext":"unicornQ2"
@@ -135,7 +135,7 @@
             "layer" :1,
             "time" : -1,
             "items" : [
-                {"type":"animation", "path":"uc_stay","resource":"unicorn_jumping_up"}
+                {"type":"animation", "path":"uc_stay","resource":"pink_unicorn_jumping_up"}
             ],
             "animations" : [
             ],
@@ -145,7 +145,7 @@
             "layer" :1,
             "time" : -1,
             "items" : [
-                {"type":"animation", "path":"uc2","resource":"unicorn_walking"}
+                {"type":"animation", "path":"uc2","resource":"pink_unicorn_walking"}
             ],
             "animations" : [
             ]
@@ -164,9 +164,9 @@
             "layer": 2,
             "time": 0,
             "items" : [
-                {"type":"text","x":500, "y": 400,"style":"name","text":"Because of his short arms"},
-                {"type":"text","x":500, "y": 370,"style":"name","delay": 3000,"text":"The T-Rex can't eat his bubblegum!"},
-                {"type":"text","x":500, "y": 400,"style":"name","delay":7000,"text":"You have to help him!"}
+                {"type":"text","x":512, "y": 100,"style":"name","text":"Because of his short arms"},
+                {"type":"text","x":512, "y": 75,"style":"name","delay": 3000,"text":"The T-Rex can't eat his bubblegum!"},
+                {"type":"text","x":512, "y": 100,"style":"name","delay":7000,"text":"You have to help him!"}
             ],
             "animations" : [
                 {"time":0, "animation":"untype_instant"},
