@@ -79,8 +79,8 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
     }
     
     private void revive(SavedEntities save) {
-        Entity entity = EntityCreator.createEntity(save.entityType.entityName().toLowerCase(), save.position.x, save.position.y);
-        PathComponent path = ComponentMappers.path.get(entity);
+        save.saved = EntityCreator.createEntity(save.entityType.entityName().toLowerCase(), save.position.x, save.position.y);
+        PathComponent path = ComponentMappers.path.get(save.saved);
         if (path != null)
         {
             path.points = save.path;
