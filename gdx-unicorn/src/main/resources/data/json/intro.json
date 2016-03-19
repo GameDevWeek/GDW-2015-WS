@@ -159,11 +159,11 @@
             "animations" : [
             ]
         },
-        "bubblegumQ3":{
+        "bgQ":{
             "layer" :0,
             "time" : 0,
             "items" : [
-                {"type":"texture","path":"bg","resource":"lvl1_background"}
+                {"type":"texture","path":"bg","resource":"intro_bg"}
             ],
             "animations" : []
         },
