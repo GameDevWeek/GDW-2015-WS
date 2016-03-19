@@ -94,4 +94,7 @@ public class GameConstants {
     
     // Particle parameters
     public static final float IDLE_PARTICLE_REDUCTION = 0.2f;
+    
+    // Animation parameters
+    public static final float TIME_TO_WAIT_TO_SHOOT = 1.0f;
 }

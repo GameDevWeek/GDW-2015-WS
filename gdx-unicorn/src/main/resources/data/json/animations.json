@@ -42,7 +42,7 @@
     "paparazzi_shooting": {
         "filename": "data/graphics/spritesheets/paparazzi_shooting.png",
         "frames" : 5,
-        "frameDuration": [0.15],
+        "frameDuration": [0.01, 0.5, 0.2],
         "playType" : "NORMAL",
         "columns": 5,
         "rows" : 1
