@@ -156,6 +156,7 @@ public class Main extends StateBasedGame {
     }
 
     private void onLoadComplete() {
+        Settings.init();
         final MainMenuState mainMenuState = new MainMenuState(assetManager);
         addPersistentState(mainMenuState);
         changeState(mainMenuState, null, null);
