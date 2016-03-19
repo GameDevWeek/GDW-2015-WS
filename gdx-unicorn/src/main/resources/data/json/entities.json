@@ -329,13 +329,14 @@
         "components": {
             "Position": {},
             "Texture": {
-                "texture": "bubblegum_rainbow"
+                "texture": "checkpoint_unchecked",
+                "flipVertical": "true"
             },
             "Collectable":{
                 "type" : "spawn_point"
             },
             "PhysixBody": {
-                "type": "circle",
+                "type": "checkpoint",
                 "size": 30,
                 "density": 5,
                 "friction": 0.2,
@@ -416,7 +417,8 @@
             "Position": {
             },
             "Animation": {
-                "animation": "chocolate_river_top"
+                "name": "river_top",
+                "default_animation": "chocolate_river_top"
             },
             "RenderLayer": {
                 "layer": 200
@@ -429,7 +431,7 @@
             "Position": {
             },
             "Animation": {
-                "animation": "chocolate_river_body"
+                "default_animation": "chocolate_river_body"
             },
             "RenderLayer": {
                 "layer": 200

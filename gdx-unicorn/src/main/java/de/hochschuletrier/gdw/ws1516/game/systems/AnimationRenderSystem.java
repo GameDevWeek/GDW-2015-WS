@@ -37,6 +37,10 @@ public class AnimationRenderSystem extends SubSystem
             animation = ComponentMappers.unicornAnimation.get(entity);
         }
         
+        if (animation.name.equals("river_top")) {
+            int i = 0;
+        }
+        
         PositionComponent position = ComponentMappers.position.get(entity);
         MovementComponent movement = ComponentMappers.movement.get(entity);
         PhysixBodyComponent physics = ComponentMappers.physixBody.get(entity);
@@ -52,6 +56,8 @@ public class AnimationRenderSystem extends SubSystem
 
         if(movement != null)
         {
+            animation.currentlyFlipped = (movement.lookDirection) == (MovementComponent.LookDirection.LEFT) ^ animation.flipHorizontal;
+            
             String stateKey = movement.state.toString().toLowerCase();
             if(animation.name.equals("Hunter") && uniteruptableAnimationRunning(animation, movement))
             {
@@ -75,16 +81,15 @@ public class AnimationRenderSystem extends SubSystem
             }
             else {
                 keyFrame = getOtherKeyframe(animation, stateKey);
-            }
+            }  
+            
         }
         
         if(keyFrame == null)
         {
             keyFrame = getDefaultKeyframe(animation);
         }
-        
-        animation.currentlyFlipped = (movement.lookDirection) == (MovementComponent.LookDirection.LEFT) ^ animation.flipHorizontal;
-        
+       
         drawKeyframe(animation, position, keyFrame);   
     }
 
@@ -220,7 +225,7 @@ public class AnimationRenderSystem extends SubSystem
         }
         if(animationExtended == null)
         {
-            animationExtended = animation.animationMap.get("animation");
+            animationExtended = animation.animationMap.get("default_animation");
             if(animationExtended == null)
             {
                 return null;

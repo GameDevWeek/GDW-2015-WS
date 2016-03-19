@@ -24,6 +24,8 @@
     "cookie" : "data/graphics/cookie.png",
     "drop" : "data/graphics/drop.png",
     "bubble" : "data/graphics/bubble.png",
+    "checkpoint_checked": "data/maps/tilesets/checkpoint_checked.png",
+    "checkpoint_unchecked": "data/maps/tilesets/checkpoint_unchecked.png",
     
     "hunter" : "data/graphics/enemy_hunter.png",
     "paparazzi" : "data/graphics/enemy_paparazzi.png",
@@ -40,11 +42,18 @@
     "transparent_bg": "data/ui/menu/transparent.png",
     "prev_Button": "data/ui/menu/prev_Button.png",
     "next_Button": "data/ui/menu/next_Button.png",
-    "dash_Cooldown": "data/ui/menu/hud_dash01.png",
-    "clock_hud": "data/ui/menu/hud_clock.png",
+    "dash_Cooldown_V2": "data/ui/menu/hud_dash01.png",
+    "dash_offCooldown": "data/ui/menu/hud_dash02.png",
+    "clock_hud":"data/ui/menu/hud_clock.png",
+    "arrow_Keys": "data/ui/menu/arrow_keys.png",
+    "dash_Key": "data/ui/menu/d_key.png",
+    "fly_Key": "data/ui/menu/f_key.png",
+    "spit_Key": "data/ui/menu/s_key.png",
+    "jump_Key": "data/ui/menu/space_key.png",
+ 
     
-    "platform3x1": "data/maps/tilesets/platform_3x1.png",
-    "platform4x1": "data/maps/tilesets/platform_4x1.png",
+    "platform_3x1": "data/maps/tilesets/platform_3x1.png",
+    "platform_4x1": "data/maps/tilesets/platform_4x1.png",
     "tutorial":"data/ui/menu/Tutorial.png",
 
     "data/maps/lvl1.tmx": "data/ui/menu/menu_level01.png",
