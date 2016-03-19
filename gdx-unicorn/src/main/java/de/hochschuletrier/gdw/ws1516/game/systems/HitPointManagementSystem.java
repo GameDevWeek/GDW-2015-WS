@@ -155,7 +155,7 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
             if (playerComp != null && animComp != null) {
                 
                 if (playerComp.throwBackCooldown > 0) {
-                    //set alpha
+                    animComp.alpha = 1.0f - (playerComp.throwBackCooldown / GameConstants.THROWBACK_MODE_COOLDOWN);
                 }
             }
         }
