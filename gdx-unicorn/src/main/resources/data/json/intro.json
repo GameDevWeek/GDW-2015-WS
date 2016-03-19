@@ -11,6 +11,13 @@
                 {"x":660, "y":200, "speed":60}
             ]
         },
+        "bg" : {
+            "type": "linear",
+            "destinations":[
+                {"x":0, "y":400, "speed":0.0001},
+                {"x":1, "y":400, "speed":0.0001}
+            ]
+        },
         "trex_stay" : {
             "type": "linear",
             "destinations":[
@@ -44,6 +51,21 @@
             "destinations":[
                 {"x":0,"y":200,"speed":300},
                 {"x":610,"y":200,"speed":300}
+            ]
+        },
+        "uc_stay":{
+            "type":"linear",
+            "destinations":[
+                {"x":610,"y":200,"speed":0.75},
+                {"x":611,"y":200,"speed":1}
+            ]
+        },
+
+        "uc_stay_start":{
+            "type":"linear",
+            "destinations":[
+                {"x":64,"y":200,"speed":0.1},
+                {"x":65,"y":200,"speed":0.1}
             ]
         },
         "uc2":{
@@ -100,6 +122,15 @@
             "finalNext" : "unicornQ1",
             "animations" : []
         },
+        "unicornQS":{
+            "layer" :1,
+            "time" : 0,
+            "items" : [
+                {"type":"texture", "path":"uc_stay_start","resource":"unicorn"}
+            ],
+            "animations" : [],
+            "finalNext":"unicornQ1"
+        },
         "unicornQ1":{
             "layer" :1,
             "time" : -1,
@@ -113,10 +144,28 @@
             "layer" :1,
             "time" : -1,
             "items" : [
+                {"type":"animation", "path":"uc_stay","resource":"unicorn_jumping_up"}
+            ],
+            "animations" : [
+            ],
+            "finalNext":"unicornQ3"
+        },
+        "unicornQ3":{
+            "layer" :1,
+            "time" : -1,
+            "items" : [
                 {"type":"animation", "path":"uc2","resource":"unicorn_walking"}
             ],
             "animations" : [
             ]
+        },
+        "bubblegumQ3":{
+            "layer" :0,
+            "time" : 0,
+            "items" : [
+                {"type":"texture","path":"bg","resource":"lvl1_background"}
+            ],
+            "animations" : []
         },
         "bubblegumQ2":{
             "layer" :0,
