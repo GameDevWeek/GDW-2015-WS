@@ -101,11 +101,11 @@ public class AnimationRenderSystem extends SubSystem
             
             if(animation.currentlyFlipped)
             {
-                DrawUtil.batch.draw(keyFrame, position.x + w * 0.5f, position.y - h * 0.5f, w * 0.5f, h * 0.5f, -w, h, 1, 1, position.rotation);
+                DrawUtil.batch.draw(keyFrame, position.x + w * 0.5f + animation.xOffset, position.y - h * 0.5f + animation.yOffset, w * 0.5f + animation.xOffset, h * 0.5f + animation.yOffset, -w, h, 1, 1, position.rotation);
             }
             else
             {
-                DrawUtil.batch.draw(keyFrame, position.x - w * 0.5f, position.y - h * 0.5f, w * 0.5f, h * 0.5f, w, h, 1, 1, position.rotation);
+                DrawUtil.batch.draw(keyFrame, position.x - w * 0.5f - animation.xOffset, position.y - h * 0.5f + animation.yOffset, w * 0.5f - animation.xOffset, h * 0.5f + animation.yOffset, w, h, 1, 1, position.rotation);
             }
             if(animation.alpha < 1f && animation.alpha >= 0f)
             {

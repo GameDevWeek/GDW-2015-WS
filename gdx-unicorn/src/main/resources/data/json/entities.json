@@ -70,7 +70,8 @@
                 "flying": "hunter_walking",
                 "falling": "hunter_walking",
                 "jumping": "hunter_walking",
-                "flip_horizontal": true
+                "flip_horizontal": true,
+                "x_offset": 20
             },
             "PhysixBody": {
                 "type": "enemy",
@@ -107,7 +108,8 @@
                 "flying": "paparazzi_walking",
                 "falling": "paparazzi_walking",
                 "jumping": "paparazzi_walking",
-                "flip_horizontal": true
+                "flip_horizontal": true,
+                "x_offset": 12
             },
             "PhysixBody": {
                 "type": "enemy",
