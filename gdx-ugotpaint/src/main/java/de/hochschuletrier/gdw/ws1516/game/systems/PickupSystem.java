@@ -47,16 +47,16 @@ public class PickupSystem extends IteratingSystem implements PickupEvent.Listene
         float x = b.x + (rand.nextFloat() * b.width - 1);
         float y = b.y + (rand.nextFloat() * b.height - 1);
         Entity entity = game.createEntity("pickup", x, y, PlayerColor.NEUTRAL);
-        ComponentMappers.animation.get(entity).alpha = 0;
+        ComponentMappers.animation.get(entity).scale = 0;
     }
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         AnimationComponent anim = ComponentMappers.animation.get(entity);
-        if(anim.alpha < 1) {
-            anim.alpha += deltaTime;
-            if(anim.alpha > 1)
-                anim.alpha = 1;
+        if(anim.scale < 1) {
+            anim.scale += deltaTime * 3;
+            if(anim.scale > 1)
+                anim.scale = 1;
         }
     }
 }

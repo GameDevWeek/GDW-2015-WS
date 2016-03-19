@@ -49,6 +49,7 @@ public class AnimationRenderSystem extends IteratingSystem {
         TextureRegion keyFrame = animation.animation.getKeyFrame(animation.stateTime);
         int w = keyFrame.getRegionWidth();
         int h = keyFrame.getRegionHeight();
-        DrawUtil.batch.draw(keyFrame, position.x - w * 0.5f, position.y - h * 0.5f, w * 0.5f, h * 0.5f, w, h, 1, 1, animation.rotation);
+        float scale = animation.scale;
+        DrawUtil.batch.draw(keyFrame, position.x - w * 0.5f, position.y - h * 0.5f, w * 0.5f, h * 0.5f, w, h, scale, scale, animation.rotation);
     }
 }
