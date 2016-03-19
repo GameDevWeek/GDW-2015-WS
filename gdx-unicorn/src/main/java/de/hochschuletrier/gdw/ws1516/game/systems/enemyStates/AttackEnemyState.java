@@ -16,7 +16,9 @@ import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyBehaviourComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent.EnemyType;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 
 public class AttackEnemyState extends EnemyBaseState {
@@ -28,18 +30,21 @@ public class AttackEnemyState extends EnemyBaseState {
         EnemyBehaviourComponent behaviour = ComponentMappers.enemyBehaviour.get(entity);
         PositionComponent enemyPosition = ComponentMappers.position.get(entity);
         PositionComponent playerPosition = ComponentMappers.position.get(player);
+        MovementComponent movementComp = ComponentMappers.movement.get(entity);
         EnemyTypeComponent type=ComponentMappers.enemyType.get(entity);
         behaviour.cooldown=behaviour.maxCooldown;
         if (type.type==EnemyType.HUNTER){
             if (!soundPlayed) {
                 SoundEvent.emit("huntergun", entity);
                 soundPlayed = true;
+                movementComp.state=State.SHOOTING;
             }
             if (timePassed<behaviour.cooldown){
                 if (behaviour.canSeeUnicorn){
                     return this;
                 }else{
                     SoundEvent.stopSound("huntergun", entity);
+                    movementComp.state=State.ON_GROUND;
                     return new FollowPathEnemyState();
                 }
             }
@@ -50,6 +55,7 @@ public class AttackEnemyState extends EnemyBaseState {
             BulletSpawnEvent.emit(enemyPosition.x+direction, enemyPosition.y,
                     playerPosition.x-(enemyPosition.x+direction), playerPosition.y-enemyPosition.y,
                     (bullet,target)->{HitEvent.emit(target, bullet, 1);}, (source,target)->{}, (e)->{DeathEvent.emit(e);});
+            movementComp.state=State.ON_GROUND;
             return new FollowPathEnemyState();
         }else{        
             float distance = (float)Math.sqrt( Math.pow(enemyPosition.x-playerPosition.x, 2)+ Math.pow(enemyPosition.y-playerPosition.y, 2) );
