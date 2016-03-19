@@ -82,15 +82,24 @@ public class PlayerDeathSystem extends EntitySystem implements PlayerDeathEvent.
         timer.reset();
 
         // on the first player death initialize the players
-        if (playerRed == null) {
+        if (ComponentMappers.player.get(players.first()).color == PlayerColor.RED) {
             playerRed = players.first();
-            playerBlue = players.get(1);
+            if (players.size() > 1) {
+                playerBlue = players.get(1);
+            }
+        } else {
+            playerBlue = players.first();
+            if (players.size() > 1) {
+                playerRed = players.get(1);
+            }
         }
+
 
         InputComponent input = ComponentMappers.input.get(player);
         direction.set(input.lastMoveDirection);
         PlayerComponent playerComponent = ComponentMappers.player.get(player);
         playerComponent.segments.clear();
+        playerComponent.path.clear();
         deadPlayers.add(playerComponent.color);
         engine.removeEntity(player);
 
@@ -106,17 +115,22 @@ public class PlayerDeathSystem extends EntitySystem implements PlayerDeathEvent.
 
         Vector2 respawnLocation;
         PositionComponent otherPlayerPositionComponent;
-        LinkedList<Vector2> segments;
+        LinkedList<Vector2> segments = new LinkedList<>();
         int playerIndex;
+
 
         if (player == PlayerColor.RED) {
             otherPlayerPositionComponent = ComponentMappers.position.get(playerBlue);
             playerIndex = 0;
-            segments = ComponentMappers.player.get(playerBlue).segments;
+            if (ComponentMappers.player.get(playerBlue) != null) {
+                segments = ComponentMappers.player.get(playerBlue).segments;
+            }
         } else {
             otherPlayerPositionComponent = ComponentMappers.position.get(playerRed);
             playerIndex = 1;
-            segments = ComponentMappers.player.get(playerRed).segments;
+            if (ComponentMappers.player.get(playerRed) != null) {
+                segments = ComponentMappers.player.get(playerRed).segments;
+            }
         }
         // while the distance requirement is not met recalculate
         int tries = 0;
@@ -124,21 +138,23 @@ public class PlayerDeathSystem extends EntitySystem implements PlayerDeathEvent.
         do {
             respawnLocation = calculateRespawn();
             // checks the distance to every single enemy segment
-            for (Vector2 segment:segments) {
-                if (respawnLocation.dst(segment)<GameConstants.MIN_RESPAWN_DISTANCE){
-                    distanceIsOk = false;
+            if (!segments.isEmpty()) {
+                for (Vector2 segment : segments) {
+                    if (respawnLocation.dst(segment) < GameConstants.MIN_RESPAWN_DISTANCE) {
+                        distanceIsOk = false;
+                    }
                 }
             }
             ++tries;
         }
         // fuck it after 10 tries!
-        while (!distanceIsOk && tries<10);
+        while (!distanceIsOk && tries < 10);
 
         Entity newPlayer = game.createSnake(playerIndex, respawnLocation.x, respawnLocation.y, direction.x, direction.y, player);
         PlayerComponent playerComponent = ComponentMappers.player.get(newPlayer);
 
         // add more segments until the specified amount is reached
-        while(playerComponent.segments.size() < GameConstants.DEFAULT_SEGMENTS - 1){
+        while (playerComponent.segments.size() < GameConstants.DEFAULT_SEGMENTS - 1) {
             playerComponent.segments.add(new Vector2());
         }
         // add the new paths oriented along the movement direction
