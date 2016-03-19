@@ -318,6 +318,19 @@
             }
         }
     },
+    "blood_splatter": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "BackgroundParticle": {
+                "effect": "blood_splatter",
+                "kill_when_finished": true
+            },
+            "RenderLayer": {
+                "layer": 55
+            }
+        }
+    },
     "splatter_1": {
         "meta": {},
         "components": {

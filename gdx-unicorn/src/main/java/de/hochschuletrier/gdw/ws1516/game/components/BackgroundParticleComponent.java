@@ -14,6 +14,7 @@ public class BackgroundParticleComponent extends Component implements Pool.Poola
     public boolean isFlippedHorizontal;
     public boolean reduceEmissionIfIdle;
     public float offsetWhenMoving;
+    public boolean killWhenFinished;
     
     @Override
     public void reset()
@@ -27,5 +28,6 @@ public class BackgroundParticleComponent extends Component implements Pool.Poola
         isFlippedHorizontal = false;
         reduceEmissionIfIdle = false;
         offsetWhenMoving = 0f;
+        killWhenFinished = false;
     }
 }

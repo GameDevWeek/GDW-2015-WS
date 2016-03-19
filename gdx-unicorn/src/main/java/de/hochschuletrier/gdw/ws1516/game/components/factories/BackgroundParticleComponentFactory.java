@@ -40,6 +40,7 @@ public class BackgroundParticleComponentFactory extends ComponentFactory<EntityF
         component.isFlippedHorizontal = properties.getBoolean("flipHorizontal", false);
         component.reduceEmissionIfIdle = properties.getBoolean("reduceEmissionIfIdle", false);
         component.offsetWhenMoving = properties.getFloat("offsetWhenMoving", 0);
+        component.killWhenFinished = properties.getBoolean("kill_when_finished", false);
         
         entity.add(component);
     }

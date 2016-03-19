@@ -9,27 +9,34 @@ import com.badlogic.gdx.utils.Array;
 
 import de.hochschuletrier.gdw.commons.gdx.ashley.SortedSubIteratingSystem;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
+import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.components.ForegroundParticleComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.LookDirection;
-import de.hochschuletrier.gdw.ws1516.game.components.ParticleComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 
-public class ParticleRenderSystem extends SortedSubIteratingSystem.SubSystem
+public class ForegroundParticleRenderSystem extends SortedSubIteratingSystem.SubSystem
 {
-    public ParticleRenderSystem()
+    public ForegroundParticleRenderSystem()
     {
-        super(Family.all(PositionComponent.class, ParticleComponent.class).get());
+        super(Family.all(PositionComponent.class, ForegroundParticleComponent.class).get());
     }
 
     @Override
     public void processEntity(Entity entity, float deltaTime)
     {
-        ParticleComponent particleComponent = ComponentMappers.foregroundParticle.get(entity);
+        ForegroundParticleComponent particleComponent = ComponentMappers.foregroundParticle.get(entity);
         MovementComponent movementComponent = ComponentMappers.movement.get(entity);
         PositionComponent positionComponent = ComponentMappers.position.get(entity);
 
+        boolean isDestroyed = destroyIfFinished(entity, particleComponent);
+        if(isDestroyed)
+        {
+            return;
+        }
+        
         if (movementComponent != null) {
             boolean flip = ((movementComponent.lookDirection) == (MovementComponent.LookDirection.LEFT));
             if (flip != particleComponent.isFlippedHorizontal)
@@ -58,7 +65,17 @@ public class ParticleRenderSystem extends SortedSubIteratingSystem.SubSystem
         particleComponent.effect.draw(DrawUtil.batch);
     }
 
-    private void reduceEmissionIfIdle(ParticleComponent particleComponent, ParticleEmitter emitter, boolean isMoving, int emitterIndex)
+    private boolean destroyIfFinished(Entity entity, ForegroundParticleComponent particleComponent) {
+        if(particleComponent.killWhenFinished && particleComponent.effect.isComplete())
+        {
+            DeathEvent.emit(entity);
+            return true;
+        }
+
+        return false;
+    }
+
+    private void reduceEmissionIfIdle(ForegroundParticleComponent particleComponent, ParticleEmitter emitter, boolean isMoving, int emitterIndex)
     {
         float highMax = emitter.getEmission().getHighMax();
         if(isMoving && highMax < particleComponent.startEmissionHighMax[emitterIndex])
@@ -75,7 +92,7 @@ public class ParticleRenderSystem extends SortedSubIteratingSystem.SubSystem
         }
     }
 
-    private void flipHorizontal(ParticleComponent particleComponent)
+    private void flipHorizontal(ForegroundParticleComponent particleComponent)
     {
         Array<ParticleEmitter> emitters = particleComponent.effect.getEmitters();        
         for (int i = 0; i < emitters.size; i++) {                          

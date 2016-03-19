@@ -9,12 +9,13 @@ import com.badlogic.gdx.utils.Array;
 
 import de.hochschuletrier.gdw.commons.gdx.ashley.SortedSubIteratingSystem;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
+import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.BackgroundParticleComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.LookDirection;
+import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 
 public class BackgroundParticleRenderSystem extends SortedSubIteratingSystem.SubSystem 
 {
@@ -29,6 +30,16 @@ public class BackgroundParticleRenderSystem extends SortedSubIteratingSystem.Sub
         BackgroundParticleComponent particleComponent = ComponentMappers.backgroundParticle.get(entity);
         MovementComponent movementComponent = ComponentMappers.movement.get(entity);
         PositionComponent positionComponent = ComponentMappers.position.get(entity);
+
+        if(particleComponent.killWhenFinished){
+            Math.sin(0);
+        }
+        
+        boolean isDestroyed = destroyIfFinished(entity, particleComponent);
+        if(isDestroyed)
+        {
+            return;
+        }
         
         if (movementComponent != null) {
             boolean flip = ((movementComponent.lookDirection) == (MovementComponent.LookDirection.LEFT));
@@ -56,6 +67,16 @@ public class BackgroundParticleRenderSystem extends SortedSubIteratingSystem.Sub
         
         particleComponent.effect.setPosition(positionComponent.x, positionComponent.y);
         particleComponent.effect.draw(DrawUtil.batch);
+    }
+
+    private boolean destroyIfFinished(Entity entity, BackgroundParticleComponent particleComponent) {
+        if(particleComponent.killWhenFinished && particleComponent.effect.isComplete())
+        {
+            DeathEvent.emit(entity);
+            return true;
+        }
+
+        return false;
     }
 
     private void reduceEmissionIfIdle(BackgroundParticleComponent particleComponent, ParticleEmitter emitter, boolean isMoving, int emitterIndex)
