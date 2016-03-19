@@ -95,18 +95,6 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
         
     }
 
-    
-
-    /**
-     * von 0 bis 1 (nicht von 1 bis 2)
-     * @param volume
-     *      neue Lautstärke
-     */
-    public static void setGlobalVolume(float volume)
-    {
-        SoundEmitter.setGlobalVolume(volume);
-    }
-    
     @Override
     public void update(float deltaTime) {
         camera = CameraSystem.getCameraPosition();
