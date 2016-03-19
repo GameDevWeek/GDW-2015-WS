@@ -21,6 +21,7 @@ import de.hochschuletrier.gdw.ws1516.menu.MainMenuPage.Type;
 import de.hochschuletrier.gdw.ws1516.states.GameplayState;
 import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
 import de.hochschuletrier.gdw.commons.gdx.menu.widgets.DecoImage;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
@@ -37,9 +38,7 @@ public class LevelSelectionPage extends MenuPage {
     
     public LevelSelectionPage(Skin skin, MenuManager menuManager) {
         super(skin, "menu_bg");
-        int xOffset=310;
-        int xStep=120;
-        int i = 0;
+       
         Main.getInstance().screenCamera.bind();
         
         try {
@@ -76,18 +75,8 @@ public class LevelSelectionPage extends MenuPage {
         
         addCenteredButton(512, 200, 50, 50, "Spielen", this::startGame, "einhornMotivated");
         addLeftAlignedButton(55, 40, 100, 50, "Zurück", () -> menuManager.popPage(),"zurueck");
-        //addPageEntry(menuManager, i, i, name, null);
-        addLabeledTexture("heart3", "Leben",xOffset+xStep*(i++),550,-10,0,40,40);
-        addLabeledTexture("coin_hud", "1 Punkt", xOffset+xStep*(i++)-15,550,-15,0,40,40);
-        addLabeledTexture("drop", "3 Punkte", xOffset+xStep*(i++), 550,-15,0,62,40);
-        addLabeledTexture("gum_hud", "Kaugummi", xOffset+xStep*(i++), 550,-27,0,40,40);
-        addLabeledTexture("hunter", "Jäger",xOffset+xStep*(i++),450,20,0,64,64);
-        addLabeledTexture("paparazzi", "Paparazzi",xOffset+xStep*(i++),450,20,0,64,64);
-        addLabeledTexture("arrow_Keys", "Bewegen",xOffset+300,50,35,0,152,90);
-        addLabeledTexture("fly_Key", "Fliegen",xOffset+110,110,-5,0,44,40);
-        addLabeledTexture("dash_Key", "Dash",xOffset+40,110,0,0,44,40);
-        addLabeledTexture("spit_Key", "Spucken",xOffset-30,110,-15,0,44,40);
-        addLabeledTexture("jump_Key", "Springen",xOffset+110,50,30,0,129,40);
+        addPageEntry(menuManager, 55, 370, "Informationen", new HelpPage(skin, menuManager));  
+     
         
         super.addActor(level_preview_d);
         
