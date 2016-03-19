@@ -11,9 +11,11 @@ import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
 import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
-import de.hochschuletrier.gdw.ws1516.events.GameRestartEvent;
+import de.hochschuletrier.gdw.ws1516.game.Game;
+import de.hochschuletrier.gdw.ws1516.states.GameplayState;
 
 public class EndPage extends MenuPage {
+    private final String mapToLoad;
 
     public enum Type {
 
@@ -21,8 +23,9 @@ public class EndPage extends MenuPage {
         GAMEOVER
     }
     
-    public EndPage(Skin skin, MenuManager menuManager, String background, Type type, ScoreComponent scoreComp) {
+    public EndPage(Skin skin, MenuManager menuManager, String background, Type type, ScoreComponent scoreComp, String mapToLoad) {
         super(skin, background);
+        this.mapToLoad = mapToLoad;
 
         String message,messageStyle;
         Sound sound;
@@ -56,7 +59,7 @@ public class EndPage extends MenuPage {
 
         addCenteredButton(200, 100, 100, 50, "Ins Hauptmenü", this::stopGame, "menu");
         if(type == Type.GAMEOVER)
-            addCenteredButton(Main.WINDOW_WIDTH - 200, 100, 100, 50, "Nochmal versuchen", this::startGame, "einhornMotivated");
+            addCenteredButton(Main.WINDOW_WIDTH - 200, 100, 100, 50, "Nochmal versuchen", this::nextLevel, "einhornMotivated");
         else
             addCenteredButton(Main.WINDOW_WIDTH - 200, 100, 100, 50, "Nächstes Level", this::nextLevel, "einhornMotivated");
     }
@@ -70,11 +73,14 @@ public class EndPage extends MenuPage {
         addLabel(x + 220, y, "" + value, "default");
     }
 
-    private void startGame() {
-        GameRestartEvent.emit();
-    }
     private void nextLevel() {
-        // todo
+        if(mapToLoad == null) {
+            // todo
+        } else {
+            Game game = new Game();
+            game.init(assetManager, mapToLoad);
+            main.changeState(new GameplayState(assetManager, game, LevelSelectionPage.getMusicForLevel(mapToLoad, assetManager)));
+        }
     }
 
     private void stopGame() {

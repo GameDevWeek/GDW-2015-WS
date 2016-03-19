@@ -89,7 +89,7 @@ import de.hochschuletrier.gdw.ws1516.menu.MenuPageOptions;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.DummyEnemyExecutionSystem;
 import de.hochschuletrier.gdw.ws1516.states.GameplayState;
 
-public class Game extends InputAdapter implements GameRestartEvent.Listener {
+public class Game extends InputAdapter {
 
     private static final Logger logger = LoggerFactory.getLogger(Game.class);
     
@@ -98,7 +98,7 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
             HotkeyModifier.CTRL);
     private final Hotkey scoreCheating = new Hotkey(() -> ScoreBoardEvent.emit(ScoreType.BONBON, 1), Input.Keys.F2,
             HotkeyModifier.CTRL);
-    private final Hotkey winGameCheat = new Hotkey(() -> GameOverEvent.emit(true), Input.Keys.F6,
+    private final Hotkey winGameCheat = new Hotkey(this::cheatWin, Input.Keys.F6,
             HotkeyModifier.CTRL);
     private final Hotkey pauseGame = new Hotkey(()->PauseGameEvent.emit(true), Input.Keys.F5,
             HotkeyModifier.CTRL);
@@ -141,10 +141,10 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
             Game.class);
 
 
-    private final TriggerSystem triggerSystem = new TriggerSystem();
+    private final TriggerSystem triggerSystem = new TriggerSystem(this);
     private final EntitySystem respawnSystem = new RespawnSystem();
     private final SoundSystem soundSystem = new SoundSystem(null);
-    private final HitPointManagementSystem hitPointSystem = new HitPointManagementSystem();
+    private final HitPointManagementSystem hitPointSystem = new HitPointManagementSystem(this);
     private final DummyEnemyExecutionSystem dummyEnemySystem = new DummyEnemyExecutionSystem();    
     private final EnemyHandlingSystem enemyHandlingSystem = new EnemyHandlingSystem(nameSystem);
     private final EntitySystem enemyVisionSystem = new EnemyVisionSystem();
@@ -167,11 +167,9 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
             pauseGame.register();
             winGameCheat.register();
         }
-        GameRestartEvent.register(this);
     }
 
     public void dispose() {
-        GameRestartEvent.unregister(this);
         togglePhysixDebug.unregister();
         scoreCheating.unregister();
         pauseGame.unregister();
@@ -209,16 +207,6 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
         loadMap(mapFilename);
         mapRenderSystem.initialzeRenderer(map, "map_background", cameraSystem);
         playerStateSystem.initializeDeathBorders(map);
-    }
-
-
-    @Override
-    public void onGameRestartEvent() {      
-        Game game = new Game();
-        final Main main = Main.getInstance();
-        final AssetManagerX assetManager = main.getAssetManager();
-        game.init(assetManager, map.getFilename());
-        main.changeState(new GameplayState(assetManager, game, LevelSelectionPage.getMusicForLevel(map.getFilename(), assetManager)));
     }
 
     /**
@@ -315,6 +303,10 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
         PAUSE_ENGINE = !PAUSE_ENGINE;
     }
     
+    public void cheatWin() {
+        GameOverEvent.emit(true, getNextMapFilename());
+    }
+    
     public void update(float delta) {
         cameraSystem.bindCamera();   
         if ( !PAUSE_ENGINE )
@@ -369,5 +361,13 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
 
     public InputProcessor getInputProcessor() {
         return keyBoardInputSystem;
+    }
+
+    public String getMapFilename() {
+        return map.getFilename();
+    }
+
+    public String getNextMapFilename() {
+        return map.getProperty("next_map", null);
     }
 }
