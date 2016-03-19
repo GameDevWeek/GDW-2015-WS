@@ -74,6 +74,7 @@ import de.hochschuletrier.gdw.ws1516.game.systems.RenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RespawnSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.ScoreSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.SoundSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.SplatterSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.TriggerSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePlatformPositionSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
@@ -128,6 +129,7 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
     
     private final MapRenderSystem mapRenderSystem = new MapRenderSystem(GameConstants.PRIORITY_MAP_RENDERING);
     
+    private final SplatterSystem splatterSystem = new SplatterSystem(GameConstants.PRIORITY_SPLATTER);
     private final EffectsRenderSystem effectsRenderSystem = new EffectsRenderSystem(GameConstants.PRIORITY_EFFECTS_RENDERING);
 
     private final EntityFactoryParam factoryParam = new EntityFactoryParam();
@@ -280,6 +282,7 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
         engine.addSystem(enemyVisionSystem );
         engine.addSystem(mapRenderSystem);
         engine.addSystem(effectsRenderSystem);
+        engine.addSystem(splatterSystem);
         engine.addSystem(scoreBoardSystem);
         engine.addSystem(bubblegumSpitSystem);
         engine.addSystem(bubbleGlueSystem);
