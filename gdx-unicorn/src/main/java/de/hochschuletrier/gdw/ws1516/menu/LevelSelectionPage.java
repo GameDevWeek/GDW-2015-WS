@@ -82,11 +82,11 @@ public class LevelSelectionPage extends MenuPage {
         addLabeledTexture("gum_hud", "Kaugummi", xOffset+xStep*(i++), 550,-27,0,40,40);
         addLabeledTexture("hunter", "Jäger",xOffset+xStep*(i++),450,20,0,64,64);
         addLabeledTexture("paparazzi", "Paparazzi",xOffset+xStep*(i++),450,20,0,64,64);
-        addLabeledTexture("arrow_Keys", "Bewegen",xOffset+350,50,35,0,152,90);
-        addLabeledTexture("dash_Key", "Paparazzi",xOffset,200,5,0,44,40);
-        addLabeledTexture("fly_Key", "Paparazzi",xOffset,300,5,0,44,40);
-        addLabeledTexture("spit_Key", "Paparazzi",xOffset,400,5,0,44,40);
-        addLabeledTexture("jump_Key", "Springen",xOffset+150,50,60,0,129,40);
+        addLabeledTexture("arrow_Keys", "Bewegen",xOffset+300,50,35,0,152,90);
+        addLabeledTexture("fly_Key", "Fliegen",xOffset+120,120,-5,0,44,40);
+        addLabeledTexture("dash_Key", "Dash",xOffset+40,120,0,0,44,40);
+        addLabeledTexture("spit_Key", "Spucken",xOffset-30,120,-15,0,44,40);
+        addLabeledTexture("jump_Key", "Springen",xOffset+110,50,30,0,129,40);
         
         super.addActor(level_preview_d);
         
