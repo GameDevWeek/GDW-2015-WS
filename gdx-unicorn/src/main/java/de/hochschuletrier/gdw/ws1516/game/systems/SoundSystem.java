@@ -30,13 +30,13 @@ import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
 import de.hochschuletrier.gdw.ws1516.events.BubblegumSpitSpawnEvent;
 import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
 import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
-
+import de.hochschuletrier.gdw.ws1516.events.ActivateSafePointEvent;
 /**
  * @author phili_000
  *
  */
 public class SoundSystem extends IteratingSystem
-        implements SoundEvent.Listener, DeathEvent.Listener, BubblegumSpitSpawnEvent.Listener,StartFlyEvent.Listener,EndFlyEvent.Listener {
+        implements SoundEvent.Listener, DeathEvent.Listener, BubblegumSpitSpawnEvent.Listener,StartFlyEvent.Listener,EndFlyEvent.Listener,ActivateSafePointEvent.Listener {
 
     private static final Logger logger = LoggerFactory.getLogger(GameLogicTest.class);
     private Vector2 camera;
@@ -57,6 +57,7 @@ public class SoundSystem extends IteratingSystem
         StartFlyEvent.register(this);
         EndFlyEvent.register(this);
         BubblegumSpitSpawnEvent.register(this);
+        ActivateSafePointEvent.register(this);
         this.engine = engine;
     }
 
@@ -67,6 +68,7 @@ public class SoundSystem extends IteratingSystem
         DeathEvent.unregister(this);
         StartFlyEvent.unregister(this);
         EndFlyEvent.unregister(this);
+        ActivateSafePointEvent.unregister(this);
         BubblegumSpitSpawnEvent.unregister(this);
         this.engine = null;
     };
@@ -233,5 +235,10 @@ public class SoundSystem extends IteratingSystem
     @Override
     public void onStartFlyEvent(Entity entity, float time) {
         SoundEvent.emit("aufblasen", entity);
+    }
+
+    @Override
+    public void onActivateCheckPointEvent(Entity unicorn, Entity safePoint) {
+        SoundEvent.emit("einhornMotivated", unicorn);
     }
 }

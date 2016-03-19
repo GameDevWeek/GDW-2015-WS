@@ -37,8 +37,8 @@ public class LevelSelectionPage extends MenuPage {
     
     public LevelSelectionPage(Skin skin, MenuManager menuManager) {
         super(skin, "menu_bg");
-        int xOffset=20;
-        int xStep=125;
+        int xOffset=310;
+        int xStep=120;
         int i = 0;
         Main.getInstance().screenCamera.bind();
         
@@ -69,17 +69,24 @@ public class LevelSelectionPage extends MenuPage {
         }
       
         level_preview_d.setTexture(level_previews[level_preview_index]);
-        level_preview_d.setPosition(312, 280);
+        level_preview_d.setPosition(312, 240);
                       
         createImageButton(buttonBack_texture, 310-20-buttonBack_texture.getWidth(), 260, 50, 50, this::previousLevel, "buttonSound", true, true);
         createImageButton(buttonNext_texture, 310+level_preview_texture.getWidth()+20, 260, 50, 50, this::nextLevel, "buttonSound", true, true);
         
         addCenteredButton(512, 200, 50, 50, "Spielen", this::startGame, "einhornMotivated");
         addLeftAlignedButton(55, 40, 100, 50, "Zurück", () -> menuManager.popPage(),"zurueck");
-//        addLabeledTexture("heart3", "Leben",xOffset+xStep*(i++),550,0,40,40);
-//        addLabeledTexture("coin_hud", "1 Punkte", xOffset+xStep*(i++)-15,550,0,40,40);
-//        addLabeledTexture("drop", "3 Punkte", xOffset+xStep*(i++), 550,0,40,40);
-//        addLabeledTexture("gum_hud", "Kaugummi", xOffset+xStep*(i++), 550,0,40,40);
+        addLabeledTexture("heart3", "Leben",xOffset+xStep*(i++),550,-10,0,40,40);
+        addLabeledTexture("coin_hud", "1 Punkt", xOffset+xStep*(i++)-15,550,-15,0,40,40);
+        addLabeledTexture("drop", "3 Punkte", xOffset+xStep*(i++), 550,-15,0,62,40);
+        addLabeledTexture("gum_hud", "Kaugummi", xOffset+xStep*(i++), 550,-27,0,40,40);
+        addLabeledTexture("hunter", "Jäger",xOffset+xStep*(i++),450,20,0,64,64);
+        addLabeledTexture("paparazzi", "Paparazzi",xOffset+xStep*(i++),450,20,0,64,64);
+        addLabeledTexture("arrow_Keys", "Bewegen",xOffset+350,50,35,0,152,90);
+        addLabeledTexture("dash_Key", "Paparazzi",xOffset,200,5,0,44,40);
+        addLabeledTexture("fly_Key", "Paparazzi",xOffset,300,5,0,44,40);
+        addLabeledTexture("spit_Key", "Paparazzi",xOffset,400,5,0,44,40);
+        addLabeledTexture("jump_Key", "Springen",xOffset+150,50,60,0,129,40);
         
         super.addActor(level_preview_d);
         
@@ -116,8 +123,7 @@ public class LevelSelectionPage extends MenuPage {
                 main.changeState(new GameplayState(assetManager, game));
             } else {
                 assetManager.getSound("death").play();
-            }
-            
+            }  
         }
     }
     
