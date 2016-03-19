@@ -97,7 +97,7 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         }
         
         if(playerComp.hornAttackCooldown==0) {
-            hornAttackDummy = assetManager.getTexture("heart3");
+            hornAttackDummy = assetManager.getTexture("dash_Cooldown");
         }
         else {
             hornAttackDummy = assetManager.getTexture("dash_Cooldown");
