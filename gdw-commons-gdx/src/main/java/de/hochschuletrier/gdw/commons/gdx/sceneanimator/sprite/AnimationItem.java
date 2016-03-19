@@ -26,7 +26,6 @@ public class AnimationItem extends Item {
         this.angleAdd = angle;
         this.scale = scale;
         this.startTime = startTime;
-        this.getter = getter;
         this.flipX = flipX;
         this.flipY = flipY;
         this.animationTime = 0;
