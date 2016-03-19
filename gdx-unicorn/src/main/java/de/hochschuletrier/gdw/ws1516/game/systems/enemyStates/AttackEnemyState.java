@@ -40,7 +40,6 @@ public class AttackEnemyState extends EnemyBaseState {
                 SoundEvent.emit("huntergun", entity);
                 soundPlayed = true;
             }
-            logger.info("{},{}",timePassed,behaviour.cooldown);
             if (timePassed<behaviour.cooldown){
                 if (timePassed>behaviour.cooldown-GameConstants.TIME_TO_WAIT_TO_SHOOT){
                     if (!shootAlready){
