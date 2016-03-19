@@ -124,11 +124,9 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
         engine.removeEntityListener(this);
     }
 
-
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         EnemyBehaviourComponent behaviour = ComponentMappers.enemyBehaviour.get(entity);
-        EnemyTypeComponent type = ComponentMappers.enemyType.get(entity);
         EnemyTypeComponent enemy = ComponentMappers.enemyType.get(entity);
         PathComponent path = ComponentMappers.path.get(entity);
         
@@ -149,9 +147,6 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
         
     }
 
-
-
-
     @Override
     public void entityAdded(Entity entity) {
         if ( ComponentMappers.player.has(entity) )
@@ -159,8 +154,6 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
             unicorn = entity;
         }
     }
-
-
 
     @Override
     public void entityRemoved(Entity entity) {
@@ -171,7 +164,4 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
         
     }
     
-
-    
-
 }
