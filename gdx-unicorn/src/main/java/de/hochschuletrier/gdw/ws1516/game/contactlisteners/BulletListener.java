@@ -10,6 +10,7 @@ import de.hochschuletrier.gdw.commons.gdx.physix.PhysixContactAdapter;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.BulletComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.CollectableComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.systems.BubblegumSpitSystem;
 
@@ -39,7 +40,9 @@ public class BulletListener extends PhysixContactAdapter {
         }
         
         //OnHit
-        bulletComponent.onHit.accept(myEntity);
+        if (otherComponent==null || 
+                ComponentMappers.collectable.get(otherComponent.getEntity())==null)
+            bulletComponent.onHit.accept(myEntity);
         
     }
     

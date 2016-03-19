@@ -80,6 +80,7 @@ public class LevelSelectionPage extends MenuPage {
 //        addLabeledTexture("coin_hud", "1 Punkte", xOffset+xStep*(i++)-15,550,0,40,40);
 //        addLabeledTexture("drop", "3 Punkte", xOffset+xStep*(i++), 550,0,40,40);
 //        addLabeledTexture("gum_hud", "Kaugummi", xOffset+xStep*(i++), 550,0,40,40);
+        
         super.addActor(level_preview_d);
         
         
@@ -87,7 +88,8 @@ public class LevelSelectionPage extends MenuPage {
     }
     
     private void setLevel(int index) {
-        level_preview_d.setTexture(assetManager.getTexture(levelNames.get(index)));
+     //   level_preview_d.setTexture(assetManager.getTexture(levelNames.get(index)));
+        level_preview_d.setTexture(level_previews[level_preview_index]);
     }
     private void nextLevel() {
         level_preview_index++;
