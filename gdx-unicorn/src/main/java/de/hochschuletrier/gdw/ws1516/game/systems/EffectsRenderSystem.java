@@ -44,9 +44,11 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
     private Vector2 paparazziEffectSeed;
     
 
+    // hotkey 1: about 1.0 intensity
     private final Hotkey paparazzi1Hotkey = new Hotkey(()->PaparazziShootEvent.emit((float)Math.random()), Input.Keys.F9,
             HotkeyModifier.CTRL);
-    private final Hotkey paparazzi0Hotkey = new Hotkey(()->PaparazziShootEvent.emit((float)Math.random()*600), Input.Keys.F8,
+    // hotkey 0: about 0.2 intensity
+    private final Hotkey paparazzi0Hotkey = new Hotkey(()->PaparazziShootEvent.emit((float) (Math.random() + GameConstants.GLOBAL_VISION * GameConstants.UNICORN_SIZE)), Input.Keys.F8,
             HotkeyModifier.CTRL);
 
     @SuppressWarnings("unchecked")
@@ -106,7 +108,6 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
     
     private void startPaparazzi(float distance, float duration, Vector2 seed)
     {
-        
         paparazziEffectDuration = paparazziEffectRemainingDuration = duration;
         paparazziEffectSeed = seed;
 
@@ -172,7 +173,7 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
                 shader.setUniformf("u_passedEffectTime", paparazziEffectDuration - Math.max(paparazziEffectRemainingDuration, 0.0f));
                 
                 // color set as RGBA [0.0, 1.0]. alpha is used as maximum result alpha for overlay.
-                float[] paparazziColor = new float[]{ 1.0f, 1.0f, 1.0f, 1.0f };
+                float[] paparazziColor = new float[]{ 1.0f, 1.0f, 1.0f, 0.9f };
                 shader.setUniform4fv("u_paparazziColor", paparazziColor, 0, 4);
                 float[] paparazziSeed = new float[]{ paparazziEffectSeed.x, paparazziEffectSeed.y };
                 shader.setUniform2fv("u_paparazziSeed", paparazziSeed, 0, 2);

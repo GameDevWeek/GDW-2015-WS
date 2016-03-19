@@ -15,9 +15,7 @@ precision mediump float;
 // threshold in px
 #define ANTI_ALIASING_THRESHOLD 2.0
 // random chosen numbers
-#define SEED_STEP_A 13.0
-#define SEED_STEP_B 89.0
-#define SEED_STEP_C 7.0
+#define SEED_STEP 13.0
 
 
 varying LOWP vec4    v_color;
@@ -47,16 +45,13 @@ varying float   v_modeIntroProgress;
 varying float   v_modeStandardProgress;
 varying float   v_modeOutroProgress;
 
-
 vec3    createCircle(vec2 seed);
 float   getCircleAlpha(vec3 circle);
 float   getCircleFade(float alphaIn);
 
-
 // helper functions
 float   getDistance(vec2 circleCenter);
-float   rand(vec2 seed);
-vec2    rand2(vec2 seed);
+vec3    rand3(vec2 seed); // very simple random function
 vec2    convertNormalizedToScreen(vec2 normalized);
 
 // prevent LibGDX from throwing "uniform not used" exception
@@ -70,7 +65,7 @@ void main()
     float fragAlpha;
     for (int i = 0; i < v_circleAmount; ++i)
     {
-        vec3 currentCircle = createCircle(u_paparazziSeed + i * SEED_STEP_A);
+        vec3 currentCircle = createCircle(u_paparazziSeed + i * SEED_STEP);
         if (getDistance(currentCircle.xy) <= currentCircle.z)
         {
             fragAlpha += (u_paparazziColor.a - 0.2) * getCircleAlpha(currentCircle);
@@ -85,13 +80,14 @@ void main()
 // returns deterministic circle property
 vec3 createCircle(vec2 seed)
 {
+    vec3 randomNumbers = rand3(seed);
     // create circle coords
-    vec2 circleCoords = convertNormalizedToScreen(rand2(seed));
+    vec2 circleCoords = convertNormalizedToScreen(randomNumbers.xy);
     // create radius
-    float radiusInBounds = rand(seed + SEED_STEP_B) * (v_radiusRange.y - v_radiusRange.x) + v_radiusRange.x;
+    float radiusInBounds = randomNumbers.z * (v_radiusRange.y - v_radiusRange.x) + v_radiusRange.x;
     radiusInBounds *= v_radiusFactor;
     // return circle vec3
-    return vec3(circleCoords.x, circleCoords.y, radiusInBounds);
+    return vec3(circleCoords, radiusInBounds);
 }
 
 
@@ -166,17 +162,15 @@ float getDistance(vec2 circleCenter)
     return length(gl_FragCoord.xy - circleCenter);
 }
 
-
-// returns [0.0, 1.0]
-float rand(vec2 seed)
+// returns vec3([0.0, 1.0], [0.0, 1.0], [0.0, 1.0])
+vec3 rand3(vec2 seed)
 {
-    return abs(fract(sin(dot(seed.xy, vec2(12.9898,78.233))) * 43758.5453));
-}
-
-// returns vec2([0.0, 1.0], [0.0, 1.0])
-vec2 rand2(vec2 seed)
-{
-    return vec2(rand(seed), rand(seed + SEED_STEP_C));
+    float random = abs(sin(dot(seed.xy, vec2(12.9898,78.233))) * 437.5453);
+    return vec3(
+        fract(random),
+        fract(random * seed.x * M_PI),
+        fract(random * seed.y * M_2PI)
+        );
 }
 
 // converts from ([0.0, 1.0], [0.0, 1.0]) to (Width, Height)
