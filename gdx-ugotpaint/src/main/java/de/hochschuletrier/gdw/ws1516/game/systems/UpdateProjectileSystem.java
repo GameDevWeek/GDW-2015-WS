@@ -5,15 +5,17 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
+import de.hochschuletrier.gdw.ws1516.events.EndgameEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ProjectileComponent;
 
-public class UpdateProjectileSystem extends IteratingSystem {
+public class UpdateProjectileSystem extends IteratingSystem implements EndgameEvent.Listener {
 
     private final Vector2 vel = new Vector2();
+    private float endgameSpeedFactor = 1;
 
     private Engine engine;
 
@@ -29,6 +31,13 @@ public class UpdateProjectileSystem extends IteratingSystem {
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
         this.engine = engine;
+        EndgameEvent.register(this);
+    }
+
+    @Override
+    public void removedFromEngine(Engine engine) {
+        super.removedFromEngine(engine);
+        EndgameEvent.unregister(this);
     }
 
     @Override
@@ -36,7 +45,7 @@ public class UpdateProjectileSystem extends IteratingSystem {
         ProjectileComponent projectile = ComponentMappers.projectile.get(entity);
         PositionComponent position = ComponentMappers.position.get(entity);
         AnimationComponent anim = ComponentMappers.animation.get(entity);
-        vel.set(projectile.velocity).scl(deltaTime);
+        vel.set(projectile.velocity).scl(deltaTime * endgameSpeedFactor);
         position.pos.add(vel);
 
         // remove entity from engine if it is completely faded out
@@ -52,4 +61,11 @@ public class UpdateProjectileSystem extends IteratingSystem {
 
     }
 
+    @Override
+    /**
+     * Speeds up the players by given amount during the endgame.
+     */
+    public void onEndgameEvent() {
+        endgameSpeedFactor = 2.5f;
+    }
 }

@@ -1,11 +1,16 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
 import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IntervalSystem;
+import com.badlogic.ashley.utils.ImmutableArray;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.events.EndgameEvent;
 import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
 import de.hochschuletrier.gdw.ws1516.events.SetCountdownEvent;
+import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.components.PickupComponent;
 import de.hochschuletrier.gdw.ws1516.game.utils.Canvas;
 
 public class EndgameSystem extends IntervalSystem implements EndgameEvent.Listener, GameOverEvent.Listener {
@@ -13,6 +18,7 @@ public class EndgameSystem extends IntervalSystem implements EndgameEvent.Listen
     private final Canvas canvas = Main.getCanvas();
 
     private PickupSystem pickupSystem;
+    private ImmutableArray<Entity> pickups;
 
     private boolean endGame;
 
@@ -24,6 +30,7 @@ public class EndgameSystem extends IntervalSystem implements EndgameEvent.Listen
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
         this.pickupSystem = engine.getSystem(PickupSystem.class);
+        this.pickups = engine.getEntitiesFor(Family.all(PickupComponent.class).get());
         EndgameEvent.register(this);
         GameOverEvent.register(this);
     }
@@ -44,7 +51,7 @@ public class EndgameSystem extends IntervalSystem implements EndgameEvent.Listen
         }
 
         // on interval spawn a pickup during endgame
-        if(endGame)
+        if(endGame && pickups.size() < GameConstants.MAX_ENDGAME_PICKUPS)
             pickupSystem.createRandomPickup();
     }
 

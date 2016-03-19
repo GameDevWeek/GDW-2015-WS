@@ -32,6 +32,7 @@ public class GameConstants {
     public static final int WINDOW_HEIGHT = 600;
     public static final int WINDOW_WIDTH = 1024;
     
+    public static final int MAX_ENDGAME_PICKUPS = 40;
     public static final int PAINT_RADIUS = 10;
     public static final int PAINT_RADIUS_BIG = 3*PAINT_RADIUS;
     public static final int BORDER_SIZE = 60;
@@ -53,8 +54,8 @@ public class GameConstants {
     );
     public static final float MIN_RESPAWN_DISTANCE = 100;
     public static final int DEFAULT_SEGMENTS = 3;
-    public static final int COUNTDOWN_TIME = 65; // 3 minutes
-    public static final int ENDGAME_DURATION = 60;
+    public static final int COUNTDOWN_TIME = 60 * 2 + 5; // 3 minutes
+    public static final int ENDGAME_DURATION = 60 * 2;
     public static final int RESPAWN_DELAY = 3000; // 3 seconds
     public static final float END_EXPLOSION_INTERVAL = 0.1F;
 }
