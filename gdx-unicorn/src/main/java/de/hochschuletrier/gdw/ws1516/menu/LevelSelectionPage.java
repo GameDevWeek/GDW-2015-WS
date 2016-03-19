@@ -1,6 +1,7 @@
 package de.hochschuletrier.gdw.ws1516.menu;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -110,7 +111,7 @@ public class LevelSelectionPage extends MenuPage {
             if(Gdx.files.internal(filename).exists()) {
                 Game game = new Game();
                 game.init(assetManager, filename);
-                main.changeState(new GameplayState(assetManager, game));
+                main.changeState(new GameplayState(assetManager, game, LevelSelectionPage.getMusicForLevel(filename, assetManager)));
             } else {
                 assetManager.getSound("death").play();
             }  
@@ -125,5 +126,18 @@ public class LevelSelectionPage extends MenuPage {
     
     public int getIndexOfSelectedLevel() {
         return level_preview_index;
+    }
+    
+    public static Music getMusicForLevel(String levelName, AssetManagerX assetManager) {
+        switch (levelName) {
+        case "data/maps/lvl1.tmx":
+            return assetManager.getMusic("gameplaytheme");
+        case "data/maps/lvl2.tmx":
+            return assetManager.getMusic("gameplaytheme_level2");
+        case "data/maps/lvl4.tmx":
+            return assetManager.getMusic("gameplaytheme_level4");
+        default:
+            return assetManager.getMusic("gameplaytheme");
+        }
     }
 }

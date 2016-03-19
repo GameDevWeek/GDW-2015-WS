@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import de.hochschuletrier.gdw.commons.gdx.sceneanimator.Animation;
 import de.hochschuletrier.gdw.commons.gdx.sceneanimator.Item;
+import de.hochschuletrier.gdw.commons.gdx.sceneanimator.SceneAnimator;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,8 +24,8 @@ public class TextItem extends Item {
     public ArrayList<TextChar> chars;
     private TextAnimation anim;
 
-    public TextItem(String group, float startTime, float angle, float opacity, String text, TextStyle style) {
-        super(group, startTime, angle, false, opacity);
+    public TextItem(String group, float startTime, float angle, float opacity, String text, TextStyle style, SceneAnimator.Getter getter) {
+        super(group, startTime, angle, false, opacity, getter);
 
         originalText = text;
         shownText = text;

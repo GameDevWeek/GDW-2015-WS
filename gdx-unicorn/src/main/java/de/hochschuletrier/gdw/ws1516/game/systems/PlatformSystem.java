@@ -21,6 +21,7 @@ public class PlatformSystem extends IteratingSystem{
     
     protected float timePassed;
     private boolean increasing = true;
+    private boolean moveDirX = false;
     
     
     
@@ -38,11 +39,10 @@ public class PlatformSystem extends IteratingSystem{
         
         if (pathComponent.points.size()>0){
             
-            /// index für den Punkt raszufinden der von 0 - max -  0 pendelt
             int pathIndex;
             int maxIndex = pathComponent.points.size()*2 -2;
             
-            if (platformComponent.pathIndex <pathComponent.points.size())
+            if (platformComponent.pathIndex < pathComponent.points.size())
             {
                 pathIndex = platformComponent.pathIndex;
             }else
@@ -54,28 +54,38 @@ public class PlatformSystem extends IteratingSystem{
             Vector2 nextTarget = pathComponent.points.get(pathIndex);
             
             
-            if (nextTarget.x < position.x +10) {
+            if(Math.abs(pathComponent.points.get(0).x - pathComponent.points.get(1).x) < 10)
+            {
+                moveDirX = false;
+            }
+            if(Math.abs(pathComponent.points.get(0).y - pathComponent.points.get(1).y) < 10)
+            {
+                moveDirX = true;
+            }
+            
+            
+            if (moveDirX && nextTarget.x < position.x +10) {
                 bodyComponent.setLinearVelocityX(-1.0f * GameConstants.PLATFORM_SPEED);
             } 
-            else if (nextTarget.x > position.x -10) {
+            else if (moveDirX && nextTarget.x > position.x -10) {
                 bodyComponent.setLinearVelocityX(1.0f * GameConstants.PLATFORM_SPEED);
             }
             
-            if (nextTarget.y < position.y +10) {
+            if (!moveDirX && nextTarget.y < position.y +10) {
                 bodyComponent.setLinearVelocityY(-1.0f * GameConstants.PLATFORM_SPEED);
             } 
-            else if (nextTarget.y > position.y -10) {
+            else if (!moveDirX && nextTarget.y > position.y -10) {
                 bodyComponent.setLinearVelocityY(1.0f * GameConstants.PLATFORM_SPEED);
             }
             
-            if(Math.abs(nextTarget.x-position.x) < 5)
-            {
-                bodyComponent.setLinearVelocityX(0);
-            }
-            if(Math.abs(nextTarget.y-position.y) < 5)
-            {
-                bodyComponent.setLinearVelocityY(0);
-            }
+//            if(moveDirX && Math.abs(nextTarget.x-position.x) < 5)
+//            {
+//                bodyComponent.setLinearVelocityX(0);
+//            }
+//            if(!moveDirX && Math.abs(nextTarget.y-position.y) < 5)
+//            {
+//                bodyComponent.setLinearVelocityY(0);
+//            }
             
             //if ( nextTarget.dst2(position.x,position.y) < 100 )
             if (Math.abs(nextTarget.x - position.x)< 12 & Math.abs(nextTarget.y - position.y)<12)

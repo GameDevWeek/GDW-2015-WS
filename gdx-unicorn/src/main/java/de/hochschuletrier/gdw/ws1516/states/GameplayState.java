@@ -63,11 +63,10 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
     
     
 
-    public GameplayState(AssetManagerX assetManager, Game game) {
+    public GameplayState(AssetManagerX assetManager, Game game, Music music) {
         this.game = game;
         
-        
-        music = assetManager.getMusic("gameplaytheme");
+        this.music = music;
         rainbowMusic = assetManager.getMusic("rainbowtheme");
 
         Skin skin = ((MainMenuState)Main.getInstance().getPersistentState(MainMenuState.class)).getSkin();
