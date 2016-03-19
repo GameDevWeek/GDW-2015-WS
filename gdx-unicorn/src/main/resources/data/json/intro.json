@@ -11,13 +11,6 @@
                 {"x":600, "y":184, "speed":60}
             ]
         },
-        "bg" : {
-            "type": "linear",
-            "destinations":[
-                {"x":511, "y":300, "speed":1},
-                {"x":512, "y":300, "speed":0.0001}
-            ]
-        },
         "trex_stay" : {
             "type": "linear",
             "destinations":[
@@ -148,16 +141,6 @@
                 {"type":"animation", "path":"uc2","resource":"pink_unicorn_walking"}
             ],
             "animations" : [
-            ]
-        },
-        "bgQ":{
-            "layer" :0,
-            "time" : 0,
-            "items" : [
-                {"type":"texture","path":"bg","resource":"intro_bg"}
-            ],
-            "animations" : [
-                {"time":0, "animation":"pause_path", "animationTime":-1, "group":"*"}
             ]
         },
         "story1Q" :{

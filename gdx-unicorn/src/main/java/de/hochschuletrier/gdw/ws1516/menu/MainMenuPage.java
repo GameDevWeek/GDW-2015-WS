@@ -1,14 +1,8 @@
 package de.hochschuletrier.gdw.ws1516.menu;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-import de.hochschuletrier.gdw.commons.gdx.input.InputForwarder;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
-import de.hochschuletrier.gdw.commons.gdx.state.transition.SplitHorizontalTransition;
-import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
-import de.hochschuletrier.gdw.ws1516.game.Game;
-import de.hochschuletrier.gdw.ws1516.states.GameplayState;
 import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
 
 public class MainMenuPage extends MenuPage {
@@ -31,7 +25,7 @@ public class MainMenuPage extends MenuPage {
         
         if(type==Type.MENU) {
             
-          addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Spiel starten", new LevelSelectionPage(skin, menuManager));  
+          addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Spiel starten", new MenuPageIntro(skin, menuManager));  
         //addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 150, 50, "Start Game", this::startGame);
         }
         else if(type==Type.PAUSED) {
