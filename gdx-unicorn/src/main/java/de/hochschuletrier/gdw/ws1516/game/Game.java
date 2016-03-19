@@ -84,6 +84,7 @@ import de.hochschuletrier.gdw.ws1516.game.utils.EntityCreator;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.MapLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
+import de.hochschuletrier.gdw.ws1516.menu.LevelSelectionPage;
 import de.hochschuletrier.gdw.ws1516.menu.MenuPageOptions;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.DummyEnemyExecutionSystem;
 import de.hochschuletrier.gdw.ws1516.states.GameplayState;
@@ -205,10 +206,9 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
         EntityCreator.setGame(this);
         EntityCreator.setEntityFactory(entityFactory);
         
-        EntityCreator.createEntity("bubblegum_rainbow", 1250, 2911);
         loadMap(mapFilename);
         mapRenderSystem.initialzeRenderer(map, "map_background", cameraSystem);
-        
+        playerStateSystem.initializeDeathBorders(map);
     }
 
 
@@ -218,7 +218,7 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
         final Main main = Main.getInstance();
         final AssetManagerX assetManager = main.getAssetManager();
         game.init(assetManager, map.getFilename());
-        main.changeState(new GameplayState(assetManager, game));
+        main.changeState(new GameplayState(assetManager, game, LevelSelectionPage.getMusicForLevel(map.getFilename(), assetManager)));
     }
 
     /**

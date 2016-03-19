@@ -20,6 +20,7 @@
     "unicorn": "data/graphics/unicorn_s.png",
     "unicorn_mirror" : "data/graphics/unicorn_mirror.png",
     "trex" : "data/graphics/trex.png",
+    "mini_trex" : "data/graphics/mini_trex.png",
     "trex_mirror" : "data/graphics/trex_mirror.png",
     "cookie" : "data/graphics/cookie.png",
     "drop" : "data/graphics/drop.png",
@@ -62,7 +63,7 @@
     "data/maps/lvl4.tmx": "data/ui/menu/menu_level04.png",
     
     "lvl1_background": "data/graphics/background_lvl1_big.png",
-    "lvl2_background": "data/graphics/background_lvl1_big.png",
-    "lvl3_background": "data/graphics/background_lvl1_big.png",
+    "lvl2_background": "data/graphics/background_lvl2_big.png",
+    "lvl3_background": "data/graphics/background_lvl3_big.png",
     "lvl4_background": "data/graphics/background_lvl4_big.png"
 }

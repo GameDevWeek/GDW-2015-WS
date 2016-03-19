@@ -2,5 +2,7 @@
     "menu": "data/music/menu.ogg",
     "menutheme": "data/music/menutheme.ogg",
     "gameplaytheme": "data/music/MainMusik.ogg",
-    "rainbowtheme": "data/music/powerUp.ogg"
+    "rainbowtheme": "data/music/powerUp.ogg",
+    "gameplaytheme_level2": "data/music/Level2Musik.ogg",
+    "gameplaytheme_level4": "data/music/luftlevelTheme.ogg"
 }
