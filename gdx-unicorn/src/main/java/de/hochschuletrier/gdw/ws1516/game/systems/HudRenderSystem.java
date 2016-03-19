@@ -13,17 +13,21 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
+import de.hochschuletrier.gdw.commons.gdx.utils.CircularProgressRenderer;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.Game;
+import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent.State;
@@ -132,8 +136,8 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         float score_x = time_x;
         float score_y = time_y+45;
         
-        float hornAttackDummy_x = 20;
-        float hornAttackDummy_y = displayHeight-90;
+        float hornAttackDummy_x = 60;
+        float hornAttackDummy_y = displayHeight - 60;
         
         int minutes_int = (int) scoreComp.playedSeconds/60;
         String minutes_string = String.valueOf(minutes_int);
@@ -161,25 +165,18 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         font.draw(DrawUtil.batch, time, time_x, time_y);
         DrawUtil.draw(coin, coin_x, coin_y, 40, 40);
         font.draw(DrawUtil.batch,score, score_x, score_y);
-        DrawUtil.draw(hornAttackDummy, hornAttackDummy_x, hornAttackDummy_y, 92, 92);
+        //DrawUtil.draw(hornAttackDummy, hornAttackDummy_x, hornAttackDummy_y, 92, 92);
         DrawUtil.draw(clock, clock_x, clock_y, 40,40);
         
-        
+        CircularProgressRenderer dashCooldownRenderer = new CircularProgressRenderer(hornAttackDummy);
+        float cooldown;
         if (playerComp.hornAttackCooldown != 0.0f && playerComp.state != State.HORNATTACK) {
-            int cooldown = (int) playerComp.hornAttackCooldown + 1;
-            Color originalColor = font.getColor();
-            
-            if (cooldown >= 3) {
-                font.setColor(Color.RED);
-            } else if (cooldown == 2) {
-                font.setColor(Color.ORANGE);
-            } else {
-                font.setColor(Color.YELLOW);
-            }
-            
-            font.draw(DrawUtil.batch, String.valueOf(cooldown), hornAttackDummy_x + 120, hornAttackDummy_y + 32);
-            font.setColor(originalColor);
+            cooldown = -(playerComp.hornAttackCooldown / GameConstants.HORN_MODE_COOLDOWN);
+        } else {
+            cooldown = 1.0f;
         }
+        dashCooldownRenderer.draw(DrawUtil.batch, hornAttackDummy_x, hornAttackDummy_y, 92, 92, cooldown * 360.0f); 
+              
     }
 
     @Override

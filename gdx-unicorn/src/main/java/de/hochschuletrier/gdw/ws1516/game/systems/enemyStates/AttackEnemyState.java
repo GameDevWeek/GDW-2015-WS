@@ -26,6 +26,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 public class AttackEnemyState extends EnemyBaseState {
     private static final Logger logger = LoggerFactory.getLogger(AttackEnemyState.class);
     private boolean soundPlayed = false;
+    private boolean shootAlready=false;
 
     @Override
     public EnemyBaseState _compute(Entity entity, Entity player, float deltaTime) {
@@ -36,17 +37,25 @@ public class AttackEnemyState extends EnemyBaseState {
         behaviour.cooldown=behaviour.maxCooldown;
         if (type.type==EnemyType.HUNTER){
             if (!soundPlayed) {
-                EnemyActionEvent.emit(entity, Type.SHOOT, 0.0f);
                 SoundEvent.emit("huntergun", entity);
                 soundPlayed = true;
             }
+            logger.info("{},{}",timePassed,behaviour.cooldown);
             if (timePassed<behaviour.cooldown){
-                if (behaviour.canSeeUnicorn){
+                if (timePassed>behaviour.cooldown-GameConstants.TIME_TO_WAIT_TO_SHOOT){
+                    if (!shootAlready){
+                        shootAlready=true;
+                        EnemyActionEvent.emit(entity, Type.SHOOT, 0.0f);
+                        logger.info("attack");
+                    }
                     return this;
                 }else{
-                    SoundEvent.stopSound("huntergun", entity);
-                    EnemyActionEvent.emit(entity, Type.SHOOT_ABORT, 0.0f);
-                    return new FollowPathEnemyState();
+                    if (behaviour.canSeeUnicorn){
+                        return this;
+                    }else{
+                        SoundEvent.stopSound("huntergun", entity);
+                        return new FollowPathEnemyState();
+                    }
                 }
             }
             int direction = GameConstants.HUNTER_BULLET_OFFSET;

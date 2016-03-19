@@ -10,6 +10,8 @@ public class TextureComponent extends Component implements Pool.Poolable
     public boolean flipHorizontal;
     public boolean flipVertical;
     
+    public float alpha;
+    
     public float originX;
     public float originY;
     

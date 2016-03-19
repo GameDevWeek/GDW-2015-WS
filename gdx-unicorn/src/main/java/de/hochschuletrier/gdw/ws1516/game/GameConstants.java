@@ -66,6 +66,7 @@ public class GameConstants {
     public static final float SPIT_COOLDOWN = 1.0f;
     public static final float SPIT_BLOCKING_ORIGINX = 32.0f;
     public static final float SPIT_BLOCKING_ORIGINY = 16.0f;
+    public static final float SPIT_BLOCKING_ALPHA_START = 0.8f;
     
     public static float MUSIC_FADE_TIME = 2;
     
@@ -94,4 +95,7 @@ public class GameConstants {
     
     // Particle parameters
     public static final float IDLE_PARTICLE_REDUCTION = 0.2f;
+    
+    // Animation parameters
+    public static final float TIME_TO_WAIT_TO_SHOOT = 1.0f;
 }

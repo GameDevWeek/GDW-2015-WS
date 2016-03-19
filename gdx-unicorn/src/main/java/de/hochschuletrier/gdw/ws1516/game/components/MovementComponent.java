@@ -33,7 +33,8 @@ public class MovementComponent extends Component implements Pool.Poolable{
         FALLING,
         JUMPING,
         LANDING,
-        GLUED
+        GLUED,
+        SHOOTING
     }
     
     public static enum LookDirection {
