@@ -21,9 +21,13 @@ public class TextureComponentFactory extends ComponentFactory<EntityFactoryParam
     }
     
     protected void fillTextureComponent(TextureComponent component, SafeProperties properties) {
+        
         component.texture = assetManager.getTexture(properties.getString("texture"));
         component.flipHorizontal = properties.getBoolean("flipHorizontal", false);
-        component.flipVertical = properties.getBoolean("flipVertical", false);
+        component.flipVertical = properties.getBoolean("flipVertical", false); 
         component.alpha = properties.getFloat("alpha", 1.0f);
+        component.originX = properties.getFloat("originX", 0.0f);
+        component.originY = properties.getFloat("originY", 0.0f);   
+        
     }
 }
