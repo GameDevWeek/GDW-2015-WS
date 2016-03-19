@@ -51,7 +51,7 @@ public class GameplayState extends BaseGameState {
 
         menuManager.addLayer(new DecoImage(assetManager.getTexture("menu_fg")));
         menuManager.pushPage(menuPageRoot);
-//        menuManager.getStage().setDebugAll(true);
+//      menuManager.getStage().setDebugAll(true);
 
         Main.getInstance().addScreenListener(menuManager);
 
