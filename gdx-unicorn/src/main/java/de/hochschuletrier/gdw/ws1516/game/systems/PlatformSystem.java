@@ -59,14 +59,10 @@ public class PlatformSystem extends IteratingSystem{
             } 
             else if (nextTarget.x > position.x -10) {
                 bodyComponent.setLinearVelocityX(1.0f * GameConstants.PLATFORM_SPEED);
-                logger.debug("TargetX {}", nextTarget.x);
-                logger.debug("PositionX {}", position.x);
             }
             
             if (nextTarget.y < position.y +10) {
                 bodyComponent.setLinearVelocityY(-1.0f * GameConstants.PLATFORM_SPEED);
-                logger.debug("TargetY {}", nextTarget.y);
-                logger.debug("PositionY {}", position.x);
             } 
             else if (nextTarget.y > position.y -10) {
                 bodyComponent.setLinearVelocityY(1.0f * GameConstants.PLATFORM_SPEED);
