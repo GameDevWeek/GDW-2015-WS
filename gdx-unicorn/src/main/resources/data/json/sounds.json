@@ -15,5 +15,6 @@
     "paparazzidie":"data/sounds/Paparazzi.wav",
     "laufen":"data/sounds/laufen.wav",
     "spuckCharge":"data/sounds/spuckenCharge.wav",
-    "spucken":"data/sounds/spuckenAttack.wav"
+    "spucken":"data/sounds/spuckenAttack.wav",
+    "rainbow":"data/sounds/powerUp.ogg"
 }
