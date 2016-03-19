@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
+import de.hochschuletrier.gdw.ws1516.events.EndgameEvent;
 import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
@@ -12,12 +13,13 @@ import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 
-public class UpdatePlayerSystem extends IteratingSystem implements GameOverEvent.Listener {
+public class UpdatePlayerSystem extends IteratingSystem implements GameOverEvent.Listener, EndgameEvent.Listener {
 
     private final Vector2 lastDir = new Vector2();
     private final Vector2 lastPoint = new Vector2();
     private final Vector2 dummy = new Vector2();
     protected boolean inputEnabled = true;
+    private float endgameSpeedFactor = 1;
 
     public UpdatePlayerSystem() {
         this(0);
@@ -31,12 +33,14 @@ public class UpdatePlayerSystem extends IteratingSystem implements GameOverEvent
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
         GameOverEvent.register(this);
+        EndgameEvent.register(this);
     }
 
     @Override
     public void removedFromEngine(Engine engine) {
         super.removedFromEngine(engine);
         GameOverEvent.unregister(this);
+        EndgameEvent.unregister(this);
     }
     
     @Override
@@ -49,7 +53,7 @@ public class UpdatePlayerSystem extends IteratingSystem implements GameOverEvent
         PositionComponent position = ComponentMappers.position.get(entity);
         if(inputEnabled) {
             InputComponent input = ComponentMappers.input.get(entity);
-            dummy.set(input.moveDirection).nor().scl(80 * deltaTime);
+            dummy.set(input.moveDirection).nor().scl(80 * deltaTime * endgameSpeedFactor);
             position.pos.add(dummy);
             if(position.pos.x < GameConstants.BOUND_LEFT)
                 position.pos.x = GameConstants.BOUND_LEFT;
@@ -125,4 +129,11 @@ public class UpdatePlayerSystem extends IteratingSystem implements GameOverEvent
         }
     }
 
+    @Override
+    /**
+     * Speeds up the players by given amount during the endgame.
+     */
+    public void onEndgameEvent() {
+        endgameSpeedFactor = 2.5f;
+    }
 }
