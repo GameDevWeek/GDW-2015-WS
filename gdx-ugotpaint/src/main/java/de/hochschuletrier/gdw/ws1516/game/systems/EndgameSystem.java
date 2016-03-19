@@ -6,9 +6,7 @@ import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.events.EndgameEvent;
 import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
 import de.hochschuletrier.gdw.ws1516.events.SetCountdownEvent;
-import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.utils.Canvas;
-import de.hochschuletrier.gdw.ws1516.states.GameplayState;
 
 public class EndgameSystem extends IntervalSystem implements EndgameEvent.Listener, GameOverEvent.Listener {
 
@@ -45,9 +43,9 @@ public class EndgameSystem extends IntervalSystem implements EndgameEvent.Listen
             SetCountdownEvent.emit(10);
         }
 
-        if(endGame)
         // on interval spawn a pickup during endgame
-        pickupSystem.createRandomPickup();
+        if(endGame)
+            pickupSystem.createRandomPickup();
     }
 
     @Override
