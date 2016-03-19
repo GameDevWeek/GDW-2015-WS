@@ -94,6 +94,7 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
                 case FALLING:
                 case JUMPING:
                 case ON_GROUND:
+                case LANDING:
                 default:
                     defaultMovement(entity);
                     break;
@@ -116,11 +117,15 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
             
             
             MovementEvent.emit(entity, input.directionX);
-            if (input.startJump && movement.state == MovementComponent.State.ON_GROUND) {
+            if (input.startJump && (movement.state == MovementComponent.State.ON_GROUND || movement.state == MovementComponent.State.LANDING)) {
                 JumpEvent.emit(entity);
             }
             
-            if ((input.directionX != 0 || input.directionY != 0) && physix != null) {
+            boolean inAir = movement != null && (
+                    movement.state == MovementComponent.State.FLYING ||
+                    movement.state == MovementComponent.State.FALLING ||
+                    movement.state == MovementComponent.State.JUMPING);
+            if ((inAir || input.directionX != 0 || input.directionY != 0) && physix != null) {
                 physix.getFixtureByUserData("body").setFriction(0.0f);
             } else {
                 physix.getFixtureByUserData("body").setFriction(1.0f);
@@ -207,7 +212,7 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         InputComponent input = ComponentMappers.input.get(player);
         MovementComponent movement = ComponentMappers.movement.get(player);
         if (physix != null && input != null && movement != null) {
-            physix.applyImpulse(input.directionX*GameConstants.HORNATTACK_IMPULSE, 0);
+            physix.applyImpulse(movement.lookDirection.getCosine()*GameConstants.HORNATTACK_IMPULSE, 0);
             
             // movement.velocityX = movement.speed * 1000 * input.directionX;
         }
