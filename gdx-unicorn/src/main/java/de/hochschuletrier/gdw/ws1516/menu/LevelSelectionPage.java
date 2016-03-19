@@ -134,6 +134,8 @@ public class LevelSelectionPage extends MenuPage {
             return assetManager.getMusic("gameplaytheme");
         case "data/maps/lvl2.tmx":
             return assetManager.getMusic("gameplaytheme_level2");
+        case "data/maps/lvl4.tmx":
+            return assetManager.getMusic("gameplaytheme_level4");
         default:
             return assetManager.getMusic("gameplaytheme");
         }
