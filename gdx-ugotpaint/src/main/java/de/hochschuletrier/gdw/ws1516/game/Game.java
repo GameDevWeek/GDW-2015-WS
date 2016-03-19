@@ -65,10 +65,10 @@ public class Game extends InputAdapter {
         for (PlayerColor color : PlayerColor.values()) {
             final String colorKey = color.name().toLowerCase();
             color.animation = assetManager.getAnimation("segment_" + colorKey);
+            color.splashAnimation = assetManager.getAnimation("splash_" + colorKey);
+            color.particleEffectExplosion = assetManager.getParticleEffect("explosion_" + colorKey);
             if (color != PlayerColor.NEUTRAL) {
-                color.splashAnimation = assetManager.getAnimation("splash_" + colorKey);
                 color.projectileAnimation = assetManager.getAnimation("projectile_" + colorKey);
-                color.particleEffectExplosion = assetManager.getParticleEffect("explosion_" + colorKey);
                 color.particleEffectSplash = assetManager.getParticleEffect("splash_red");
             }
         }

@@ -8,6 +8,7 @@ import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
 import de.hochschuletrier.gdw.ws1516.events.SplashEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.components.PickupComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.utils.PlayerColor;
@@ -23,6 +24,7 @@ public class EndExplosionSystem extends IntervalSystem implements GameOverEvent.
 
     private PlayerComponent player1, player2;
     Entity player1Entity, player2Entity;
+    private ImmutableArray<Entity> pickups;
 
     public EndExplosionSystem(int priority) {
         super(GameConstants.END_EXPLOSION_INTERVAL, priority);
@@ -33,6 +35,7 @@ public class EndExplosionSystem extends IntervalSystem implements GameOverEvent.
         super.addedToEngine(engine);
         this.engine = engine;
         GameOverEvent.register(this);
+        this.pickups = engine.getEntitiesFor(Family.all(PickupComponent.class).get());
     }
 
     @Override
@@ -95,6 +98,12 @@ public class EndExplosionSystem extends IntervalSystem implements GameOverEvent.
             splash(pos.pos, play.color);
             engine.removeEntity(player2Entity);
             player2Entity = null;
+        }
+        if(pickups.size() > 0) {
+            final Entity entity = pickups.first();
+            engine.removeEntity(entity);
+            Vector2 pos = ComponentMappers.position.get(entity).pos;
+            SplashEvent.emit(pos, PlayerColor.NEUTRAL);
         }
     }
 

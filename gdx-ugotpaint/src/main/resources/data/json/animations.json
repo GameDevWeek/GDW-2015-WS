@@ -39,6 +39,14 @@
         "columns": 1,
         "rows" : 1
     },
+    "splash_neutral": {
+        "filename": "data/animations/splash_neutral.png",
+        "frames" : 4,
+        "frameDuration": [0.05,0.05,0.05,0.05],
+        "playType" : "NORMAL",
+        "columns": 4,
+        "rows" : 1
+    },
     "splash_red": {
         "filename": "data/animations/splash_red.png",
         "frames" : 5,
