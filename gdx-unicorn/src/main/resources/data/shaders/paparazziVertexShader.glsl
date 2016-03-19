@@ -8,10 +8,8 @@
 // CONSTANTS TO ADJUST SHADER RESULTS
 #define CIRCLE_RADIUS_ANIMATION_GROW_FACTOR 0.1
 // lerps from start min to end min, ...
-#define CIRCLE_RADIUS_RANGE_FACTOR_START_MIN 0.5 
-#define CIRCLE_RADIUS_RANGE_FACTOR_START_MAX 1.0 
-#define CIRCLE_RADIUS_RANGE_FACTOR_END_MIN 2.2
-#define CIRCLE_RADIUS_RANGE_FACTOR_END_MAX 3.0
+#define CIRCLE_RADIUS_RANGE_FACTOR_START 0.4 
+#define CIRCLE_RADIUS_RANGE_FACTOR_END 1.6
 // duration in seconds
 #define PRE_INTRO_DURATION 0.1
 #define INTRO_DURATION 0.2
@@ -92,6 +90,11 @@ void main()
     }
 	
 	// calculates v_radiusFactor
+	if (v_modePreIntroProgress >= 0.0)
+	{
+        // pre intro mode (flash)
+        v_radiusFactor =  0.0;
+    }
 	if (v_modeIntroProgress >= 0.0)
 	{
         // intro mode
@@ -110,15 +113,15 @@ vec2 getRadiusRange()
 {
     float baseFactor = max(u_frameDimension.x, u_frameDimension.y) * 0.0625; // 1/16
     // u_paparazziIntensity
-    float rangeMin = lerp(CIRCLE_RADIUS_RANGE_FACTOR_START_MIN, CIRCLE_RADIUS_RANGE_FACTOR_END_MIN, u_paparazziIntensity);
-    float rangeMax = lerp(CIRCLE_RADIUS_RANGE_FACTOR_START_MAX, CIRCLE_RADIUS_RANGE_FACTOR_END_MAX, u_paparazziIntensity);
+    float rangeMin = lerp(CIRCLE_RADIUS_RANGE_FACTOR_START, CIRCLE_RADIUS_RANGE_FACTOR_END, u_paparazziIntensity);
+    float rangeMax = lerp(CIRCLE_RADIUS_RANGE_FACTOR_START + 0.4, CIRCLE_RADIUS_RANGE_FACTOR_END + 0.4, u_paparazziIntensity);
     
     return vec2(baseFactor * rangeMin, baseFactor * rangeMax);
 }
 
 float getAmountOfCircles()
 {
-    return 20 * 
+    return 22 * 
         (
             // u_paparazziIntensity is taken 40 percent into account
             (1 - clamp(u_paparazziIntensity, 0.0, 1.0)) * 0.4 
