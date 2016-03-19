@@ -15,6 +15,7 @@ import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.commons.utils.Point;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.Game;
+import de.hochschuletrier.gdw.ws1516.game.components.EnemyBehaviourComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.NameComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PathComponent;
 
@@ -24,14 +25,11 @@ public class EntityLoader implements MapLoader {
 
     @Override
     public void parseMap(TiledMap map, Game game, PooledEngine engine) {
-        logger.info("Hier startet parseMap");
         LinkedList<String> names = new LinkedList();
         for (Layer layer : map.getLayers()) {
             if (layer.isObjectLayer()) {
-                logger.info("Objektlayer");
                 for (LayerObject obj : layer.getObjects()) {
                     // only load tiles and rectangles
-                    logger.info("Objekte suchen");
                     LayerObject.Primitive primitive = obj.getPrimitive(); /**
                      * @author Tobias Gepp, Jerome Jähnig
                      */
@@ -61,6 +59,7 @@ public class EntityLoader implements MapLoader {
             final boolean loop = obj.getBooleanProperty("loop", false);
             final String path = obj.getProperty("path",null);
             Entity e = EntityCreator.createEntity(entity_type, name, x, y, speed, loop);
+            EnemyBehaviourComponent behave =  ComponentMappers.enemyBehaviour.get(e);
             NameComponent nc = engine.createComponent(NameComponent.class);
             nc.name = name;
             e.add(nc);
@@ -70,6 +69,10 @@ public class EntityLoader implements MapLoader {
                     pc.points.add(new Vector2(p.x, p.y));
                 }
                 logger.info("{}", e.getComponent(PathComponent.class).points);
+            }
+            if (  behave!= null )
+            {   /// pfadstring and
+                behave.pathID = path;
             }
             names.add(entity_type);
         }

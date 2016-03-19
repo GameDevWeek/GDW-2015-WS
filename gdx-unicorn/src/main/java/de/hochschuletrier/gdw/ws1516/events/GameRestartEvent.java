@@ -2,17 +2,17 @@ package de.hochschuletrier.gdw.ws1516.events;
 
 import com.badlogic.gdx.utils.SnapshotArray;
 
-public class HornAttackCooldownEvent {
+public class GameRestartEvent {
     public static interface Listener {
-        void onHornAttackCooldown(float cd);
+        void onGameRestartEvent();
     }
 
     private static final SnapshotArray<Listener> listeners = new SnapshotArray<Listener>();
 
-    public static void emit(float cd) {
+    public static void emit() {
         Object[] items = listeners.begin();
         for (int i = 0, n = listeners.size; i < n; i++) {
-            ((Listener) items[i]).onHornAttackCooldown(cd);
+            ((Listener) items[i]).onGameRestartEvent();
         }
         listeners.end();
     }

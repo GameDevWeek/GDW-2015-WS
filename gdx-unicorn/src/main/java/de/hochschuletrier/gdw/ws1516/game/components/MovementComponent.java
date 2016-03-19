@@ -1,8 +1,10 @@
 package de.hochschuletrier.gdw.ws1516.game.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Pool;
 
+import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 
 
@@ -15,6 +17,9 @@ public class MovementComponent extends Component implements Pool.Poolable{
     public float velocityY = 0;
     public float remainingStateTime=0;
     public LookDirection lookDirection = LookDirection.RIGHT;
+    
+    public boolean isOnPlatform;
+    public PhysixBodyComponent onPlatformBody;
     
     public static enum State{
         ON_GROUND,
@@ -50,6 +55,7 @@ public class MovementComponent extends Component implements Pool.Poolable{
         state = State.ON_GROUND;
         jumpImpulse=GameConstants.PLAYER_JUMP_IMPULSE;
         lookDirection = LookDirection.RIGHT;
+        isOnPlatform = false;
     }
     
     
