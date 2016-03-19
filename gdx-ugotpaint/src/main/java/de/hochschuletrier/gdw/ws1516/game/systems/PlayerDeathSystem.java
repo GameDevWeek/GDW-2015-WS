@@ -128,15 +128,12 @@ public class PlayerDeathSystem extends EntitySystem implements PlayerDeathEvent.
 
 //        position.pos.set(respawnLocation);
 
-        if (playerComponent != null) {
-
-            // add more segments until the specified amount is reached
-            for (int i = 1; i < GameConstants.DEFAULT_SEGMENTS; ++i) {
-                playerComponent.segments.add(new Vector2());
-            }
-            // add the new paths oriented along the movement direction
-            playerComponent.path.add(respawnLocation.add(direction.scl(-10)));
+        // add more segments until the specified amount is reached
+        for (int i = 1; i < GameConstants.DEFAULT_SEGMENTS; ++i) {
+            playerComponent.segments.add(new Vector2());
         }
+        // add the new paths oriented along the movement direction
+        playerComponent.path.add(respawnLocation.add(direction.scl(-10)));
         timer = null;
     }
 

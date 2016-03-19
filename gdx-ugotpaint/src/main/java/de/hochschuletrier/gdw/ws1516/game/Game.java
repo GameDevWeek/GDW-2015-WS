@@ -1,6 +1,5 @@
 package de.hochschuletrier.gdw.ws1516.game;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
@@ -118,12 +117,12 @@ public class Game extends InputAdapter {
 
     public Entity createSnake(int index, float x, float y, float xDir, float yDir, PlayerColor color) {
         Entity e = createEntity("snake", x, y, color);
-        final InputComponent input = engine.createComponent(InputComponent.class);
+        InputComponent input = ComponentMappers.input.get(e);
         input.index = index;
         input.lastMoveDirection.add(xDir, yDir);
         e.add(input);
 
-        final PlayerComponent player = engine.createComponent(PlayerComponent.class);
+        PlayerComponent player = ComponentMappers.player.get(e);
         player.color = color;
         player.path.add(new Vector2(-xDir, -yDir).nor().scl(100).add(x, y));
         for (int i = 1; i < GameConstants.DEFAULT_SEGMENTS; i++)

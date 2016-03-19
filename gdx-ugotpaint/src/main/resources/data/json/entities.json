@@ -2,6 +2,8 @@
     "snake": {
         "meta": {},
         "components": {
+            "Input": {},
+            "Player": {},
             "SoundEmitter": {},
             "Position": {},
             "Animation": {}
