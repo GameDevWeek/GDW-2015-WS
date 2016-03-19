@@ -18,6 +18,7 @@ import de.hochschuletrier.gdw.commons.utils.SafeProperties;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.LookDirection;
+import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -215,6 +216,7 @@ public class PhysixBodyComponentFactory extends
                 properties.getFloat("size", 5));
         fixtureDef.isSensor = properties.getBoolean("isSensor",false);
         bodyComponent.createFixture(fixtureDef);
+        bodyComponent.setAngle(properties.getFloat("angle", 0.0f) * PhysixUtil.DEG2RAD);
         bodyComponent.setGravityScale(properties.getFloat("gravity",1.0f));
         entity.add(bodyComponent);
         logger.debug("Circle body created");

@@ -5,15 +5,18 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 
+import de.hochschuletrier.gdw.ws1516.events.ActivateSafePointEvent;
 import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
 import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
 import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.components.SafePointTextureComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.UnicornAnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.UnicornAnimationComponent.UnicornColor;
 
-public class AnimationEventHandlerSystem extends IteratingSystem implements RainbowEvent.Listener, StartFlyEvent.Listener, EndFlyEvent.Listener {
+public class AnimationEventHandlerSystem extends IteratingSystem implements RainbowEvent.Listener, StartFlyEvent.Listener, EndFlyEvent.Listener, ActivateSafePointEvent.Listener {
 
+    @SuppressWarnings("unchecked")
     public AnimationEventHandlerSystem(int priority) {
         super(Family.all().get(), priority);
     }
@@ -67,7 +70,7 @@ public class AnimationEventHandlerSystem extends IteratingSystem implements Rain
     public void onRainbowModeEnd(Entity player)
     {
         UnicornAnimationComponent unicornAnimation = ComponentMappers.unicornAnimation.get(player);
-        if(unicornAnimation != null && !unicornAnimation.isInBlueMode)
+        if(unicornAnimation != null && unicornAnimation.isInBlueMode)
         {
             unicornAnimation.switchUnicornColor(UnicornColor.blue);
         }
@@ -75,6 +78,12 @@ public class AnimationEventHandlerSystem extends IteratingSystem implements Rain
         {
             unicornAnimation.switchUnicornColor(UnicornColor.pink);
         }
+    }
+    
+    @Override
+    public void onActivateCheckPointEvent(Entity unicorn, Entity safePoint) {
+        SafePointTextureComponent component = safePoint.getComponent(SafePointTextureComponent.class);
+        component.texture = component.activatedTexture;
     }
 
     @Override
