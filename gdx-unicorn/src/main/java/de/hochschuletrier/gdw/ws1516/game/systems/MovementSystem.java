@@ -228,6 +228,15 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         MovementComponent movement = ComponentMappers.movement.get(entity);
         movement.velocityX = movement.speed * Math.max(Math.min(dirX, 1.0f), -1.0f);
         
+        EnemyTypeComponent enemyType = ComponentMappers.enemyType.get(entity);
+        if (enemyType != null) {
+            if (dirX > 0.01) {
+                movement.lookDirection = MovementComponent.LookDirection.RIGHT;
+            } else if (dirX < -0.01) {
+                movement.lookDirection = MovementComponent.LookDirection.LEFT;
+            }
+        }
+        
     }
     
     @Override
