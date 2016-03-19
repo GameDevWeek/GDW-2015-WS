@@ -2,5 +2,5 @@
     "menu": "data/music/menu.ogg",
     "menutheme": "data/music/menutheme.ogg",
     "gameplaytheme": "data/music/MainMusik.ogg",
-    "rainbowtheme": "data/sounds/powerUp.ogg"
+    "rainbowtheme": "data/music/powerUp.ogg"
 }
