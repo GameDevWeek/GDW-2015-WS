@@ -59,6 +59,7 @@ import de.hochschuletrier.gdw.ws1516.game.systems.BubbleGlueSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BubblegumSpitSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BulletSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.CameraSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.DeathAnimationSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.EffectsRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.EnemyHandlingSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.EnemyVisionSystem;
@@ -131,6 +132,8 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
     
     private final SplatterSystem splatterSystem = new SplatterSystem(GameConstants.PRIORITY_SPLATTER);
     private final EffectsRenderSystem effectsRenderSystem = new EffectsRenderSystem(GameConstants.PRIORITY_EFFECTS_RENDERING);
+    
+    private final DeathAnimationSystem deathAnimationSystem = new DeathAnimationSystem(GameConstants.PRIORITY_DEATH_ANIMATION);
 
     private final EntityFactoryParam factoryParam = new EntityFactoryParam();
     private final EntityFactory<EntityFactoryParam> entityFactory = new EntityFactory("data/json/entities.json",
@@ -201,6 +204,9 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
         EntityCreator.setGame(this);
         EntityCreator.setEntityFactory(entityFactory);
         
+        //TEST
+        EntityCreator.createEntity("hunter", 1000, 400);
+        
         loadMap(mapFilename);
         mapRenderSystem.initialzeRenderer(map, "map_background", cameraSystem);
         
@@ -268,6 +274,7 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
         engine.addSystem(updatePlatformPositionSystem);
         engine.addSystem(platformSystem);
         engine.addSystem(blockingGumSystem);
+        engine.addSystem(deathAnimationSystem);
     }
 
     private void addContactListeners() {

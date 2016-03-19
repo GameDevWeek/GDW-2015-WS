@@ -34,7 +34,7 @@
     "hunter_dying": {
         "filename": "data/graphics/spritesheets/hunter_dying.png",
         "frames" : 4,
-        "frameDuration": [0.5],
+        "frameDuration": [0.15, 0.15, 0.15, 3],
         "playType" : "NORMAL",
         "columns": 4,
         "rows" : 1
