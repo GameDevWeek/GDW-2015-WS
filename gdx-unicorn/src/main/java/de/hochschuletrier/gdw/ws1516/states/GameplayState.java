@@ -60,6 +60,7 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
     
     private float generalVolume;
     private float musicVolume;
+    private boolean isGameOver;
     
     
 
@@ -96,10 +97,12 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
             @Override
             public boolean keyUp(int keycode) {
                 if (keycode == Input.Keys.ESCAPE) {
-                    if (mainProcessor == gameInputProcessor) {
-                        mainProcessor = menuInputProcessor;                        
-                    } else {
-                        menuManager.popPage();
+                    if(!isGameOver) {
+                        if (mainProcessor == gameInputProcessor) {
+                            mainProcessor = menuInputProcessor;                        
+                        } else {
+                            menuManager.popPage();
+                        }
                     }
                     return true;
                 }
@@ -176,19 +179,19 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
      */
     @Override
     public void onGameOverEvent(boolean won) {
+        isGameOver = true;
         Skin skin = ((MainMenuState)Main.getInstance().getPersistentState(MainMenuState.class)).getSkin();
         EndPage endPage; 
         if ( won ){
-            endPage = new EndPage(skin, menuManager, "transparent_bg", EndPage.Type.WIN, scoreComp);
+            endPage = new EndPage(skin, menuManager, null, EndPage.Type.WIN, scoreComp);
         } else {
-            endPage = new EndPage(skin, menuManager, "transparent_bg", EndPage.Type.GAMEOVER, scoreComp);
+            endPage = new EndPage(skin, menuManager, null, EndPage.Type.GAMEOVER, scoreComp);
         }
         PauseGameEvent.emit(true);
             
         menuManager.addLayer(endPage);
         menuManager.pushPage(endPage);
         inputForwarder.set(menuInputProcessor);
-            
     }
 
 

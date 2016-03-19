@@ -1,123 +1,86 @@
 package de.hochschuletrier.gdw.ws1516.menu;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 
-import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.audio.SoundEmitter;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
-import de.hochschuletrier.gdw.commons.gdx.menu.widgets.DecoImage;
-import de.hochschuletrier.gdw.commons.gdx.state.transition.SplitHorizontalTransition;
-import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.Main;
-import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
-import de.hochschuletrier.gdw.ws1516.states.GameplayState;
 import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
-import de.hochschuletrier.gdw.ws1516.events.FinalScoreEvent;
 import de.hochschuletrier.gdw.ws1516.events.GameRestartEvent;
 
 public class EndPage extends MenuPage {
-    
+
     public enum Type {
+
         WIN,
         GAMEOVER
     }
     
-    private long finalScore;
-    
-
     public EndPage(Skin skin, MenuManager menuManager, String background, Type type, ScoreComponent scoreComp) {
         super(skin, background);
-        
-        Main.getInstance().screenCamera.bind();
-        AssetManagerX assetManager = Main.getInstance().getAssetManager();
-        
-        String message;
-        Label label;
-        Texture endImage;
-        Texture bonbons = assetManager.getTexture("drop");
-        Texture chocoCoins = assetManager.getTexture("coin_hud");
+
+        String message,messageStyle;
         Sound sound;
-        
-        Label chocoScore;
-        Label bonbonScore;
-                                
-        if(type==Type.GAMEOVER) {
-            message="Verloren!";
-            label = new Label(message, skin, "gameover");
-            endImage = assetManager.getTexture("dead_unicorn_gameover");
+
+        if (type == Type.GAMEOVER) {
+            message = "Verloren!";
+            messageStyle = "gameover";
+            Texture endImage = assetManager.getTexture("dead_unicorn_gameover");
+            addDecoImage(endImage, Main.WINDOW_WIDTH/2, Main.WINDOW_HEIGHT/2, Align.center, Align.center);
             sound = assetManager.getSound("lose_sound");
-        }
-        else
-        {
-            message="Gewonnen!";
-            label = new Label(message, skin, "win");
-           // endImage = assetManager.getTexture("drop");
+        } else {
+            Texture bonbons = assetManager.getTexture("drop");
+            Texture chocoCoins = assetManager.getTexture("coin_hud");
+            Texture clock_hud = assetManager.getTexture("clock_hud");
+            message = "Gewonnen!";
+            messageStyle = "win";
             sound = assetManager.getSound("win_sound");
-            DecoImage bonbons_image = new DecoImage(bonbons);
-            DecoImage chocoCoins_image = new DecoImage(chocoCoins);
-            chocoScore = new Label("    x " + scoreComp.chocoCoins + " (1 Punkt) =                       " + scoreComp.chocoCoins, skin, "default");
-            
-            bonbonScore = new Label("    x " + scoreComp.bonbons + " (3 Punkte) =                     " + scoreComp.bonbons*3, skin, "default");
-            Label trennstrich = new Label("___________________________________________________", skin, "default");
-            
-            long timeScore = (long) (GameConstants.SCORE_TIME_POINTS - scoreComp.playedSeconds);
-            //Label timeScore_label = new Label(""+timeScore + " (" + String.valueOf((int) (GameConstants.SCORE_TIME_POINTS))+" Abzug pro Sekunde)", skin, "default");
-            Label timeScore_label = new Label("Zeitbonus              =                     "+ timeScore , skin, "default");
-            
-            Label finalScore = new Label(String.valueOf(scoreComp.bonbons*3+scoreComp.chocoCoins+timeScore), skin, "win");
-            
-            chocoCoins_image.setPosition(200, 600);
-     
-            chocoScore.setPosition(200+70, 600);
-            bonbons_image.setPosition(200, 550);
-            bonbonScore.setPosition(200+70, 550);
-            timeScore_label.setPosition(200, 450);
-            trennstrich.setPosition(180, 400);
-            finalScore.setPosition(300, 350);
-            super.addActor(bonbonScore);
-            super.addActor(chocoScore);
-            super.addActor(bonbons_image);
-            super.addActor(chocoCoins_image);
-            super.addActor(trennstrich);
-            super.addActor(finalScore);
-            super.addActor(timeScore_label);
-            
-            
+            int timeScore = (int) (GameConstants.SCORE_TIME_POINTS - scoreComp.playedSeconds);
+            final int chocoScore = scoreComp.chocoCoins;
+            final int bonbonScore = scoreComp.bonbons * GameConstants.SCORE_BONBONS_POINTS;
+
+            addScoreLine(400, chocoCoins, scoreComp.chocoCoins + " (1 Punkt)", chocoScore);
+            addScoreLine(350, bonbons, scoreComp.bonbons + " (1 Punkt)", bonbonScore);
+            addScoreLine(300, clock_hud, "Zeitbonus", timeScore);
+
+            addLabel(600, 325, "" + (timeScore + chocoScore + bonbonScore), "win");
         }
-        
-        label.setPosition(200, 600);
+
+        addCenteredLabel(0, 480, Main.WINDOW_WIDTH, 50, message, messageStyle);
         SoundEmitter.playGlobal(sound, false);
-        
-        //DecoImage endPicture = new DecoImage(endImage);
-       //endPicture.setPosition(300, 50);
-       
-                
-       addCenteredButton(200, 200, 100, 50, "Nochmal versuchen", this::startGame, "einhornMotivated");
-        addCenteredButton(500, 200, 100, 50, "Ins Hauptmenü", this::stopGame, "menu");
-       super.addActor(label);
-       //super.addActor(endPicture);
-        
-        
+
+        addCenteredButton(200, 100, 100, 50, "Ins Hauptmenü", this::stopGame, "menu");
+        if(type == Type.GAMEOVER)
+            addCenteredButton(Main.WINDOW_WIDTH - 200, 100, 100, 50, "Nochmal versuchen", this::startGame, "einhornMotivated");
+        else
+            addCenteredButton(Main.WINDOW_WIDTH - 200, 100, 100, 50, "Nächstes Level", this::nextLevel, "einhornMotivated");
+    }
+    
+    private void addScoreLine(int y, Texture icon, String label, int value) {
+        int x = 250;
+        int lineheight = 20;
+        addDecoImage(icon, x, y + lineheight*0.5f, Align.center, Align.center);
+        addLabel(x + 100, y, label, "default");
+        addLabel(x + 200, y, "=", "default");
+        addLabel(x + 220, y, "" + value, "default");
     }
 
     private void startGame() {
         GameRestartEvent.emit();
     }
-    
+    private void nextLevel() {
+        // todo
+    }
+
     private void stopGame() {
         if (!main.isTransitioning()) {
             main.changeState(main.getPersistentState(MainMenuState.class));
-            
-        }  
+
+        }
     }
 }
