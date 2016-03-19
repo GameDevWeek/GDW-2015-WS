@@ -61,6 +61,7 @@ public class AttackEnemyState extends EnemyBaseState {
             float distance = (float)Math.sqrt( Math.pow(enemyPosition.x-playerPosition.x, 2)+ Math.pow(enemyPosition.y-playerPosition.y, 2) );
             SoundEvent.emit("paparazzishoot", entity);
             PaparazziShootEvent.emit(distance);
+            movementComp.state=State.SHOOTING;
             return new FollowPlayerEnemyState();
         }
     }
