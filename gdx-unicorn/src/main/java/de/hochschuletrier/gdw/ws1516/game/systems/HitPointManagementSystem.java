@@ -67,6 +67,8 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
             
             if (playerComp.state!=PlayerComponent.State.RAINBOW && playerComp.invulnerableTimer==0){
                 playerComp.hitpoints-= value;
+                playerComp.flyingCooldown = 0.0f;
+                playerComp.hornAttackCooldown = 0.0f;
                 playerComp.invulnerableTimer=GameConstants.INVULNERABLE_TIMER;
                 
                 if (playerComp.hitpoints <= 0)

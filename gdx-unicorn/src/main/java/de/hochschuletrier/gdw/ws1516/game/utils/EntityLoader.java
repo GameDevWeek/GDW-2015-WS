@@ -18,6 +18,7 @@ import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyBehaviourComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.NameComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PathComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PlatformComponent;
 
 public class EntityLoader implements MapLoader {
 
@@ -59,6 +60,7 @@ public class EntityLoader implements MapLoader {
             final String path = obj.getProperty("path",null);
             Entity e = EntityCreator.createEntity(entity_type, name, x, y, speed, loop);
             EnemyBehaviourComponent behave =  ComponentMappers.enemyBehaviour.get(e);
+            PlatformComponent platform = ComponentMappers.platform.get(e);
             NameComponent nc = engine.createComponent(NameComponent.class);
             nc.name = name;
             e.add(nc);
@@ -71,6 +73,10 @@ public class EntityLoader implements MapLoader {
             if (  behave!= null )
             {   /// pfadstring and
                 behave.pathID = path;
+            }
+            if (  platform != null )
+            {   /// pfadstring and
+                platform.pathID = path;
             }
             names.add(entity_type);
         }
