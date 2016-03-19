@@ -36,7 +36,6 @@ public class AttackEnemyState extends EnemyBaseState {
         behaviour.cooldown=behaviour.maxCooldown;
         if (type.type==EnemyType.HUNTER){
             if (!soundPlayed) {
-                EnemyActionEvent.emit(entity, Type.SHOOT, 0.0f);
                 SoundEvent.emit("huntergun", entity);
                 soundPlayed = true;
             }
@@ -45,7 +44,6 @@ public class AttackEnemyState extends EnemyBaseState {
                     return this;
                 }else{
                     SoundEvent.stopSound("huntergun", entity);
-                    EnemyActionEvent.emit(entity, Type.SHOOT_ABORT, 0.0f);
                     return new FollowPathEnemyState();
                 }
             }
@@ -53,6 +51,7 @@ public class AttackEnemyState extends EnemyBaseState {
             if (playerPosition.x<enemyPosition.x){
                 direction=-direction;
             }
+            EnemyActionEvent.emit(entity, Type.SHOOT, 0.0f);
             BulletSpawnEvent.emit(enemyPosition.x+direction, enemyPosition.y,
                     playerPosition.x-(enemyPosition.x+direction), playerPosition.y-enemyPosition.y,
                     (bullet,target)->{HitEvent.emit(target, bullet, 1);}, (source,target)->{}, (e)->{DeathEvent.emit(e);});

@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.physics.box2d.Fixture;
 
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixContact;
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixContactAdapter;
@@ -29,17 +30,28 @@ public class PlayerContactListener extends PhysixContactAdapter {
     // PooledEngine engine;
     
     //contact count for player/world contact fix jumping bug only works with singlePlayer
-    int contactCount=0;
+//    int contactCount=0;
     public void beginContact(PhysixContact contact) {
         Entity myEntity = contact.getMyComponent().getEntity();
+       MovementComponent movementComp=ComponentMappers.movement.get(myEntity);
+       if(movementComp!=null){
+           movementComp.contacts.add(contact.getOtherFixture());
+       }
         if (contact.getOtherComponent() == null) {
-            if (ComponentMappers.player.has(myEntity)){
-                contactCount++;
+        // if (ComponentMappers.player.has(myEntity)){
+        // contactCount++;
+        // }
+            if (ComponentMappers.movement.get(myEntity).state == State.ON_GROUND || ComponentMappers.movement.get(myEntity).state == State.LANDING) {                
+                // for Jumps:
+                if ("foot".equals(contact.getMyFixture().getUserData())) {
+                    logger.debug("sollte nicht so sein");
+                }
             }
             if (ComponentMappers.movement.get(myEntity).state == State.FALLING || ComponentMappers.movement.get(myEntity).state == State.JUMPING) {                
                 // for Jumps:
                 if ("foot".equals(contact.getMyFixture().getUserData())) {
                     if (!contact.getOtherFixture().isSensor()) {
+                        logger.debug("landing{}");
                         MovementComponent.State oldState = ComponentMappers.movement.get(myEntity).state;
                         MovementComponent.State newState = MovementComponent.State.LANDING;
                         MovementStateChangeEvent.emit(myEntity, oldState, newState);
@@ -50,9 +62,10 @@ public class PlayerContactListener extends PhysixContactAdapter {
             return;
         }
         Entity otherEntity = contact.getOtherComponent().getEntity();
-        // for Jumps:
+         //for Jumps:
         if ("foot".equals(contact.getMyFixture().getUserData())) {
             if (!contact.getOtherFixture().isSensor()) {
+                logger.debug("landing{}");
                 MovementComponent.State oldState = ComponentMappers.movement.get(myEntity).state;
                 MovementComponent.State newState = MovementComponent.State.LANDING;
                 MovementStateChangeEvent.emit(myEntity, oldState, newState);
@@ -123,38 +136,44 @@ public class PlayerContactListener extends PhysixContactAdapter {
             }
           
         }
-        // if(ComponentMappers.enemyType.has(myEntity)&&ComponentMappers.player.has(otherEntity)){
-        // PlayerComponent
-        // player=otherEntity.getComponent(PlayerComponent.class);
-        // if(player.state==PlayerComponent.State.HORNATTACK&&"horn".equals(contact.getOtherFixture().getUserData())){
-        // HornCollisionEvent.emit(otherEntity, myEntity);
-        // logger.debug("hornKollision {}");
-        // }else{
-        // UnicornEnemyCollisionEvent.emit(myEntity, otherEntity);
-        // logger.debug("gegnerKollision {}");
-        // }
-        // }
+        if (ComponentMappers.enemyType.has(myEntity) && ComponentMappers.player.has(otherEntity)) {
+            PlayerComponent player = otherEntity.getComponent(PlayerComponent.class);
+            if (player.state == PlayerComponent.State.HORNATTACK && "horn".equals(contact.getOtherFixture().getUserData())) {
+                HornCollisionEvent.emit(otherEntity, myEntity);
+                logger.debug("hornKollision {}");
+            } else {
+                UnicornEnemyCollisionEvent.emit(myEntity, otherEntity);
+                logger.debug("gegnerKollision {}");
+            }
+        }
         
         return;
         
     }
     
     public void endContact(PhysixContact contact) {
-        Entity player = contact.getMyComponent().getEntity();
+        Entity myEntity = contact.getMyComponent().getEntity();
+        
+        MovementComponent movementComp=ComponentMappers.movement.get(myEntity);
+        if(movementComp!=null){
+            movementComp.contacts.remove(contact.getOtherFixture());
+            logger.debug("Verlassen Kontakte:{}",movementComp.contacts.size());
+        }
         
         if (contact.getOtherComponent() == null) {
-            if (ComponentMappers.player.has(player)){
-                contactCount--;
-            }
-            if (ComponentMappers.movement.get(player).state == State.ON_GROUND&&contactCount==0 ) {                
+//            if (ComponentMappers.player.has(myEntity)){
+//                contactCount--;
+//            }
+            if (ComponentMappers.movement.get(myEntity).state == State.ON_GROUND&&movementComp.contacts.isEmpty() ) {                
                 // for Jumps:
-                if ("foot".equals(contact.getMyFixture().getUserData())) {
+//                if ("foot".equals(contact.getMyFixture().getUserData())) {
                     if (!contact.getOtherFixture().isSensor()) {
-                        MovementComponent.State oldState = ComponentMappers.movement.get(player).state;
+                        logger.debug("falling{}");
+                        MovementComponent.State oldState = ComponentMappers.movement.get(myEntity).state;
                         MovementComponent.State newState = MovementComponent.State.FALLING;
-                        MovementStateChangeEvent.emit(player, oldState, newState);
-                        ComponentMappers.movement.get(player).state = newState;
-                    }
+                        MovementStateChangeEvent.emit(myEntity, oldState, newState);
+                        ComponentMappers.movement.get(myEntity).state = newState;
+//                    }
                 }
             }
             return;
@@ -165,7 +184,7 @@ public class PlayerContactListener extends PhysixContactAdapter {
         /**
          * @author tobi - Gamelogic ein endContactEvent schmeißen
          */
-        EndContactEvent.emit(player, otherEntity);
+        EndContactEvent.emit(myEntity, otherEntity);
     }
-    
+
 }
