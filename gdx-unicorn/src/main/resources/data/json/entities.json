@@ -4,13 +4,13 @@
         "components": {
             "ScoreBoard":{},
             "StartPosition":{},
-            "Position": { 
+            "Position": {},
+            "Input":{},
+            "Player":{
                 "maxHitpoints":3,
                 "hitpoints":3,
                 "lives":3
             },
-            "Input":{},
-            "Player":{},
             "Movable":{
                 "state": "falling"
                 },
