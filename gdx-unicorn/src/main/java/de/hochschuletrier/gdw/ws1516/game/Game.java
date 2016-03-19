@@ -68,6 +68,7 @@ import de.hochschuletrier.gdw.ws1516.game.systems.KeyboardInputSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.MapRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.MovementSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.NameSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.PlatformHandlingSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.PlatformSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.PlayerStateSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RenderSystem;
@@ -149,6 +150,7 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
     private final BubblegumSpitSystem bubblegumSpitSystem = new BubblegumSpitSystem(engine);
     private final UpdatePlatformPositionSystem updatePlatformPositionSystem = new UpdatePlatformPositionSystem();
     private final PlatformSystem platformSystem = new PlatformSystem();
+    private final PlatformHandlingSystem platformHandlingSystem = new PlatformHandlingSystem(nameSystem);
     private final BulletSystem bulletSystem = new BulletSystem(engine);
     private final BlockingGumSystem blockingGumSystem = new BlockingGumSystem(engine);
     
@@ -267,6 +269,7 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
         engine.addSystem(bubbleGlueSystem);
         engine.addSystem(playerStateSystem);
         engine.addSystem(updatePlatformPositionSystem);
+        engine.addSystem(platformHandlingSystem);
         engine.addSystem(platformSystem);
         engine.addSystem(blockingGumSystem);
     }

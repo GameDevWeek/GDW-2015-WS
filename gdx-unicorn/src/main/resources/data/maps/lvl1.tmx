@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="365" height="50" tilewidth="64" tileheight="64" nextobjectid="690">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="365" height="50" tilewidth="64" tileheight="64" nextobjectid="691">
  <tileset firstgid="1" name="statics_tileset" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="tilesets/statics_tileset.png" width="640" height="640"/>
   <tile id="0">
@@ -270,7 +270,7 @@
     <property name="entity_type" value="trigger"/>
    </properties>
   </object>
-  <object id="261" x="15424" y="2240" width="2240" height="192">
+  <object id="261" x="15424" y="2272" width="2240" height="160">
    <properties>
     <property name="action" value="death_zone"/>
     <property name="entity_type" value="trigger"/>
@@ -332,7 +332,7 @@
     <property name="entity_type" value="bubblegum_blue"/>
    </properties>
   </object>
-  <object id="388" x="17536" y="1216" width="192" height="64">
+  <object id="388" x="17536" y="1232" width="192" height="48">
    <properties>
     <property name="action" value="death_zone"/>
     <property name="entity_type" value="trigger"/>
@@ -728,7 +728,7 @@
     <property name="entity_type" value="chocolate"/>
    </properties>
   </object>
-  <object id="477" gid="204" x="19423.3" y="2048" width="64" height="64">
+  <object id="477" gid="204" x="19424" y="2048" width="64" height="64">
    <properties>
     <property name="entity_type" value="tourist"/>
     <property name="path" value="tourist_path_2"/>
@@ -740,19 +740,19 @@
     <property name="path" value="tourist_path_2"/>
    </properties>
   </object>
-  <object id="479" gid="204" x="19495.3" y="2045.33" width="64" height="64">
+  <object id="479" gid="204" x="19488" y="2048" width="64" height="64">
    <properties>
     <property name="entity_type" value="tourist"/>
     <property name="path" value="tourist_path_2"/>
    </properties>
   </object>
-  <object id="480" gid="204" x="19458.7" y="2046.67" width="64" height="64">
+  <object id="480" gid="204" x="19456" y="2048" width="64" height="64">
    <properties>
     <property name="entity_type" value="tourist"/>
     <property name="path" value="tourist_path_2"/>
    </properties>
   </object>
-  <object id="481" gid="204" x="19552" y="2048.67" width="64" height="64">
+  <object id="481" gid="204" x="19552" y="2048" width="64" height="64">
    <properties>
     <property name="entity_type" value="tourist"/>
     <property name="path" value="tourist_path_2"/>
@@ -1761,12 +1761,7 @@
     <property name="entity_type" value="bubblegum_blue"/>
    </properties>
   </object>
-  <object id="689" gid="222" x="17984" y="1024" width="256" height="64">
-   <properties>
-    <property name="entity_type" value="platform"/>
-    <property name="path" value="platform_path_1"/>
-   </properties>
-  </object>
+  <object id="690" gid="221" x="18016" y="1024" width="192" height="64"/>
  </objectgroup>
  <layer name="foreground" width="365" height="50">
   <data encoding="base64">

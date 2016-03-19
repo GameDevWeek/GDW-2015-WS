@@ -494,7 +494,8 @@
             },
             "PhysixBody": {
                 "type": "box",
-                "size": 60,
+                "sizeWidth": 60,
+                "sizeHeight": 60,
                 "density": 10,
                 "friction": 0.5,
                 "restitution": 0.1

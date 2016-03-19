@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.slf4j.Logger;
+
+import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.events.ActivateSafePointEvent;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +16,9 @@ import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.graphics.Texture;
 
+import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.ws1516.events.ActivateSafePointEvent;
 import de.hochschuletrier.gdw.ws1516.events.ActivateSafePointEvent.Listener;
@@ -26,6 +30,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.PathComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.StartPointComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.TextureComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.StartPointComponent.SavedEntities;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityCreator;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.GameLogicTest;
@@ -36,6 +41,7 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
     private Entity player;
     private Engine engine;
     private boolean initStartSpawn = false;
+    private Texture activatedCheckpointTexture;
     
     public RespawnSystem()
     {
@@ -114,6 +120,7 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
         GameRespawnEvent.register(this);
         ActivateSafePointEvent.register(this);
         this.engine = engine;
+        this.activatedCheckpointTexture = Main.getInstance().getAssetManager().getTexture("checkpoint_checked");
     }
     
     @Override
@@ -123,6 +130,7 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
         ActivateSafePointEvent.unregister(this);
         engine.removeEntityListener(this);
         this.engine = null;
+        this.activatedCheckpointTexture = null;
     }
 
     @Override
@@ -193,6 +201,13 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
             start.blueGums = player.blueGumStacks;
         }
         
+        TextureComponent texture = ComponentMappers.texture.get(safePoint);
+        if (texture != null) {
+            
+            if (activatedCheckpointTexture != null) {
+                texture.texture = activatedCheckpointTexture;
+            }
+        }
     }
 
 }
