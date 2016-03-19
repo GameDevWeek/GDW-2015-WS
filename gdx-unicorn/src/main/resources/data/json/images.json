@@ -43,8 +43,8 @@
     "dash_Cooldown": "data/ui/menu/hud_dash01.png",
     "clock_hud": "data/ui/menu/hud_clock.png",
     
-    "platform3x1": "data/maps/tilesets/platform3x1.png",
-    "platform4x1": "data/maps/tilesets/platform4x1.png",
+    "platform3x1": "data/maps/tilesets/platform_3x1.png",
+    "platform4x1": "data/maps/tilesets/platform_4x1.png",
     "tutorial":"data/ui/menu/Tutorial.png",
 
     "data/maps/lvl1.tmx": "data/ui/menu/menu_level01.png",
