@@ -2,6 +2,7 @@ package de.hochschuletrier.gdw.ws1516;
 
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.loaders.BitmapFontLoader.BitmapFontParameter;
 import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
@@ -25,7 +26,9 @@ import de.hochschuletrier.gdw.commons.gdx.devcon.DevConsoleView;
 import de.hochschuletrier.gdw.commons.gdx.audio.SoundDistanceModel;
 import de.hochschuletrier.gdw.commons.gdx.audio.SoundEmitter;
 import de.hochschuletrier.gdw.commons.gdx.audio.SoundInstance;
+import de.hochschuletrier.gdw.commons.gdx.input.hotkey.Hotkey;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.HotkeyManager;
+import de.hochschuletrier.gdw.commons.gdx.input.hotkey.HotkeyModifier;
 import de.hochschuletrier.gdw.commons.gdx.state.BaseGameState;
 import de.hochschuletrier.gdw.commons.gdx.state.StateBasedGame;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
@@ -66,6 +69,7 @@ public class Main extends StateBasedGame {
             SoundDistanceModel.INVERSE, SoundDistanceModel.class, 0, "sound distance model");
     private final CVarEnum<SoundEmitter.Mode> emitterMode = new CVarEnum("snd_mode", SoundEmitter.Mode.STEREO,
             SoundEmitter.Mode.class, 0, "sound mode");
+    private final Hotkey screenshot = new Hotkey(Screenshot::take, Input.Keys.F1, HotkeyModifier.CTRL);
 
     public Main() {
         super(new BaseGameState());
@@ -152,6 +156,7 @@ public class Main extends StateBasedGame {
         final MainMenuState mainMenuState = new MainMenuState(assetManager);
         addPersistentState(mainMenuState);
         changeState(mainMenuState, null, null);
+        screenshot.register();
     }
 
     @Override
