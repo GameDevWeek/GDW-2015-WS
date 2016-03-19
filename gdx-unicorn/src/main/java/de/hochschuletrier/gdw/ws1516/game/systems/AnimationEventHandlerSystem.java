@@ -67,7 +67,7 @@ public class AnimationEventHandlerSystem extends IteratingSystem implements Rain
     public void onRainbowModeEnd(Entity player)
     {
         UnicornAnimationComponent unicornAnimation = ComponentMappers.unicornAnimation.get(player);
-        if(unicornAnimation != null && !unicornAnimation.isInBlueMode)
+        if(unicornAnimation != null && unicornAnimation.isInBlueMode)
         {
             unicornAnimation.switchUnicornColor(UnicornColor.blue);
         }
