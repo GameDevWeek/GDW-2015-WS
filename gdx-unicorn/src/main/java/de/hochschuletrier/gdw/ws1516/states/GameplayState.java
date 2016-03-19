@@ -23,6 +23,7 @@ import de.hochschuletrier.gdw.commons.gdx.audio.MusicManager;
 import de.hochschuletrier.gdw.commons.gdx.state.BaseGameState;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.Main;
+import de.hochschuletrier.gdw.ws1516.Settings;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
@@ -57,13 +58,17 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
     private final InputProcessor menuInputProcessor;
     private final InputProcessor gameInputProcessor;
     
+    private float generalVolume;
+    private float musicVolume;
+    
+    
 
     public GameplayState(AssetManagerX assetManager, Game game) {
         this.game = game;
         
         
         music = assetManager.getMusic("gameplaytheme");
-        rainbowMusic = assetManager.getMusic("rainboxtheme");
+        rainbowMusic = assetManager.getMusic("rainbowtheme");
 
         Skin skin = ((MainMenuState)Main.getInstance().getPersistentState(MainMenuState.class)).getSkin();
         final MainMenuPage menuPageRoot = new MainMenuPage(skin, menuManager, MainMenuPage.Type.PAUSED);
@@ -198,13 +203,13 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
     @Override
     public void onRainbowCollect(Entity player) {
         MusicManager.play(rainbowMusic, GameConstants.MUSIC_FADE_TIME);
-        
+              
     }
 
 
     @Override
     public void onRainbowModeEnd(Entity player) {
         MusicManager.play(music, GameConstants.MUSIC_FADE_TIME);
-        
+             
     }
 }

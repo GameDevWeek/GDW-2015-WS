@@ -51,7 +51,6 @@ public class EntityLoader implements MapLoader {
 
     private void addEntity(PooledEngine engine, LinkedList<String> names, LayerObject obj) {
         String entity_type = obj.getProperty("entity_type", null);
-            logger.info("entity_type{}", entity_type);
         if (entity_type != null) {
             final String name = obj.getProperty("name", null);
             final float x = obj.getX() + obj.getWidth() * 0.5f;
@@ -70,7 +69,6 @@ public class EntityLoader implements MapLoader {
                 for (Point p : obj.getPoints()) {
                     pc.points.add(new Vector2(p.x, p.y));
                 }
-                logger.info("{}", e.getComponent(PathComponent.class).points);
             }
             if (  behave!= null )
             {   /// pfadstring and
