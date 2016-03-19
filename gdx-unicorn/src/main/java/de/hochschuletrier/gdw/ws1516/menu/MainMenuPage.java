@@ -51,15 +51,6 @@ public class MainMenuPage extends MenuPage {
         
     }    
 
-    private void startGame() {
-        if (!main.isTransitioning()) {      
-            Game game = new Game();
-            game.init(assetManager);
-            main.changeState(new GameplayState(assetManager, game), new SplitHorizontalTransition(500), null);
-            
-        }
-    }
-    
     private void stopGame() {
         if (!main.isTransitioning()) {
             main.changeState(main.getPersistentState(MainMenuState.class));
