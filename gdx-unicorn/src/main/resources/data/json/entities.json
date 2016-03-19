@@ -12,7 +12,7 @@
             "Input":{},
             "Player":{},
             "Movable":{
-                "state": "on_ground"
+                "state": "falling"
                 },
             "Animation": {
                 "on_ground_idle": "unicorn_idle",
