@@ -8,7 +8,7 @@
       "type": "linear",
       "destinations":[
         {"x":511, "y":300, "speed":1},
-        {"x":512, "y":300, "speed":0.0001}
+        {"x":512, "y":300, "speed":1}
       ]
     },
     "tr1" : {
@@ -18,18 +18,39 @@
         {"x":700, "y":184, "speed":30}
       ]
     },
+    "bg" : {
+      "type": "linear",
+      "destinations":[
+        {"x":511, "y":300, "speed":1},
+        {"x":512, "y":300, "speed":0.0001}
+      ]
+    },
+    "uc2" : {
+      "type": "linear",
+      "destinations":[
+        {"x":200, "y":152, "speed":300},
+        {"x":634, "y":152, "speed":300}
+      ]
+    },
+    "uc2_stay" : {
+      "type": "linear",
+      "destinations":[
+        {"x":634, "y":152, "speed":1},
+        {"x":635, "y":152, "speed":1}
+      ]
+    },
     "uc1": {
       "type": "linear",
       "destinations":[
-        {"x":-100, "y":184, "speed":100},
-        {"x":200, "y":184, "speed":100}
+        {"x":-100, "y":152, "speed":100},
+        {"x":200, "y":152, "speed":100}
       ]
     },
     "uc_stay" : {
       "type": "linear",
       "destinations":[
-        {"x":200, "y":184, "speed":0.5},
-        {"x":201, "y":184, "speed":0.4}
+        {"x":200, "y":168, "speed":0.5},
+        {"x":201, "y":168, "speed":0.4}
       ]
     },
     "tr_stay" : {
@@ -66,7 +87,6 @@
       ]
     }
 },
-
   "queues" : {
     "trexQ1":{
       "layer" :1,
@@ -108,9 +128,8 @@
       ],
       "animations" : [
         {"time":0,"animation": "sound/trexHappy", "group":"crying"},
-        {"time":0,"animation": "pause_path", "group":"*","animationTime":2000}
-      ],
-      "finalNext":"trexQ4"
+        {"time":0,"animation": "pause_path", "group":"*","animationTime":2400}
+      ]
     },
     "unicornQ1":{
       "layer" :1,
@@ -153,14 +172,35 @@
       "finalNext":"unicornQ5"
     },
     "unicornQ5":{
-      "layer" :1,
+      "layer" :2,
       "time" : -1,
       "items" : [
-        {"type":"animation", "path":"uc_stay","resource":"pink_unicorn_walking"}
+        {"type":"animation", "path":"uc2","resource":"pink_unicorn_dashing"}
       ],
       "animations" : [
       ],
-      "finalNext":"unicornQ5"
+      "finalNext":"trexQ5"
+    },
+    "unicornQ6":{
+      "layer" :4,
+      "time" : -1,
+      "items" : [
+        {"type":"animation", "path":"uc2_stay","resource":"pink_unicorn_idle"}
+      ],
+      "animations" : [
+        {"time":0,"animation":"pause_path","group":"*","animationTime":2000}
+      ]
+    },
+    "trexQ5":{
+      "layer" :1,
+      "time" : -1,
+      "items" : [
+        {"type":"animation", "path":"tr_stay","resource":"trex_plottwist", "flipX":"true"}
+      ],
+      "animations" : [
+        {"time":"0","animation":"pause_path","animationTime":600,"group":"*"}
+      ],
+      "next":"unicornQ6"
     },
     "gumQ":{
       "layer" :2,

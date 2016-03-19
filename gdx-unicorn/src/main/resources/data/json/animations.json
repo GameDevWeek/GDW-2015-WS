@@ -481,5 +481,18 @@
     "playType": "REVERSED",
     "columns": 4,
     "rows": 1
+  },
+  "pink_unicorn_dashing": {
+    "filename": "data/graphics/spritesheets/unicorn_dash_pink_spritesheet.png",
+    "frames": 3,
+    "frameDuration": [
+      0.15,
+      0.15,
+      0.15,
+      0.15
+    ],
+    "playType": "NORMAL",
+    "columns": 3,
+    "rows": 1
   }
 }
