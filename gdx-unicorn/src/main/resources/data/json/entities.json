@@ -416,7 +416,8 @@
             "Position": {
             },
             "Animation": {
-                "animation": "chocolate_river_top"
+                "name": "river_top",
+                "default_animation": "chocolate_river_top"
             },
             "RenderLayer": {
                 "layer": 200
@@ -429,7 +430,7 @@
             "Position": {
             },
             "Animation": {
-                "animation": "chocolate_river_body"
+                "default_animation": "chocolate_river_body"
             },
             "RenderLayer": {
                 "layer": 200

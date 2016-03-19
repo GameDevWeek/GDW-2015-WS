@@ -139,7 +139,7 @@
     "chocolate_river_top": {
         "filename": "data/maps/tilesets/chocolateriver_ani_top.png",
         "frames" : 4,
-        "frameDuration": [0.25],
+        "frameDuration": [0.4],
         "playType" : "LOOP",
         "columns": 4,
         "rows" : 1
@@ -147,7 +147,7 @@
     "chocolate_river_body": {
         "filename": "data/maps/tilesets/chocolateriver_ani_body.png",
         "frames" : 4,
-        "frameDuration": [0.25],
+        "frameDuration": [0.4],
         "playType" : "LOOP",
         "columns": 4,
         "rows" : 1
