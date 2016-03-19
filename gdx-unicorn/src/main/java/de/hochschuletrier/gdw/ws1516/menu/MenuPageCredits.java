@@ -55,18 +55,31 @@ public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter, S
                 }
             });
             addActor(sceneAnimatorActor);
-
-            // If this is a build jar file, disable hotkeys
-            if (!Main.IS_RELEASE) {
-                increaseSpeed.register();
-                decreaseSpeed.register();
-                resetSpeed.register();
-            }
         } catch (Exception ex) {
             logger.error("Error loading credits", ex);
         }
 
         addLeftAlignedButton(55, 40, 100, 50, "Menu", () -> menuManager.popPage(),"buttonSound");
+    }
+    
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        
+        // If this is a build jar file, disable hotkeys
+        if (!Main.IS_RELEASE && increaseSpeed != null) {
+            if(visible) {
+                increaseSpeed.register();
+                decreaseSpeed.register();
+                resetSpeed.register();
+            } else {
+                increaseSpeed.unregister();
+                decreaseSpeed.unregister();
+                resetSpeed.unregister();
+            }
+        }
+        if(sceneAnimator != null && visible)
+            sceneAnimator.reset();
     }
 
     @Override
