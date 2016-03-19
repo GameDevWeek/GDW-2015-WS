@@ -1,6 +1,7 @@
 package de.hochschuletrier.gdw.ws1516.menu;
 
 import de.hochschuletrier.gdw.ws1516.Settings;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
 import de.hochschuletrier.gdw.commons.gdx.audio.SoundEmitter;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
 
@@ -32,7 +34,7 @@ public class MenuPageOptions extends MenuPage {
         soundSlider=addLabeledSlider(0,100,1,xOffset, yOffset - yStep * (i++), "Sound", true,Settings.soundValue.get());
         System.out.println("Test3");
         addLeftAlignedButton(xOffset, yOffset - yStep * (i++), 120, 50, "Zurücksetzen", this::reset, "buttonSound");  
-        
+        addPageEntry(menuManager, xOffset, yOffset - yStep*(i++), "Informationen", new HelpPage(skin, menuManager));  
         
         generalSlider.addListener(new ChangeListener() {
             @Override
@@ -87,4 +89,9 @@ public class MenuPageOptions extends MenuPage {
             setValuesFromSettings();
         }
     }
+    protected final void addPageEntry(MenuManager menuManager, int x, int y, String text, MenuPage page) {
+        menuManager.addLayer(page);
+        addLeftAlignedButton(x, y, 150, 40, text, () -> menuManager.pushPage(page),"buttonSound");
+    }
+
 }
