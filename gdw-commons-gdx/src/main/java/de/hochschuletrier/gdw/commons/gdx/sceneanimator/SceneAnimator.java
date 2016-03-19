@@ -1,5 +1,6 @@
 package de.hochschuletrier.gdw.commons.gdx.sceneanimator;
 
+import com.badlogic.gdx.audio.Sound;
 import de.hochschuletrier.gdw.commons.gdx.sceneanimator.text.TextItem;
 import de.hochschuletrier.gdw.commons.gdx.sceneanimator.text.TextStyle;
 import com.badlogic.gdx.graphics.Color;
@@ -57,6 +58,8 @@ public class SceneAnimator {
         AnimationExtended getAnimation(String name);
 
         Texture getTexture(String name);
+
+        Sound getSound(String name);
     }
 
     public SceneAnimator(Getter getter, String filename) throws IOException, UnsupportedEncodingException,
@@ -123,7 +126,7 @@ public class SceneAnimator {
                 switch (itemData.type) {
                     case TEXT:
                         style = textStyles.get(itemData.style);
-                        item = new TextItem(group, itemStartTime, angle, opacity, itemData.text, style);
+                        item = new TextItem(group, itemStartTime, angle, opacity, itemData.text, style, getter);
 
                         if (itemData.x != null && itemData.y != null) {
                             item.setPosition(temp.set(itemData.x, itemData.y));
