@@ -184,7 +184,7 @@ public class SoundSystem extends IteratingSystem
         if (move != null && player != null) {
             boolean shouldplayRun = false;
             boolean shouldplaySpuck = false;
-            if (move.state == State.ON_GROUND) {
+            if (move.state == State.ON_GROUND || move.state==State.LANDING) {
                 if (Math.abs(body.getLinearVelocity().x) > 1f) {
                     shouldplayRun = true;
                 }
