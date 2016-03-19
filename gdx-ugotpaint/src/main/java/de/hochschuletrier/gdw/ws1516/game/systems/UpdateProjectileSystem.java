@@ -15,7 +15,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.ProjectileComponent;
 public class UpdateProjectileSystem extends IteratingSystem implements EndgameEvent.Listener {
 
     private final Vector2 vel = new Vector2();
-    private float endgameSpeedFactor = 1;
+    private float speedFactor = GameConstants.GAME_SPEEDFACTOR;
 
     private Engine engine;
 
@@ -45,7 +45,7 @@ public class UpdateProjectileSystem extends IteratingSystem implements EndgameEv
         ProjectileComponent projectile = ComponentMappers.projectile.get(entity);
         PositionComponent position = ComponentMappers.position.get(entity);
         AnimationComponent anim = ComponentMappers.animation.get(entity);
-        vel.set(projectile.velocity).scl(deltaTime * endgameSpeedFactor);
+        vel.set(projectile.velocity).scl(deltaTime * speedFactor);
         position.pos.add(vel);
 
         // remove entity from engine if it is completely faded out
@@ -66,6 +66,6 @@ public class UpdateProjectileSystem extends IteratingSystem implements EndgameEv
      * Speeds up the players by given amount during the endgame.
      */
     public void onEndgameEvent() {
-        endgameSpeedFactor = 2.5f;
+        speedFactor = GameConstants.ENDGAME_SPEEDFACTOR;
     }
 }

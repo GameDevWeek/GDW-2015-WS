@@ -19,7 +19,7 @@ public class UpdatePlayerSystem extends IteratingSystem implements GameOverEvent
     private final Vector2 lastPoint = new Vector2();
     private final Vector2 dummy = new Vector2();
     protected boolean inputEnabled = true;
-    private float endgameSpeedFactor = 1;
+    private float speedFactor = GameConstants.GAME_SPEEDFACTOR;
 
     public UpdatePlayerSystem() {
         this(0);
@@ -53,7 +53,7 @@ public class UpdatePlayerSystem extends IteratingSystem implements GameOverEvent
         PositionComponent position = ComponentMappers.position.get(entity);
         if(inputEnabled) {
             InputComponent input = ComponentMappers.input.get(entity);
-            dummy.set(input.moveDirection).nor().scl(80 * deltaTime * endgameSpeedFactor);
+            dummy.set(input.moveDirection).nor().scl(80 * deltaTime * speedFactor);
             position.pos.add(dummy);
             if(position.pos.x < GameConstants.BOUND_LEFT)
                 position.pos.x = GameConstants.BOUND_LEFT;
@@ -134,6 +134,6 @@ public class UpdatePlayerSystem extends IteratingSystem implements GameOverEvent
      * Speeds up the players by given amount during the endgame.
      */
     public void onEndgameEvent() {
-        endgameSpeedFactor = 2.5f;
+        speedFactor = GameConstants.ENDGAME_SPEEDFACTOR;
     }
 }
