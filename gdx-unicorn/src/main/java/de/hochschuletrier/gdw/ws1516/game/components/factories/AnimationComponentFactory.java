@@ -40,6 +40,13 @@ public class AnimationComponentFactory extends ComponentFactory<EntityFactoryPar
             }
         }
         
+        // default animation
+        String stateString = properties.getString("default_animation");
+        if(stateString != null)
+        {
+            component.animationMap.put("default_animation", assetManager.getAnimation(stateString));
+        }
+        
         fillAnimationComponent(component, properties);
         
         entity.add(component);
