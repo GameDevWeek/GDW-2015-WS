@@ -17,6 +17,7 @@ import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
 import de.hochschuletrier.gdw.ws1516.events.JumpEvent;
 import de.hochschuletrier.gdw.ws1516.events.MovementEvent;
+import de.hochschuletrier.gdw.ws1516.events.MovementStateChangeEvent;
 import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
 import de.hochschuletrier.gdw.ws1516.events.ThrowBackEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
@@ -155,6 +156,7 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         PhysixBodyComponent physix = ComponentMappers.physixBody.get(entity);
         InputComponent input = ComponentMappers.input.get(entity);
         MovementComponent movement = ComponentMappers.movement.get(entity);
+        PlayerComponent player = ComponentMappers.player.get(entity);
         
         movement.velocityX = movement.speed * Math.max(Math.min(input.directionX, 1.0f), -1.0f);
         movement.velocityY = movement.speed * Math.max(Math.min(input.directionY, 1.0f), -1.0f);
@@ -167,6 +169,10 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         if (movement.remainingStateTime <= 0) {
             EndFlyEvent.emit(entity);
         }
+        
+        if (player != null) {
+            player.flyingCooldown = movement.remainingStateTime;
+        }
     }
     
     @Override
@@ -174,7 +180,14 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         // TODO Auto-generated method stub
         MovementComponent movement = ComponentMappers.movement.get(entity);
         if (movement != null) {
-            movement.state = MovementComponent.State.JUMPING;
+            MovementComponent.State newState=MovementComponent.State.FALLING;
+            MovementStateChangeEvent.emit(entity, movement.state, newState);
+            movement.state = newState;
+        }
+        
+        PlayerComponent player = ComponentMappers.player.get(entity);
+        if (player != null) {
+            player.flyingCooldown = 0;
         }
     }
     
@@ -183,8 +196,15 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         // TODO Auto-generated method stub
         MovementComponent movement = ComponentMappers.movement.get(entity);
         if (movement != null) {
-            movement.state = MovementComponent.State.FLYING;
+            MovementComponent.State newState=MovementComponent.State.FLYING;
+            MovementStateChangeEvent.emit(entity, movement.state, newState);
+            movement.state = newState;
             movement.remainingStateTime = time;
+        }
+        
+        PlayerComponent player = ComponentMappers.player.get(entity);
+        if (player != null) {
+            player.flyingCooldown = GameConstants.FLYING_TIME;
         }
     }
     
@@ -193,7 +213,9 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         // TODO Auto-generated method stub
         MovementComponent movement = ComponentMappers.movement.get(entity);
         PhysixBodyComponent physix = ComponentMappers.physixBody.get(entity);
-        movement.state = MovementComponent.State.JUMPING;
+        MovementComponent.State newState=MovementComponent.State.JUMPING;
+        MovementStateChangeEvent.emit(entity, movement.state, newState);
+        movement.state = newState;
         physix.setLinearVelocity(0, 0); //kills any movement
         physix.applyImpulse(0, movement.jumpImpulse);
     }
@@ -231,7 +253,9 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         MovementComponent movement = ComponentMappers.movement.get(unicorn);
         
         if (physix != null && movement != null) {            
-            movement.state = MovementComponent.State.FALLING;
+            MovementComponent.State newState=MovementComponent.State.FALLING;
+            MovementStateChangeEvent.emit(unicorn, movement.state, newState);
+            movement.state = newState;
             physix.setLinearVelocity(0, 0); //kills any movement
             physix.applyImpulse(dirX * GameConstants.THROWBACK_FORCE, -1.0f * GameConstants.THROWBACK_FORCE);
         }

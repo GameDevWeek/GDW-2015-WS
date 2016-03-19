@@ -52,7 +52,6 @@ public class TextureRenderSystem extends SubSystem {
             ShaderProgram alphaTextureShader = ShaderLoader.getAlphaTextureShader();
             DrawUtil.setShader(alphaTextureShader);
             alphaTextureShader.setUniformf("u_alpha", alpha);
-            
         }
         
         DrawUtil.batch.draw(texture, x - w * 0.5f, y - h * 0.5f, originX, originY, w, h,

@@ -3,6 +3,7 @@ package de.hochschuletrier.gdw.ws1516.game.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 import de.hochschuletrier.gdw.commons.gdx.ashley.SortedSubIteratingSystem.SubSystem;
 import de.hochschuletrier.gdw.commons.gdx.assets.AnimationExtended;
@@ -19,6 +20,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.systems.EnemyHandlingSystem.Action.Type;
+import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 
 public class AnimationRenderSystem extends SubSystem 
     implements MovementStateChangeEvent.Listener, PlayerStateChangeEvent.Listener, EnemyActionEvent.Listener
@@ -45,7 +47,7 @@ public class AnimationRenderSystem extends SubSystem
         }
         
         animation.stateTime += deltaTime;
-        if(movement != null && movement.state != animation.lastRenderedState)
+        if((movement != null && movement.state != animation.lastRenderedState))
         {
             animation.resetStateTime();
             animation.lastRenderedState = movement.state;
@@ -82,8 +84,18 @@ public class AnimationRenderSystem extends SubSystem
         
         animation.currentlyFlipped = (movement.lookDirection) == (MovementComponent.LookDirection.LEFT) ^ animation.flipHorizontal;
         
+        drawKeyframe(animation, position, keyFrame);   
+    }
+
+    private void drawKeyframe(AnimationComponent animation, PositionComponent position, TextureRegion keyFrame) {
         if(keyFrame != null)
         {
+            if(animation.alpha < 1f && animation.alpha >= 0f)
+            {
+                ShaderProgram alphaTextureShader = ShaderLoader.getAlphaTextureShader();
+                DrawUtil.setShader(alphaTextureShader);
+                alphaTextureShader.setUniformf("u_alpha", animation.alpha);
+            }
             int w = keyFrame.getRegionWidth();
             int h = keyFrame.getRegionHeight();
             
@@ -95,7 +107,11 @@ public class AnimationRenderSystem extends SubSystem
             {
                 DrawUtil.batch.draw(keyFrame, position.x - w * 0.5f, position.y - h * 0.5f, w * 0.5f, h * 0.5f, w, h, 1, 1, position.rotation);
             }
-        }        
+            if(animation.alpha < 1f && animation.alpha >= 0f)
+            {
+                DrawUtil.setShader(null);
+            }
+        }
     }
 
 
@@ -118,7 +134,15 @@ public class AnimationRenderSystem extends SubSystem
         String walkingString = stateKey + "_walking";
         
         AnimationExtended animationExtended = null;
-        if(Math.abs(movement.velocityX) <= 0.01)
+        boolean isIdle = Math.abs(movement.velocityX) <= 0.01;
+        
+        if((isIdle != animation.lastRenderedIdle))
+        {
+            animation.resetStateTime();
+            animation.lastRenderedIdle = isIdle;
+        }
+        
+        if(isIdle)
         {
             animationExtended = animation.animationMap.get(idleString);
         }

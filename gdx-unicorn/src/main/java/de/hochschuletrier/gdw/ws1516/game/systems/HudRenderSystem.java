@@ -117,10 +117,10 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         
        
         
-        float gum_x = lives_x + 60;
-        float gum_y = heart_y;
+        float gum_x = lives_x + 80;
+        float gum_y = heart_y + 20;
         
-        float gum_count_x = gum_x + 55;
+        float gum_count_x = gum_x + 35;
         float gum_count_y = heart_y+10;
         
         
@@ -160,7 +160,7 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
                        
         DrawUtil.draw(heart, heart_x, heart_y, 40, 40);
         font.draw(DrawUtil.batch, lives_string, lives_x, lives_y);
-        DrawUtil.draw(blue_gum, gum_x, gum_y, 40, 40);
+        //DrawUtil.draw(blue_gum, gum_x, gum_y, 40, 40);
         font.draw(DrawUtil.batch, gum_count_string, gum_count_x, gum_count_y);
         font.draw(DrawUtil.batch, time, time_x, time_y);
         DrawUtil.draw(coin, coin_x, coin_y, 40, 40);
@@ -169,14 +169,22 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         DrawUtil.draw(clock, clock_x, clock_y, 40,40);
         
         CircularProgressRenderer dashCooldownRenderer = new CircularProgressRenderer(hornAttackDummy);
-        float cooldown;
+        float hornCooldown;
         if (playerComp.hornAttackCooldown != 0.0f && playerComp.state != State.HORNATTACK) {
-            cooldown = -(playerComp.hornAttackCooldown / GameConstants.HORN_MODE_COOLDOWN);
+            hornCooldown = -(playerComp.hornAttackCooldown / GameConstants.HORN_MODE_COOLDOWN);
         } else {
-            cooldown = 1.0f;
+            hornCooldown = 1.0f;
         }
-        dashCooldownRenderer.draw(DrawUtil.batch, hornAttackDummy_x, hornAttackDummy_y, 92, 92, cooldown * 360.0f); 
-              
+        dashCooldownRenderer.draw(DrawUtil.batch, hornAttackDummy_x, hornAttackDummy_y, 92, 92, hornCooldown * 360.0f); 
+        
+        CircularProgressRenderer flyingCooldownRenderer = new CircularProgressRenderer(blue_gum);
+        float flyingCooldown;
+        if (playerComp.flyingCooldown != 0.0f) {
+            flyingCooldown = -(playerComp.flyingCooldown / GameConstants.FLYING_TIME);
+        } else {
+            flyingCooldown = 1.0f;
+        }
+        flyingCooldownRenderer.draw(DrawUtil.batch, gum_x, gum_y, 40, 40, flyingCooldown * 360.0f);
     }
 
     @Override
