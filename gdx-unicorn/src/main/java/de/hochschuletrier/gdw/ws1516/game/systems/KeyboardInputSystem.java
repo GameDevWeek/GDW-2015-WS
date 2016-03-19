@@ -172,7 +172,10 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
             if (movement.state==de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State.FLYING){
                 EndFlyEvent.emit(entity);
             }else{
-                StartFlyEvent.emit(entity, GameConstants.FLYING_TIME);
+                if ( player.blueGumStacks > 0 ) {
+                    StartFlyEvent.emit(entity, GameConstants.FLYING_TIME);
+                    player.blueGumStacks--;
+                }
             }
             fly = false;
         }

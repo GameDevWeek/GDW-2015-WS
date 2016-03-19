@@ -16,8 +16,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
+import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.BubbleGlueComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 
 public class BubbleGlueSystem extends EntitySystem {
@@ -37,13 +39,16 @@ public class BubbleGlueSystem extends EntitySystem {
         for (Entity entity : entitys) {
               //Fetch components
                 BubbleGlueComponent glueComponent = ComponentMapper.getFor(BubbleGlueComponent.class).get(entity);
-                PhysixBodyComponent body = ComponentMapper.getFor(PhysixBodyComponent.class).get(glueComponent.gluedEntity);
+                PhysixBodyComponent body = ComponentMappers.physixBody.get(glueComponent.gluedEntity);
+                MovementComponent movement = ComponentMappers.movement.get(glueComponent.gluedEntity);
                 
+                //Remove glue if the glued body does no longer exist
                 if (body == null) {
                     engine.removeEntity(entity);
                     continue;
                 }
-                
+                                
+                //Set entity to ground and arrest momentum
                 checkIfEntityIsOnGround(glueComponent.gluedEntity, engine);
                 if (!groundTraceResult) {
                     
@@ -53,8 +58,10 @@ public class BubbleGlueSystem extends EntitySystem {
                     
                     //Arresto momentum
                     body.setLinearVelocity(0, 0);
-                
-                    logger.debug("onground");
+                    
+                    //If the glued entity has a movement component, set it to glued
+                    if (movement != null) 
+                        movement.state = MovementComponent.State.GLUED;
                     
                 } else {
                     
@@ -65,15 +72,18 @@ public class BubbleGlueSystem extends EntitySystem {
                     PhysixBodyComponent enemyBody = ComponentMappers.physixBody.get(glueComponent.gluedEntity);
                     glueComponent.gluedToPosition = enemyBody.getPosition();
                     
-                    logger.debug("onthefly");
                 }
                                 
                 //Cooldown
                 glueComponent.timeRemaining -= deltaTime;
                     
+                //Unglued entity
                 if (glueComponent.timeRemaining <= 0) {
-                    engine.removeEntity(entity);
+                    DeathEvent.emit(entity);
+                    if (movement != null)
+                        movement.state = MovementComponent.State.FALLING;
                 }
+                
         }
             
     }

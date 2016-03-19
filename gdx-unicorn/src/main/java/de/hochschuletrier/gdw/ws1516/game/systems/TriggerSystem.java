@@ -21,6 +21,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.StartPointComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.TriggerComponent;
 import de.hochschuletrier.gdw.ws1516.events.EndContactEvent;
+import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
 /*
  * TODO listeners für Objekte einsammeln und zählen in diesem hoch
  */
@@ -71,13 +72,7 @@ public class TriggerSystem extends EntitySystem implements TriggerEvent.Listener
         switch( type)
         {
         case SPAWN_ZONE:
-                StartPointComponent start = ComponentMappers.startPoint.get(unicorn);
-                PositionComponent triggerPos = ComponentMappers.position.get(triggeringEntity);
-
-                start.x = triggerPos.x;
-                start.y = triggerPos.y;         
-                
-                HealEvent.emit(unicorn, playerComp.maxHitpoints);
+                    // Spawnzone ist kein trigger
             break;
        
         case DEATH_ZONE:           
@@ -89,6 +84,10 @@ public class TriggerSystem extends EntitySystem implements TriggerEvent.Listener
                     DeathEvent.emit(triggeringEntity);
                 }                 
             break; 
+        case WINING_ZONE:
+                GameOverEvent.emit(true);
+            break;
+           
         default:
             logger.warn("unhandeld TriggerEvent : {}",type.toString());
             break;

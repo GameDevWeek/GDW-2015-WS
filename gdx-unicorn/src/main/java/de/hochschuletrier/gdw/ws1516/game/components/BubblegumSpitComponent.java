@@ -1,11 +1,12 @@
 package de.hochschuletrier.gdw.ws1516.game.components;
 
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Pool;
+
+import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BubblegumSpitListener;
 
 /**
  * A bubble-gum spit component.
@@ -22,8 +23,9 @@ public class BubblegumSpitComponent extends Component implements Pool.Poolable {
     /**
      * Called when something has been hit, including the player or other entity
      * the entity is the bullet entity that caused the hit
+     * second argument contains details about the collision
      */
-    public Consumer<Entity> onHit;
+    public BiConsumer<Entity, BubblegumSpitListener.CollisionDetails> onHit;
     
     @Override
     public void reset() {

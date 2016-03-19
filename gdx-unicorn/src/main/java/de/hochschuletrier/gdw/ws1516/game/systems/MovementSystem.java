@@ -9,6 +9,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
@@ -21,6 +22,7 @@ import de.hochschuletrier.gdw.ws1516.events.ThrowBackEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.InputComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.LookDirection;
@@ -92,6 +94,7 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
                 case FALLING:
                 case JUMPING:
                 case ON_GROUND:
+                case LANDING:
                 default:
                     defaultMovement(entity);
                     break;
@@ -108,15 +111,43 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         InputComponent input = ComponentMappers.input.get(entity);
         MovementComponent movement = ComponentMappers.movement.get(entity);
         PlayerComponent playerComp = ComponentMappers.player.get(entity);
-        
+        EnemyTypeComponent enemyType = ComponentMappers.enemyType.get(entity);
+                
         if (input != null) {
+            
+            
             MovementEvent.emit(entity, input.directionX);
-            if (input.startJump && movement.state == MovementComponent.State.ON_GROUND) {
+            if (input.startJump && (movement.state == MovementComponent.State.ON_GROUND || movement.state == MovementComponent.State.LANDING)) {
                 JumpEvent.emit(entity);
             }
+            
+            boolean inAir = movement != null && (
+                    movement.state == MovementComponent.State.FLYING ||
+                    movement.state == MovementComponent.State.FALLING ||
+                    movement.state == MovementComponent.State.JUMPING);
+            if ((inAir || input.directionX != 0 || input.directionY != 0) && physix != null) {
+                physix.getFixtureByUserData("body").setFriction(0.0f);
+            } else {
+                physix.getFixtureByUserData("body").setFriction(1.0f);
+            }
+            
         }
-        if (playerComp == null || playerComp.state != State.HORNATTACK && playerComp.state != State.THROWBACK) {
-            physix.setLinearVelocityX(movement.velocityX);
+        if (playerComp != null && playerComp.state != State.HORNATTACK && playerComp.state != State.THROWBACK) {
+            if (movement.isOnPlatform) {
+                physix.setLinearVelocityX(movement.velocityX + movement.onPlatformBody.getLinearVelocity().x);
+            } else {
+                physix.setLinearVelocityX(movement.velocityX);
+            }
+        }
+        /** Gegner wollen sich auch bewegen
+         * @author Tobi - GameLogic
+         */
+        if (enemyType != null ) {
+            if (movement.isOnPlatform) {
+                physix.setLinearVelocityX(movement.velocityX + movement.onPlatformBody.getLinearVelocity().x);
+            } else {
+                physix.setLinearVelocityX(movement.velocityX);
+            }
         }
     }
     
@@ -169,7 +200,6 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
     
     @Override
     public void onMovementEvent(Entity entity, float dirX) {
-        
         MovementComponent movement = ComponentMappers.movement.get(entity);
         movement.velocityX = movement.speed * Math.max(Math.min(dirX, 1.0f), -1.0f);
         
@@ -182,7 +212,7 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         InputComponent input = ComponentMappers.input.get(player);
         MovementComponent movement = ComponentMappers.movement.get(player);
         if (physix != null && input != null && movement != null) {
-            physix.applyImpulse(input.directionX*GameConstants.HORNATTACK_IMPULSE, 0);
+            physix.applyImpulse(movement.lookDirection.getCosine()*GameConstants.HORNATTACK_IMPULSE, 0);
             
             // movement.velocityX = movement.speed * 1000 * input.directionX;
         }

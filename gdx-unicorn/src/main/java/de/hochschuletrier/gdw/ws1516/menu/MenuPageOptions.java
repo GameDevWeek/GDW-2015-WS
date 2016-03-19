@@ -1,32 +1,23 @@
 package de.hochschuletrier.gdw.ws1516.menu;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.backends.lwjgl.audio.Wav.Sound;
+import de.hochschuletrier.gdw.ws1516.Settings;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import de.hochschuletrier.gdw.commons.gdx.audio.MusicManager;
 import de.hochschuletrier.gdw.commons.gdx.audio.SoundEmitter;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
-import de.hochschuletrier.gdw.ws1516.game.systems.SoundSystem;
 
-public class MenuOptions extends MenuPage {
+public class MenuPageOptions extends MenuPage {
 
-    private static float generalSound;
     private Slider generalSlider;
     private Slider musicSlider;
     private Slider soundSlider;
-    
 
-
-    public MenuOptions(Skin skin, MenuManager menuManager) {
+    public MenuPageOptions(Skin skin, MenuManager menuManager) {
         super(skin, "menu_bg");
         System.out.println("Test");
         int i = 0;
@@ -34,7 +25,6 @@ public class MenuOptions extends MenuPage {
         int yOffset = 370;
         int yStep = 55;
         
-        generalSound = 5;
         generalSlider = addLabeledSlider(0,100,1,xOffset, yOffset - yStep * (i++), "Allgemein", true,Settings.generalValue.get());    
         System.out.println("Test1");
         musicSlider = addLabeledSlider( 0,100,1,xOffset, yOffset - yStep * (i++), "Musik", true,Settings.musicValue.get()); 
@@ -47,48 +37,26 @@ public class MenuOptions extends MenuPage {
         generalSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Settings.generalValue.set(generalSlider.getValue()/10);
-                generalSound = Settings.generalValue.get();
-               
-                Settings.musicValue.set(musicSlider.getValue());
-                Settings.soundValue.set(soundSlider.getValue());    
-                MusicManager.setGlobalVolume(Settings.musicValue.get()/1000*generalSound);
-                SoundSystem.setGlobalVolume(Settings.soundValue.get()/1000*generalSound);
-                
-                
-                       
+                Settings.generalValue.set(generalSlider.getValue());
+                Settings.flush();
             }
         });
 
         musicSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-               Settings.musicValue.set(musicSlider.getValue());
-               MusicManager.setGlobalVolume(Settings.musicValue.get()/1000*generalSound);
-                      
-
+                Settings.musicValue.set(musicSlider.getValue());
+                Settings.flush();
             }
         });
 
-//        soundSlider.addListener(new ClickListener() {
-//
-//            @Override
-//            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-//                Settings.soundValue.set(soundSlider.getValue());    
-//                SoundSystem.setGlobalVolume(Settings.soundValue.get()/1000*generalSound);
-//                soundTest();
-//
-//            }
-//        });
         soundSlider.addListener(new ClickListener() {
             
             @Override
             public void clicked(InputEvent event, float x, float y)  {
-                Settings.soundValue.set(soundSlider.getValue());    
-                SoundSystem.setGlobalVolume(Settings.soundValue.get()/1000*generalSound);
-                System.out.println(Settings.soundValue.get()/1000*generalSound);
+                Settings.soundValue.set(soundSlider.getValue());
+                Settings.flush();
                 soundTest();
-                
             }
         });
       
@@ -102,13 +70,21 @@ public class MenuOptions extends MenuPage {
     public void reset(){
         System.out.println(""+Settings.generalValue.get()+" "+Settings.musicValue.get()+""+Settings.soundValue.get());
         Settings.reset();
+        setValuesFromSettings();
+    }
+    
+    public void setValuesFromSettings(){
         generalSlider.setValue(Settings.generalValue.get());
         musicSlider.setValue(Settings.musicValue.get());
         soundSlider.setValue(Settings.soundValue.get());
         System.out.println(""+Settings.generalValue.get()+" "+Settings.musicValue.get()+""+Settings.soundValue.get());
-        
     }
 
- 
-  
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if(visible) {
+            setValuesFromSettings();
+        }
+    }
 }
