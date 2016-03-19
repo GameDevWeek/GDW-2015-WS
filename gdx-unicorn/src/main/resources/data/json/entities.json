@@ -12,7 +12,7 @@
             "Input":{},
             "Player":{},
             "Movable":{
-                "state": "on_ground"
+                "state": "falling"
                 },
             "Animation": {
                 "on_ground_idle": "unicorn_idle",
@@ -351,6 +351,20 @@
                 "density": 5,
                 "friction": 0.2,
                 "restitution": 0.4
+            }
+        }
+    },
+    "blood_splatter": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "BackgroundParticle": {
+                "effect": "blood_splatter",
+                "kill_when_finished": true,
+                "flipVertical": true
+            },
+            "RenderLayer": {
+                "layer": 150
             }
         }
     },
