@@ -70,6 +70,9 @@
                 "flying": "hunter_walking",
                 "falling": "hunter_walking",
                 "jumping": "hunter_walking",
+                "landing": "hunter_walking",
+                "glued": "hunter_glued",
+                "shooting": "hunter_shooting",
                 "flip_horizontal": true
             },
             "PhysixBody": {
@@ -107,6 +110,9 @@
                 "flying": "paparazzi_walking",
                 "falling": "paparazzi_walking",
                 "jumping": "paparazzi_walking",
+                "landing": "paparazzi_walking",
+                "glued": "paparazzi_glued",
+                "shooting": "paparazzi_shooting",
                 "flip_horizontal": true
             },
             "PhysixBody": {

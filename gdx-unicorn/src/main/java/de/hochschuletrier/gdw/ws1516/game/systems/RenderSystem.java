@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.Family;
 
 import de.hochschuletrier.gdw.commons.gdx.ashley.SortedSubIteratingSystem;
 import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
+import de.hochschuletrier.gdw.ws1516.events.EnemyActionEvent;
 import de.hochschuletrier.gdw.ws1516.events.JumpEvent;
 import de.hochschuletrier.gdw.ws1516.events.MovementEvent;
 import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
@@ -40,6 +41,7 @@ public class RenderSystem extends SortedSubIteratingSystem {
     public void addedToEngine(Engine engine) 
     {
         super.addedToEngine(engine);
+        EnemyActionEvent.register(animationRenderSystem);
     }
 
     @Override
