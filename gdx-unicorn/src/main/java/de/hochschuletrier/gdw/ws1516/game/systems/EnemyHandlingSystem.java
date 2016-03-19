@@ -138,12 +138,10 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
             if ( pathEntity != null )
             {
                 PathComponent foundPath = ComponentMappers.path.get(pathEntity);
-                logger.debug("found the path ? : {}",behaviour.pathID);
                 path.points = new ArrayList<>(foundPath.points);  
                 
             }else
             {
-                logger.debug("not found"); 
                 behaviour.pathID  = null;
             }
         }
