@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 
 import de.hochschuletrier.gdw.commons.gdx.ashley.ComponentFactory;
 import de.hochschuletrier.gdw.commons.utils.SafeProperties;
-import de.hochschuletrier.gdw.ws1516.game.components.ParticleComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.ForegroundParticleComponent;
 
-public class ParticleComponentFactory extends ComponentFactory<EntityFactoryParam> 
+public class ForegroundParticleComponentFactory extends ComponentFactory<EntityFactoryParam> 
 {
 
     @Override
@@ -20,7 +20,7 @@ public class ParticleComponentFactory extends ComponentFactory<EntityFactoryPara
     @Override
     public void run(Entity entity, SafeProperties meta, SafeProperties properties, EntityFactoryParam param)
     {
-        ParticleComponent component = engine.createComponent(ParticleComponent.class);
+        ForegroundParticleComponent component = engine.createComponent(ForegroundParticleComponent.class);
 
         component.effect = new ParticleEffect(assetManager.getParticleEffect(properties.getString("effect")));
         int numOfEmitters = component.effect.getEmitters().size;
@@ -38,8 +38,10 @@ public class ParticleComponentFactory extends ComponentFactory<EntityFactoryPara
             component.startEmissionLowMin[i] = emitter.getEmission().getLowMin();
         }
         component.isFlippedHorizontal = properties.getBoolean("flipHorizontal", false);
+        component.flipVertical = properties.getBoolean("flipVertical", false);
         component.reduceEmissionIfIdle = properties.getBoolean("reduceEmissionIfIdle", false);
         component.offsetWhenMoving = properties.getFloat("offsetWhenMoving", 0);
+        component.killWhenFinished = properties.getBoolean("kill_when_finished", false);
         
         entity.add(component);
     }

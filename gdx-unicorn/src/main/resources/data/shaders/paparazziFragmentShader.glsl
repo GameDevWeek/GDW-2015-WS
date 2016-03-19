@@ -54,13 +54,10 @@ float   getDistance(vec2 circleCenter);
 vec3    rand3(vec2 seed); // very simple random function
 vec2    convertNormalizedToScreen(vec2 normalized);
 
-// prevent LibGDX from throwing "uniform not used" exception
-float   dummy(sampler2D);
-
 void main()
 {
     // prevent LibGDX from throwing "uniform not used" exception
-    dummy(u_texture);
+    texture2D(u_texture, clamp(u_paparazziSeed, 0.0, 1.0));
     
     float fragAlpha;
     for (int i = 0; i < v_circleAmount; ++i)
@@ -178,5 +175,3 @@ vec2 convertNormalizedToScreen(vec2 normalized)
 {
     return normalized * u_frameDimension;
 }
-// prevent LibGDX from throwing "uniform not used" exception
-float dummy(sampler2D) { return 0.0; }

@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.utils.Pool;
 
-public class ParticleComponent extends Component implements Pool.Poolable
+public class ForegroundParticleComponent extends Component implements Pool.Poolable
 {
     public ParticleEffect effect;
     public float[] startEmissionHighMin;
@@ -12,8 +12,11 @@ public class ParticleComponent extends Component implements Pool.Poolable
     public float[] startEmissionLowMin;
     public float[] startEmissionLowMax;
     public boolean isFlippedHorizontal;
+    public boolean isFlippedVertical;
+    public boolean flipVertical;
     public boolean reduceEmissionIfIdle;
     public float offsetWhenMoving;
+    public boolean killWhenFinished;
     
     @Override
     public void reset()
@@ -27,5 +30,6 @@ public class ParticleComponent extends Component implements Pool.Poolable
         isFlippedHorizontal = false;
         reduceEmissionIfIdle = false;
         offsetWhenMoving = 0f;
+        killWhenFinished = false;
     }
 }
