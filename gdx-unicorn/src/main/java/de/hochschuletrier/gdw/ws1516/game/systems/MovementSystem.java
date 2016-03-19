@@ -156,6 +156,7 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         PhysixBodyComponent physix = ComponentMappers.physixBody.get(entity);
         InputComponent input = ComponentMappers.input.get(entity);
         MovementComponent movement = ComponentMappers.movement.get(entity);
+        PlayerComponent player = ComponentMappers.player.get(entity);
         
         movement.velocityX = movement.speed * Math.max(Math.min(input.directionX, 1.0f), -1.0f);
         movement.velocityY = movement.speed * Math.max(Math.min(input.directionY, 1.0f), -1.0f);
@@ -168,6 +169,10 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
         if (movement.remainingStateTime <= 0) {
             EndFlyEvent.emit(entity);
         }
+        
+        if (player != null) {
+            player.flyingCooldown = movement.remainingStateTime;
+        }
     }
     
     @Override
@@ -178,6 +183,11 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
             MovementComponent.State newState=MovementComponent.State.FALLING;
             MovementStateChangeEvent.emit(entity, movement.state, newState);
             movement.state = newState;
+        }
+        
+        PlayerComponent player = ComponentMappers.player.get(entity);
+        if (player != null) {
+            player.flyingCooldown = 0;
         }
     }
     
@@ -190,6 +200,11 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
             MovementStateChangeEvent.emit(entity, movement.state, newState);
             movement.state = newState;
             movement.remainingStateTime = time;
+        }
+        
+        PlayerComponent player = ComponentMappers.player.get(entity);
+        if (player != null) {
+            player.flyingCooldown = GameConstants.FLYING_TIME;
         }
     }
     
