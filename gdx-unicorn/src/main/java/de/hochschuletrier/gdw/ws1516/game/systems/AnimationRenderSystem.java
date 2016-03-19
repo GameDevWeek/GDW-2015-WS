@@ -9,13 +9,11 @@ import de.hochschuletrier.gdw.commons.gdx.ashley.SortedSubIteratingSystem.SubSys
 import de.hochschuletrier.gdw.commons.gdx.assets.AnimationExtended;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
+import de.hochschuletrier.gdw.ws1516.events.EnemyActionEvent;
 import de.hochschuletrier.gdw.ws1516.events.MovementStateChangeEvent;
 import de.hochschuletrier.gdw.ws1516.events.PlayerStateChangeEvent;
-import de.hochschuletrier.gdw.ws1516.events.EnemyActionEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.EnemyBehaviourComponent;
-import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
@@ -252,7 +250,6 @@ public class AnimationRenderSystem extends SubSystem
 
     @Override
     public void onPlayerStateChangeEvent(Entity entity, State oldState, State newState) {
-//        System.out.println("Player State Change");
         AnimationComponent animationComponent = ComponentMappers.animation.get(entity);
         if(animationComponent != null)
         {
@@ -262,7 +259,6 @@ public class AnimationRenderSystem extends SubSystem
 
     @Override
     public void onMovementStateChangeEvent(Entity entity, State oldState, State newState) {
-//        System.out.println("Movement State Change");
         AnimationComponent animationComponent = ComponentMappers.animation.get(entity);
         if(animationComponent != null)
         {
@@ -272,10 +268,7 @@ public class AnimationRenderSystem extends SubSystem
 
     @Override
     public void onEnemyActionEvent(Entity enemy, Type action, float strength) {
-        AnimationComponent animationComponent = ComponentMappers.animation.get(enemy);
-        
-        EnemyTypeComponent enemyType = ComponentMappers.enemyType.get(enemy);
-        EnemyBehaviourComponent enemyBehaviour = ComponentMappers.enemyBehaviour.get(enemy);       
+        AnimationComponent animationComponent = ComponentMappers.animation.get(enemy);     
         
         MovementComponent movement = ComponentMappers.movement.get(enemy);
         
