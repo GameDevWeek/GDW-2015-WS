@@ -25,6 +25,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.LookDirection;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent.State;
+import de.hochschuletrier.gdw.ws1516.game.components.UnicornAnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.GameLogicTest;
 
@@ -146,7 +147,7 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
     
     @Override
     public void update(float deltaTime) {
-        Entity unicorn = engine.getEntitiesFor(Family.all(PlayerComponent.class, AnimationComponent.class).get()).first();
+        Entity unicorn = engine.getEntitiesFor(Family.all(PlayerComponent.class, UnicornAnimationComponent.class).get()).first();
         
         if (unicorn != null) {
             PlayerComponent playerComp = ComponentMappers.player.get(unicorn);
