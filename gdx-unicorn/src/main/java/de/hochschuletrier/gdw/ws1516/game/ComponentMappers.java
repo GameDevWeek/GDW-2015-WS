@@ -16,6 +16,7 @@ public class ComponentMappers {
     public static final ComponentMapper<AnimationComponent> animation = ComponentMapper.getFor(AnimationComponent.class);
     public static final ComponentMapper<UnicornAnimationComponent> unicornAnimation = ComponentMapper.getFor(UnicornAnimationComponent.class);
     public static final ComponentMapper<TextureComponent> texture = ComponentMapper.getFor(TextureComponent.class);
+    public static final ComponentMapper<SafePointTextureComponent> safePointTexture = ComponentMapper.getFor(SafePointTextureComponent.class);
     public static final ComponentMapper<RenderLayerComponent> renderLayer = ComponentMapper.getFor(RenderLayerComponent.class);
     public static final ComponentMapper<ForegroundParticleComponent> foregroundParticle = ComponentMapper.getFor(ForegroundParticleComponent.class);
     public static final ComponentMapper<BackgroundParticleComponent> backgroundParticle = ComponentMapper.getFor(BackgroundParticleComponent.class);

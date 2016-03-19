@@ -33,8 +33,14 @@ public class UnicornAnimationComponentFactory extends AnimationComponentFactory 
                     String idleString = properties.getString(color.toString() + "_" + animState.toString().toLowerCase() + "_idle");
                     String walkingString = properties.getString(color.toString() + "_" + animState.toString().toLowerCase() + "_walking");
                     
-                    map.put(animState.toString().toLowerCase() + "_idle", assetManager.getAnimation(idleString));
-                    map.put(animState.toString().toLowerCase() + "_walking", assetManager.getAnimation(walkingString));                
+                    if(idleString != null)
+                    {
+                        map.put(animState.toString().toLowerCase() + "_idle", assetManager.getAnimation(idleString));
+                    }
+                    if(idleString != null)
+                    {
+                        map.put(animState.toString().toLowerCase() + "_walking", assetManager.getAnimation(walkingString));
+                    }
                 }
                 else
                 {

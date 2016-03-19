@@ -1,11 +1,7 @@
 package de.hochschuletrier.gdw.ws1516.events;
 
-import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.SnapshotArray;
-
-import de.hochschuletrier.gdw.ws1516.events.TestEvent.Listener;
 
 
 public class TriggerEvent {

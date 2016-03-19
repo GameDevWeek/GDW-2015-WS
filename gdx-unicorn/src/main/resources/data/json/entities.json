@@ -5,9 +5,9 @@
             "ScoreBoard":{},
             "StartPosition":{},
             "Position": { 
-        "maxHitpoints":3,
-        "hitpoints":3,
-        "lives":3
+                "maxHitpoints":3,
+                "hitpoints":3,
+                "lives":3
             },
             "Input":{},
             "Player":{},
@@ -16,12 +16,24 @@
                 },
             "UnicornAnimation": {
                 "name": "unicorn",
-                "pink_on_ground_idle": "unicorn_idle",
-                "pink_on_ground_walking": "unicorn_walking",
-                "pink_flying": "unicorn_flying",
-                "pink_falling": "unicorn_falling", 
-                "pink_jumping": "unicorn_jumping",
-                "pink_landing": "unicorn_landing"
+                "pink_on_ground_idle": "pink_unicorn_idle",
+                "pink_on_ground_walking": "pink_unicorn_walking",
+                "pink_flying": "pink_unicorn_flying",
+                "pink_falling": "pink_unicorn_falling", 
+                "pink_jumping": "pink_unicorn_jumping",
+                "pink_landing": "pink_unicorn_landing",
+                "blue_on_ground_idle": "blue_unicorn_idle",
+                "blue_on_ground_walking": "blue_unicorn_walking",
+                "blue_flying": "blue_unicorn_flying",
+                "blue_falling": "blue_unicorn_falling", 
+                "blue_jumping": "blue_unicorn_jumping",
+                "blue_landing": "blue_unicorn_landing",
+                "rainbow_on_ground_idle": "rainbow_unicorn_idle",
+                "rainbow_on_ground_walking": "rainbow_unicorn_walking",
+                "rainbow_flying": "rainbow_unicorn_flying",
+                "rainbow_falling": "rainbow_unicorn_falling", 
+                "rainbow_jumping": "rainbow_unicorn_jumping",
+                "rainbow_landing": "rainbow_unicorn_landing"
             },
             "PhysixBody": {
                 "type": "player",
@@ -53,7 +65,7 @@
         "meta": {},
         "components": {
             "Position": {},
-        "Path":{},
+            "Path":{},
             "Movable":{
                 "state":"on_ground",
                 "speed": 100.0
@@ -417,8 +429,11 @@
     "chocolate_river_top": {
         "meta": {},
         "components": {
+            "Position": {
+            },
             "Animation": {
-                "animation": "chocolate_river_top"
+                "name": "river_top",
+                "default_animation": "chocolate_river_top"
             },
             "RenderLayer": {
                 "layer": 200
@@ -428,8 +443,10 @@
     "chocolate_river_body": {
         "meta": {},
         "components": {
+            "Position": {
+            },
             "Animation": {
-                "animation": "chocolate_river_body"
+                "default_animation": "chocolate_river_body"
             },
             "RenderLayer": {
                 "layer": 200
