@@ -54,9 +54,15 @@ public class AnimationRenderSystem extends SubSystem
         TextureRegion keyFrame = null;
 
         String stateKey = movement.state.toString().toLowerCase();
-        if(movement.state == MovementComponent.State.ON_GROUND)
+        
+        if(animation.name.equals("Hunter") && uniteruptableAnimationRunning(animation, movement))
         {
-//            System.out.println("Ground " + animation.name);
+//            System.out.println(animation.uninteruptableAnimationBool);
+            System.out.println(movement.state.toString());
+            keyFrame = getKeyFrameFromAnimationExtended(animation);
+        }      
+        else if(movement.state == MovementComponent.State.ON_GROUND)
+        {
             keyFrame = getGroundKeyframe(animation, movement, stateKey);
         }
         else if(movement.state == State.SHOOTING)
@@ -98,6 +104,25 @@ public class AnimationRenderSystem extends SubSystem
         }        
     }
 
+    private boolean uniteruptableAnimationRunning(AnimationComponent animation, MovementComponent movement) 
+    {
+        if(animation.uninteruptableAnimation == null)
+        {
+            return false;
+        }
+        
+        float animDuration = animation.uninteruptableAnimation.animationDuration;
+        float animTime = animation.stateTime;
+        
+        if(animTime > animDuration)
+        {
+            movement.state = State.ON_GROUND;
+            return true;
+        }
+        
+        animation.uninteruptableAnimation = null;
+        return false;
+    }
 
     public void registerListeners()
     {
@@ -170,6 +195,10 @@ public class AnimationRenderSystem extends SubSystem
     
     private TextureRegion getDefaultKeyframe(AnimationComponent animation) {
         AnimationExtended animationExtended = animation.animationMap.get("on_ground_walking");
+        if(animation.name.equals("Hunter"))
+        {
+            animationExtended = animation.animationMap.get("on_ground_idle");
+        }
         if(animationExtended == null)
         {
             animationExtended = animation.animationMap.get("animation");
@@ -186,14 +215,23 @@ public class AnimationRenderSystem extends SubSystem
         AnimationExtended animationExtended = animation.animationMap.get(stateKey);
         
         if(animationExtended == null)
+        {
             return null;
+        }
+        
+        animation.uninteruptableAnimation = animationExtended;
         
         return animationExtended.getKeyFrame(animation.stateTime);
+    }
+    
+    private TextureRegion getKeyFrameFromAnimationExtended(AnimationComponent animation) 
+    {
+       return animation.uninteruptableAnimation.getKeyFrame(animation.stateTime);
     }
 
     @Override
     public void onPlayerStateChangeEvent(Entity entity, State oldState, State newState) {
-        System.out.println("Player State Change");
+//        System.out.println("Player State Change");
         AnimationComponent animationComponent = ComponentMappers.animation.get(entity);
         if(animationComponent != null)
         {
@@ -203,7 +241,7 @@ public class AnimationRenderSystem extends SubSystem
 
     @Override
     public void onMovementStateChangeEvent(Entity entity, State oldState, State newState) {
-        System.out.println("Movement State Change");
+//        System.out.println("Movement State Change");
         AnimationComponent animationComponent = ComponentMappers.animation.get(entity);
         if(animationComponent != null)
         {
@@ -222,7 +260,6 @@ public class AnimationRenderSystem extends SubSystem
         
         if((animationComponent.name.equals("Paparazzi") || animationComponent.name.equals("Hunter")) && (action == EnemyHandlingSystem.Action.Type.SHOOT))
         {
-            System.out.println("schießender Zustande");
             movement.state = State.SHOOTING;
         }
         
