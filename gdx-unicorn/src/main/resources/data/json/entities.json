@@ -293,7 +293,9 @@
         "components": {
             "Position": {},
             "Texture": {
-                "texture": "coin"
+                "texture": "coin",
+                "originX":16,
+                "originY":16
             },
             "Collectable":{
                 "type" : "choco_coin"
@@ -301,6 +303,7 @@
             "PhysixBody": {
                 "type": "circle",
                 "size": 20,
+                "angle": 180.0,
                 "density": 5,
                 "friction": 0.0,
                 "restitution": 0.0,
@@ -508,7 +511,8 @@
             },
             "PhysixBody": {
                 "type": "box",
-                "size": 60,
+                "sizeWidth": 60,
+                "sizeHeight": 60,
                 "density": 10,
                 "friction": 0.5,
                 "restitution": 0.1
