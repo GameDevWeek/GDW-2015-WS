@@ -64,6 +64,7 @@ public class AnimationItem extends Item {
         } else {
             this.animationTime = 0;
             this.animation = getter.getAnimation(animation.animation);
+            totalAnimationTime = this.animation.getDuration();
         }
         return true;
     }
