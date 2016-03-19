@@ -91,24 +91,26 @@ public class PhysixBodyComponentFactory extends
      // Horn (sensor)
      PhysixFixtureDef fixtureDef = new PhysixFixtureDef(physixSystem)
                 .density(1).friction(0).restitution(0f)
-                .shapeCircle(width * 0.04f, new Vector2(width * 0.43f, height * -0.4f)).sensor(true);
+                .shapeBox(width * 0.09f, height * 0.85f, new Vector2(width * 0.3f, height * 0.0f), 0.0f)
+                .sensor(true);
         fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
 		Fixture fixture = playerBody.createFixture(fixtureDef);
         fixture.setUserData("horn");
         
         // mainBody
-           fixtureDef = new PhysixFixtureDef(physixSystem)
-            .density(0.68f).friction(1.0f).restitution(0f)
-            .shapeCircle(width * 0.25f, new Vector2(1, 0));
-           fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
-            fixture = playerBody.createFixture(fixtureDef);
-            fixture.setUserData("body");
+        fixtureDef = new PhysixFixtureDef(physixSystem)
+         .density(0.68f).friction(1.0f).restitution(0f)
+         .shapeCircle(width * 0.2f, new Vector2(width * 0.0f, height * 0.1f));
+        fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
+         fixture = playerBody.createFixture(fixtureDef);
+         fixture.setUserData("body");
             
         
         // jump contact (sensor)
         fixtureDef = new PhysixFixtureDef(physixSystem)
         .density(1).friction(0f).restitution(0f)
-        .shapeCircle(width * 0.05f, new Vector2(0, height * 0.49f)).sensor(true);
+        .shapeCircle(width * 0.05f, new Vector2(0, height * 0.49f))
+        .sensor(true);
         fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
         fixture = playerBody.createFixture(fixtureDef);
         fixture.setUserData("foot");
@@ -256,13 +258,15 @@ public class PhysixBodyComponentFactory extends
             dir = 1;
         }
         
+        
         // Horn (sensor)
         PhysixFixtureDef fixtureDef = new PhysixFixtureDef(physixSystem)
-                .density(1).friction(0).restitution(0f)
-                .shapeCircle(width * 0.04f, new Vector2(dir * width * 0.43f, height * -0.4f)).sensor(true);
-        fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
-        Fixture fixture = playerBody.createFixture(fixtureDef);
-        fixture.setUserData("horn");
+                   .density(1).friction(0).restitution(0f)
+                   .shapeBox(width * 0.09f, height * 0.85f, new Vector2(dir * width * 0.3f, height * 0.0f), 0.0f)
+                   .sensor(true);
+           fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
+           Fixture fixture = playerBody.createFixture(fixtureDef);
+           fixture.setUserData("horn");
         
     }
 }
