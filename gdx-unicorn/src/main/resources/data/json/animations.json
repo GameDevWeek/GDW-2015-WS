@@ -79,6 +79,14 @@
         "columns": 3,
         "rows" : 1
     },
+    "unicorn_jumping_up": {
+        "filename": "data/graphics/spritesheets/unicorn_jumping_up_pink_spritesheet.png",
+        "frames" : 4,
+        "frameDuration": [0.15],
+        "playType" : "LOOP",
+        "columns": 4,
+        "rows" : 1
+    },
     "unicorn_landing": {
         "filename": "data/graphics/spritesheets/unicorn_jumping_down_pink_spritesheet.png",
         "frames" : 3,
@@ -127,5 +135,47 @@
         "playType" : "LOOP",
         "columns": 2,
         "rows" : 1
+    },
+
+    "trex_crying" : {
+        "filename": "data/graphics/spritesheets/trex_crying.png",
+        "frames": 4,
+        "frameDuration" : [0.15,0.15,0.15,0.15],
+        "playType" : "LOOP",
+        "columns" : 4,
+        "rows" : 1
+    },
+    "trex_happy" : {
+        "filename": "data/graphics/spritesheets/trex_happy.png",
+        "frames": 2,
+        "frameDuration" : [0.15,0.15],
+        "playType" : "LOOP",
+        "columns" : 2,
+        "rows" : 1
+    },
+    "trex_plottwist" : {
+        "filename": "data/graphics/spritesheets/trex_plottwist.png",
+        "frames": 4,
+        "frameDuration" : [0.15,0.15,0.15,0.15],
+        "playType" : "NORMAL",
+        "columns" : 4,
+        "rows" : 1
+    },
+    "trex_run" : {
+        "filename": "data/graphics/spritesheets/trex_run.png",
+        "frames": 5,
+        "frameDuration" : [0.15,0.15,0.15,0.15,0.15],
+        "playType" : "LOOP",
+        "columns" : 5,
+        "rows" : 1
+    },
+    "trex_trying" : {
+        "filename": "data/graphics/spritesheets/trex_trying.png",
+        "frames": 5,
+        "frameDuration" : [0.15,0.15,0.15,0.15,0.15],
+        "playType" : "LOOP",
+        "columns" : 5,
+        "rows" : 1
     }
+
 }
