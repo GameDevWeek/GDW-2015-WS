@@ -69,7 +69,7 @@ public class Game extends InputAdapter {
             color.particleEffectExplosion = assetManager.getParticleEffect("explosion_" + colorKey);
             if (color != PlayerColor.NEUTRAL) {
                 color.projectileAnimation = assetManager.getAnimation("projectile_" + colorKey);
-                color.particleEffectSplash = assetManager.getParticleEffect("splash_red");
+                color.particleEffectSplash = assetManager.getParticleEffect("splash_" + colorKey);
             }
         }
 
