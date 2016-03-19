@@ -27,8 +27,6 @@ public class EndExplosionSystem extends IntervalSystem implements GameOverEvent.
 
     private PlayerComponent loser;
     private Entity loserEntity;
-    private PlayerComponent player1, player2;
-    Entity player1Entity, player2Entity;
     private ImmutableArray<Entity> pickups;
 
     public EndExplosionSystem(int priority) {

@@ -31,7 +31,7 @@ public class PlayerDeathSystem extends EntitySystem implements PlayerDeathEvent.
 
     private Game game;
 
-    private Vector2 direction;
+    private Vector2 direction = new Vector2();
 
     private Entity playerRed, playerBlue;
 
@@ -88,12 +88,11 @@ public class PlayerDeathSystem extends EntitySystem implements PlayerDeathEvent.
         }
 
         InputComponent input = ComponentMappers.input.get(player);
-        direction = input.lastMoveDirection;
+        direction.set(input.lastMoveDirection);
         PlayerComponent playerComponent = ComponentMappers.player.get(player);
         playerComponent.segments.clear();
         deadPlayers.add(playerComponent.color);
         engine.removeEntity(player);
-
 
     }
 
@@ -107,29 +106,39 @@ public class PlayerDeathSystem extends EntitySystem implements PlayerDeathEvent.
 
         Vector2 respawnLocation;
         PositionComponent otherPlayerPositionComponent;
-
+        LinkedList<Vector2> segments;
         int playerIndex;
 
         if (player == PlayerColor.RED) {
             otherPlayerPositionComponent = ComponentMappers.position.get(playerBlue);
             playerIndex = 0;
+            segments = ComponentMappers.player.get(playerBlue).segments;
         } else {
             otherPlayerPositionComponent = ComponentMappers.position.get(playerRed);
             playerIndex = 1;
+            segments = ComponentMappers.player.get(playerRed).segments;
         }
         // while the distance requirement is not met recalculate
+        int tries = 0;
+        boolean distanceIsOk = true;
         do {
             respawnLocation = calculateRespawn();
+            // checks the distance to every single enemy segment
+            for (Vector2 segment:segments) {
+                if (respawnLocation.dst(segment)<GameConstants.MIN_RESPAWN_DISTANCE){
+                    distanceIsOk = false;
+                }
+            }
+            ++tries;
         }
-        while (otherPlayerPositionComponent != null && respawnLocation.dst(otherPlayerPositionComponent.pos) < GameConstants.MIN_RESPAWN_DISTANCE);
+        // fuck it after 10 tries!
+        while (!distanceIsOk && tries<10);
 
         Entity newPlayer = game.createSnake(playerIndex, respawnLocation.x, respawnLocation.y, direction.x, direction.y, player);
         PlayerComponent playerComponent = ComponentMappers.player.get(newPlayer);
 
-//        position.pos.set(respawnLocation);
-
         // add more segments until the specified amount is reached
-        for (int i = 1; i < GameConstants.DEFAULT_SEGMENTS; ++i) {
+        while(playerComponent.segments.size() < GameConstants.DEFAULT_SEGMENTS - 1){
             playerComponent.segments.add(new Vector2());
         }
         // add the new paths oriented along the movement direction
