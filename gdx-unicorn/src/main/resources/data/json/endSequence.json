@@ -1,0 +1,199 @@
+{
+  "timeFactor": 1.0,
+  "textStyles" : {
+    "name": { "color": "FFFFFF", "font": "verdana_32", "align": "center" }
+  },
+  "paths" : {
+    "bg" : {
+      "type": "linear",
+      "destinations":[
+        {"x":511, "y":300, "speed":1},
+        {"x":512, "y":300, "speed":0.0001}
+      ]
+    },
+    "tr1" : {
+      "type": "linear",
+      "destinations":[
+        {"x":800, "y":184, "speed":30},
+        {"x":700, "y":184, "speed":30}
+      ]
+    },
+    "uc1": {
+      "type": "linear",
+      "destinations":[
+        {"x":-100, "y":184, "speed":100},
+        {"x":200, "y":184, "speed":100}
+      ]
+    },
+    "uc_stay" : {
+      "type": "linear",
+      "destinations":[
+        {"x":200, "y":184, "speed":0.5},
+        {"x":201, "y":184, "speed":0.4}
+      ]
+    },
+    "tr_stay" : {
+      "type": "linear",
+      "destinations":[
+        {"x":700, "y":184, "speed":1},
+        {"x":701, "y":184, "speed":1}
+      ]
+    },
+    "gum" : {
+      "type": "linear",
+      "destinations":[
+        {"x":200, "y":184, "speed":500},
+        {"x":225, "y":200, "speed":500},
+        {"x":250, "y":220, "speed":500},
+        {"x":275, "y":240, "speed":500},
+        {"x":300, "y":255, "speed":500},
+        {"x":325, "y":265, "speed":500},
+        {"x":350, "y":270, "speed":500},
+        {"x":375, "y":273, "speed":500},
+        {"x":400, "y":274, "speed":500},
+        {"x":425, "y":275, "speed":500},
+        {"x":450, "y":275, "speed":500},
+        {"x":475, "y":275, "speed":500},
+        {"x":500, "y":274, "speed":500},
+        {"x":525, "y":273, "speed":500},
+        {"x":550, "y":270, "speed":500},
+        {"x":575, "y":265, "speed":500},
+        {"x":600, "y":255, "speed":500},
+        {"x":625, "y":240, "speed":500},
+        {"x":650, "y":220, "speed":500},
+        {"x":675, "y":200, "speed":500},
+        {"x":700, "y":184, "speed":500}
+      ]
+    }
+},
+
+  "queues" : {
+    "trexQ1":{
+      "layer" :1,
+      "time" : 0,
+      "items" : [
+        {"type":"animation","path":"tr1","resource":"trex_run", "flipX":"true"}
+      ],
+      "animations":[],
+      "finalNext" : "trexQ3"
+    },
+    "trexQ2":{
+      "layer" :3,
+      "time" : -1,
+      "items" : [
+        {"type":"animation","path":"tr_stay","resource":"trex_crying", "flipX":"true","group":"crying"}
+      ],
+      "animations" : [
+        {"time":0,"animation": "sound/trexSad", "group":"crying"}
+      ],
+      "finalNext" : "trexQ3"
+    },
+    "trexQ3":{
+      "layer" :3,
+      "time" : -1,
+      "items" : [
+        {"type":"animation","path":"tr_stay","resource":"trex_crying", "flipX":"true","group":"crying"}
+      ],
+      "animations" : [
+        {"time":0,"animation": "sound/trexSad", "group":"crying"},
+        {"time":0,"animation": "pause_path", "group":"*","animationTime":3000}
+      ],
+      "finalNext":"trexQ4"
+    },
+    "trexQ4":{
+      "layer" :3,
+      "time" : -1,
+      "items" : [
+        {"type":"animation","path":"tr_stay","resource":"trex_happy", "flipX":"true","group":"crying"}
+      ],
+      "animations" : [
+        {"time":0,"animation": "sound/trexHappy", "group":"crying"},
+        {"time":0,"animation": "pause_path", "group":"*","animationTime":2000}
+      ],
+      "finalNext":"trexQ4"
+    },
+    "unicornQ1":{
+      "layer" :1,
+      "time" : 0,
+      "items" : [
+        {"type":"animation", "path":"uc1","resource":"pink_unicorn_walking"}
+      ],
+      "animations" : [],
+      "finalNext":"unicornQ2"
+    },
+    "unicornQ2":{
+      "layer" :1,
+      "time" : -1,
+      "items" : [
+        {"type":"animation", "path":"uc_stay","resource":"pink_unicorn_jumping_up"}
+      ],
+      "animations" : [
+      ],
+      "finalNext":"unicornQ3"
+    },
+    "unicornQ3":{
+      "layer" :1,
+      "time" : -1,
+      "items" : [
+        {"type":"animation", "path":"uc_stay","resource":"pink_unicorn_jumping_up_no_loop"}
+      ],
+      "animations" : [
+      ],
+      "next":"gumQ",
+      "finalNext":"unicornQ4"
+    },
+    "unicornQ4":{
+      "layer" :1,
+      "time" : -1,
+      "items" : [
+        {"type":"animation", "path":"uc_stay","resource":"pink_unicorn_jumping_up_no_loop_reverse"}
+      ],
+      "animations" : [
+      ],
+      "finalNext":"unicornQ5"
+    },
+    "unicornQ5":{
+      "layer" :1,
+      "time" : -1,
+      "items" : [
+        {"type":"animation", "path":"uc_stay","resource":"pink_unicorn_walking"}
+      ],
+      "animations" : [
+      ],
+      "finalNext":"unicornQ5"
+    },
+    "gumQ":{
+      "layer" :2,
+      "time" : -1,
+      "items" : [
+        {"delay":700,"type":"texture", "path":"gum","resource":"bubblegum_spitting_rainbow"}
+      ],
+      "animations" : [
+      ]
+    },
+    "bgQ":{
+      "layer" :0,
+      "time" : 0,
+      "items" : [
+        {"type":"texture","path":"bg","resource":"intro_bg"}
+      ],
+      "animations" : [
+        {"time":0, "animation":"pause_path", "animationTime":-1, "group":"*"}
+      ]
+    },
+    "story1Q" :{
+      "layer": 2,
+      "time": 1000,
+      "items" : [
+        {"type":"text","x":512, "y": 100,"style":"name","text":"Because of his short arms"},
+        {"type":"text","x":512, "y": 75,"style":"name","delay": 2000,"text":"The T-Rex can't eat his bubblegum!"},
+        {"type":"text","x":512, "y": 100,"style":"name","delay":5000,"text":"You have to help him!"}
+      ],
+      "animations" : [
+        {"time":0, "animation":"untype_instant"},
+        {"animation":"type","animationTime":50},
+        {"time":4000, "animation":"untype","animationTime":33}
+      ]
+    }
+  }
+}
