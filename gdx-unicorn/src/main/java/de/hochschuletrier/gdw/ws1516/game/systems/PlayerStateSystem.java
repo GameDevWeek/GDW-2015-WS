@@ -10,11 +10,14 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 
+import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornAttackCooldownEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
 import de.hochschuletrier.gdw.ws1516.events.MovementEvent;
+import de.hochschuletrier.gdw.ws1516.events.MovementStateChangeEvent;
+import de.hochschuletrier.gdw.ws1516.events.MovementStateChangeEvent.Listener;
 import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
@@ -193,7 +196,6 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
             playerComp.state = State.NORMAL;
         }
     }
-    
 
     
 }

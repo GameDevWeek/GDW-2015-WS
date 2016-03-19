@@ -72,44 +72,8 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
         MovementComponent move = ComponentMappers.movement.get(entity);
         PlayerComponent player = ComponentMappers.player.get(entity);
         
-        if (move != null && player!=null)
-        {
-            boolean shouldplayRun = false;
-            boolean shouldplaySpuck=false;
-            if ( move.state == State.ON_GROUND )
-            {
-                if ( Math.abs(body.getLinearVelocity().x)>1f )
-                {
-                    shouldplayRun = true;
-                }
-            }
-            if ( player.state == PlayerComponent.State.SPUCKCHARGE)
-            {
-                if (!player.soundSpuckChargePlayed){
-                    shouldplaySpuck = true;
-                    player.soundSpuckChargePlayed=true;
-                }
-            }else{
-                player.soundSpuckChargePlayed=false;
-            }
-            if (shouldplaySpuck){
-                if (!soundEmitter.soundNames.contains("spuckCharge")){
-                    SoundEvent.emit("spuckCharge", entity);
-                }
-            }else if (player.state!=PlayerComponent.State.SPUCKCHARGE){
-                if ( soundEmitter.soundNames.contains("spuckCharge") )
-                    SoundEvent.stopSound("spuckCharge",entity);
-            }
-            if( shouldplayRun )
-            {
-                if ( !soundEmitter.soundNames.contains("laufen") )
-                    SoundEvent.emit("laufen", entity,true);
-            }else
-            {
-                if ( soundEmitter.soundNames.contains("laufen") )
-                    SoundEvent.stopSound("laufen",entity);
-            }
-        }
+        playerSounds(entity);
+        
         
         
         
@@ -130,6 +94,8 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
         soundEmitter.emitter.update();
         
     }
+
+    
 
     /**
      * von 0 bis 1 (nicht von 1 bis 2)
@@ -202,22 +168,25 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
         EnemyTypeComponent enemy = ComponentMappers.enemyType.get(entity);
         if (player != null)
         {
-            if ( collect != null )
-            {
+            if ( collect != null ) {
                 switch(collect.type )
                 {
+                    case BONBON:
+                    case BLUE_GUM:
                     case CHOCO_COIN:
-                        
                         SoundEvent.emit("eat_cho", player);
                         break;
+                    case SPAWN_POINT:
+                        SoundEvent.emit("einhornEmpathy", player);
+                        break;
                 }
+            } else if ( enemy != null ) {
+                SoundEvent.emit("paparazzidie", player);
+            } else if ( ComponentMappers.player.has(entity) ) {
+                SoundEvent.emit("lose_sound", player);
             }
         }
-        if ( enemy != null )
-        {
-
-            SoundEvent.emit("paparazzidie", player);
-        }
+        
     }
 
     @Override
@@ -227,5 +196,50 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
     }
     
     
-    
+    private void playerSounds(Entity entity) 
+    {
+        SoundEmitterComponent soundEmitter = ComponentMappers.soundEmitter.get(entity);
+        PhysixBodyComponent body = ComponentMappers.physixBody.get(entity);
+        MovementComponent move = ComponentMappers.movement.get(entity);
+        PlayerComponent player = ComponentMappers.player.get(entity);
+        if (move != null && player!=null)
+        {
+            boolean shouldplayRun = false;
+            boolean shouldplaySpuck=false;
+            if ( move.state == State.ON_GROUND )
+            {
+                if ( Math.abs(body.getLinearVelocity().x)>1f )
+                {
+                    shouldplayRun = true;
+                }
+            }
+            if ( player.state == PlayerComponent.State.SPUCKCHARGE)
+            {
+                if (!player.soundSpuckChargePlayed){
+                    shouldplaySpuck = true;
+                    player.soundSpuckChargePlayed=true;
+                }
+            }else{
+                player.soundSpuckChargePlayed=false;
+            }
+            if (shouldplaySpuck){
+                if (!soundEmitter.soundNames.contains("spuckCharge")){
+                    SoundEvent.emit("spuckCharge", entity);
+                }
+            }else if (player.state!=PlayerComponent.State.SPUCKCHARGE){
+                if ( soundEmitter.soundNames.contains("spuckCharge") )
+                    SoundEvent.stopSound("spuckCharge",entity);
+            }
+            if( shouldplayRun )
+            {
+                if ( !soundEmitter.soundNames.contains("laufen") )
+                    SoundEvent.emit("laufen", entity,true);
+            }else
+            {
+                if ( soundEmitter.soundNames.contains("laufen") )
+                    SoundEvent.stopSound("laufen",entity);
+            }
+        }
+        
+    }
 }

@@ -143,7 +143,7 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         }
         
         int lives = playerComp.lives;
-        int gum_count_int = scoreComp.bubblegums;
+        int gum_count_int = playerComp.blueGumStacks;
            
         String lives_string = "x " + String.valueOf(lives);
         String gum_count_string = "x " + String.valueOf(gum_count_int); 

@@ -9,9 +9,12 @@ import com.badlogic.gdx.math.Vector2;
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixContact;
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixContactAdapter;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
+import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.BubblegumSpitComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.BulletComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PlatformComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 
 /**
@@ -51,7 +54,24 @@ public class BubblegumSpitListener extends PhysixContactAdapter {
                 }
             }               
         }
+
+        //Non spitable entitys
+        if (otherComponent != null &&
+            otherComponent.getEntity() != null) {
+            
+            //Remove spit if it hits a platform
+            if (otherComponent.getEntity().getComponent(PlatformComponent.class) != null)
+                DeathEvent.emit(myEntity);
+            
+            //Remove spit if it hits a bullet
+            if (otherComponent.getEntity().getComponent(BulletComponent.class) != null) {
+                DeathEvent.emit(myEntity);
+                DeathEvent.emit(otherComponent.getEntity());
+            }
                 
+            return;
+        }
+        
         //OnHit (ignore player hits)
         if (otherComponent == null ||
             otherComponent.getEntity() == null ||

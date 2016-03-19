@@ -1,5 +1,6 @@
 package de.hochschuletrier.gdw.ws1516.menu;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -13,17 +14,22 @@ import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
 import de.hochschuletrier.gdw.commons.gdx.state.transition.SplitHorizontalTransition;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
+import de.hochschuletrier.gdw.commons.jackson.JacksonReader;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.menu.MainMenuPage.Type;
 import de.hochschuletrier.gdw.ws1516.states.GameplayState;
 import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Map;
 
 public class LevelSelectionPage extends MenuPage {
 
     private int level_preview_index=0;
-    private int level_preview_count=4;
+    private int level_preview_count=0;
     private ImageButton level_preview;
+    private final ArrayList<String> levelNames = new ArrayList();
     private Texture[] level_previews;
     
     
@@ -33,19 +39,31 @@ public class LevelSelectionPage extends MenuPage {
         int xStep=125;
         int i = 0;
         Main.getInstance().screenCamera.bind();
-        AssetManagerX assetManager = Main.getInstance().getAssetManager();
         
-        Texture level_preview_texture = assetManager.getTexture("level1");
+        try {
+            Map<String, String> images = JacksonReader.readMap("data/json/images.json", String.class);
+            
+            for (String key : images.keySet()) {
+                if(key.endsWith(".tmx")) {
+                    levelNames.add(key);
+                }
+            }
+            Collections.sort(levelNames);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        Texture level_preview_texture = assetManager.getTexture(levelNames.get(0));
         Texture buttonBack_texture = assetManager.getTexture("prev_Button");
         Texture buttonNext_texture = assetManager.getTexture("next_Button");
         
-        level_previews = new Texture[level_preview_count];
+        level_previews = new Texture[levelNames.size()];
+        for (String levelName : levelNames) {
+            level_previews[level_preview_count] = assetManager.getTexture(levelName);
+            level_preview_count++;
+        }
       
-        level_previews[0] = assetManager.getTexture("level1");
-        level_previews[1] = assetManager.getTexture("level2");
-        level_previews[2] = assetManager.getTexture("level3");
-        level_previews[3] = assetManager.getTexture("level4");
-        
         level_preview = createImageButton(level_previews[level_preview_index], 312, 280, 50, 50, this::nextLevel, "einhornMotivated", true, false);
                     
         createImageButton(buttonBack_texture, 310-20-buttonBack_texture.getWidth(), 260, 50, 50, this::previousLevel, "buttonSound", true, true);
@@ -85,15 +103,15 @@ public class LevelSelectionPage extends MenuPage {
     }
     
     private void startGame() {
-        if (!main.isTransitioning()) { 
-            try {
-                Thread.sleep(500);                 //1000 milliseconds is one second.
-            } catch(InterruptedException ex) {
-                Thread.currentThread().interrupt();
+        if (!main.isTransitioning()) {
+            final String filename = levelNames.get(level_preview_index);
+            if(Gdx.files.internal(filename).exists()) {
+                Game game = new Game();
+                game.init(assetManager, filename);
+                main.changeState(new GameplayState(assetManager, game));
+            } else {
+                assetManager.getSound("death").play();
             }
-            Game game = new Game();
-            game.init(assetManager);
-            main.changeState(new GameplayState(assetManager, game), new SplitHorizontalTransition(500), null);
             
         }
     }

@@ -8,7 +8,6 @@ public class CollectableComponent extends Component {
         BONBON,
         RAINBOW_GUM,
         BLUE_GUM,
-        PINK_GUM,
         SPAWN_POINT,
         NONE
     }

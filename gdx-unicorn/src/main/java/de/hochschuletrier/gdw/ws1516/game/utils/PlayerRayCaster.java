@@ -82,7 +82,9 @@ public class PlayerRayCaster {
             
             physixSystem.getWorld().rayCast((fixture, point, normal, fraction) -> {
                 
-                if (fixture.getBody().getType().equals(BodyType.StaticBody)) {
+                //Oclusion conditions
+                if (fixture.getBody().getType().equals(BodyType.StaticBody) || 
+                    fixture.getBody().getType().equals(BodyType.KinematicBody)) {
                     lastCastResult = false;
                     return 0;
                 }

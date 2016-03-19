@@ -24,14 +24,11 @@ public class EntityLoader implements MapLoader {
 
     @Override
     public void parseMap(TiledMap map, Game game, PooledEngine engine) {
-        logger.info("Hier startet parseMap");
         LinkedList<String> names = new LinkedList();
         for (Layer layer : map.getLayers()) {
             if (layer.isObjectLayer()) {
-                logger.info("Objektlayer");
                 for (LayerObject obj : layer.getObjects()) {
                     // only load tiles and rectangles
-                    logger.info("Objekte suchen");
                     LayerObject.Primitive primitive = obj.getPrimitive(); /**
                      * @author Tobias Gepp, Jerome Jähnig
                      */

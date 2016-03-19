@@ -102,6 +102,7 @@ public class PhysixBodyComponentFactory extends
             .shapeCircle(width * 0.25f, new Vector2(1, 0));
            fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_UNICORN;
             fixture = playerBody.createFixture(fixtureDef);
+            fixture.setUserData("body");
             
         
         // jump contact (sensor)

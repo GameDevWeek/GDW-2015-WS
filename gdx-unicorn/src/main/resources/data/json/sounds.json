@@ -1,4 +1,5 @@
 {
+	"death": "data/sounds/death.wav",
 	"click": "data/sounds/click.wav",
 	"helicopter": "data/sounds/helicopter.wav",
 	"einhornEmpathy":"data/sounds/EinhornEmpathy.wav",
