@@ -64,7 +64,7 @@ public class LoadGameState extends BaseGameState {
         DrawUtil.draw(rectTexture, Gdx.graphics.getWidth()/2 - 512, Gdx.graphics.getHeight() / 2 + 200, (int) (drawWidth * assetManager.getProgress()), 50);
 
         TextureRegion keyFrame = anim.getKeyFrame(stateTime);
-        DrawUtil.batch.draw(keyFrame, Gdx.graphics.getWidth()/2 - 512 - keyFrame.getRegionWidth()/2-10 + (int) (drawWidth * assetManager.getProgress()), Gdx.graphics.getHeight() / 2 + 200, 0,0, keyFrame.getRegionWidth(), keyFrame.getRegionHeight(), 1, 1, 0);
+        DrawUtil.batch.draw(keyFrame, Gdx.graphics.getWidth()/2 - 512 - keyFrame.getRegionWidth()/2-20 + (int) (drawWidth * assetManager.getProgress()), Gdx.graphics.getHeight() / 2 + 200, 0,0, keyFrame.getRegionWidth(), keyFrame.getRegionHeight(), 1, 1, 0);
    
     }
 
