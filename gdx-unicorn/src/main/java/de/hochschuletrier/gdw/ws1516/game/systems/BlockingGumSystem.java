@@ -133,6 +133,14 @@ public class BlockingGumSystem extends IteratingSystem implements BlockingGumSpa
             //Watch you go...
             blockingComponent.timeToDespawn -= deltaTime;
             
+            //Alpha depending on clock
+            if (blockingComponent.timeToDespawn <= GameConstants.SPIT_BLOCKING_ALPHA_START) {
+                TextureComponent texture = ComponentMappers.texture.get(entity);
+                if (texture != null && GameConstants.SPIT_BLOCKING_ALPHA_START > 0.0f) {
+                    texture.alpha = blockingComponent.timeToDespawn / GameConstants.SPIT_BLOCKING_ALPHA_START;
+                }
+            }
+            
             //Despawn on clock <= 0
             if (blockingComponent.timeToDespawn <= 0) {
                 blockingComponent.onDespawn.accept(entity);

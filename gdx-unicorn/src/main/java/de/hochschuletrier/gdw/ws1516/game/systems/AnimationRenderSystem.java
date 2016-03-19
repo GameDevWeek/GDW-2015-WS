@@ -3,6 +3,7 @@ package de.hochschuletrier.gdw.ws1516.game.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 import de.hochschuletrier.gdw.commons.gdx.ashley.SortedSubIteratingSystem.SubSystem;
 import de.hochschuletrier.gdw.commons.gdx.assets.AnimationExtended;
@@ -10,13 +11,19 @@ import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.events.MovementStateChangeEvent;
 import de.hochschuletrier.gdw.ws1516.events.PlayerStateChangeEvent;
+import de.hochschuletrier.gdw.ws1516.events.EnemyActionEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.EnemyBehaviourComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
+import de.hochschuletrier.gdw.ws1516.game.systems.EnemyHandlingSystem.Action.Type;
+import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 
-public class AnimationRenderSystem extends SubSystem implements MovementStateChangeEvent.Listener, PlayerStateChangeEvent.Listener
+public class AnimationRenderSystem extends SubSystem 
+    implements MovementStateChangeEvent.Listener, PlayerStateChangeEvent.Listener, EnemyActionEvent.Listener
 {
     public AnimationRenderSystem() {
         super(Family.all(PositionComponent.class, AnimationComponent.class).get());
@@ -29,13 +36,18 @@ public class AnimationRenderSystem extends SubSystem implements MovementStateCha
         MovementComponent movement = ComponentMappers.movement.get(entity);
         PhysixBodyComponent physics = ComponentMappers.physixBody.get(entity);
         
-        if(animation.name.equals("Paparazzi"))
+        EnemyTypeComponent enemyType = ComponentMappers.enemyType.get(entity);
+        EnemyBehaviourComponent enemyBehaviour = ComponentMappers.enemyBehaviour.get(entity);
+        
+        
+        if(animation.name.equals("Paparazzi") || animation.name.equals("Hunter"))
         {
-            //System.out.println("Test");
+//            System.out.println(enemyType.type);
+//            System.out.println(enemyBehaviour.canSeeUnicorn + " " + enemyBehaviour.currentState.toString());
         }
         
         animation.stateTime += deltaTime;
-        if(movement != null && movement.state != animation.lastRenderedState)
+        if((movement != null && movement.state != animation.lastRenderedState))
         {
             animation.resetStateTime();
             animation.lastRenderedState = movement.state;
@@ -46,7 +58,12 @@ public class AnimationRenderSystem extends SubSystem implements MovementStateCha
         String stateKey = movement.state.toString().toLowerCase();
         if(movement.state == MovementComponent.State.ON_GROUND)
         {
+//            System.out.println("Ground " + animation.name);
             keyFrame = getGroundKeyframe(animation, movement, stateKey);
+        }
+        else if(movement.state == State.SHOOTING)
+        {
+            keyFrame = getShootingKeyFrame(animation, movement, stateKey);
         }
         else if((movement.state == State.JUMPING || movement.state == State.FALLING) && physics != null)
         {
@@ -67,8 +84,18 @@ public class AnimationRenderSystem extends SubSystem implements MovementStateCha
         
         animation.currentlyFlipped = (movement.lookDirection) == (MovementComponent.LookDirection.LEFT) ^ animation.flipHorizontal;
         
+        drawKeyframe(animation, position, keyFrame);   
+    }
+
+    private void drawKeyframe(AnimationComponent animation, PositionComponent position, TextureRegion keyFrame) {
         if(keyFrame != null)
         {
+            if(animation.alpha < 1f && animation.alpha >= 0f)
+            {
+                ShaderProgram alphaTextureShader = ShaderLoader.getAlphaTextureShader();
+                DrawUtil.setShader(alphaTextureShader);
+                alphaTextureShader.setUniformf("u_alpha", animation.alpha);
+            }
             int w = keyFrame.getRegionWidth();
             int h = keyFrame.getRegionHeight();
             
@@ -80,19 +107,26 @@ public class AnimationRenderSystem extends SubSystem implements MovementStateCha
             {
                 DrawUtil.batch.draw(keyFrame, position.x - w * 0.5f, position.y - h * 0.5f, w * 0.5f, h * 0.5f, w, h, 1, 1, position.rotation);
             }
-        }        
+            if(animation.alpha < 1f && animation.alpha >= 0f)
+            {
+                DrawUtil.setShader(null);
+            }
+        }
     }
+
 
     public void registerListeners()
     {
         MovementStateChangeEvent.register(this);
         PlayerStateChangeEvent.register(this);
+        EnemyActionEvent.register(this);
     }
     
     public void unregisterListeners()
     {
         MovementStateChangeEvent.unregister(this);
         PlayerStateChangeEvent.unregister(this);
+        EnemyActionEvent.unregister(this);
     }
 
     private TextureRegion getGroundKeyframe(AnimationComponent animation, MovementComponent movement, String stateKey) {
@@ -100,7 +134,15 @@ public class AnimationRenderSystem extends SubSystem implements MovementStateCha
         String walkingString = stateKey + "_walking";
         
         AnimationExtended animationExtended = null;
-        if(Math.abs(movement.velocityX) <= 0.01)
+        boolean isIdle = Math.abs(movement.velocityX) <= 0.01;
+        
+        if((isIdle != animation.lastRenderedIdle))
+        {
+            animation.resetStateTime();
+            animation.lastRenderedIdle = isIdle;
+        }
+        
+        if(isIdle)
         {
             animationExtended = animation.animationMap.get(idleString);
         }
@@ -162,9 +204,20 @@ public class AnimationRenderSystem extends SubSystem implements MovementStateCha
         }
         return animationExtended.getKeyFrame(animation.stateTime);
     }
+    
+    private TextureRegion getShootingKeyFrame(AnimationComponent animation, MovementComponent movement, String stateKey)
+    {
+        AnimationExtended animationExtended = animation.animationMap.get(stateKey);
+        
+        if(animationExtended == null)
+            return null;
+        
+        return animationExtended.getKeyFrame(animation.stateTime);
+    }
 
     @Override
     public void onPlayerStateChangeEvent(Entity entity, State oldState, State newState) {
+        System.out.println("Player State Change");
         AnimationComponent animationComponent = ComponentMappers.animation.get(entity);
         if(animationComponent != null)
         {
@@ -174,7 +227,29 @@ public class AnimationRenderSystem extends SubSystem implements MovementStateCha
 
     @Override
     public void onMovementStateChangeEvent(Entity entity, State oldState, State newState) {
+        System.out.println("Movement State Change");
         AnimationComponent animationComponent = ComponentMappers.animation.get(entity);
+        if(animationComponent != null)
+        {
+            animationComponent.resetStateTime();
+        }
+    }
+
+    @Override
+    public void onEnemyActionEvent(Entity enemy, Type action, float strength) {
+        AnimationComponent animationComponent = ComponentMappers.animation.get(enemy);
+        
+        EnemyTypeComponent enemyType = ComponentMappers.enemyType.get(enemy);
+        EnemyBehaviourComponent enemyBehaviour = ComponentMappers.enemyBehaviour.get(enemy);       
+        
+        MovementComponent movement = ComponentMappers.movement.get(enemy);
+        
+        if((animationComponent.name.equals("Paparazzi") || animationComponent.name.equals("Hunter")) && (action == EnemyHandlingSystem.Action.Type.SHOOT))
+        {
+            System.out.println("schießender Zustande");
+            movement.state = State.SHOOTING;
+        }
+        
         if(animationComponent != null)
         {
             animationComponent.resetStateTime();

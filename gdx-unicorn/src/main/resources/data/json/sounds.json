@@ -16,5 +16,7 @@
     "laufen":"data/sounds/laufen.wav",
     "spuckCharge":"data/sounds/spuckenCharge.wav",
     "spucken":"data/sounds/spuckenAttack.wav",
-    "rainbow":"data/sounds/powerUp.ogg"
+    "splatter":"data/sounds/splatter.wav",
+    "einhorndying":"data/sounds/EinhornDying.wav",
+    "aufblasen":"data/sounds/Kaugummi.wav"
 }

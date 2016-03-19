@@ -26,6 +26,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 public class AttackEnemyState extends EnemyBaseState {
     private static final Logger logger = LoggerFactory.getLogger(AttackEnemyState.class);
     private boolean soundPlayed = false;
+    private boolean shootAlready=false;
 
     @Override
     public EnemyBaseState _compute(Entity entity, Entity player, float deltaTime) {
@@ -33,27 +34,39 @@ public class AttackEnemyState extends EnemyBaseState {
         PositionComponent enemyPosition = ComponentMappers.position.get(entity);
         PositionComponent playerPosition = ComponentMappers.position.get(player);
         EnemyTypeComponent type=ComponentMappers.enemyType.get(entity);
+
+        MovementComponent movementComp=ComponentMappers.movement.get(entity);
         behaviour.cooldown=behaviour.maxCooldown;
+        if (movementComp.state == State.GLUED){
+            SoundEvent.stopSound("huntergun", entity);
+            return new FollowPathEnemyState();
+        }
         if (type.type==EnemyType.HUNTER){
             if (!soundPlayed) {
-                EnemyActionEvent.emit(entity, Type.SHOOT, 0.0f);
                 SoundEvent.emit("huntergun", entity);
                 soundPlayed = true;
             }
             if (timePassed<behaviour.cooldown){
-                if (behaviour.canSeeUnicorn){
+                if (timePassed>behaviour.cooldown-GameConstants.TIME_TO_WAIT_TO_SHOOT){
+                    if (!shootAlready){
+                        shootAlready=true;
+                        EnemyActionEvent.emit(entity, Type.SHOOT, 0.0f);
+                    }
                     return this;
                 }else{
-                    SoundEvent.stopSound("huntergun", entity);
-                    EnemyActionEvent.emit(entity, Type.SHOOT_ABORT, 0.0f);
-                    return new FollowPathEnemyState();
+                    if (behaviour.canSeeUnicorn){
+                        return this;
+                    }else{
+                        SoundEvent.stopSound("huntergun", entity);
+                        return new FollowPathEnemyState();
+                    }
                 }
             }
             int direction = GameConstants.HUNTER_BULLET_OFFSET;
             if (playerPosition.x<enemyPosition.x){
                 direction=-direction;
             }
-            BulletSpawnEvent.emit(enemyPosition.x+direction, enemyPosition.y,
+            BulletSpawnEvent.emit(enemyPosition.x+direction, enemyPosition.y+GameConstants.TILESIZE_Y/4,
                     playerPosition.x-(enemyPosition.x+direction), playerPosition.y-enemyPosition.y,
                     (bullet,target)->{HitEvent.emit(target, bullet, 1);}, (source,target)->{}, (e)->{DeathEvent.emit(e);});
             return new FollowPathEnemyState();

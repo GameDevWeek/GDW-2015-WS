@@ -31,6 +31,7 @@ import de.hochschuletrier.gdw.ws1516.menu.MainMenuPage;
 import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
 import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
 import de.hochschuletrier.gdw.ws1516.events.FinalScoreEvent;
+import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
 
 
 /**
@@ -38,7 +39,7 @@ import de.hochschuletrier.gdw.ws1516.events.FinalScoreEvent;
  * 
  * @author Santo Pfingsten
  */
-public class GameplayState extends BaseGameState implements GameOverEvent.Listener, FinalScoreEvent.Listener {
+public class GameplayState extends BaseGameState implements GameOverEvent.Listener, FinalScoreEvent.Listener, RainbowEvent.Listener  {
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Game.class);
 
@@ -49,6 +50,7 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
 
     private final Game game;
     private final Music music;
+    private final Music rainbowMusic;
 
     private final MenuManager menuManager = new MenuManager(Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT, this::onMenuEmptyPop);
     private final InputForwarder inputForwarder;
@@ -61,6 +63,7 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
         
         
         music = assetManager.getMusic("gameplaytheme");
+        rainbowMusic = assetManager.getMusic("rainboxtheme");
 
         Skin skin = ((MainMenuState)Main.getInstance().getPersistentState(MainMenuState.class)).getSkin();
         final MainMenuPage menuPageRoot = new MainMenuPage(skin, menuManager, MainMenuPage.Type.PAUSED);
@@ -70,7 +73,7 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
         gameInputProcessor = game.getInputProcessor();
 
 
-//        menuManager.addLayer(new DecoImage(assetManager.getTexture("menu_fg")));
+        //menuManager.addLayer(new DecoImage(assetManager.getTexture("tutorial")));
 
 
 
@@ -144,6 +147,7 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
         inputForwarder.set(gameInputProcessor);
         GameOverEvent.register(this);
         FinalScoreEvent.register(this);
+        RainbowEvent.register(this);
        
 
     }
@@ -154,6 +158,7 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
         Main.inputMultiplexer.removeProcessor(inputForwarder);
         GameOverEvent.unregister(this);
         FinalScoreEvent.unregister(this);
+        RainbowEvent.unregister(this);
     }
 
     @Override
@@ -186,6 +191,20 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
     @Override
     public void onFinalScoreChanged(long score, ScoreComponent scoreComponent) {
         this.scoreComp=scoreComponent;
+        
+    }
+
+
+    @Override
+    public void onRainbowCollect(Entity player) {
+        MusicManager.play(rainbowMusic, GameConstants.MUSIC_FADE_TIME);
+        
+    }
+
+
+    @Override
+    public void onRainbowModeEnd(Entity player) {
+        MusicManager.play(music, GameConstants.MUSIC_FADE_TIME);
         
     }
 }

@@ -28,12 +28,15 @@ import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.GameLogicTest;
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
 import de.hochschuletrier.gdw.ws1516.events.BubblegumSpitSpawnEvent;
+import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
+import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
 
 /**
  * @author phili_000
  *
  */
-public class SoundSystem extends IteratingSystem implements SoundEvent.Listener, DeathEvent.Listener,BubblegumSpitSpawnEvent.Listener {
+public class SoundSystem extends IteratingSystem
+        implements SoundEvent.Listener, DeathEvent.Listener, BubblegumSpitSpawnEvent.Listener,StartFlyEvent.Listener,EndFlyEvent.Listener {
 
     private static final Logger logger = LoggerFactory.getLogger(GameLogicTest.class);
     private Vector2 camera;
@@ -50,7 +53,9 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
         SoundEvent.register(this);
-        DeathEvent.register(this);    
+        DeathEvent.register(this);
+        StartFlyEvent.register(this);
+        EndFlyEvent.register(this);
         BubblegumSpitSpawnEvent.register(this);
         this.engine = engine;
     }
@@ -60,10 +65,12 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
         super.removedFromEngine(engine);
         SoundEvent.unregister(this);
         DeathEvent.unregister(this);
+        StartFlyEvent.unregister(this);
+        EndFlyEvent.unregister(this);
         BubblegumSpitSpawnEvent.unregister(this);
         this.engine = null;
     };
-    
+
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         SoundEmitterComponent soundEmitter = ComponentMappers.soundEmitter.get(entity);
@@ -71,28 +78,24 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
         PhysixBodyComponent body = ComponentMappers.physixBody.get(entity);
         MovementComponent move = ComponentMappers.movement.get(entity);
         PlayerComponent player = ComponentMappers.player.get(entity);
-        
+
         playerSounds(entity);
-        
-        
-        
-        
-        
+
         soundEmitter.emitter.setPosition(position.x, position.y, 0);
         /*
          * Löschen der beendeten Sounds
          */
-        for (int i=0;i<soundEmitter.soundInstances.size();i++){
-            if (soundEmitter.soundInstances.get(i).isStopped()){
-                soundEmitter.soundNames.remove( i );
+
+        for (int i = 0; i < soundEmitter.soundInstances.size(); i++) {
+            if (soundEmitter.soundInstances.get(i).isStopped()) {
+                soundEmitter.soundNames.remove(i);
                 soundEmitter.soundInstances.remove(i);
                 i--;
             }
         }
-        
-        
+
         soundEmitter.emitter.update();
-        
+
     }
 
     @Override
@@ -108,17 +111,15 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
         SoundEmitterComponent soundEmitter = ComponentMappers.soundEmitter.get(entity);
         // soundEmitter.emitter.play(assetManager.getSound(sound), b);
         // System.out.println(soundEmitter.emitter);
-        if ( soundEmitter  != null )
-        {
+        if (soundEmitter != null) {
             SoundInstance soundInstance = soundEmitter.emitter.play(assetManager.getSound(sound), b);
             if (soundInstance != null) {
                 soundInstance.setVolume(1f);
+                soundEmitter.soundInstances.add(soundInstance);
+                soundEmitter.soundNames.add(sound);
             }
-            soundEmitter.soundInstances.add(soundInstance);
-            soundEmitter.soundNames.add(sound);
-        }else
-        {
-            logger.warn("Entity {} tried to play a sound( {} ), but has no SoundEmitter.",entity,sound);
+        } else {
+            logger.warn("Entity {} tried to play a sound( {} ), but has no SoundEmitter.", entity, sound);
         }
 
     }
@@ -129,105 +130,107 @@ public class SoundSystem extends IteratingSystem implements SoundEvent.Listener,
     }
 
     /**
-     * @param sound 
-     *          Sound to be stopped, null stops all sounds
+     * @param sound
+     *            Sound to be stopped, null stops all sounds
      * @param entity
-     *          Entity which plays the sound
+     *            Entity which plays the sound
      */
     @Override
-    public void onSoundStop(String sound,Entity entity) {
+    public void onSoundStop(String sound, Entity entity) {
         SoundEmitterComponent soundEmitter = ComponentMappers.soundEmitter.get(entity);
-        for (int i=0;i<soundEmitter.soundNames.size();i++){
-            if (sound == null ||  soundEmitter.soundNames.get(i).equals(sound)){
+        for (int i = 0; i < soundEmitter.soundNames.size(); i++) {
+            if (sound == null || soundEmitter.soundNames.get(i).equals(sound)) {
                 soundEmitter.soundInstances.get(i).stop();
-                
+
                 soundEmitter.soundInstances.remove(i);
                 soundEmitter.soundNames.remove(i);
                 i--;
-                
+
             }
         }
     }
 
     @Override
     public void onDeathEvent(Entity entity) {
-        Entity player =  engine.getEntitiesFor( Family.all(PlayerComponent.class).get() ).first();
+        Entity player = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first();
         CollectableComponent collect = ComponentMappers.collectable.get(entity);
         EnemyTypeComponent enemy = ComponentMappers.enemyType.get(entity);
-        if (player != null)
-        {
-            if ( collect != null ) {
-                switch(collect.type )
-                {
-                    case BONBON:
-                    case BLUE_GUM:
-                    case CHOCO_COIN:
-                        SoundEvent.emit("eat_cho", player);
-                        break;
-                    case SPAWN_POINT:
-                        SoundEvent.emit("einhornEmpathy", player);
-                        break;
+        if (player != null) {
+            if (entity==player){
+                SoundEvent.emit("einhorndying", player);
+            }else if (collect != null) {
+                switch (collect.type) {
+                case BONBON:
+                case BLUE_GUM:
+                case CHOCO_COIN:
+                    SoundEvent.emit("eat_cho", player);
+                    break;
+                case SPAWN_POINT:
+                    SoundEvent.emit("einhornEmpathy", player);
+                    break;
                 }
-            } else if ( enemy != null ) {
+            } else if (enemy != null) {
                 SoundEvent.emit("paparazzidie", player);
-            } else if ( ComponentMappers.player.has(entity) ) {
+            } else if (ComponentMappers.player.has(entity)) {
                 SoundEvent.emit("lose_sound", player);
             }
         }
-        
+
     }
 
     @Override
     public void onSpawnBubblegumSpit(float force) {
-        Entity player =  engine.getEntitiesFor( Family.all(PlayerComponent.class).get() ).first();
+        Entity player = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first();
         SoundEvent.emit("spucken", player);
     }
-    
-    
-    private void playerSounds(Entity entity) 
-    {
+
+    private void playerSounds(Entity entity) {
         SoundEmitterComponent soundEmitter = ComponentMappers.soundEmitter.get(entity);
         PhysixBodyComponent body = ComponentMappers.physixBody.get(entity);
         MovementComponent move = ComponentMappers.movement.get(entity);
         PlayerComponent player = ComponentMappers.player.get(entity);
-        if (move != null && player!=null)
-        {
+        if (move != null && player != null) {
             boolean shouldplayRun = false;
-            boolean shouldplaySpuck=false;
-            if ( move.state == State.ON_GROUND )
-            {
-                if ( Math.abs(body.getLinearVelocity().x)>1f )
-                {
+            boolean shouldplaySpuck = false;
+            if (move.state == State.ON_GROUND || move.state==State.LANDING) {
+                if (Math.abs(body.getLinearVelocity().x) > 1f) {
                     shouldplayRun = true;
                 }
             }
-            if ( player.state == PlayerComponent.State.SPUCKCHARGE)
-            {
-                if (!player.soundSpuckChargePlayed){
+            if (player.state == PlayerComponent.State.SPUCKCHARGE) {
+                if (!player.soundSpuckChargePlayed) {
                     shouldplaySpuck = true;
-                    player.soundSpuckChargePlayed=true;
+                    player.soundSpuckChargePlayed = true;
                 }
-            }else{
-                player.soundSpuckChargePlayed=false;
+            } else {
+                player.soundSpuckChargePlayed = false;
             }
-            if (shouldplaySpuck){
-                if (!soundEmitter.soundNames.contains("spuckCharge")){
+            if (shouldplaySpuck) {
+                if (!soundEmitter.soundNames.contains("spuckCharge")) {
                     SoundEvent.emit("spuckCharge", entity);
                 }
-            }else if (player.state!=PlayerComponent.State.SPUCKCHARGE){
-                if ( soundEmitter.soundNames.contains("spuckCharge") )
-                    SoundEvent.stopSound("spuckCharge",entity);
+            } else if (player.state != PlayerComponent.State.SPUCKCHARGE) {
+                if (soundEmitter.soundNames.contains("spuckCharge"))
+                    SoundEvent.stopSound("spuckCharge", entity);
             }
-            if( shouldplayRun )
-            {
-                if ( !soundEmitter.soundNames.contains("laufen") )
-                    SoundEvent.emit("laufen", entity,true);
-            }else
-            {
-                if ( soundEmitter.soundNames.contains("laufen") )
-                    SoundEvent.stopSound("laufen",entity);
+            if (shouldplayRun) {
+                if (!soundEmitter.soundNames.contains("laufen"))
+                    SoundEvent.emit("laufen", entity, true);
+            } else {
+                if (soundEmitter.soundNames.contains("laufen"))
+                    SoundEvent.stopSound("laufen", entity);
             }
         }
-        
+
+    }
+
+    @Override
+    public void onEndFlyEvent(Entity entity) {
+        SoundEvent.stopSound("aufblasen",entity);
+    }
+
+    @Override
+    public void onStartFlyEvent(Entity entity, float time) {
+        SoundEvent.emit("aufblasen", entity);
     }
 }

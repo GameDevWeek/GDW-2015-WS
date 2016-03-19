@@ -68,6 +68,9 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
                    revive(save);
                }
            }
+           playerComp.flyingCooldown = 0;
+           playerComp.hornAttackCooldown = 0;
+           playerComp.throwBackCooldown = 0;
        }
     }
     

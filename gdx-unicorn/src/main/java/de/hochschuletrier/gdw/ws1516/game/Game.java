@@ -204,28 +204,6 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
         loadMap(mapFilename);
         mapRenderSystem.initialzeRenderer(map, "map_background", cameraSystem);
         
-        //test: 
-        // take it out
-        Entity unicorn = EntityCreator.createEntity("unicorn", 8800, 500);
-        Entity entity=EntityCreator.createEntity("hunter", 9000, 700);
-        PathComponent pathComponent = ComponentMappers.path.get(entity);
-        pathComponent.points.add(new Vector2(10000, 700));
-        pathComponent.points.add(new Vector2(8800,100));
-//        Entity platform = EntityCreator.createEntity("platform", 1700, 100);
-/*        healCheating = new Hotkey(() -> HealEvent.emit(unicorn, 1), Input.Keys.F4,
-        HotkeyModifier.CTRL);
-        healCheating.register();
-        rainbow = new Hotkey(() -> RainbowEvent.start(unicorn), Input.Keys.F3,
-                HotkeyModifier.CTRL);
-        rainbow.register();
-*/
-        Entity platform = EntityCreator.createEntity("platform", 9000, 700);
-        PlatformComponent platformComp = ComponentMappers.platform.get(platform);
-        //platformComp.loop = true;
-        pathComponent =ComponentMappers.path.get(platform);
-        pathComponent.points.add(new Vector2(9000, 700));
-        pathComponent.points.add(new Vector2(9500, 700));
-
     }
 
 
