@@ -48,11 +48,11 @@
         "rows" : 1
     },
     "unicorn_idle": {
-        "filename": "data/graphics/unicorn_s.png",
-        "frames" : 1,
-        "frameDuration": [0.15],
+        "filename": "data/graphics/spritesheets/unicorn_idle_pink_spritesheet.png",
+        "frames" : 9,
+        "frameDuration": [2, 0.31, 0.31, 0.31, 0.31, 0.31, 0.3, 0.31, 0.31],
         "playType" : "LOOP",
-        "columns": 1,
+        "columns": 9,
         "rows" : 1
     },
     "unicorn_falling": {
