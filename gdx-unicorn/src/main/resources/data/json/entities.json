@@ -320,13 +320,14 @@
         "components": {
             "Position": {},
             "Texture": {
-                "texture": "bubblegum_rainbow"
+                "texture": "checkpoint_unchecked",
+                "flipVertical": "true"
             },
             "Collectable":{
                 "type" : "spawn_point"
             },
             "PhysixBody": {
-                "type": "circle",
+                "type": "checkpoint",
                 "size": 30,
                 "density": 5,
                 "friction": 0.2,
