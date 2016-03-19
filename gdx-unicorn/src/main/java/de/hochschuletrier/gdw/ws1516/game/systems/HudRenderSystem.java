@@ -81,6 +81,7 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         Texture coin = assetManager.getTexture("coin_hud");
         Texture blue_gum = assetManager.getTexture("gum_hud");
         Texture hornAttackRdy = assetManager.getTexture("dash_offCooldown");
+        Texture hornAttackCd_Ver2 = assetManager.getTexture("dash_Cooldown_V2");
         Texture hornAttackCd = assetManager.getTexture("dash_Cooldown");
         Texture clock = assetManager.getTexture("clock_hud");
         
@@ -165,18 +166,25 @@ public class HudRenderSystem extends IteratingSystem implements FinalScoreEvent.
         font.draw(DrawUtil.batch, time, time_x, time_y);
         DrawUtil.draw(coin, coin_x, coin_y, 40, 40);
         font.draw(DrawUtil.batch,score, score_x, score_y);
-        DrawUtil.draw(hornAttackCd, hornAttack_x, hornAttack_y, 92, 92);
+        DrawUtil.draw(hornAttackRdy, hornAttack_x-46, hornAttack_y-46, 92, 92);
         DrawUtil.draw(clock, clock_x, clock_y, 40,40);
         
-        CircularProgressRenderer dashCooldownRenderer = new CircularProgressRenderer(hornAttackRdy);
+        CircularProgressRenderer dashCooldownRenderer = new CircularProgressRenderer(hornAttackCd_Ver2);
+        //CircularProgressRenderer dashCooldownRenderer = new CircularProgressRenderer(hornAttackCd);
         float hornCooldown;
         if (playerComp.hornAttackCooldown != 0.0f && playerComp.state != State.HORNATTACK) {
             hornCooldown = -(playerComp.hornAttackCooldown / GameConstants.HORN_MODE_COOLDOWN);
         } else {
             hornCooldown = 1.0f;
         }
-        dashCooldownRenderer.draw(DrawUtil.batch, hornAttack_x, hornAttack_y, 92, 92, hornCooldown * 360.0f); 
         
+        if(playerComp.hornAttackCooldown!=0){
+        dashCooldownRenderer.draw(DrawUtil.batch, hornAttack_x, hornAttack_y, 92, 92, hornCooldown * 360.0f);  
+        }
+        else{
+            DrawUtil.draw(hornAttackRdy, hornAttack_x-46, hornAttack_y-46, 92, 92);
+        }
+            
         CircularProgressRenderer flyingCooldownRenderer = new CircularProgressRenderer(blue_gum);
         float flyingCooldown;
         if (playerComp.flyingCooldown != 0.0f) {
