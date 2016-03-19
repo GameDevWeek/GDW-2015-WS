@@ -5,9 +5,9 @@
             "ScoreBoard":{},
             "StartPosition":{},
             "Position": { 
-		"maxHitpoints":3,
-		"hitpoints":3,
-		"lives":3
+        "maxHitpoints":3,
+        "hitpoints":3,
+        "lives":3
             },
             "Input":{},
             "Player":{},
@@ -52,7 +52,7 @@
         "meta": {},
         "components": {
             "Position": {},
-	    "Path":{},
+        "Path":{},
             "Movable":{
                 "state":"on_ground",
                 "speed": 100.0
@@ -61,8 +61,8 @@
                 "type" : "hunter"
             },
             "Behaviour": {
-        		"cooldown":1.35
-        	    },
+                "cooldown":1.35
+                },
             "Animation": {
                 "name": "Hunter",
                 "on_ground_idle": "hunter_walking",
@@ -70,9 +70,6 @@
                 "flying": "hunter_walking",
                 "falling": "hunter_walking",
                 "jumping": "hunter_walking",
-                "landing": "hunter_walking",
-                "glued": "hunter_glued",
-                "shooting": "hunter_shooting",
                 "flip_horizontal": true
             },
             "PhysixBody": {
@@ -92,7 +89,7 @@
         "meta": {},
         "components": {
             "Position": {},
-	    "Path":{},
+        "Path":{},
             "Movable":{
                 "state":"on_ground",
                 "speed": 275.0
@@ -101,8 +98,8 @@
                 "type" : "paparazzi"
             },
             "Behaviour": {
-		"cooldown":1.5
-	    },
+        "cooldown":1.5
+        },
             "Animation": {
                 "name": "Paparazzi",
                 "on_ground_idle": "paparazzi_walking",
@@ -110,9 +107,6 @@
                 "flying": "paparazzi_walking",
                 "falling": "paparazzi_walking",
                 "jumping": "paparazzi_walking",
-                "landing": "paparazzi_walking",
-                "glued": "paparazzi_glued",
-                "shooting": "paparazzi_shooting",
                 "flip_horizontal": true
             },
             "PhysixBody": {
@@ -403,6 +397,28 @@
                 "density": 5,
                 "friction": 0.2,
                 "restitution": 0.4
+            }
+        }
+    },
+    "chocolate_river_top": {
+        "meta": {},
+        "components": {
+            "Animation": {
+                "animation": "chocolate_river_top"
+            },
+            "RenderLayer": {
+                "layer": 200
+            }
+        }
+    },
+    "chocolate_river_body": {
+        "meta": {},
+        "components": {
+            "Animation": {
+                "animation": "chocolate_river_body"
+            },
+            "RenderLayer": {
+                "layer": 200
             }
         }
     },
