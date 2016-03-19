@@ -41,9 +41,9 @@ public class MenuPageRoot extends MenuPage {
         } else {
             addLeftAlignedButton(x, y - MENU_STEP * (i++), BUTTON_WIDTH, BUTTON_HEIGHT, "Fortsetzen", this::fadeToGame);
         }
+        addPageEntry(menuManager, x, y - MENU_STEP * (i++), BUTTON_WIDTH, "Hilfe", new MenuPageHelp(skin, menuManager));
         addPageEntry(menuManager, x, y - MENU_STEP * (i++), BUTTON_WIDTH, "Credits", new MenuPageCredits(skin, menuManager));
         
-        i++;
         if (type != Type.MAINMENU) {
             addLeftAlignedButton(x, y - MENU_STEP * (i++), BUTTON_WIDTH, BUTTON_HEIGHT, "Hauptmenü", this::stopGame);
         } else {

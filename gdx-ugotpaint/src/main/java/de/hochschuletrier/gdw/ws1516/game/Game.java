@@ -76,12 +76,12 @@ public class Game extends InputAdapter {
         inputForwarder.set(engine.getSystem(KeyboardInputSystem.class));
         float x = GameConstants.BOUND_LEFT + GameConstants.DEFAULT_SEGMENTS * GameConstants.SEGMENT_DISTANCE;
         float y = GameConstants.BOUND_TOP;
-        createSnake(0, x, y, 1, 0, PlayerColor.RED);
+        createSnake(1, x, y, 1, 0, PlayerColor.BLUE);
 
 
         x = GameConstants.BOUND_RIGHT - GameConstants.DEFAULT_SEGMENTS * GameConstants.SEGMENT_DISTANCE;
         y = GameConstants.BOUND_BOTTOM;
-        createSnake(1, x, y, -1, 0, PlayerColor.BLUE);
+        createSnake(0, x, y, -1, 0, PlayerColor.RED);
 
         pickupSystem.createRandomPickup();
         pickupSystem.createRandomPickup();
