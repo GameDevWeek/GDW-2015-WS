@@ -28,13 +28,15 @@ import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.GameLogicTest;
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
 import de.hochschuletrier.gdw.ws1516.events.BubblegumSpitSpawnEvent;
+import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
+import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
 
 /**
  * @author phili_000
  *
  */
 public class SoundSystem extends IteratingSystem
-        implements SoundEvent.Listener, DeathEvent.Listener, BubblegumSpitSpawnEvent.Listener {
+        implements SoundEvent.Listener, DeathEvent.Listener, BubblegumSpitSpawnEvent.Listener,StartFlyEvent.Listener,EndFlyEvent.Listener {
 
     private static final Logger logger = LoggerFactory.getLogger(GameLogicTest.class);
     private Vector2 camera;
@@ -216,5 +218,15 @@ public class SoundSystem extends IteratingSystem
             }
         }
 
+    }
+
+    @Override
+    public void onEndFlyEvent(Entity entity) {
+        SoundEvent.stopSound("aufblasen",entity);
+    }
+
+    @Override
+    public void onStartFlyEvent(Entity entity, float time) {
+        SoundEvent.emit("aufblasen", entity);
     }
 }
