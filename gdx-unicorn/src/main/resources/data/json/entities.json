@@ -14,13 +14,13 @@
             "Movable":{
                 "state": "falling"
                 },
-            "Animation": {
-                "on_ground_idle": "unicorn_idle",
-                "on_ground_walking": "unicorn_walking",
-                "flying": "unicorn_flying",
-                "falling": "unicorn_falling", 
-                "jumping": "unicorn_jumping",
-                "landing": "unicorn_landing"
+            "UnicornAnimation": {
+                "pink_on_ground_idle": "unicorn_idle",
+                "pink_on_ground_walking": "unicorn_walking",
+                "pink_flying": "unicorn_flying",
+                "pink_falling": "unicorn_falling", 
+                "pink_jumping": "unicorn_jumping",
+                "pink_landing": "unicorn_landing"
             },
             "PhysixBody": {
                 "type": "player",
