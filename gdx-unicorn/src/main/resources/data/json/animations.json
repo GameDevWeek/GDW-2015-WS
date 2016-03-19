@@ -7,30 +7,6 @@
         "columns": 5,
         "rows" : 1
     },
-    "hunter_shooting": {
-        "filename": "data/graphics/spritesheets/hunter_shooting.png",
-        "frames" : 5,
-        "frameDuration": [0.15],
-        "playType" : "NORMAL",
-        "columns": 5,
-        "rows" : 1
-    },
-    "hunter_glued": {
-        "filename": "data/graphics/spritesheets/hunter_sticky.png",
-        "frames" : 4,
-        "frameDuration": [0.15],
-        "playType" : "LOOP",
-        "columns": 4,
-        "rows" : 1
-    },
-    "hunter_dying": {
-        "filename": "data/graphics/spritesheets/hunter_dying.png",
-        "frames" : 4,
-        "frameDuration": [0.1, 0.1, 2.8],
-        "playType" : "NORMAL",
-        "columns": 4,
-        "rows" : 1
-    },
     "paparazzi_walking": {
         "filename": "data/graphics/spritesheets/paparazzi_walking.png",
         "frames" : 5,
@@ -118,6 +94,22 @@
         "frameDuration": [0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15],
         "playType" : "LOOP",
         "columns": 7,
+        "rows" : 1
+    },
+    "chocolate_river_top": {
+        "filename": "data/graphics/spritesheets/unicorn_jumping_fly_blue_spritesheet.png",
+        "frames" : 3,
+        "frameDuration": [0.5, 0.5, 0.5],
+        "playType" : "LOOP",
+        "columns": 3,
+        "rows" : 1
+    },
+    "chocolate_river_body": {
+        "filename": "data/graphics/spritesheets/unicorn_jumping_fly_pink_spritesheet.png",
+        "frames" : 3,
+        "frameDuration": [0.5, 0.5, 0.5],
+        "playType" : "LOOP",
+        "columns": 3,
         "rows" : 1
     },
     "ball": {
