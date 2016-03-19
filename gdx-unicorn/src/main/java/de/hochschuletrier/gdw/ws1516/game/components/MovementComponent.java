@@ -20,12 +20,25 @@ public class MovementComponent extends Component implements Pool.Poolable{
         ON_GROUND,
         FLYING,
         FALLING,
-        JUMPING
+        JUMPING,
+        LANDING,
+        GLUED
     }
     
     public static enum LookDirection {
-        LEFT,
-        RIGHT;
+        LEFT(-1.0f),
+        RIGHT(1.0f);
+        
+        float cosine;
+        
+        LookDirection(float cosine) {
+            this.cosine = cosine;
+        }
+        
+        public float getCosine() {
+            return this.cosine;
+        }
+        
     }
     
     public State state=State.ON_GROUND;

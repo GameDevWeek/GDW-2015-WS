@@ -6,13 +6,14 @@ Unicorn Bubblegum
 ### Input
 - Auf dem Boden:
   - Pfeiltasten: Bewegung links/rechts, Sprung
-  - Taste A: Hornattacke
-  - Taste B: Rosa Kaugummi
-  - Taste C: Blaues Kaugummi
+  - Taste D: Hornattacke
+  - Taste S: Rosa Kaugummi
+  - Taste F: Blaues Kaugummi
   - Geschwindigkeit beim Laufen: tbd
 - Im Flugmodus:
 	- Pfeiltasten: Bewegung links/rechts, auf/ab
-	- Taste A,B,C: Blase platzen lassen
+	- Taste F,D: Blase platzen lassen
+	- Taste S: Rosa Kaugummi spucken
 	- Geschwindigkeit beim Fliegen: 75% der Laufgeschwindigkeit
 - Im Fallen:
 	- Pfeiltasten: Bewegung links/rechts
@@ -87,6 +88,9 @@ Unicorn Bubblegum
 ### Welt
 - Visuell wie z.B. [Sugar Rush aus dem Film "Wreck it Ralph"](http://wreckitralph.wikia.com/wiki/Candy_Cane_Forest?file=Ralph_meets_Vanellope)
 - Todeszonen (Schokofluss, etc.)
+- Parallax-Effekt für den Hintergrund
+- Es gibt Höhlen mit statischen Lichtquellen (Kerzen)
+- In den Höhlen ist die Helligkeit gedimmt
 - [Bewegliche Platformen]
 - [Jumppad]
 

@@ -11,6 +11,11 @@ public class ShaderLoader {
     private static ShaderProgram oldRainbowShader;
     private static ShaderProgram paparazziShader;
     
+    static
+    {
+        ShaderProgram.pedantic = false;
+    }
+    
     public static ShaderProgram getFancyRainbowShader()
     {
         if(fancyRainbowShader == null)

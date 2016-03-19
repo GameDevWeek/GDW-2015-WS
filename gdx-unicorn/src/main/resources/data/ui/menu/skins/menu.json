@@ -3,7 +3,8 @@
         "default-font": {"file": "data/fonts/verdana_32.fnt"},
         "verdana_32": {"file": "data/fonts/verdana_32.fnt"},
         "open_sans_24": {"file": "data/fonts/open_sans_24.fnt"},
-        "quartz_50": {"file": "data/fonts/quartz_50.fnt"}
+        "quartz_50": {"file": "data/fonts/quartz_50.fnt"},
+        "calligraphy_90": {"file": "data/fonts/calligraphy_90.fnt"}
     },
     "com.badlogic.gdx.graphics.Color": {
         "green": {"a": 1, "b": 0, "g": 1, "r": 0},
@@ -53,11 +54,14 @@
     },
     "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
         "default": {"font": "open_sans_24", "fontColor": "pink"},
-        "gameover": {"font": "quartz_50", "fontColor": "red"},
-        "win": {"font": "quartz_50", "fontColor": "cyan"}
+        "gameover": {"font": "calligraphy_90", "fontColor": "red"},
+        "win": {"font": "calligraphy_90", "fontColor": "cyan"}
     },
     "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
         "default": {"selection": "selection", "background": "textfield", "font": "default-font", "fontColor": "white", "cursor": "cursor"}
+    },
+    "com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle": {
+        "unicorn": { "knob": "unicorn-knob", "background" : "default-select"}
     },
     "com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle": {
         "default": {"checkboxOn": "check-on", "checkboxOff": "check-off", "font": "default-font", "fontColor": "white"}

@@ -1,106 +1,139 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.Filter;
 
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixBodyDef;
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixFixtureDef;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixModifierComponent;
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
+import de.hochschuletrier.gdw.ws1516.events.BlockingGumSpawnEvent;
 import de.hochschuletrier.gdw.ws1516.events.BubblegumSpitSpawnEvent;
+import de.hochschuletrier.gdw.ws1516.events.BubblegumGlueSpawnEvent;
+import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.BubbleGlueComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.BubblegumSpitComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.TextureComponent;
+import de.hochschuletrier.gdw.ws1516.game.contactlisteners.BubblegumSpitListener.CollisionDetails;
+import de.hochschuletrier.gdw.ws1516.game.utils.EntityCreator;
+import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 
 /**
  * Handles bubble-gum spits
  * @author Eileen
  * @version 1.0
  */
-public class BubblegumSpitSystem extends EntitySystem implements BubblegumSpitSpawnEvent.Listener {
+public class BubblegumSpitSystem extends IteratingSystem implements BubblegumSpitSpawnEvent.Listener,
+                                                                    BubblegumGlueSpawnEvent.Listener,
+                                                                    RainbowEvent.Listener {
     private static final Logger logger = LoggerFactory.getLogger(BubblegumSpitSystem.class);
-
-    private PooledEngine engine;
     
-    public BubblegumSpitSystem(PooledEngine e) {
-        super(0);
-        this.engine = e;
-    }
-
-    public BubblegumSpitSystem(int priority) {
-        super(priority);
+    private PooledEngine engine;
+    private boolean spitsRainbow;
+    
+    @SuppressWarnings("unchecked")
+    public BubblegumSpitSystem(PooledEngine engine) {
+        super(Family.all(BubblegumSpitComponent.class,
+                         PositionComponent.class,
+                         PhysixBodyComponent.class).get());
+        this.engine = engine;
+        this.spitsRainbow = false;
     }
 
     @Override
     public void addedToEngine(Engine engine) {
+        super.addedToEngine(engine);
         BubblegumSpitSpawnEvent.register(this);
     }   
     
     @Override
     public void removedFromEngine (Engine engine) {
+        super.removedFromEngine(engine);
         BubblegumSpitSpawnEvent.unregister(this);
     }
 
     @Override
+    protected void processEntity(Entity entity, float deltaTime) {
+        PositionComponent position = ComponentMappers.position.get(entity);
+        PhysixBodyComponent body = ComponentMappers.physixBody.get(entity);
+        
+        if (position != null && body != null) { 
+            PhysixModifierComponent modifier = engine.createComponent(PhysixModifierComponent.class);
+            modifier.schedule(() -> {
+                body.setAngle(body.getLinearVelocity().angle() * PhysixUtil.DEG2RAD);
+            });
+            entity.add(modifier);
+        }
+        
+    }
+    
+    @Override
     public void onSpawnBubblegumSpit(final float force) {
         
-        //Create gum spit entity
-        final Entity gumSpitEntity = engine.createEntity();
+        //Resolve player entity
+        @SuppressWarnings("unchecked")
+        Entity player = engine.getEntitiesFor(Family.all(PlayerComponent.class,
+                                                         MovementComponent.class,
+                                                         PositionComponent.class).get()).first();
+        PositionComponent playerPos  = ComponentMappers.position.get(player);
+        MovementComponent playerMove = ComponentMappers.movement.get(player); 
         
-        //Create gum spit component
-        BubblegumSpitComponent bulletComponent = engine.createComponent(BubblegumSpitComponent.class);
-        bulletComponent.onEnemyHit = this::makeBubbleGlue;
-        bulletComponent.onHit = this::removeBubblegumSpit;
+        //Calculate spawn position
+        float playerLookCosine = playerMove.lookDirection.getCosine();
+        float spawnX = playerPos.x + GameConstants.SPIT_SPAWN_OFFSET_X * playerLookCosine;
+        float spawnY = playerPos.y + GameConstants.SPIT_SPAWN_OFFSET_Y;
         
-        //Create physics modifier component
-        PhysixModifierComponent modifyComponent = engine.createComponent(PhysixModifierComponent.class);
-        
-        //Bind components
-        gumSpitEntity.add(bulletComponent);
-        gumSpitEntity.add(modifyComponent);
-
-        //Build bullet physics
-        modifyComponent.schedule(() -> {
-            PhysixSystem physixSystem = engine.getSystem(PhysixSystem.class);
+        //Create gum spit entity, rainbow or not
+        Entity gumSpitEntity;
+        if (spitsRainbow) {
+            gumSpitEntity = EntityCreator.createEntity("bubblegum_spitting_rainbow", spawnX, spawnY);
+        } else {
+            gumSpitEntity = EntityCreator.createEntity("bubblegum_spitting", spawnX, spawnY);
+        }
             
-            Entity playerEntity = engine.getEntitiesFor(Family.all(PlayerComponent.class,
-                                                                   MovementComponent.class).get()).first();
-            PhysixBodyComponent playerBody = ComponentMappers.physixBody.get(playerEntity);
-            MovementComponent movementComponent = ComponentMappers.movement.get(playerEntity);
+        //Set callback's
+        BubblegumSpitComponent spitComponent = ComponentMappers.bubblegumSpitComponent.get(gumSpitEntity);
+        spitComponent.onEnemyHit = (gum, enemy) -> BubblegumGlueSpawnEvent.emit(gum, enemy);
+        spitComponent.onHit = this::removeBubblegumSpit;
+        
+        //Calculate spit impulse
+        float spitForceDelta = GameConstants.SPIT_FORCE_MAX - GameConstants.SPIT_FORCE_MIN;
+        float impulseForce = GameConstants.SPIT_FORCE_MIN + force * spitForceDelta;
+        float impulseX = (float) Math.cos(GameConstants.SPIT_SPAWN_ANGLE) * playerLookCosine;
+        float impulseY = (float) Math.sin(GameConstants.SPIT_SPAWN_ANGLE);
+        
+        //Add body manually
+        gumSpitEntity.add(engine.createComponent(PhysixBodyComponent.class));
+        PhysixModifierComponent phyModifier = engine.createComponent(PhysixModifierComponent.class);
+        phyModifier.schedule(() -> {
             
-            //'Magie = Physik / Wollen'
-            float lookDirection = movementComponent.lookDirection == MovementComponent.LookDirection.RIGHT ? 1.0f : -1.0f;
-            float spawnX = playerBody.getX() + (GameConstants.SPIT_SPAWN_OFFSET_X * lookDirection);
-            float spawnY = playerBody.getY() + GameConstants.SPIT_SPAWN_OFFSET_Y;
-            float impulseX = (float) Math.cos(GameConstants.SPIT_SPAWN_ANGLE) * lookDirection;
-            float impulseY = (float) Math.sin(GameConstants.SPIT_SPAWN_ANGLE);
+            //Get physix system
+            PhysixSystem physix = engine.getSystem(PhysixSystem.class);
             
             //Create physic Body component
-            PhysixBodyComponent spitBodyComponent = engine.createComponent(PhysixBodyComponent.class);
-            PhysixBodyDef spitBodyDef = new PhysixBodyDef(BodyType.DynamicBody, physixSystem)
+            PhysixBodyComponent spitBodyComponent = ComponentMappers.physixBody.get(gumSpitEntity);
+            PhysixBodyDef spitBodyDef = new PhysixBodyDef(BodyType.DynamicBody, physix)
                                             .position(spawnX, spawnY)
                                             .fixedRotation(true);
-            spitBodyComponent.init(spitBodyDef, physixSystem, gumSpitEntity);
+            spitBodyComponent.init(spitBodyDef, physix, gumSpitEntity);
             
             //Gum spit fixture
-            PhysixFixtureDef fixtureDef = new PhysixFixtureDef(physixSystem)
+            PhysixFixtureDef fixtureDef = new PhysixFixtureDef(physix)
                                           .density(1.0f)
                                           .friction(0.0f)
                                           .restitution(0.0f)
@@ -108,40 +141,75 @@ public class BubblegumSpitSystem extends EntitySystem implements BubblegumSpitSp
             fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_SPIT;
             spitBodyComponent.createFixture(fixtureDef);
             
+            //Set sprite origin
+            TextureComponent texture = ComponentMappers.texture.get(gumSpitEntity);
+            texture.originX = 16.0f;
+            texture.originY =  8.0f;
+            
             //Force gum spit
-            float spitForceDelta = GameConstants.SPIT_FORCE_MAX - GameConstants.SPIT_FORCE_MIN;
-            float spitForce = GameConstants.SPIT_FORCE_MIN + force * spitForceDelta;
-            spitBodyComponent.applyImpulse(impulseX * spitForce, impulseY * spitForce);
+            spitBodyComponent.applyImpulse(impulseX * impulseForce, impulseY * impulseForce);
             spitBodyComponent.setGravityScale(1.0f);
             
             //Add body to entity
             gumSpitEntity.add(spitBodyComponent);
+           
         });
-        engine.addEntity(gumSpitEntity);
+        gumSpitEntity.add(phyModifier);
         
     }
     
-    private void makeBubbleGlue(Entity gum, Entity enemy) {
+    @Override
+    public void onSpawnGlue(Entity gum, Entity gluedEntity) {
+        if (ComponentMappers.physixBody.get(gluedEntity) == null)
+            return;
         
         //Fetch body
-        PhysixBodyComponent enemyBody = ComponentMapper.getFor(PhysixBodyComponent.class).get(enemy);
-        
+        PhysixBodyComponent enemyBody = ComponentMapper.getFor(PhysixBodyComponent.class).get(gluedEntity);
+                    
         //Create glue entity
         final Entity glueEntity = engine.createEntity();
-        
+     
+        //Set glue component
         BubbleGlueComponent glueComponent = engine.createComponent(BubbleGlueComponent.class);
-        glueComponent.gluedEntity = enemy;
+        glueComponent.gluedEntity = gluedEntity;
         glueComponent.gluedToPosition = new Vector2(enemyBody.getX(), enemyBody.getY());
         glueComponent.timeRemaining = GameConstants.SPIT_GLUE_COOLDOWN;
-        
+            
         glueEntity.add(glueComponent);
-        
+            
         engine.addEntity(glueEntity);
-        
     }
     
-    private void removeBubblegumSpit(Entity gum) {
+    @Override
+    public void onRainbowCollect(Entity player) {
+        this.spitsRainbow = true;
+    }
+
+    @Override
+    public void onRainbowModeEnd(Entity player) {
+        this.spitsRainbow = false;
+    }
+    
+    private void removeBubblegumSpit(Entity gum, CollisionDetails details) {
+        
+        //Spawn blocking gum when no enemy was hit
+        if (!details.hitEnemy)
+            spawnBlockingGum(gum, details.normal);
+        
+        //Remove the spit
         engine.removeEntity(gum);
+        
+    }
+
+    private void spawnBlockingGum(Entity gum, Vector2 normal) {
+        PositionComponent position = ComponentMappers.position.get(gum);
+        if (position != null) { 
+            
+
+            BlockingGumSpawnEvent.emit(position.x, position.y, normal.angle() + 270.0f, (blockingGum) -> {
+                engine.removeEntity(blockingGum);
+            });
+        }
     }
     
 }

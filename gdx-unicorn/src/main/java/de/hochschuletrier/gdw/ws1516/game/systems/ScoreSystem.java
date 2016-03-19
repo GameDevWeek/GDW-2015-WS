@@ -1,8 +1,9 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import org.slf4j.LoggerFactory;
+import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
@@ -19,11 +20,12 @@ import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
 import de.hochschuletrier.gdw.ws1516.events.FinalScoreEvent;
 import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
+import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
 /*
  * TODO listeners für Objekte einsammeln und zählen in diesem hoch
  */
-public class ScoreSystem extends EntitySystem implements EntityListener , ScoreBoardEvent.Listener , PauseGameEvent.Listener{
+public class ScoreSystem extends EntitySystem implements EntityListener , ScoreBoardEvent.Listener , PauseGameEvent.Listener, GameOverEvent.Listener{
 
     private static final Logger logger = LoggerFactory.getLogger(ScoreSystem.class);
     private ScoreComponent scoreComponent;
@@ -39,6 +41,7 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
         engine.addEntityListener(family, this);
         ScoreBoardEvent.register(this);
         PauseGameEvent.register(this);
+        GameOverEvent.register(this);
         gameIsPaused = false;
     }
     
@@ -48,16 +51,17 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
         engine.removeEntityListener(this);
         ScoreBoardEvent.unregister(this);
         PauseGameEvent.unregister(this);
+        GameOverEvent.unregister(this);
     }
 
     @Override
     public void update(float deltaTime) {
-        if ( !gameIsPaused  )
+        if ( !gameIsPaused )
         {
             if(scoreComponent != null)
             {
                 scoreComponent.playedSeconds += deltaTime;
-                FinalScoreEvent.emit(getFinalScore());
+                FinalScoreEvent.emit(getFinalScore(),scoreComponent);
             }
         }
     }
@@ -102,7 +106,8 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
             scoreComponent.killedObstacles += value;
                 break;
         }
-        FinalScoreEvent.emit(getFinalScore());
+        
+        FinalScoreEvent.emit(getFinalScore(),scoreComponent);
     }
 
     public long getFinalScore()
@@ -122,5 +127,17 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
     public void onPauseGameEvent(boolean pauseOn) {
         gameIsPaused = pauseOn;
     }
+
+    @Override
+    public void onGameOverEvent(boolean won) {
+        gameIsPaused = true;        
+    }
+
+    @Override
+    public void onPauseChange() {
+        onPauseGameEvent(!gameIsPaused);
+        
+    }
+    
     
 }

@@ -13,17 +13,21 @@ public class PlayerComponent extends Component implements Poolable {
     /// im Bezug auf Rainbow Mode unverwundbarkeit
     public int deathZoneCounter;
     
+    public boolean soundSpuckChargePlayed=false;
+    
     public static enum State{
         NORMAL,
         RAINBOW,
         HORNATTACK,
-        SPUCKCHARGE
+        SPUCKCHARGE,
+        THROWBACK;
     }
     
     public State state = State.NORMAL;
     public float stateTimer;
     
     public float hornAttackCooldown;
+    public float throwBackCooldown;
 
     @Override
     public void reset() {
@@ -35,6 +39,7 @@ public class PlayerComponent extends Component implements Poolable {
         stateTimer=0;
         hornAttackCooldown=0;
         invulnerableTimer=0;
+        throwBackCooldown=0;
     }
    
 }

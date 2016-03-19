@@ -5,59 +5,74 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import de.hochschuletrier.gdw.commons.gdx.ashley.SortedSubIteratingSystem.SubSystem;
+import de.hochschuletrier.gdw.commons.gdx.assets.AnimationExtended;
+import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
+import de.hochschuletrier.gdw.ws1516.events.MovementStateChangeEvent;
+import de.hochschuletrier.gdw.ws1516.events.PlayerStateChangeEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
-import de.hochschuletrier.gdw.ws1516.events.*;
 
-public class AnimationRenderSystem extends SubSystem
+public class AnimationRenderSystem extends SubSystem implements MovementStateChangeEvent.Listener, PlayerStateChangeEvent.Listener
 {
-    
     public AnimationRenderSystem() {
         super(Family.all(PositionComponent.class, AnimationComponent.class).get());
     }
 
     @Override
     public void processEntity(Entity entity, float deltaTime) {
-                
         AnimationComponent animation = ComponentMappers.animation.get(entity);
         PositionComponent position = ComponentMappers.position.get(entity);
         MovementComponent movement = ComponentMappers.movement.get(entity);
+        PhysixBodyComponent physics = ComponentMappers.physixBody.get(entity);
+        
+        if(animation.name.equals("Paparazzi"))
+        {
+            //System.out.println("Test");
+        }
         
         animation.stateTime += deltaTime;
-        TextureRegion keyFrame = null;
-
-        if(movement.state == MovementComponent.State.ON_GROUND)
+        if(movement != null && movement.state != animation.lastRenderedState)
         {
-            String idleString = movement.state.toString().toLowerCase() + "_idle";
-            String walkingString = movement.state.toString().toLowerCase() + "_walking";
-            
-//            System.out.println(idleString + " - " + walkingString + " - " + movement.velocityX + " - " + animation.animationMap.get(idleString));
-            
-            if(Math.abs(movement.velocityX) <= 0.01 && animation.animationMap.get(idleString) != null)
-            {
-                keyFrame = animation.animationMap.get(idleString).getKeyFrame(animation.stateTime);
-            }
-            else if(animation.animationMap.get(walkingString) != null)
-            {
-                keyFrame = animation.animationMap.get(walkingString).getKeyFrame(animation.stateTime);
-            }
-        }
-        else if(animation.animationMap.get(MovementComponent.State.ON_GROUND.toString().toLowerCase()) != null)
-        {
-            keyFrame = animation.animationMap.get(MovementComponent.State.ON_GROUND.toString().toLowerCase()).getKeyFrame(animation.stateTime);
+            animation.resetStateTime();
+            animation.lastRenderedState = movement.state;
         }
         
-        animation.flipHorizontal = (movement.lookDirection) == (MovementComponent.LookDirection.LEFT);
+        TextureRegion keyFrame = null;
+
+        String stateKey = movement.state.toString().toLowerCase();
+        if(movement.state == MovementComponent.State.ON_GROUND)
+        {
+            keyFrame = getGroundKeyframe(animation, movement, stateKey);
+        }
+        else if((movement.state == State.JUMPING || movement.state == State.FALLING) && physics != null)
+        {
+            keyFrame = getAirKeyframe(animation, movement, physics);
+        }
+        else if(movement.state == State.LANDING)
+        {
+            keyFrame = getLandingKeyframe(entity, animation, movement, stateKey);
+        }
+        else {
+            keyFrame = getOtherKeyframe(animation, stateKey);
+        }
+        
+        if(keyFrame == null)
+        {
+            keyFrame = getDefaultKeyframe(animation);
+        }
+        
+        animation.currentlyFlipped = (movement.lookDirection) == (MovementComponent.LookDirection.LEFT) ^ animation.flipHorizontal;
         
         if(keyFrame != null)
         {
             int w = keyFrame.getRegionWidth();
             int h = keyFrame.getRegionHeight();
             
-            if(animation.flipHorizontal)
+            if(animation.currentlyFlipped)
             {
                 DrawUtil.batch.draw(keyFrame, position.x + w * 0.5f, position.y - h * 0.5f, w * 0.5f, h * 0.5f, -w, h, 1, 1, position.rotation);
             }
@@ -67,75 +82,102 @@ public class AnimationRenderSystem extends SubSystem
             }
         }        
     }
-    
 
-//    @Override
-//    public void onMovementEvent(Entity entity, float dirX) 
-//    {       
-//        AnimationComponent animation = ComponentMappers.animation.get(entity);
-////        System.out.println("Entity " + animation.animationState + " " + animation.animationMap.get(AnimationState.none).getFrameCount());
-//        if(animation != null)
-//        {
-////            if(Math.abs(dirX) >= 0.01f && AnimationState.walking.compareTo(animation.animationState) < 0)
-////            {
-////                animation.animationState = AnimationState.walking;
-////                animation.flipHorizontal = dirX < 0.0f;
-////            }
-//              if(Math.abs(dirX) <= 0.01f)
-//              {
-//                  animation.animationState = MovementComponent.State.ON_GROUND;
-//              }
-//              else
-//              {
-//                  animation.animationState = MovementComponent.State.JUMPING;
-//                  animation.flipHorizontal = dirX < 0.0f;
-//              }
-//        }
-//    }
-//
-//    @Override
-//    public void onJumpEvent(Entity entity)
-//    {
-////        System.out.println(move);
-//        AnimationComponent animation = ComponentMappers.animation.get(entity);
-////        System.out.println(AnimationState.jump.compareTo(animation.animationState) > 0);
-////        if(animation != null && AnimationState.jump.compareTo(animation.animationState) < 0)
-////        {
-////            animation.animationState = AnimationState.jump;
-////        }
-//        if(animation != null)
-//        {
-//            animation.animationState = MovementComponent.State.JUMPING;
-//        }
-//    }
-//
-//    @Override
-//    public void onStartFlyEvent(Entity entity, float time) 
-//    {
-//        // TODO Auto-generated method stub
-//        System.out.println("fly" + time);
-//        
-//        AnimationComponent animation = ComponentMappers.animation.get(entity);
-//        
-//        if(animation != null)
-//        {
-////            animation.animationState = AnimationState.fly;
-//        }
-//
-//    }
-//    
-//    @Override
-//    public void onEndFlyEvent(Entity entity) 
-//    {
-//        // TODO Auto-generated method stub
-//        System.out.println("end fly");
-//        
-//        AnimationComponent animation = ComponentMappers.animation.get(entity);
-//
-//        if(animation != null)
-//        {
-////            animation.animationState = AnimationState.none;
-//        }
-//        
-//    }
+    public void registerListeners()
+    {
+        MovementStateChangeEvent.register(this);
+        PlayerStateChangeEvent.register(this);
+    }
+    
+    public void unregisterListeners()
+    {
+        MovementStateChangeEvent.unregister(this);
+        PlayerStateChangeEvent.unregister(this);
+    }
+
+    private TextureRegion getGroundKeyframe(AnimationComponent animation, MovementComponent movement, String stateKey) {
+        String idleString = stateKey + "_idle";
+        String walkingString = stateKey + "_walking";
+        
+        AnimationExtended animationExtended = null;
+        if(Math.abs(movement.velocityX) <= 0.01)
+        {
+            animationExtended = animation.animationMap.get(idleString);
+        }
+        else
+        {
+            animationExtended = animation.animationMap.get(walkingString);
+        }
+        return animationExtended == null ? null : animationExtended.getKeyFrame(animation.stateTime);
+    }
+
+    private TextureRegion getAirKeyframe(AnimationComponent animation, MovementComponent movement, PhysixBodyComponent physics) {
+        AnimationExtended animationExtended = animation.animationMap.get(MovementComponent.State.JUMPING.toString().toLowerCase());
+        if(animationExtended == null)
+        {
+            return null;
+        }
+        float normalized = physics.getLinearVelocity().y / 500f;
+        if(normalized < -1f)
+            normalized = -1f;
+        else if(normalized > 1f)
+            normalized = 1f;
+        normalized = (normalized + 1) * 0.5f;
+        return animationExtended.getKeyFrame(normalized *  animationExtended.animationDuration);
+    }
+
+    private TextureRegion getLandingKeyframe(Entity entity, AnimationComponent animation, MovementComponent movement, String stateKey) {
+        AnimationExtended animationExtended = animation.animationMap.get(MovementComponent.State.LANDING.toString().toLowerCase());
+        if(animationExtended == null)
+        {
+            return null;
+        }
+        else if(animation.stateTime > animationExtended.animationDuration)
+        {
+            movement.state = MovementComponent.State.ON_GROUND;
+            MovementStateChangeEvent.emit(entity, MovementComponent.State.LANDING, MovementComponent.State.ON_GROUND);
+            return getGroundKeyframe(animation, movement, stateKey);
+        }
+        return animationExtended.getKeyFrame(animation.stateTime);
+    }
+
+    private TextureRegion getOtherKeyframe(AnimationComponent animation, String stateKey) {
+        AnimationExtended animationExtended = animation.animationMap.get(stateKey);
+        if(animationExtended == null)
+        {
+            return null;
+        }
+        return animationExtended.getKeyFrame(animation.stateTime);
+    }
+    
+    private TextureRegion getDefaultKeyframe(AnimationComponent animation) {
+        AnimationExtended animationExtended = animation.animationMap.get("on_ground_walking");
+        if(animationExtended == null)
+        {
+            animationExtended = animation.animationMap.get("animation");
+            if(animationExtended == null)
+            {
+                return null;
+            }
+        }
+        return animationExtended.getKeyFrame(animation.stateTime);
+    }
+
+    @Override
+    public void onPlayerStateChangeEvent(Entity entity, State oldState, State newState) {
+        AnimationComponent animationComponent = ComponentMappers.animation.get(entity);
+        if(animationComponent != null)
+        {
+            animationComponent.resetStateTime();
+        }
+    }
+
+    @Override
+    public void onMovementStateChangeEvent(Entity entity, State oldState, State newState) {
+        AnimationComponent animationComponent = ComponentMappers.animation.get(entity);
+        if(animationComponent != null)
+        {
+            animationComponent.resetStateTime();
+        }
+    }
 }
