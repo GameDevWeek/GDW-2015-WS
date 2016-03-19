@@ -100,10 +100,12 @@
             "time" : -1,
             "items" : [
                 {"type":"animation","path":"trex_stay","resource":"trex_trying", "flipX":"true"},
-                {"type":"animation","path":"trex_stay_crying","resource":"trex_crying","delay":"2500", "flipX":"true"}
+                {"type":"animation","path":"trex_stay_crying","resource":"trex_crying","delay":"2500", "flipX":"true", "group":"crying"}
             ],
             "finalNext" : "trexQ3",
-            "animations" : []
+            "animations" : [
+                {"time":0,"animation": "sound/trexSad", "group":"crying"}
+            ]
         },
         "trexQ3":{
             "layer" :1,
