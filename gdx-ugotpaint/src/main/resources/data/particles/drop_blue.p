@@ -99,9 +99,9 @@ timelineCount: 1
 timeline0: 0.0
 - Tint - 
 colorsCount: 3
-colors0: 0.6627451
-colors1: 0.078431375
-colors2: 0.078431375
+colors0: 0.15686275
+colors1: 0.3529412
+colors2: 0.6666667
 timelineCount: 1
 timeline0: 0.0
 - Transparency - 

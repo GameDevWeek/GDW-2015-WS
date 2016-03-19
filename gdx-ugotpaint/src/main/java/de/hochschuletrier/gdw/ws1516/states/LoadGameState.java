@@ -15,7 +15,7 @@ public class LoadGameState extends BaseGameState {
     private final AssetManagerX assetManager;
     private final Runnable completeFunc;
     private final Color color = Color.valueOf("73BE28");
-    private final Texture barleft = new Texture(Gdx.files.internal("data/images/barleft.png"));
+    private final Texture loading = new Texture(Gdx.files.internal("data/images/loading.png"));
     private final Texture paintbrush = new Texture(Gdx.files.internal("data/images/paintbrush.png"));
 
     public LoadGameState(AssetManagerX assetManager, Runnable completeFunc) {
@@ -25,15 +25,14 @@ public class LoadGameState extends BaseGameState {
 
     public void render() {
         Main.getInstance().screenCamera.bind();
-        DrawUtil.fillRect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Color.BLACK);
 
+        DrawUtil.draw(loading, 0, 0);
         float leftDist = 70;
         float rightDist = 70;
         float barHeight = 105;
         float drawWidth = Gdx.graphics.getWidth() - (leftDist + rightDist);
         final int progressWidth = (int) (drawWidth * assetManager.getProgress());
-        final float y = (Gdx.graphics.getHeight() - barHeight) * 0.5f;
-        DrawUtil.draw(barleft, leftDist - barleft.getWidth(), y - 115);
+        final float y = 245;
         DrawUtil.fillRect(leftDist, y, progressWidth, barHeight, color);
         DrawUtil.draw(paintbrush, leftDist + progressWidth - 70, y - 115);
     }
