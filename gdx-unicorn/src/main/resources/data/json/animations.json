@@ -50,7 +50,7 @@
     "unicorn_idle": {
         "filename": "data/graphics/spritesheets/unicorn_idle_pink_spritesheet.png",
         "frames" : 9,
-        "frameDuration": [2, 0.31, 0.31, 0.31, 0.31, 0.31, 0.3, 0.31, 0.31],
+        "frameDuration": [2, 0.1, 0.1, 0.1, 0.1, 0.1, 0.3, 0.1, 0.1],
         "playType" : "LOOP",
         "columns": 9,
         "rows" : 1
