@@ -151,8 +151,7 @@ public class SoundSystem extends IteratingSystem
         EnemyTypeComponent enemy = ComponentMappers.enemyType.get(entity);
         if (player != null) {
             if (entity==player){
-                SoundEvent.emit("splatter", player);
-                //SoundEvent.emit("einhorndying", player);
+                SoundEvent.emit("einhorndying", player);
             }else if (collect != null) {
                 switch (collect.type) {
                 case BONBON:
