@@ -860,9 +860,21 @@
     <property name="entity_type" value="chocolate_river_top"/>
    </properties>
   </object>
-  <object id="276" gid="134" x="2818" y="3590" width="64" height="64"/>
-  <object id="277" gid="134" x="2880" y="3568" width="64" height="64"/>
-  <object id="278" gid="134" x="2942" y="3590" width="64" height="64"/>
+  <object id="276" gid="134" x="2818" y="3590" width="64" height="64">
+   <properties>
+    <property name="entity_type" value="bonbon"/>
+   </properties>
+  </object>
+  <object id="277" gid="134" x="2880" y="3568" width="64" height="64">
+   <properties>
+    <property name="entity_type" value="bonbon"/>
+   </properties>
+  </object>
+  <object id="278" gid="134" x="2942" y="3590" width="64" height="64">
+   <properties>
+    <property name="entity_type" value="bonbon"/>
+   </properties>
+  </object>
   <object id="279" gid="101" x="5366" y="696" width="64" height="64">
    <properties>
     <property name="entity_type" value="hunter"/>
