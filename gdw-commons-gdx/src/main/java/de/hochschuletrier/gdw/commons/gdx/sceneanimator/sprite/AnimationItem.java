@@ -1,6 +1,5 @@
 package de.hochschuletrier.gdw.commons.gdx.sceneanimator.sprite;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import de.hochschuletrier.gdw.commons.gdx.assets.AnimationExtended;
@@ -8,6 +7,7 @@ import de.hochschuletrier.gdw.commons.gdx.sceneanimator.Animation;
 import de.hochschuletrier.gdw.commons.gdx.sceneanimator.Item;
 import de.hochschuletrier.gdw.commons.gdx.sceneanimator.SceneAnimator.Getter;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
+import java.util.ArrayList;
 
 /**
  *
@@ -15,11 +15,12 @@ import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
  */
 public class AnimationItem extends Item {
 
-    protected float angleAdd;
-    protected float scale;
+    protected final float angleAdd;
+    protected final float scale;
     protected AnimationExtended animation;
     private final boolean flipX;
     private final boolean flipY;
+    private final AnimationExtended originalAnimation;
 
     public AnimationItem(String group, float scale, float startTime, float angle, boolean oriented, boolean flipX, boolean flipY, float opacity, String animation, Getter getter) {
         super(group, startTime, 0, oriented, opacity, getter);
@@ -30,6 +31,7 @@ public class AnimationItem extends Item {
         this.flipY = flipY;
         this.animationTime = 0;
         this.animation = getter.getAnimation(animation);
+        this.originalAnimation = this.animation;
     }
 
     @Override
@@ -73,4 +75,13 @@ public class AnimationItem extends Item {
     protected boolean isAnimationDone() {
         return this.animationTime > this.totalAnimationTime;
     }
+
+    @Override
+    public void reset(ArrayList<Animation> animations) {
+        super.reset(animations);
+        
+        animation = originalAnimation;
+    }
+    
+    
 }
