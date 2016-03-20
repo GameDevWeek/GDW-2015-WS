@@ -64,16 +64,6 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
     private float caveTime;
     private float caveEffectIntensity;
     private float caveEffectLightGlowIntensity;
-
-    //DEBUG
-    // hotkey 1: about 1.0 intensity
-    private final Hotkey paparazzi1Hotkey = new Hotkey(()->PaparazziShootEvent.emit((float)Math.random()), Input.Keys.F9,
-            HotkeyModifier.CTRL);
-    // hotkey 0: about 0.2 intensity
-    private final Hotkey paparazzi0Hotkey = new Hotkey(()->PaparazziShootEvent.emit((float) (Math.random() + GameConstants.GLOBAL_VISION * GameConstants.UNICORN_SIZE)), Input.Keys.F8,
-            HotkeyModifier.CTRL);
-
-    
     
     @SuppressWarnings("unchecked")
     public EffectsRenderSystem(int priority) {
@@ -115,10 +105,7 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
         PaparazziShootEvent.register(this);
         DeathEvent.register(this);
         TriggerEvent.register(this);
-
-        //DEBUG
-        paparazzi1Hotkey.register();
-        paparazzi0Hotkey.register();
+        ActivateSafePointEvent.register(this);
         
         super.addedToEngine(engine);
     }
@@ -131,10 +118,7 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
         PaparazziShootEvent.unregister(this);
         DeathEvent.unregister(this);
         TriggerEvent.unregister(this);
-
-        //DEBUG
-        paparazzi1Hotkey.unregister();
-        paparazzi0Hotkey.unregister();
+        ActivateSafePointEvent.unregister(this);
         
         super.removedFromEngine(engine);
     }
@@ -249,7 +233,6 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
     }
     
     public void onTriggerEvent(TriggerEvent.Action action, Entity triggeringEntity) {
-        
         switch (action) {
             case CAVE_ENTER:
                 if (!isInsideCave) {

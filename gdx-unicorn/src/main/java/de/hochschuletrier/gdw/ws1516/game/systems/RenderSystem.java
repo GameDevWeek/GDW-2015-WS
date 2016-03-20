@@ -10,8 +10,11 @@ import de.hochschuletrier.gdw.commons.gdx.ashley.SortedSubIteratingSystem;
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
 import de.hochschuletrier.gdw.ws1516.events.EnemyActionEvent;
+import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
 import de.hochschuletrier.gdw.ws1516.events.JumpEvent;
 import de.hochschuletrier.gdw.ws1516.events.MovementEvent;
+import de.hochschuletrier.gdw.ws1516.events.MovementStateChangeEvent;
+import de.hochschuletrier.gdw.ws1516.events.PlayerStateChangeEvent;
 import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
@@ -43,7 +46,9 @@ public class RenderSystem extends SortedSubIteratingSystem {
     {
         super.addedToEngine(engine);
         EnemyActionEvent.register(animationRenderSystem);
-        DeathEvent.register(animationRenderSystem);
+        HornAttackEvent.register(animationRenderSystem);
+        MovementStateChangeEvent.register(animationRenderSystem);
+        PlayerStateChangeEvent.register(animationRenderSystem);
     }
     
     @Override
@@ -51,7 +56,9 @@ public class RenderSystem extends SortedSubIteratingSystem {
     {
         super.removedFromEngine(engine);
         EnemyActionEvent.unregister(animationRenderSystem);
-        DeathEvent.unregister(animationRenderSystem);
+        HornAttackEvent.unregister(animationRenderSystem);
+        MovementStateChangeEvent.unregister(animationRenderSystem);
+        PlayerStateChangeEvent.unregister(animationRenderSystem);
     }
 
     @Override

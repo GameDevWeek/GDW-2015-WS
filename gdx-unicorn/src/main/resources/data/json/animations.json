@@ -47,7 +47,10 @@
     "filename": "data/graphics/spritesheets/hunter_dying.png",
     "frames": 4,
     "frameDuration": [
-      0.5
+      0.18,
+      0.18,
+      0.18,
+      3.5
     ],
     "playType": "NORMAL",
     "columns": 4,
@@ -101,9 +104,10 @@
     "filename": "data/graphics/spritesheets/paparazzi_dying.png",
     "frames": 4,
     "frameDuration": [
-      0.1,
-      0.1,
-      2.8
+      0.18,
+      0.18,
+      0.18,
+      3.5
     ],
     "playType": "NORMAL",
     "columns": 4,
@@ -488,10 +492,33 @@
     "frameDuration": [
       0.15,
       0.15,
-      0.15,
-      0.15
+      0.5
     ],
-    "playType": "NORMAL",
+    "playType": "LOOP",
+    "columns": 3,
+    "rows": 1
+  },
+  "blue_unicorn_dashing": {
+    "filename": "data/graphics/spritesheets/unicorn_dash_blue_spritesheet.png",
+    "frames": 3,
+    "frameDuration": [
+      0.15,
+      0.15,
+      0.5
+    ],
+    "playType": "LOOP",
+    "columns": 3,
+    "rows": 1
+  },
+  "rainbow_unicorn_dashing": {
+    "filename": "data/graphics/spritesheets/unicorn_dash_rainbow_spritesheet.png",
+    "frames": 3,
+    "frameDuration": [
+      0.15,
+      0.15,
+      0.5
+    ],
+    "playType": "LOOP",
     "columns": 3,
     "rows": 1
   }
