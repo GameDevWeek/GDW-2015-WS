@@ -62,6 +62,18 @@ public class DeathAnimationSystem extends IteratingSystem implements DeathEvent.
             AnimationComponent animComp = ComponentMappers.animation.get(deathDummy);
             animComp.killWhenFinished = true;
         }   
+        else if((enemyType != null) && (enemyType.type == EnemyType.PAPARAZZI))
+        {
+            Entity deathDummy = EntityCreator.createEntity("touristDeathDummy", deathPos.x, deathPos.y);
+            PositionComponent dummyPos = ComponentMappers.position.get(deathDummy);
+            if(dummyPos != null)
+            {
+                dummyPos.x = deathPos.x;
+                dummyPos.y = deathPos.y;
+            }
+            AnimationComponent animComp = ComponentMappers.animation.get(deathDummy);
+            animComp.killWhenFinished = true;
+        }
     }
 
 }
