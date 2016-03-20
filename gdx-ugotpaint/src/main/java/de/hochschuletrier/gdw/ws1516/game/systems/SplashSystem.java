@@ -52,7 +52,7 @@ public class SplashSystem extends IteratingSystem implements SplashEvent.Listene
 
         // if animation has played half way through fade the entity out and eventually destroy it
         AnimationComponent anim = ComponentMappers.animation.get(entity);
-        if(anim.stateTime > anim.animation.animationDuration/2){
+        if(anim.stateTime > anim.animation.getDuration()/2){
             anim.alpha = Math.max(anim.alpha - deltaTime,0);
         }
         if(anim.alpha <= 0){

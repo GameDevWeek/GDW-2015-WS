@@ -1,6 +1,7 @@
 package de.hochschuletrier.gdw.ws1516.menu;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -76,5 +77,10 @@ public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter, S
     @Override
     public void onSceneEnd() {
         sceneAnimator.reset();
+    }
+
+    @Override
+    public Sound getSound(String name) {
+        return assetManager.getSound(name);
     }
 }
