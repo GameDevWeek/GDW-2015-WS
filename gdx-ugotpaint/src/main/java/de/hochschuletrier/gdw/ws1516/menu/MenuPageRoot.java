@@ -28,8 +28,6 @@ public class MenuPageRoot extends MenuPage {
     private float canvasAnimationTime = 0;
     private final float totalCanvasAnimationTime = 1;
     private boolean bigCanvas = true;
-    private String winMessage="";
-
 
     public MenuPageRoot(Skin skin, MenuManager menuManager, Type type) {
         super(skin, true);
@@ -144,10 +142,9 @@ public class MenuPageRoot extends MenuPage {
     }
 
     public void setWinMessage(String message, float pctWinnerFilled){
-        this.winMessage = message;
         String pctMessage = "mit: "+Math.round(pctWinnerFilled * 100.0) +"% der Fläche";
 
-        addLabel(500,360,winMessage);
+        addLabel(500,360,message);
         addLabel(500,330,pctMessage);
     }
 

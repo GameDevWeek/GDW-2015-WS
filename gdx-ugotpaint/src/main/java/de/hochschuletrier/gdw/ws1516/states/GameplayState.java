@@ -17,7 +17,6 @@ import de.hochschuletrier.gdw.ws1516.events.ShowWinScreenEvent;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.menu.MenuPageRoot;
-import de.hochschuletrier.gdw.ws1516.menu.MenuPageWin;
 
 /**
  * Gameplay state
