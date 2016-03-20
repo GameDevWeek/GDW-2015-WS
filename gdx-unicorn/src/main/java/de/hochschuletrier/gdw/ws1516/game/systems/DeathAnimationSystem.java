@@ -47,8 +47,6 @@ public class DeathAnimationSystem extends IteratingSystem implements DeathEvent.
         
         if(ComponentMappers.enemyType.has(entity) && deathPos != null)
         {
-            System.out.println("on Death Event");
-            
             Entity deathDummy = EntityCreator.createEntity("hunterDeathDummy", deathPos.x, deathPos.y);
             PositionComponent dummyPos = ComponentMappers.position.get(deathDummy);
             if(dummyPos != null)
