@@ -18,18 +18,19 @@ import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
 import de.hochschuletrier.gdw.ws1516.events.FinalScoreEvent;
-import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
+import de.hochschuletrier.gdw.ws1516.events.ChangeInGameStateEvent;
+import de.hochschuletrier.gdw.ws1516.events.ChangeInGameStateEvent.GameStateType;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
 import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
 /*
  * TODO listeners für Objekte einsammeln und zählen in diesem hoch
  */
-public class ScoreSystem extends EntitySystem implements EntityListener , ScoreBoardEvent.Listener , PauseGameEvent.Listener, GameOverEvent.Listener{
+public class ScoreSystem extends EntitySystem implements EntityListener , ScoreBoardEvent.Listener , GameOverEvent.Listener{
 
     private static final Logger logger = LoggerFactory.getLogger(ScoreSystem.class);
+    private static long finalScore;
     private ScoreComponent scoreComponent;
-    private boolean gameIsPaused;
     
     public ScoreSystem() {
         scoreComponent = null;
@@ -40,9 +41,7 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
         Family family=Family.all(ScoreComponent.class).get();
         engine.addEntityListener(family, this);
         ScoreBoardEvent.register(this);
-        PauseGameEvent.register(this);
         GameOverEvent.register(this);
-        gameIsPaused = false;
     }
     
     @Override
@@ -50,13 +49,11 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
         super.removedFromEngine(engine);
         engine.removeEntityListener(this);
         ScoreBoardEvent.unregister(this);
-        PauseGameEvent.unregister(this);
         GameOverEvent.unregister(this);
     }
 
     @Override
     public void update(float deltaTime) {
-        if ( !gameIsPaused )
         {
             if(scoreComponent != null)
             {
@@ -94,7 +91,7 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
             scoreComponent.bubblegums += value;
                 break;
         case DEATH:
-            scoreComponent.deaths += value;
+            scoreComponent.lives -= value;
                 break;
         case HIT:
             scoreComponent.hits += value;
@@ -112,32 +109,26 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
 
     public long getFinalScore()
     {
-        long score = 100 + scoreComponent.chocoCoins * GameConstants.SCORE_CHOCOCOINS_POINTS
+        long score = finalScore = GameConstants.SCORE_BASEPOINTS + scoreComponent.chocoCoins * GameConstants.SCORE_CHOCOCOINS_POINTS
                 + scoreComponent.bonbons * GameConstants.SCORE_BONBONS_POINTS +
-                (long)(scoreComponent.playedSeconds * GameConstants.SCORE_TIME_POINTS ) +
-                scoreComponent.deaths  * GameConstants.SCORE_DEATHS + 
+                (long)(GameConstants.SCORE_TIME_POINTS * scoreComponent.playedSeconds  ) +
+                scoreComponent.lives  * GameConstants.SCORE_LIVES + 
                 scoreComponent.killedEnemies * GameConstants.SCORE_KILLED_ENEMIES  +
                 scoreComponent.killedObstacles * GameConstants.SCORE_KILLED_OBSTACLES +
                 scoreComponent.hits * GameConstants.SCORE_HITS; 
         return (score>0)?score:0;
         
     }
-
-    @Override
-    public void onPauseGameEvent(boolean pauseOn) {
-        gameIsPaused = pauseOn;
+   
+    public static long getFinalScoreStatic() {
+        return finalScore;
     }
 
     @Override
-    public void onGameOverEvent(boolean won) {
-        gameIsPaused = true;        
-    }
-
-    @Override
-    public void onPauseChange() {
-        onPauseGameEvent(!gameIsPaused);
+    public void onGameOverEvent(boolean won, String mapToLoad) {
+        finalScore = getFinalScore();
         
     }
-    
+
     
 }

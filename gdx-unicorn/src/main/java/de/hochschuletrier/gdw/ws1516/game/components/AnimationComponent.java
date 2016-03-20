@@ -14,13 +14,21 @@ public class AnimationComponent extends Component implements Pool.Poolable
     public boolean flipHorizontal;
     public boolean currentlyFlipped;
     public MovementComponent.State lastRenderedState;
-
+    public AnimationExtended uninteruptableAnimation = null;
+    public float xOffset;
+    public float xOffsetFlipped;
+    public float yOffset;
+    public boolean lastRenderedIdle;    
+    public float alpha;
+    public boolean killWhenFinished;
     
     @Override
     public void reset() {
+        killWhenFinished = false;
         animationMap = null;
         flipHorizontal = false;
         stateTime = 0;
+        xOffsetFlipped = 0;
     }
     
     public void resetStateTime()

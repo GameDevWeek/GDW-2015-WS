@@ -57,17 +57,14 @@ public class LoadGameState extends BaseGameState {
     public void render() {
         Main.getInstance().screenCamera.bind();
         
-       
-        
-       // DrawUtil.fillRect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Color.PURPLE);
-        DrawUtil.draw(background, 0, 0);
+        DrawUtil.draw(background, Gdx.graphics.getWidth() / 2 - 512, Gdx.graphics.getHeight()/2-300);
         DrawUtil.fillRect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new Color(0,0,0,0.5F));
-        float drawWidth = Gdx.graphics.getWidth() - 100.0f;
-     
-        DrawUtil.draw(rectTexture, 50, Gdx.graphics.getHeight() / 2 - 25, (int) (drawWidth * assetManager.getProgress()+25), 50);
+        float drawWidth = 1024;
+         
+        DrawUtil.draw(rectTexture, Gdx.graphics.getWidth()/2 - 512, Gdx.graphics.getHeight() / 2 + 200, (int) (drawWidth * assetManager.getProgress()), 50);
 
         TextureRegion keyFrame = anim.getKeyFrame(stateTime);
-        DrawUtil.batch.draw(keyFrame, (int) (drawWidth * assetManager.getProgress()), Gdx.graphics.getHeight() / 2 - 25, 0,0, keyFrame.getRegionWidth(), keyFrame.getRegionHeight(), 1, 1, 0);
+        DrawUtil.batch.draw(keyFrame, Gdx.graphics.getWidth()/2 - 512 - keyFrame.getRegionWidth()/2-20 + (int) (drawWidth * assetManager.getProgress()), Gdx.graphics.getHeight() / 2 + 200, 0,0, keyFrame.getRegionWidth(), keyFrame.getRegionHeight(), 1, 1, 0);
    
     }
 

@@ -1,5 +1,6 @@
 package de.hochschuletrier.gdw.commons.gdx.sceneanimator;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,7 +14,7 @@ public abstract class Item {
     protected static final Vector2 temp = new Vector2();
     protected final Vector2 position = new Vector2();
 
-    public String group;
+    public final String group;
     protected Path<Vector2> path;
     protected float startTime;
     protected float originalStartTime;
@@ -25,14 +26,16 @@ public abstract class Item {
     public final ArrayList<Animation> animations = new ArrayList();
     protected boolean oriented;
     private float pausePath;
+    protected final SceneAnimator.Getter getter;
 
-    public Item(String group, float startTime, float angle, boolean oriented, float opacity) {
+    public Item(String group, float startTime, float angle, boolean oriented, float opacity, SceneAnimator.Getter getter) {
         this.group = group;
         this.startTime = startTime;
         originalStartTime = startTime;
         this.angle = angle;
         this.opacity = opacity;
         this.oriented = oriented;
+        this.getter = getter;
     }
 
     public void reset(ArrayList<Animation> animations) {
@@ -43,6 +46,8 @@ public abstract class Item {
         startTime = originalStartTime;
         pathTime = 0;
         pausePath = 0;
+        animationTime = 0;
+        totalAnimationTime = 0;
         //Fixme: angle, opacity
     }
     
@@ -106,8 +111,14 @@ public abstract class Item {
     }
 
     public boolean startAnimation(Animation animation) {
-        if(animation.animation.toLowerCase().equals("pause_path")) {
+        final String name = animation.animation.toLowerCase();
+        if(name.equals("pause_path")) {
             pausePath = animation.animationTime;
+            return true;
+        } else if(name.startsWith("sound/")) {
+            Sound sound = getter.getSound(animation.animation.substring(6));
+            if(sound != null)
+                sound.play();
             return true;
         }
         return false;

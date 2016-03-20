@@ -12,6 +12,7 @@ import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.BubblegumSpitComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.BulletComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlatformComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
@@ -44,21 +45,26 @@ public class BubblegumSpitListener extends PhysixContactAdapter {
         boolean hitEnemy = false;
         
         //Collision handling with entity
-        if (otherComponent != null) {
-            if (otherComponent.getEntity() != null) {
-                //Collide with enemies
-                if (otherComponent.getEntity().getComponent(EnemyTypeComponent.class) != null) {          
-                    gumSpit.onEnemyHit.accept(myEntity, otherComponent.getEntity());
-                    hitEnemy = true;
-                }
-            }               
-        }
-                
-        //Remove spit if platform
         if (otherComponent != null &&
             otherComponent.getEntity() != null &&
-            otherComponent.getEntity().getComponent(PlatformComponent.class) != null) {
-            DeathEvent.emit(myEntity);
+            otherComponent.getEntity().getComponent(EnemyTypeComponent.class) != null) { 
+                    gumSpit.onEnemyHit.accept(myEntity, otherComponent.getEntity());
+                    hitEnemy = true;
+        }
+
+        //Non spitable entitys
+        if (otherComponent != null &&
+            otherComponent.getEntity() != null) {
+            
+            if (otherComponent.getEntity().getComponent(PlatformComponent.class) != null) {
+                //Remove spit if it hits a platform
+                DeathEvent.emit(myEntity);
+            } else if (otherComponent.getEntity().getComponent(BulletComponent.class) != null) {
+                //Remove spit if it hits a bullet
+                DeathEvent.emit(myEntity);
+                DeathEvent.emit(otherComponent.getEntity());
+            }
+                
             return;
         }
         

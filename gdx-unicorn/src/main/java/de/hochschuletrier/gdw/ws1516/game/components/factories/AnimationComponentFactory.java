@@ -26,8 +26,14 @@ public class AnimationComponentFactory extends ComponentFactory<EntityFactoryPar
                 String idleString = properties.getString(animState.toString().toLowerCase() + "_idle");
                 String walkingString = properties.getString(animState.toString().toLowerCase() + "_walking");
                 
-                component.animationMap.put(animState.toString().toLowerCase() + "_idle", assetManager.getAnimation(idleString));
-                component.animationMap.put(animState.toString().toLowerCase() + "_walking", assetManager.getAnimation(walkingString));                
+                if(idleString != null)
+                {
+                    component.animationMap.put(animState.toString().toLowerCase() + "_idle", assetManager.getAnimation(idleString));
+                }
+                if(idleString != null)
+                {
+                    component.animationMap.put(animState.toString().toLowerCase() + "_walking", assetManager.getAnimation(walkingString));
+                }            
             }
             else
             {
@@ -40,9 +46,26 @@ public class AnimationComponentFactory extends ComponentFactory<EntityFactoryPar
             }
         }
         
-        component.flipHorizontal = properties.getBoolean("flip_horizontal", false);
-        component.name = properties.getString("name", "");
+        // default animation
+        String stateString = properties.getString("default_animation");
+        if(stateString != null)
+        {
+            component.animationMap.put("default_animation", assetManager.getAnimation(stateString));
+        }
+        
+        fillAnimationComponent(component, properties);
         
         entity.add(component);
+    }
+    
+    protected void fillAnimationComponent(AnimationComponent component, SafeProperties properties)
+    {
+        component.flipHorizontal = properties.getBoolean("flip_horizontal", false);
+        component.name = properties.getString("name", "");
+        component.xOffset = properties.getFloat("x_offset", 0f);
+        component.xOffsetFlipped = properties.getFloat("x_offset_flipped", 0f);
+        component.yOffset = properties.getFloat("y_offset", 0f);
+        component.alpha = properties.getFloat("alpha", 1.0f);
+        component.killWhenFinished = properties.getBoolean("kill_When_Finished", false);
     }
 }

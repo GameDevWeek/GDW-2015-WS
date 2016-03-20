@@ -1,5 +1,7 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
+import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +14,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyBehaviourComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PathComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 /**
  * @author Tobi
@@ -27,6 +30,12 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
          */        
         public float seconds;
     }
+    /**
+     * no longer needed ?? denke ich
+     * @author Tobi
+     *
+     * @param <T>
+     */
     public static abstract class Action<T extends ActionData>
     { 
         public static enum Type
@@ -43,61 +52,20 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
              * Shoots with strength as ?range? 
              * direction towards Enemy looking to
              */
-            SHOOT
+            SHOOT,
+            SHOOT_ABORT
         }
-        public T  data;
-        /**
-         * 
-         * @param d
-         *      Grants Access to the PatternWide Data
-         */
-        public Action(T d)
-        {
-            data = d;
-        }
-        /**
-         * Is called every update
-         * @param entity
-         *      the enemy that is about to move
-         * @param unicorn
-         *      the unicorn/player
-         * @return
-         *      next State to enter
-         */
-        protected abstract int doStep(Entity entity,Entity unicorn);   
-        protected void initStep(){};
-        /**
-         * gets called on switching to this step
-         */
-        private final void init()
-        {
-            data.seconds = 0;
-            initStep();
-        }
-        /**
-         * Is called every update
-         * @param entity
-         *      the enemy that is about to move
-         * @param unicorn
-         *      the unicorn/player
-         * @param deltaTime
-         *      time that passed
-         * @return
-         *      next State to enter
-         */
-        private final int apply(Entity entity,Entity unicorn, float deltaTime)
-        {
-            data.seconds+=deltaTime;
-            return doStep(entity,unicorn);
-        }
+        
     }
 
     private static final Logger logger = LoggerFactory.getLogger(EnemyHandlingSystem.class);
     private Entity unicorn;
+    private NameSystem nameSystem;
 
     
-    public EnemyHandlingSystem() {
-        super(Family.all(EnemyBehaviourComponent.class,EnemyTypeComponent.class).get());
+    public EnemyHandlingSystem(NameSystem nameSys) {
+        super(Family.all(EnemyBehaviourComponent.class,EnemyTypeComponent.class).get(),90);
+        nameSystem = nameSys;
     }
     
     @Override
@@ -112,28 +80,36 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
         engine.removeEntityListener(this);
     }
 
-
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         EnemyBehaviourComponent behaviour = ComponentMappers.enemyBehaviour.get(entity);
-        EnemyTypeComponent type = ComponentMappers.enemyType.get(entity);
+        EnemyTypeComponent enemy = ComponentMappers.enemyType.get(entity);
+        PathComponent path = ComponentMappers.path.get(entity);
         
+        if ( enemy != null && behaviour.pathID != null && (path.points == null || path.points.isEmpty() ))
+        {
+            Entity pathEntity = nameSystem.getEntityByName(behaviour.pathID);
+            if ( pathEntity != null )
+            {
+                PathComponent foundPath = ComponentMappers.path.get(pathEntity);
+                path.points = new ArrayList<>(foundPath.points);  
+                
+            }else
+            {
+                behaviour.pathID  = null;
+            }
+        }
         behaviour.currentState = behaviour.currentState.compute(entity, unicorn, deltaTime);
         
     }
 
-
-
-
     @Override
     public void entityAdded(Entity entity) {
-        if ( ComponentMappers.player.get(entity) != null)
+        if ( ComponentMappers.player.has(entity) )
         {
             unicorn = entity;
         }
     }
-
-
 
     @Override
     public void entityRemoved(Entity entity) {
@@ -144,7 +120,4 @@ public class EnemyHandlingSystem extends IteratingSystem implements EntityListen
         
     }
     
-
-    
-
 }

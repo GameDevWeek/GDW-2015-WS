@@ -7,9 +7,16 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 
 import de.hochschuletrier.gdw.commons.gdx.ashley.SortedSubIteratingSystem;
+import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
+import de.hochschuletrier.gdw.ws1516.events.EnemyActionEvent;
+import de.hochschuletrier.gdw.ws1516.events.GameRespawnEvent;
+import de.hochschuletrier.gdw.ws1516.events.GameRestartEvent;
+import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
 import de.hochschuletrier.gdw.ws1516.events.JumpEvent;
 import de.hochschuletrier.gdw.ws1516.events.MovementEvent;
+import de.hochschuletrier.gdw.ws1516.events.MovementStateChangeEvent;
+import de.hochschuletrier.gdw.ws1516.events.PlayerStateChangeEvent;
 import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
@@ -21,7 +28,7 @@ public class RenderSystem extends SortedSubIteratingSystem {
 
     private BackgroundParticleRenderSystem backgroundParticleRenderSystem;
     private AnimationRenderSystem animationRenderSystem;
-    private ParticleRenderSystem particleRenderSystem;
+    private ForegroundParticleRenderSystem particleRenderSystem;
     
     @SuppressWarnings("unchecked")
     public RenderSystem(int priority) {
@@ -32,7 +39,7 @@ public class RenderSystem extends SortedSubIteratingSystem {
         animationRenderSystem = new AnimationRenderSystem();
         addSubSystem(animationRenderSystem);
         addSubSystem(new TextureRenderSystem());
-        particleRenderSystem = new ParticleRenderSystem();
+        particleRenderSystem = new ForegroundParticleRenderSystem();
         addSubSystem(particleRenderSystem);
     }
     
@@ -40,6 +47,28 @@ public class RenderSystem extends SortedSubIteratingSystem {
     public void addedToEngine(Engine engine) 
     {
         super.addedToEngine(engine);
+        animationRenderSystem.engine = engine;
+        EnemyActionEvent.register(animationRenderSystem);
+        HornAttackEvent.register(animationRenderSystem);
+        MovementStateChangeEvent.register(animationRenderSystem);
+        PlayerStateChangeEvent.register(animationRenderSystem);
+        DeathEvent.register(animationRenderSystem);
+        GameRespawnEvent.register(animationRenderSystem);
+        GameRestartEvent.register(animationRenderSystem);
+    }
+    
+    @Override
+    public void removedFromEngine(Engine engine) 
+    {
+        super.removedFromEngine(engine);
+        EnemyActionEvent.unregister(animationRenderSystem);
+        HornAttackEvent.unregister(animationRenderSystem);
+        MovementStateChangeEvent.unregister(animationRenderSystem);
+        PlayerStateChangeEvent.unregister(animationRenderSystem);
+        DeathEvent.unregister(animationRenderSystem);
+        GameRespawnEvent.unregister(animationRenderSystem);
+        GameRestartEvent.unregister(animationRenderSystem);
+        animationRenderSystem.engine = null;
     }
 
     @Override

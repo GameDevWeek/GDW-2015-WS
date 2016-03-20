@@ -20,10 +20,14 @@
     "unicorn": "data/graphics/unicorn_s.png",
     "unicorn_mirror" : "data/graphics/unicorn_mirror.png",
     "trex" : "data/graphics/trex.png",
+    "mini_trex" : "data/graphics/mini_trex.png",
     "trex_mirror" : "data/graphics/trex_mirror.png",
     "cookie" : "data/graphics/cookie.png",
     "drop" : "data/graphics/drop.png",
     "bubble" : "data/graphics/bubble.png",
+    "checkpoint_checked": "data/maps/tilesets/checkpoint_checked.png",
+    "checkpoint_unchecked": "data/maps/tilesets/checkpoint_unchecked.png",
+    "candle" : "data/graphics/candle.png",
     
     "hunter" : "data/graphics/enemy_hunter.png",
     "paparazzi" : "data/graphics/enemy_paparazzi.png",
@@ -35,19 +39,39 @@
     "gum_hud": "data/ui/menu/hud_gum.png",
     "coin_hud": "data/ui/menu/hud_coin.png",
     "dead_unicorn_gameover": "data/ui/menu/unicorn_dead.png",
+    "happy_unicorn_win": "data/ui/menu/win_screen.png",
     "menu_fg": "data/ui/menu/fg_border.png",
     "menu_bg": "data/ui/menu/menu_splash.png",
-    "transparent_bg": "data/ui/menu/transparent.png",
-    "prev_Button": "data/ui/menu/prev_Button.png",
-    "next_Button": "data/ui/menu/next_Button.png",
-
-    "dash_Cooldown": "data/ui/menu/hud_dash01.png",
-    "clock_hud": "data/ui/menu/hud_clock.png",
+    "prev_Button": "data/ui/menu/prev_button.png",
+    "next_Button": "data/ui/menu/next_button.png",
+    "dash_Cooldown_V2": "data/ui/menu/hud_dash01.png",
+    "dash_offCooldown": "data/ui/menu/hud_dash02.png",
+    "clock_hud":"data/ui/menu/hud_clock.png",
+    "arrow_Keys": "data/ui/menu/arrow_keys.png",
+    "dash_Key": "data/ui/menu/d_key.png",
+    "fly_Key": "data/ui/menu/f_key.png",
+    "spit_Key": "data/ui/menu/s_key.png",
+    "jump_Key": "data/ui/menu/space_key.png",
+    "death_zone":"data/ui/menu/deathzone.png",
+ 
+    
+    "platform_3x1": "data/maps/tilesets/platform_3x1.png",
+    "platform_4x1": "data/maps/tilesets/platform_4x1.png",
+    "tutorial":"data/ui/menu/Tutorial.png",
 
     "data/maps/lvl1.tmx": "data/ui/menu/menu_level01.png",
     "data/maps/lvl2.tmx": "data/ui/menu/menu_level02.png",
     "data/maps/lvl3.tmx": "data/ui/menu/menu_level03.png",
     "data/maps/lvl4.tmx": "data/ui/menu/menu_level04.png",
     
-    "lvl1": "data/graphics/background_lvl1_big.png"
+    "lvl1_background": "data/graphics/background_lvl1_big.png",
+    "lvl2_background": "data/graphics/background_lvl2_big.png",
+    "lvl3_background": "data/graphics/background_lvl3_big.png",
+    "lvl4_background": "data/graphics/background_lvl4_big.png",
+
+    "intro_bg" : "data/graphics/background_intro.png",
+    "outro_bg" : "data/graphics/background_outro.png",
+
+    "alle" : "data/graphics/AlleTeilnehmer.JPG"
+
 }

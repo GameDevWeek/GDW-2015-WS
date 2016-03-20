@@ -40,7 +40,8 @@ public class MenuPage extends Group {
         super();
         this.skin = skin;
 
-        addActor(new DecoImage(assetManager.getTexture(background)));
+        if(background != null)
+            addActor(new DecoImage(assetManager.getTexture(background)));
 
         setVisible(false);
     }
@@ -85,24 +86,48 @@ public class MenuPage extends Group {
         return slider;
     }
 
-    protected final void addLabeledTexture(String texture, String text,int x, int y,int modifier,int width,int height){
+    protected final void addLabeledTexture(String texture, String text,int x, int y,int xModifier,int yModifier,int width,int height){
         Label label = new Label(text,skin,"default");
         Texture image = assetManager.getTexture(texture);
         DecoImage decoImage = new DecoImage(image);
-        decoImage.setBounds(x, y+modifier,width,height);
-        label.setPosition(x+50, y+12);
+        decoImage.setBounds(x, y+yModifier,width,height);
+        label.setPosition(x+xModifier, y-30);
         addActor(decoImage);
         addActor(label);
-        
-        
-    
     }
 
+    
+    protected final void addLayer(String texture){
+        Texture layer = assetManager.getTexture(texture);
+        DecoImage image = new DecoImage(layer);
+        image.setPosition(0, 0);
+        addActor(image);
+    }
     protected final void addLeftAlignedButton(int x, int y, int width, int height, String text,Runnable runnable,String sound) {
         TextButton button = addButton(x, y, width, height, text, runnable, "default",sound);
         button.getLabel().setAlignment(Align.left);
     }
+    
+    protected final void addRightAlignedButton(int x, int y, int width, int height, String text,Runnable runnable,String sound) {
+        TextButton button = addButton(x, y, width, height, text, runnable, "default",sound);
+        button.getLabel().setAlignment(Align.right);
+    }
 
+    protected final Label addLabel(int x, int y, String text, String style) {
+        Label label = new Label(text, skin, style);
+        label.setPosition(x, y);
+        addActor(label);
+        return label;
+    }
+
+    protected final Label addCenteredLabel(int x, int y, int width, int height, String text, String style) {
+        Label label = new Label(text, skin, style);
+        label.setBounds(x, y, width, height);
+        label.setAlignment(Align.center);
+        addActor(label);
+        return label;
+    }
+    
     protected final void addCenteredButton(int x, int y, int width, int height, String text, Runnable runnable,String sound) {
         TextButton button = addButton(x - width / 2, y - height / 2, width, height, text, runnable, "default",sound);
         button.getLabel().setAlignment(Align.center);
@@ -122,6 +147,24 @@ public class MenuPage extends Group {
         return button;
     }
 
+    protected final DecoImage addDecoImage(Texture texture, float x, float y) {
+        return addDecoImage(texture, x, y, Align.left, Align.bottom);
+    }
+
+    protected final DecoImage addDecoImage(Texture texture, float x, float y, int alignX, int alignY) {
+        DecoImage image = new DecoImage(texture);
+        if((alignX & Align.center) != 0)
+            x -=  texture.getWidth()*0.5f;
+        else if ((alignX & Align.right) != 0)
+            x -=  texture.getWidth();
+        if((alignY & Align.center) != 0)
+            y -=  texture.getHeight()*0.5f;
+        else if ((alignY & Align.top) != 0)
+            y -=  texture.getHeight();
+        image.setPosition(x, y);
+        addActor(image);
+        return image;
+    }
     
     protected ImageButton createImageButton(Texture texture, float x, float y, float width, float height, Runnable runnable, String sound, boolean addToActor, boolean tintable) {
         

@@ -14,9 +14,11 @@ public class ComponentMappers {
     public static final ComponentMapper<BulletComponent> bulletComponent = ComponentMapper.getFor(BulletComponent.class);
     public static final ComponentMapper<ImpactSoundComponent> impactSound = ComponentMapper.getFor(ImpactSoundComponent.class);
     public static final ComponentMapper<AnimationComponent> animation = ComponentMapper.getFor(AnimationComponent.class);
+    public static final ComponentMapper<UnicornAnimationComponent> unicornAnimation = ComponentMapper.getFor(UnicornAnimationComponent.class);
     public static final ComponentMapper<TextureComponent> texture = ComponentMapper.getFor(TextureComponent.class);
+    public static final ComponentMapper<SafePointTextureComponent> safePointTexture = ComponentMapper.getFor(SafePointTextureComponent.class);
     public static final ComponentMapper<RenderLayerComponent> renderLayer = ComponentMapper.getFor(RenderLayerComponent.class);
-    public static final ComponentMapper<ParticleComponent> foregroundParticle = ComponentMapper.getFor(ParticleComponent.class);
+    public static final ComponentMapper<ForegroundParticleComponent> foregroundParticle = ComponentMapper.getFor(ForegroundParticleComponent.class);
     public static final ComponentMapper<BackgroundParticleComponent> backgroundParticle = ComponentMapper.getFor(BackgroundParticleComponent.class);
     public static final ComponentMapper<LightComponent> light = ComponentMapper.getFor(LightComponent.class);
     public static final ComponentMapper<ScoreComponent> score = ComponentMapper.getFor(ScoreComponent.class);

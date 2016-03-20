@@ -11,6 +11,7 @@ public class GameConstants {
     public static final int PRIORITY_INPUT=11;
     public static final int PRIORITY_MOVEMENT=12;
     public static final int PRIORITY_CAMERA = 15;
+    public static final int PRIORITY_SPLATTER = 16;
     public static final int PRIORITY_MAP_RENDERING = 17;
     public static final int PRIORITY_RENDERING = 20;
     public static final int PRIORITY_EFFECTS_RENDERING = 25;
@@ -18,6 +19,10 @@ public class GameConstants {
     public static final int PRIORITY_HUD = 40;
     public static final int PRIORITY_NAME = 50;
     public static final int PRIORITY_REMOVE_ENTITIES = 1000;
+    public static final int PRIORITY_DEATH_ANIMATION = 18;
+    public static final int PRIORITY_ANIMATION_EVENTS = 999;
+    public static final int PRIORITY_CAVE_LIGHTS_RENDERING = 900;
+    
 
     // PooledEngine parameters
     public static final int ENTITY_POOL_INITIAL_SIZE = 32;
@@ -50,6 +55,7 @@ public class GameConstants {
     public static final short PHYSIX_COLLISION_SPIT = -1;
     public static final short PHYSIX_COLLISION_UNICORN = -1;
     public static final short PHYSIX_COLLISION_BLOCKINGGUM = -1;
+    public static final short PHYSIX_COLLISION_ENEMY = -2;
     
     // Bullet system
     public static final float BULLET_SPEED = (50.0f / 43.0f) * 15.0f;
@@ -65,17 +71,19 @@ public class GameConstants {
     public static final float SPIT_COOLDOWN = 1.0f;
     public static final float SPIT_BLOCKING_ORIGINX = 32.0f;
     public static final float SPIT_BLOCKING_ORIGINY = 16.0f;
+    public static final float SPIT_BLOCKING_ALPHA_START = 0.8f;
     
     public static float MUSIC_FADE_TIME = 2;
     
-    // Scoreborad-Constant
-    public static final float SCORE_TIME_POINTS = - 100F / 60;
-    public static final int SCORE_CHOCOCOINS_POINTS = 1;
-    public static final int SCORE_BONBONS_POINTS = 3;
-    public static final int SCORE_DEATHS = 0; // negative Points ??
+    // Scoreboard-Constant
+    public static final int SCORE_BASEPOINTS = 0;
+    public static final float SCORE_TIME_POINTS = -100.0f/ 60.0f;
+    public static final int SCORE_CHOCOCOINS_POINTS = 6;
+    public static final int SCORE_BONBONS_POINTS = 35;
     public static final int SCORE_KILLED_ENEMIES = 0;
     public static final int SCORE_KILLED_OBSTACLES = 0;
     public static final int SCORE_HITS = 0;
+    public static final int SCORE_LIVES = 100;
 
     //Vision System
     public static final int GLOBAL_VISION=5;
@@ -90,7 +98,14 @@ public class GameConstants {
     public static final float RAINBOW_ALPHA = 0.65f;
     public static final float RAINBOW_AMPLITUDE = 0.2f;
     public static final float PAPARAZZI_DURATION = 2.0f;
+    public static final float CAVE_LIGHT_GLOW_RADIUS = (float) (1.5 * Math.max(TILESIZE_X, TILESIZE_Y));
     
     // Particle parameters
     public static final float IDLE_PARTICLE_REDUCTION = 0.2f;
+    
+    // Animation parameters
+
+    public static final float TIME_TO_WAIT_TO_SHOOT = 0.5f;
+    public static final double THROWBACK_ANIMATION_PERIODS = 3;
+
 }

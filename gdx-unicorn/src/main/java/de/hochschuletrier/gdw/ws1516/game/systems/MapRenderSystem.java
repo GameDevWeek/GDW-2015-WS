@@ -35,20 +35,14 @@ import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.commons.tiled.tmx.TmxImage;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
-import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
+import de.hochschuletrier.gdw.ws1516.events.ChangeInGameStateEvent;
+import de.hochschuletrier.gdw.ws1516.events.ChangeInGameStateEvent.GameStateType;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 import de.hochschuletrier.gdw.ws1516.states.GameplayState;
 
-public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Listener, PauseGameEvent.Listener
+public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Listener, ChangeInGameStateEvent.Listener
 {
-    private final CVarInt rainbowType = new CVarInt("fancyRainbow", 0, 0, 2, 0, "sets fancy rainbowmode");
-    private final ConsoleCmd rainbow = new ConsoleCmd("rainbow", 0, "Usage: rainbow [duration] - Activates rainbow mode for [duration] seconds") { @Override public void execute(List<String> args) { startRainbow(args); } };
-    private final Hotkey rainbowHotkey = new Hotkey(() -> startRainbow(), Input.Keys.R, HotkeyModifier.CTRL);
-    private final Hotkey fancyRainbowHotkey = new Hotkey(() -> rainbowType.set((rainbowType.get() + 1) % 3, true), Input.Keys.T, HotkeyModifier.CTRL);
-    private final CVarFloat rainbowFrequency = new CVarFloat("rainbowFrequency", GameConstants.RAINBOW_FREQUENCY, 0.0f, Float.MAX_VALUE, 0, "");
-    private final CVarFloat rainbowAlpha = new CVarFloat("rainbowAlpha", GameConstants.RAINBOW_ALPHA, 0.0f, Float.MAX_VALUE, 0, "");
-    
     private final HashMap<TileSet, Texture> tilesetImages = new HashMap<>();
     
     private static Logger logger;
@@ -82,14 +76,7 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
         super.addedToEngine(engine);
         
         RainbowEvent.register(this);
-        PauseGameEvent.register(this);
-        
-        Main.getInstance().console.register(rainbow);
-        Main.getInstance().console.register(rainbowFrequency);
-        Main.getInstance().console.register(rainbowAlpha);
-        Main.getInstance().console.register(rainbowType);
-        rainbowHotkey.register();
-        fancyRainbowHotkey.register();
+        ChangeInGameStateEvent.register(this);
     }
     
     @Override
@@ -97,14 +84,7 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
         super.removedFromEngine(engine);
         
         RainbowEvent.unregister(this);
-        PauseGameEvent.unregister(this);
-        
-        Main.getInstance().console.unregister(rainbow);
-        Main.getInstance().console.unregister(rainbowFrequency);
-        Main.getInstance().console.unregister(rainbowAlpha);
-        Main.getInstance().console.unregister(rainbowType);
-        rainbowHotkey.unregister();
-        fancyRainbowHotkey.unregister();
+        ChangeInGameStateEvent.unregister(this);
     }
     
     public void initialzeRenderer(TiledMap map, String backgroundGraphic, CameraSystem cameraSystem)
@@ -124,7 +104,7 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
         Pattern extractFileName = Pattern.compile("^.*/(.*)\\.tmx$");
         Matcher extractFileNameMatcher = extractFileName.matcher(map.getFilename());
         extractFileNameMatcher.matches();
-        String mapName = extractFileNameMatcher.group(1);
+        String mapName = extractFileNameMatcher.group(1) + "_background";
         
         // DEBUG
         System.out.println(mapName);
@@ -233,29 +213,22 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
         
         if(rainbowTime < rainbowStartDuration)
         {
-            ShaderProgram rainbowShader = null;
+            ShaderProgram rainbowShader = ShaderLoader.getFancyRainbowShader();
+            DrawUtil.setShader(rainbowShader);
+            rainbowShader.setUniformf("u_rainbowAlpha", GameConstants.RAINBOW_ALPHA);
+            rainbowShader.setUniformf("u_rainbowFrequency", GameConstants.RAINBOW_FREQUENCY);
             
-            switch(rainbowType.get())
-            {
-            case 0:
-                rainbowShader = ShaderLoader.getFancyRainbowShader();
-                DrawUtil.setShader(rainbowShader);
-                rainbowShader.setUniformf("u_rainbowAlpha", rainbowAlpha.get());
-                rainbowShader.setUniformf("u_rainbowFrequency", rainbowFrequency.get());
-                break;
-            case 1:
-                rainbowShader = ShaderLoader.getSimpleRainbowShader();
-                DrawUtil.setShader(rainbowShader);
-                rainbowShader.setUniformf("u_rainbowAlpha", rainbowAlpha.get());
-                rainbowShader.setUniformf("u_rainbowFrequency", rainbowFrequency.get());
-                break;
-            default:
-                rainbowShader = ShaderLoader.getOldRainbowShader();
-                DrawUtil.setShader(rainbowShader);
-                rainbowShader.setUniformf("u_rainbowAlpha", rainbowAlpha.get());
-                rainbowShader.setUniformf("u_rainbowFrequency", rainbowFrequency.get() * 0.2f);
-                break;
-            }
+            // cool unused shaders
+//            rainbowShader = ShaderLoader.getSimpleRainbowShader();
+//            DrawUtil.setShader(rainbowShader);
+//            rainbowShader.setUniformf("u_rainbowAlpha", rainbowAlpha.get());
+//            rainbowShader.setUniformf("u_rainbowFrequency", rainbowFrequency.get());
+//        
+//            rainbowShader = ShaderLoader.getOldRainbowShader();
+//            DrawUtil.setShader(rainbowShader);
+//            rainbowShader.setUniformf("u_rainbowAlpha", rainbowAlpha.get());
+//            rainbowShader.setUniformf("u_rainbowFrequency", rainbowFrequency.get() * 0.2f);
+            
             if(rainbowShader != null)
             {
                 float[] dimensions = new float[]{ Gdx.graphics.getWidth(), Gdx.graphics.getHeight() };
@@ -273,12 +246,18 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
     }
 
     @Override
-    public void onPauseGameEvent(boolean pauseOn) {
-        isPaused = pauseOn;
-    }
-
-    @Override
-    public void onPauseChange() {
-        isPaused = !isPaused;
+    public void onPauseGameEvent(GameStateType state) {
+        switch (state ) {
+        case GAME_PAUSE:  
+                isPaused = true;
+        case GAME_PLAYER_FREEZE:  
+            break;
+        case GAME_PLAYING:
+                isPaused = false;
+            break;
+        default:
+            break;
+        }
+        
     }
 }

@@ -14,6 +14,7 @@ import de.hochschuletrier.gdw.ws1516.game.systems.enemyStates.EnemyBaseState;
  */
 public class EnemyBehaviourComponent extends Component implements Poolable{
 
+    public String pathID;
     public EnemyBaseState currentState;
     public boolean canSeeUnicorn;
     public float cooldown;
@@ -30,6 +31,7 @@ public class EnemyBehaviourComponent extends Component implements Poolable{
         cooldown=0;
         pathIndex=0;
         maxCooldown=0;
+        pathID = null;
     }
 
 }

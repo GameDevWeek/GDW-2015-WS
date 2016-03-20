@@ -156,6 +156,7 @@ public class Main extends StateBasedGame {
     }
 
     private void onLoadComplete() {
+        Settings.init();
         final MainMenuState mainMenuState = new MainMenuState(assetManager);
         addPersistentState(mainMenuState);
         changeState(mainMenuState, null, null);
@@ -237,7 +238,7 @@ public class Main extends StateBasedGame {
 
     public static void main(String[] args) {
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-        cfg.title = "LibGDX Test";
+        cfg.title = "Great Unicorn Massacre";
         cfg.width = WINDOW_WIDTH;
         cfg.height = WINDOW_HEIGHT;
         cfg.useGL30 = false;

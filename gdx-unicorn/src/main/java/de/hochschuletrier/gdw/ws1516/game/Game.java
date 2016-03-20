@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
@@ -34,7 +35,8 @@ import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
 import de.hochschuletrier.gdw.ws1516.events.GameRestartEvent;
 import de.hochschuletrier.gdw.ws1516.events.PaparazziShootEvent;
-import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
+import de.hochschuletrier.gdw.ws1516.events.ChangeInGameStateEvent;
+import de.hochschuletrier.gdw.ws1516.events.ChangeInGameStateEvent.GameStateType;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
 import de.hochschuletrier.gdw.ws1516.events.TriggerEvent.Action;
@@ -54,11 +56,14 @@ import de.hochschuletrier.gdw.ws1516.game.contactlisteners.ImpactSoundListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerContactListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.PlayerPlatformListener;
 import de.hochschuletrier.gdw.ws1516.game.contactlisteners.TriggerListener;
+import de.hochschuletrier.gdw.ws1516.game.systems.AnimationEventHandlerSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BlockingGumSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BubbleGlueSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BubblegumSpitSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.BulletSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.CameraSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.CaveLightsRenderSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.DeathAnimationSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.EffectsRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.EnemyHandlingSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.EnemyVisionSystem;
@@ -68,12 +73,14 @@ import de.hochschuletrier.gdw.ws1516.game.systems.KeyboardInputSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.MapRenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.MovementSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.NameSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.PlatformHandlingSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.PlatformSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.PlayerStateSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RenderSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.RespawnSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.ScoreSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.SoundSystem;
+import de.hochschuletrier.gdw.ws1516.game.systems.SplatterSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.TriggerSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePlatformPositionSystem;
 import de.hochschuletrier.gdw.ws1516.game.systems.UpdatePositionSystem;
@@ -81,11 +88,13 @@ import de.hochschuletrier.gdw.ws1516.game.utils.EntityCreator;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.MapLoader;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysicsLoader;
+import de.hochschuletrier.gdw.ws1516.menu.LevelSelectionPage;
 import de.hochschuletrier.gdw.ws1516.menu.MenuPageOptions;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.DummyEnemyExecutionSystem;
 import de.hochschuletrier.gdw.ws1516.states.GameplayState;
+import de.hochschuletrier.gdw.ws1516.events.ChangeInGameStateEvent;
 
-public class Game extends InputAdapter implements GameRestartEvent.Listener {
+public class Game extends InputAdapter implements ChangeInGameStateEvent.Listener  {
 
     private static final Logger logger = LoggerFactory.getLogger(Game.class);
     
@@ -94,14 +103,13 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
             HotkeyModifier.CTRL);
     private final Hotkey scoreCheating = new Hotkey(() -> ScoreBoardEvent.emit(ScoreType.BONBON, 1), Input.Keys.F2,
             HotkeyModifier.CTRL);
-    private final Hotkey winGameCheat = new Hotkey(() -> GameOverEvent.emit(true), Input.Keys.F6,
-            HotkeyModifier.CTRL);
-    private final Hotkey pauseGame = new Hotkey(()->PauseGameEvent.emit(true), Input.Keys.F5,
+    private final Hotkey winGameCheat = new Hotkey(this::cheatWin, Input.Keys.F6,
             HotkeyModifier.CTRL);
     private Hotkey healCheating = null;
     private Hotkey rainbow=null;
     
-    public static boolean PAUSE_ENGINE = false;
+
+    private static GameStateType engineState;
 
 
 
@@ -114,6 +122,7 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
     private final PhysixDebugRenderSystem physixDebugRenderSystem = new PhysixDebugRenderSystem(
             GameConstants.PRIORITY_DEBUG_WORLD);
     private final CameraSystem cameraSystem = new CameraSystem(GameConstants.PRIORITY_CAMERA);
+    private final CaveLightsRenderSystem caveLightsRenderSystem = new CaveLightsRenderSystem(GameConstants.PRIORITY_CAVE_LIGHTS_RENDERING);
     private final RenderSystem renderSystem = new RenderSystem(GameConstants.PRIORITY_RENDERING);
     private final UpdatePositionSystem updatePositionSystem = new UpdatePositionSystem(
             GameConstants.PRIORITY_PHYSIX + 1);
@@ -127,28 +136,54 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
     private final HudRenderSystem hudRenderSystem = new HudRenderSystem(GameConstants.PRIORITY_HUD);
     
     private final MapRenderSystem mapRenderSystem = new MapRenderSystem(GameConstants.PRIORITY_MAP_RENDERING);
+    private final AnimationEventHandlerSystem animationEventHandlerSystem = new AnimationEventHandlerSystem(GameConstants.PRIORITY_ANIMATION_EVENTS);
     
+    private final SplatterSystem splatterSystem = new SplatterSystem(GameConstants.PRIORITY_SPLATTER);
     private final EffectsRenderSystem effectsRenderSystem = new EffectsRenderSystem(GameConstants.PRIORITY_EFFECTS_RENDERING);
+    
+    private final DeathAnimationSystem deathAnimationSystem = new DeathAnimationSystem(GameConstants.PRIORITY_DEATH_ANIMATION);
 
     private final EntityFactoryParam factoryParam = new EntityFactoryParam();
     private final EntityFactory<EntityFactoryParam> entityFactory = new EntityFactory("data/json/entities.json",
             Game.class);
 
 
-    private final TriggerSystem triggerSystem = new TriggerSystem();
+    private final TriggerSystem triggerSystem = new TriggerSystem(this);
     private final EntitySystem respawnSystem = new RespawnSystem();
     private final SoundSystem soundSystem = new SoundSystem(null);
-    private final HitPointManagementSystem hitPointSystem = new HitPointManagementSystem();
+    private final HitPointManagementSystem hitPointSystem = new HitPointManagementSystem(this);
     private final DummyEnemyExecutionSystem dummyEnemySystem = new DummyEnemyExecutionSystem();    
-    private final EnemyHandlingSystem enemyHandlingSystem = new EnemyHandlingSystem();
+    private final EnemyHandlingSystem enemyHandlingSystem = new EnemyHandlingSystem(nameSystem);
     private final EntitySystem enemyVisionSystem = new EnemyVisionSystem();
     private final ScoreSystem scoreBoardSystem = new ScoreSystem();
     private final PlayerStateSystem playerStateSystem = new PlayerStateSystem();
     private final BubblegumSpitSystem bubblegumSpitSystem = new BubblegumSpitSystem(engine);
     private final UpdatePlatformPositionSystem updatePlatformPositionSystem = new UpdatePlatformPositionSystem();
     private final PlatformSystem platformSystem = new PlatformSystem();
+    private final PlatformHandlingSystem platformHandlingSystem = new PlatformHandlingSystem(nameSystem);
     private final BulletSystem bulletSystem = new BulletSystem(engine);
     private final BlockingGumSystem blockingGumSystem = new BlockingGumSystem(engine);
+    
+    /// Systems not update while FreezeGame 
+    private final EntitySystem[] updateOnFreeze = {              
+            renderSystem,
+            mapRenderSystem,
+            hudRenderSystem,
+            respawnSystem,
+            cameraSystem,
+            effectsRenderSystem,
+            animationEventHandlerSystem,
+            splatterSystem,
+            soundSystem 
+    };
+    /// Systems  updated while PauseGame 
+    private final EntitySystem[] updateOnPause = {            
+            renderSystem,
+            mapRenderSystem,
+            hudRenderSystem
+    };
+    private EntitySystem[] updateOnPlaying;
+    
     
     private TiledMap map;
     
@@ -157,17 +192,17 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
         if (!Main.IS_RELEASE) {
             togglePhysixDebug.register();
             scoreCheating.register();
-            pauseGame.register();
             winGameCheat.register();
+        } else {
+            physixDebugRenderSystem.setProcessing(false);
         }
-        GameRestartEvent.register(this);
+        ChangeInGameStateEvent.register(this);
     }
 
     public void dispose() {
-        GameRestartEvent.unregister(this);
+        ChangeInGameStateEvent.unregister(this);
         togglePhysixDebug.unregister();
         scoreCheating.unregister();
-        pauseGame.unregister();
 //        rainbow.unregister();
 //        healCheating.unregister();
         winGameCheat.unregister();
@@ -186,7 +221,7 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
     }
 
     public void init(AssetManagerX assetManager, String mapFilename) {
-        PAUSE_ENGINE = false;
+        engineState = GameStateType.GAME_PLAYING;
         Main.getInstance().console.register(physixDebug);
         physixDebug.addListener((CVar) -> physixDebugRenderSystem.setProcessing(physixDebug.get()));
         addSystems();
@@ -199,41 +234,15 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
         EntityCreator.setGame(this);
         EntityCreator.setEntityFactory(entityFactory);
         
+        //TEST   
+//        EntityCreator.createEntity("bubblegum_rainbow", 1250, 2911);
+//        EntityCreator.createEntity("tourist", 1000, 200);
+//        EntityCreator.createEntity("hunter", 1000, 200);
+
+
         loadMap(mapFilename);
         mapRenderSystem.initialzeRenderer(map, "map_background", cameraSystem);
-        
-        //test: 
-        // take it out
-        Entity unicorn = EntityCreator.createEntity("unicorn", 8800, 500);
-        Entity entity=EntityCreator.createEntity("hunter", 9000, 700);
-        PathComponent pathComponent = ComponentMappers.path.get(entity);
-        pathComponent.points.add(new Vector2(10000, 700));
-        pathComponent.points.add(new Vector2(8800,100));
-//        Entity platform = EntityCreator.createEntity("platform", 1700, 100);
-/*        healCheating = new Hotkey(() -> HealEvent.emit(unicorn, 1), Input.Keys.F4,
-        HotkeyModifier.CTRL);
-        healCheating.register();
-        rainbow = new Hotkey(() -> RainbowEvent.start(unicorn), Input.Keys.F3,
-                HotkeyModifier.CTRL);
-        rainbow.register();
-*/
-        Entity platform = EntityCreator.createEntity("platform", 9000, 700);
-        PlatformComponent platformComp = ComponentMappers.platform.get(platform);
-        //platformComp.loop = true;
-        pathComponent =ComponentMappers.path.get(platform);
-        pathComponent.points.add(new Vector2(9000, 700));
-        pathComponent.points.add(new Vector2(9500, 700));
-
-    }
-
-
-    @Override
-    public void onGameRestartEvent() {      
-        Game game = new Game();
-        final Main main = Main.getInstance();
-        final AssetManagerX assetManager = main.getAssetManager();
-        game.init(assetManager, map.getFilename());
-        main.changeState(new GameplayState(assetManager, game));
+        playerStateSystem.initializeDeathBorders(map);
     }
 
     /**
@@ -264,7 +273,9 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
         engine.addSystem(physixSystem);
         engine.addSystem(physixDebugRenderSystem);
         engine.addSystem(cameraSystem);
+        engine.addSystem(caveLightsRenderSystem);
         engine.addSystem(renderSystem);
+        engine.addSystem(animationEventHandlerSystem);
         engine.addSystem(updatePositionSystem);
         engine.addSystem(nameSystem);
         engine.addSystem(keyBoardInputSystem);
@@ -280,13 +291,17 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
         engine.addSystem(enemyVisionSystem );
         engine.addSystem(mapRenderSystem);
         engine.addSystem(effectsRenderSystem);
+        engine.addSystem(splatterSystem);
         engine.addSystem(scoreBoardSystem);
         engine.addSystem(bubblegumSpitSystem);
         engine.addSystem(bubbleGlueSystem);
         engine.addSystem(playerStateSystem);
         engine.addSystem(updatePlatformPositionSystem);
+        engine.addSystem(platformHandlingSystem);
         engine.addSystem(platformSystem);
         engine.addSystem(blockingGumSystem);
+        engine.addSystem(deathAnimationSystem);
+        
     }
 
     private void addContactListeners() {
@@ -319,28 +334,15 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
     }
 
 
-
-    public static void pauseGame(boolean pause) {
-        PAUSE_ENGINE = pause;
-    }
-    public static void switchPause() {
-        PAUSE_ENGINE = !PAUSE_ENGINE;
+    
+    public void cheatWin() {
+        GameOverEvent.emit(true, getNextMapFilename());
     }
     
     public void update(float delta) {
-        cameraSystem.bindCamera();   
-        if ( !PAUSE_ENGINE )
-        {
-            engine.update(delta);
-        } else
-        {   /* 
-                in der Engine Update Methode wird noch mehr
-                 getan, fehlt noch etwas wichtiges um ein Menü am laufen zu halten ??
-             */
-            renderSystem.update(delta);
-            mapRenderSystem.update(delta);
-            hudRenderSystem.update(delta);
-        }
+//        delta = 0;
+        cameraSystem.bindCamera(); 
+        engine.update(delta);
     }
 
     public void createTrigger(Action action,float x, float y, float width, float height, Consumer<Entity> consumer) {
@@ -366,6 +368,7 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
 
     public ParticleEffect effect;
 
+
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
@@ -381,5 +384,56 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
 
     public InputProcessor getInputProcessor() {
         return keyBoardInputSystem;
+    }
+
+    @Override
+    public void onPauseGameEvent(GameStateType state) {
+        if ( state != engineState )
+        {
+            ImmutableArray<EntitySystem> usedSys = engine.getSystems();
+
+            
+            for( EntitySystem sys : usedSys )
+            {
+                 sys.setProcessing(false);
+            }
+            
+            switch( state )
+            {
+            case GAME_PLAYING:
+                for( EntitySystem sys : usedSys )
+                {
+                     sys.setProcessing(true);
+                }
+                break;
+            case GAME_PLAYER_FREEZE:
+                for( EntitySystem sys : updateOnFreeze )
+                {
+                     sys.setProcessing(true);
+                }
+                break;
+            case GAME_PAUSE:
+                for( EntitySystem sys : updateOnPause )
+                {
+                     sys.setProcessing(true);
+                }
+                break;
+            }
+            if(Main.IS_RELEASE)
+                physixDebugRenderSystem.setProcessing(false);
+            engineState = state;
+        }
+    }
+
+    public static boolean isInState(GameStateType state) {
+
+        return state == engineState;
+    }
+    public String getMapFilename() {
+        return map.getFilename();
+    }
+
+    public String getNextMapFilename() {
+        return map.getProperty("next_map", null);
     }
 }

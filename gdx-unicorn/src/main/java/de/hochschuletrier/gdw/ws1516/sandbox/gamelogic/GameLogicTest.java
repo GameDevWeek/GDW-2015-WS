@@ -104,11 +104,11 @@ public class GameLogicTest extends SandboxGame {
 
     private final SoundSystem soundSystem = new SoundSystem(null);
 
-    private final HitPointManagementSystem hitPointSystem = new HitPointManagementSystem();
+    private final HitPointManagementSystem hitPointSystem = new HitPointManagementSystem(null);
 
     private final DummyEnemyExecutionSystem dummyEnemySystem = new DummyEnemyExecutionSystem();
     
-    private final EnemyHandlingSystem enemyHandlingSystem = new EnemyHandlingSystem();
+    private final EnemyHandlingSystem enemyHandlingSystem = new EnemyHandlingSystem(null);
 
     private final EntitySystem enemyVisionSystem = new EnemyVisionSystem();
 

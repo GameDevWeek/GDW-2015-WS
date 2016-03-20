@@ -1,7 +1,5 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
-import java.awt.FlowLayout;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,28 +8,37 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 
-import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
+import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
-import de.hochschuletrier.gdw.ws1516.events.HornAttackCooldownEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
-import de.hochschuletrier.gdw.ws1516.events.MovementEvent;
-import de.hochschuletrier.gdw.ws1516.events.MovementStateChangeEvent;
-import de.hochschuletrier.gdw.ws1516.events.MovementStateChangeEvent.Listener;
 import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
+import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
+import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
+import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
+import de.hochschuletrier.gdw.ws1516.events.ThrowBackEvent;
+import de.hochschuletrier.gdw.ws1516.events.HitEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent.State;
-import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
-import de.hochschuletrier.gdw.ws1516.events.ThrowBackEvent;
+import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
+import javafx.scene.input.ScrollEvent;
 
 public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.Listener,
-    HornAttackEvent.Listener, StartFlyEvent.Listener, EndFlyEvent.Listener, ThrowBackEvent.Listener, MovementStateChangeEvent.Listener
-    {
-
+                                                                  HornAttackEvent.Listener,
+                                                                  StartFlyEvent.Listener,
+                                                                  EndFlyEvent.Listener,
+                                                                  ThrowBackEvent.Listener,
+                                                                  DeathEvent.Listener,
+                                                                  HitEvent.Listener {
+    
     private static final Logger logger = LoggerFactory.getLogger(PlayerStateSystem.class);
+    private float maxGameBottom;
+    private float maxGameRight;
+    private int maxGameLeft;
+    private int maxGameTop;
     
     public PlayerStateSystem() 
     {
@@ -47,7 +54,8 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         StartFlyEvent.register(this);
         EndFlyEvent.register(this);
         ThrowBackEvent.register(this);
-        MovementStateChangeEvent.register(this);
+        DeathEvent.register(this);
+        HitEvent.register(this);
     }
     
     @Override
@@ -59,7 +67,8 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         StartFlyEvent.unregister(this);
         EndFlyEvent.unregister(this);
         ThrowBackEvent.unregister(this);
-        MovementStateChangeEvent.unregister(this);
+        DeathEvent.unregister(this);
+        HitEvent.unregister(this);
     }
     
     @Override
@@ -67,10 +76,11 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
     {
         boolean dieLater = false;
         MovementComponent movementComp = ComponentMappers.movement.get(entity);
+        PositionComponent position = ComponentMappers.position.get(entity);
         PlayerComponent playerComp = ComponentMappers.player.get(entity);
         playerComp.stateTimer = Math.max(playerComp.stateTimer - deltaTime, 0);
+        
         playerComp.hornAttackCooldown = Math.max(playerComp.hornAttackCooldown - deltaTime, 0);
-        HornAttackCooldownEvent.emit(playerComp.hornAttackCooldown);
         playerComp.throwBackCooldown = Math.max(playerComp.throwBackCooldown - deltaTime, 0);
         playerComp.invulnerableTimer = Math.max(playerComp.invulnerableTimer - deltaTime, 0);
         if (playerComp.stateTimer <= 0.0f) {
@@ -96,6 +106,11 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
                 DeathEvent.emit(entity);                
             }
         }
+        if ( position.x < maxGameLeft || position.x > maxGameRight ||
+                position.y < maxGameTop || position.y > maxGameBottom )
+        {
+            DeathEvent.emit(entity);
+        }
     }
     
     @Override
@@ -106,7 +121,7 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
             MovementComponent movementComp = ComponentMappers.movement.get(getEntities().get(0));
             if (playerComp.state==State.HORNATTACK)
             {
-                HornAttackEvent.start(player);
+                HornAttackEvent.stop(player);
             }
             EndFlyEvent.emit(player);
             playerComp.state=State.RAINBOW;
@@ -137,18 +152,6 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         if (getEntities().size()>0){
             PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
             playerComp.hornAttackCooldown = GameConstants.HORN_MODE_COOLDOWN;
-        }
-    }
-    
-
-
-    
-    @Override
-    public void onRainbowModeEnd(Entity player) 
-    {
-        if (getEntities().size()>0){
-            PlayerComponent playerComp = ComponentMappers.player.get(getEntities().get(0));
-            playerComp.hornAttackCooldown = GameConstants.HORN_MODE_COOLDOWN;         
         }
     }
 
@@ -194,32 +197,43 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         
         if (getEntities().size()>0){
             PlayerComponent playerComp = ComponentMappers.player.get(unicorn);
-            playerComp.throwBackCooldown = GameConstants.THROWBACK_MODE_COOLDOWN;
+            playerComp.throwBackCooldown = 0;
             playerComp.state = State.NORMAL;
         }
     }
 
     @Override
-    public void onMovementStateChangeEvent(Entity entity,
-            de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State oldState,
-            de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State newState) {
-        MovementComponent move = ComponentMappers.movement.get(entity);
-        PhysixBodyComponent body = ComponentMappers.physixBody.get(entity);
-        PlayerComponent player = ComponentMappers.player.get(entity);
-        if ( player != null && player.state != PlayerComponent.State.RAINBOW )
-        {
-            if ( newState == MovementComponent.State.LANDING )
-            {
-                move.speed = GameConstants.PLAYER_SPEED * 0.5f;
-            } 
-            if ( oldState == MovementComponent.State.LANDING )
-            {
-                move.speed = GameConstants.PLAYER_SPEED ;
-            } 
+    public void onRainbowModeEnd(Entity player) {
+        ComponentMappers.unicornAnimation.get(player).isInBlueMode = false;
+        ComponentMappers.unicornAnimation.get(player).isInRainbowMode = false;
+        EndFlyEvent.emit(player);
+    }
+
+    public void initializeDeathBorders(TiledMap map) {
+        maxGameBottom = map.getHeight()*GameConstants.TILESIZE_X;
+        maxGameRight = map.getWidth() * GameConstants.TILESIZE_Y;
+        maxGameLeft = 0;
+        maxGameTop = 0;
+        
+    }
+
+    @Override
+    public void onDeathEvent(Entity entity) {
+        
+        //If the player dies, end flying
+        if (ComponentMappers.player.has(entity)) {
+            EndFlyEvent.emit(entity);
+            ScoreBoardEvent.emit(ScoreType.DEATH, 1);
         }
         
     }
-    
 
+    @Override
+    public void onHitEvent(Entity wasHit, Entity source, int value) {
+        //If the player dies, end flying
+        if (ComponentMappers.player.has(wasHit)) {
+            EndFlyEvent.emit(wasHit);
+        }
+    }
     
 }

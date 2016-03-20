@@ -22,6 +22,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.StartPointComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.TriggerComponent;
 import de.hochschuletrier.gdw.ws1516.events.EndContactEvent;
 import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
+import de.hochschuletrier.gdw.ws1516.game.Game;
 /*
  * TODO listeners für Objekte einsammeln und zählen in diesem hoch
  */
@@ -30,9 +31,10 @@ public class TriggerSystem extends EntitySystem implements TriggerEvent.Listener
     private static final Logger logger = LoggerFactory.getLogger(TriggerSystem.class);
     
     private Entity unicorn = null;
+    private final Game game;
     
-    public TriggerSystem() {
-        
+    public TriggerSystem(Game game) {
+        this.game = game;
     }
     
     @Override
@@ -85,7 +87,11 @@ public class TriggerSystem extends EntitySystem implements TriggerEvent.Listener
                 }                 
             break; 
         case WINING_ZONE:
-                GameOverEvent.emit(true);
+                PlayerComponent playerCompTrigger=ComponentMappers.player.get(triggeringEntity);
+                if ( playerCompTrigger != null )
+                {
+                    GameOverEvent.emit(true, game.getNextMapFilename());
+                }
             break;
            
         default:
