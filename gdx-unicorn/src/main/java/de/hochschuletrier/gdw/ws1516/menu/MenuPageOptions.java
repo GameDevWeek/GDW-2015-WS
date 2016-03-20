@@ -18,6 +18,7 @@ public class MenuPageOptions extends MenuPage {
     private Slider generalSlider;
     private Slider musicSlider;
     private Slider soundSlider;
+    private boolean touchDown = false;
 
     public MenuPageOptions(Skin skin, MenuManager menuManager) {
         super(skin, "menu_bg");
@@ -26,6 +27,7 @@ public class MenuPageOptions extends MenuPage {
         int xOffset = 55;
         int yOffset = 370;
         int yStep = 55;
+        
         
         generalSlider = addLabeledSlider(0,100,1,xOffset, yOffset - yStep * (i++), "Allgemein", true,Settings.generalValue.get());    
         System.out.println("Test1");
@@ -58,13 +60,7 @@ public class MenuPageOptions extends MenuPage {
                 Settings.flush();
             }
         });
-        soundSlider.addListener(new ClickListener() {
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button){
-                soundTest();
-                
-            }
-        });
+    
       
         addLeftAlignedButton(xOffset, 40, 100, 50, "Zurück", () -> menuManager.popPage(), "zurueck");
     }
@@ -94,8 +90,6 @@ public class MenuPageOptions extends MenuPage {
         addLeftAlignedButton(x, y, 150, 40, text, () -> menuManager.pushPage(page),"buttonSound");
     }
     
-    public void soundTest(){
-        SoundEmitter.playGlobal(assetManager.getSound("einhornMotivated"), false);
-    }
+
 
 }
