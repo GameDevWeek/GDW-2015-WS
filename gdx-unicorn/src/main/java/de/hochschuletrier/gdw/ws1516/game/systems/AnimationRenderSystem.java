@@ -99,7 +99,7 @@ public class AnimationRenderSystem extends SubSystem
         
         if(keyFrame == null)
         {
-            keyFrame = getDefaultKeyframe(animation);
+            keyFrame = getDefaultKeyframe(animation, entity);
         }
        
         drawKeyframe(animation, position, keyFrame);   
@@ -204,20 +204,7 @@ public class AnimationRenderSystem extends SubSystem
         else
         {
             animationExtended = animation.animationMap.get(walkingString);
-        }
-        
-        //check if deathAnimation has to be destroyed
-        if(animationExtended != null)
-        {
-            if(animation.name.equals("hunterDeathDummy") || animation.name.equals("HunterDeath") || animation.name.equals("Hunter"))
-            {
-                float duration = animationExtended.getDuration();
-                if(animation.killWhenFinished && animation.stateTime > duration)
-                {
-                    DeathEvent.emit(entity);
-                }
-            }
-        }
+        }      
         
         return animationExtended == null ? null : animationExtended.getKeyFrame(animation.stateTime);
     }
@@ -261,7 +248,7 @@ public class AnimationRenderSystem extends SubSystem
         return animationExtended.getKeyFrame(animation.stateTime);
     }
     
-    private TextureRegion getDefaultKeyframe(AnimationComponent animation) {
+    private TextureRegion getDefaultKeyframe(AnimationComponent animation, Entity entity) {
         AnimationExtended animationExtended = animation.animationMap.get("on_ground_walking");
         if(animation.name.equals("Hunter"))
         {
@@ -275,6 +262,17 @@ public class AnimationRenderSystem extends SubSystem
                 return null;
             }
         }
+        
+        //check if animation has to be deleted
+        if(animationExtended != null)
+        {
+            float duration = animationExtended.getDuration();
+            if(animation.killWhenFinished && animation.stateTime > duration)
+            {
+               DeathEvent.emit(entity);
+            }
+        }
+        
         return animationExtended.getKeyFrame(animation.stateTime);
     }
     

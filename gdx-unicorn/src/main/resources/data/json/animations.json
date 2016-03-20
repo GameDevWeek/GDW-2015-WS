@@ -50,7 +50,7 @@
       0.18,
       0.18,
       0.18,
-      1
+      3.5
     ],
     "playType": "NORMAL",
     "columns": 4,
@@ -104,9 +104,10 @@
     "filename": "data/graphics/spritesheets/paparazzi_dying.png",
     "frames": 4,
     "frameDuration": [
-      0.1,
-      0.1,
-      2.8
+      0.18,
+      0.18,
+      0.18,
+      3.5
     ],
     "playType": "NORMAL",
     "columns": 4,

@@ -160,6 +160,20 @@
             "SoundEmitter":{}
         }
     },
+    "touristDeathDummy": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Animation": {
+                "name": "PaparazziDeath",
+                "default_animation": "paparazzi_dying",
+                "kill_When_Finished": true
+            },
+            "RenderLayer": {
+                "layer": 50
+            }
+        }
+    },
     "platform": {
         "meta": {},
         "components": {
