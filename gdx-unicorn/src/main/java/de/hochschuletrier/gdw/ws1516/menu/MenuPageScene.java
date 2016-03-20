@@ -53,7 +53,7 @@ public class MenuPageScene extends MenuPage implements SceneAnimator.Getter, Sce
 
 
         addLeftAlignedButton(55, 40, 100, 50, "Menü", () -> menuManager.popPage(),"menu");
-        addLeftAlignedButton(55, 40, 100, 50, "Menü", () -> menuManager.popPage(),"buttonSound");
+       
 
         
         addRightAlignedButton(Main.WINDOW_WIDTH - 155, 40, 100, 50, "Überspringen", this::skip,"buttonSound");

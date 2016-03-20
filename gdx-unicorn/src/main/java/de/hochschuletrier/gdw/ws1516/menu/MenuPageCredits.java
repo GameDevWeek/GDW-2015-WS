@@ -61,8 +61,7 @@ public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter, S
 
 
         addLeftAlignedButton(55, 40, 100, 50, "Menü", () -> menuManager.popPage(),"menu");
-        addLeftAlignedButton(55, 40, 100, 50, "Menü", () -> menuManager.popPage(),"buttonSound");
-
+        
     }
     
     @Override
