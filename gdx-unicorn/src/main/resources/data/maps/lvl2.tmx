@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="250" height="54" tilewidth="64" tileheight="64" nextobjectid="468">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="250" height="54" tilewidth="64" tileheight="64" nextobjectid="469">
  <tileset firstgid="1" source="tilesets/characters_tileset_final.tsx"/>
  <tileset firstgid="10" name="chocolateriver_ani" tilewidth="64" tileheight="64" tilecount="8" columns="4">
   <image source="tilesets/chocolateriver_ani.png" width="256" height="128"/>
@@ -1244,7 +1244,7 @@
     <property name="entity_type" value="unicorn"/>
    </properties>
   </object>
-  <object id="241" x="1984" y="1536" width="64" height="256">
+  <object id="241" x="1856" y="1536" width="64" height="256">
    <properties>
     <property name="action" value="cave_exit"/>
     <property name="entity_type" value="trigger"/>
@@ -2123,6 +2123,11 @@
   <object id="467" gid="42" x="7488" y="832" width="64" height="64">
    <properties>
     <property name="entity_type" value="bonbon"/>
+   </properties>
+  </object>
+  <object id="468" gid="45" x="2240" y="1792" width="64" height="64">
+   <properties>
+    <property name="entity_type" value="light"/>
    </properties>
   </object>
  </objectgroup>
