@@ -46,8 +46,10 @@ vec4    getAnimModesProgress();
 
 void main()
 {
-    // prevent LibGDX from throwing "uniform not used" exception
-    mat4 dummy1 = u_projTrans;
+    // prevent LibGDX from throwing "not used" exception
+    vec4 dummy1 = a_color;
+    vec2 dummy2 = a_texCoord0;
+    mat4 dummy3 = u_projTrans;
     
     // move from center to lower left corner
 	gl_Position =  vec4(a_position.x - u_frameDimension.x/2, a_position.y - u_frameDimension.y/2, a_position.z, a_position.w);

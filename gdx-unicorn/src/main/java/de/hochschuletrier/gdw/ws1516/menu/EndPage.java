@@ -11,6 +11,7 @@ import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.events.ShowCreditsEvent;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
+import de.hochschuletrier.gdw.ws1516.game.systems.ScoreSystem;
 import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.states.GameplayState;
@@ -29,6 +30,7 @@ public class EndPage extends MenuPage {
         super(skin, background);
         this.menuManager = menuManager;
         this.mapToLoad = mapToLoad;
+        Texture endImage;
 
         String message,messageStyle;
         Sound sound;
@@ -36,7 +38,7 @@ public class EndPage extends MenuPage {
         if (type == Type.GAMEOVER) {
             message = "Verloren!";
             messageStyle = "gameover";
-            Texture endImage = assetManager.getTexture("dead_unicorn_gameover");
+            endImage = assetManager.getTexture("dead_unicorn_gameover");
             addDecoImage(endImage, Main.WINDOW_WIDTH/2, Main.WINDOW_HEIGHT/2, Align.center, Align.center);
             sound = assetManager.getSound("lose_sound");
         } else {
@@ -46,15 +48,18 @@ public class EndPage extends MenuPage {
             message = "Gewonnen!";
             messageStyle = "win";
             sound = assetManager.getSound("win_sound");
-            int timeScore = (int) (GameConstants.SCORE_TIME_POINTS - scoreComp.playedSeconds);
-            final int chocoScore = scoreComp.chocoCoins;
+            int timeScore = (int) (GameConstants.SCORE_TIME_POINTS * scoreComp.playedSeconds);
+            final int chocoScore = scoreComp.chocoCoins * GameConstants.SCORE_CHOCOCOINS_POINTS;
             final int bonbonScore = scoreComp.bonbons * GameConstants.SCORE_BONBONS_POINTS;
+            
+            endImage = assetManager.getTexture("happy_unicorn_win");
+            addDecoImage(endImage, Main.WINDOW_WIDTH/2+250, Main.WINDOW_HEIGHT/2-50, Align.center, Align.center);
+            addScoreLine(400, clock_hud, "Level geschafft ", GameConstants.SCORE_BASEPOINTS); // hier fehlt ein made it icon
+            addScoreLine(350, chocoCoins, scoreComp.chocoCoins + " (" + GameConstants.SCORE_CHOCOCOINS_POINTS + " Punkte)", chocoScore);
+            addScoreLine(300, bonbons, scoreComp.bonbons + " (" + GameConstants.SCORE_BONBONS_POINTS + " Punkte)", bonbonScore);
+            addScoreLine(250, clock_hud, "Zeitmalus", timeScore);
 
-            addScoreLine(400, chocoCoins, scoreComp.chocoCoins + " (1 Punkt)", chocoScore);
-            addScoreLine(350, bonbons, scoreComp.bonbons + " (1 Punkt)", bonbonScore);
-            addScoreLine(300, clock_hud, "Zeitbonus", timeScore);
-
-            addLabel(600, 325, "" + (timeScore + chocoScore + bonbonScore), "win");
+            addLabel(600, 325, "" + ( ScoreSystem.getFinalScoreStatic() ), "win");
         }
 
         addCenteredLabel(0, 480, Main.WINDOW_WIDTH, 50, message, messageStyle);
@@ -72,8 +77,8 @@ public class EndPage extends MenuPage {
         int lineheight = 20;
         addDecoImage(icon, x, y + lineheight*0.5f, Align.center, Align.center);
         addLabel(x + 100, y, label, "default");
-        addLabel(x + 200, y, "=", "default");
-        addLabel(x + 220, y, "" + value, "default");
+        addLabel(x + 230, y, "=", "default");
+        addLabel(x + 250, y, "" + value, "default");
     }
     
     private void onOutroSkipped() {
@@ -84,7 +89,7 @@ public class EndPage extends MenuPage {
     private void nextLevel() {
         if(mapToLoad == null) {
             menuManager.popPage();
-            MenuPageScene outroPage = new MenuPageScene(skin, menuManager, "data/json/endSequence.json", this::onOutroSkipped);
+            MenuPageScene outroPage = new MenuPageScene(skin, menuManager, "data/json/endSequence.json", this::onOutroSkipped,"outro_bg");
             menuManager.addLayer(outroPage);
             menuManager.pushPage(outroPage);
         } else {

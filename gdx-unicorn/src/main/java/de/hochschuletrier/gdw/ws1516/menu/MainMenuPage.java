@@ -36,7 +36,7 @@ public class MainMenuPage extends MenuPage implements ShowCreditsEvent.Listener 
             ShowCreditsEvent.register(this);
             levelSelectionPage = new LevelSelectionPage(skin, menuManager);
             menuManager.addLayer(levelSelectionPage);
-            MenuPageScene introPage = new MenuPageScene(skin, menuManager, "data/json/intro.json", this::onIntroSkipped);
+            MenuPageScene introPage = new MenuPageScene(skin, menuManager, "data/json/intro.json", this::onIntroSkipped,"intro_bg");
             addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Spiel starten", introPage);
             //addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 150, 50, "Start Game", this::startGame);
         } else if (type == Type.PAUSED) {
@@ -44,8 +44,9 @@ public class MainMenuPage extends MenuPage implements ShowCreditsEvent.Listener 
                 menuManager.popPage();
             }, "buttonSound");
         }
-        addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Hilfe", new HelpPage(skin, menuManager));
         addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Optionen", new MenuPageOptions(skin, menuManager));
+        addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Hilfe", new HelpPage(skin, menuManager));
+        
         menuPageCredits = new MenuPageCredits(skin, menuManager);
         addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Credits", menuPageCredits);
 
