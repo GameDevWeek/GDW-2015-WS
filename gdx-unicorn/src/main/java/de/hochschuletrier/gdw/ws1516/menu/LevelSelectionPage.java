@@ -121,6 +121,8 @@ public class LevelSelectionPage extends MenuPage {
             level_preview_index=level_preview_count-1;
         }
         setLevel(level_preview_index);
+        setLevel(level_preview_index);
+        level_title.setText(title[level_preview_index]);
     }
     
     private void startGame() {
