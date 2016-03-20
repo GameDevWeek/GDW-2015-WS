@@ -45,6 +45,7 @@ public class EndPage extends MenuPage {
             Texture bonbons = assetManager.getTexture("drop");
             Texture chocoCoins = assetManager.getTexture("coin_hud");
             Texture clock_hud = assetManager.getTexture("clock_hud");
+            Texture heart = assetManager.getTexture("heart3");
             message = "Gewonnen!";
             messageStyle = "win";
             sound = assetManager.getSound("win_sound");
@@ -54,7 +55,8 @@ public class EndPage extends MenuPage {
             
             endImage = assetManager.getTexture("happy_unicorn_win");
             addDecoImage(endImage, Main.WINDOW_WIDTH/2+250, Main.WINDOW_HEIGHT/2-50, Align.center, Align.center);
-            addScoreLine(400, clock_hud, "Level geschafft ", GameConstants.SCORE_BASEPOINTS); // hier fehlt ein made it icon
+            //addScoreLine(400, clock_hud, "Level geschafft ", GameConstants.SCORE_BASEPOINTS); // hier fehlt ein made it icon
+            addScoreLine(400, heart, scoreComp.lives + " (" + GameConstants.SCORE_LIVES + " Punkte)", scoreComp.lives * GameConstants.SCORE_LIVES);
             addScoreLine(350, chocoCoins, scoreComp.chocoCoins + " (" + GameConstants.SCORE_CHOCOCOINS_POINTS + " Punkte)", chocoScore);
             addScoreLine(300, bonbons, scoreComp.bonbons + " (" + GameConstants.SCORE_BONBONS_POINTS + " Punkte)", bonbonScore);
             addScoreLine(250, clock_hud, "Zeitmalus", timeScore);

@@ -14,7 +14,7 @@ public abstract class Item {
     protected static final Vector2 temp = new Vector2();
     protected final Vector2 position = new Vector2();
 
-    public String group;
+    public final String group;
     protected Path<Vector2> path;
     protected float startTime;
     protected float originalStartTime;
