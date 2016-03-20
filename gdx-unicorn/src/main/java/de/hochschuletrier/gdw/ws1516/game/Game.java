@@ -232,9 +232,7 @@ public class Game extends InputAdapter implements ChangeInGameStateEvent.Listene
         EntityCreator.setGame(this);
         EntityCreator.setEntityFactory(entityFactory);
         
-        EntityCreator.createEntity("bubblegum_rainbow", 1250, 2911);
-        //TEST
-        EntityCreator.createEntity("hunter", 1000, 400);    
+        //TEST   
         EntityCreator.createEntity("bubblegum_rainbow", 1250, 2911);
 
         loadMap(mapFilename);
