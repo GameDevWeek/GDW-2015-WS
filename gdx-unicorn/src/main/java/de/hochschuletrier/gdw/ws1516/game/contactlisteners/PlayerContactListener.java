@@ -107,10 +107,12 @@ public class PlayerContactListener extends PhysixContactAdapter {
                 switch (collect.type) 
                 {
                     case RAINBOW_GUM:
+                            ScoreBoardEvent.emit(ScoreType.BUBBLE_GUM, 1);
                             RainbowEvent.start(playerEn);
                             DeathEvent.emit(otherEn); 
                         break;
                     case BLUE_GUM:
+                            ScoreBoardEvent.emit(ScoreType.BUBBLE_GUM, 1);
                             player.blueGumStacks++;
                             DeathEvent.emit(otherEn);  
                         break;
