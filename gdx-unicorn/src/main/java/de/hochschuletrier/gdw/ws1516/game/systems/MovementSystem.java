@@ -263,13 +263,21 @@ public class MovementSystem extends IteratingSystem implements StartFlyEvent.Lis
     public void onThrowBackEventStart(Entity unicorn, float dirX) {
         PhysixBodyComponent physix = ComponentMappers.physixBody.get(unicorn);
         MovementComponent movement = ComponentMappers.movement.get(unicorn);
+        InputComponent input = ComponentMappers.input.get(unicorn);
         
-        if (physix != null && movement != null) {
+        if (physix != null && movement != null && input != null) {
             MovementComponent.State newState = MovementComponent.State.FALLING;
             MovementStateChangeEvent.emit(unicorn, movement.state, newState);
             movement.state = newState;
             physix.setLinearVelocity(0, 0); // kills any movement
-            physix.applyImpulse(dirX * GameConstants.THROWBACK_FORCE, -1.0f * GameConstants.THROWBACK_FORCE);
+            
+            //Compute throwback force
+            float force = GameConstants.THROWBACK_FORCE;
+            if (input.startJump) {
+                force -= (float) Math.abs(movement.jumpImpulse);
+            }
+            
+            physix.applyImpulse(dirX * force, -1.0f * force);
         }
     }
     
