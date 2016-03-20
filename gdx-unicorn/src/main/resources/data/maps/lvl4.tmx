@@ -507,31 +507,31 @@
     <property name="entity_type" value="trigger"/>
    </properties>
   </object>
-  <object id="135" gid="101" x="5294.18" y="696" width="64" height="64">
+  <object id="135" gid="101" x="5340.64" y="696" width="64" height="64">
    <properties>
     <property name="entity_type" value="hunter"/>
     <property name="path" value="dual_path_2"/>
    </properties>
   </object>
-  <object id="136" gid="104" x="5038.18" y="696" width="64" height="64">
+  <object id="136" gid="104" x="5120" y="689.939" width="64" height="64">
    <properties>
     <property name="entity_type" value="tourist"/>
     <property name="path" value="dual_path_2"/>
    </properties>
   </object>
-  <object id="139" gid="104" x="5102.18" y="696" width="64" height="64">
+  <object id="139" gid="104" x="5256.73" y="692.97" width="64" height="64">
    <properties>
     <property name="entity_type" value="tourist"/>
     <property name="path" value="dual_path_2"/>
    </properties>
   </object>
-  <object id="140" gid="104" x="5486.18" y="696" width="64" height="64">
+  <object id="140" gid="104" x="5490.24" y="692.97" width="64" height="64">
    <properties>
     <property name="entity_type" value="tourist"/>
     <property name="path" value="dual_path_2"/>
    </properties>
   </object>
-  <object id="141" gid="104" x="5550.18" y="696" width="64" height="64">
+  <object id="141" gid="104" x="5198.67" y="696" width="64" height="64">
    <properties>
     <property name="entity_type" value="tourist"/>
     <property name="path" value="dual_path_2"/>
@@ -543,7 +543,7 @@
     <property name="path" value="hunter_path_7"/>
    </properties>
   </object>
-  <object id="143" gid="104" x="5614.18" y="696" width="64" height="64">
+  <object id="143" gid="104" x="5568.73" y="695" width="64" height="64">
    <properties>
     <property name="entity_type" value="tourist"/>
     <property name="path" value="dual_path_2"/>
@@ -645,7 +645,7 @@
     <property name="path" value="hunter_path_7"/>
    </properties>
   </object>
-  <object id="170" x="5529" y="60" width="62" height="828">
+  <object id="170" x="5570" y="64.9091" width="113.758" height="828">
    <properties>
     <property name="action" value="goal"/>
     <property name="entity_type" value="trigger"/>
@@ -670,12 +670,12 @@
    </properties>
    <polyline points="0,0 -282,0"/>
   </object>
-  <object id="193" x="5664" y="664">
+  <object id="193" x="5648.48" y="660.97">
    <properties>
     <property name="entity_type" value="path"/>
     <property name="name" value="dual_path_2"/>
    </properties>
-   <polyline points="0,0 -1006.67,0"/>
+   <polyline points="0,0 -836.606,0"/>
   </object>
   <object id="195" x="1821" y="1249">
    <properties>
@@ -875,19 +875,19 @@
     <property name="entity_type" value="bonbon"/>
    </properties>
   </object>
-  <object id="279" gid="101" x="5366" y="696" width="64" height="64">
+  <object id="279" gid="101" x="5417.52" y="692.97" width="64" height="64">
    <properties>
     <property name="entity_type" value="hunter"/>
     <property name="path" value="dual_path_2"/>
    </properties>
   </object>
-  <object id="280" gid="101" x="4806" y="698" width="64" height="64">
+  <object id="280" gid="101" x="4942.36" y="694.97" width="64" height="64">
    <properties>
     <property name="entity_type" value="hunter"/>
     <property name="path" value="dual_path_2"/>
    </properties>
   </object>
-  <object id="281" gid="101" x="4878" y="698" width="64" height="64">
+  <object id="281" gid="101" x="5032.55" y="694.97" width="64" height="64">
    <properties>
     <property name="entity_type" value="hunter"/>
     <property name="path" value="dual_path_2"/>
