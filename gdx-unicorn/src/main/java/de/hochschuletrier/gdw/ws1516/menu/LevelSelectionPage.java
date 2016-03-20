@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
@@ -35,6 +36,8 @@ public class LevelSelectionPage extends MenuPage {
     private DecoImage level_preview_d;
     private final ArrayList<String> levelNames = new ArrayList();
     private Texture[] level_previews;
+    private Label level_title;
+    private String[] title;
     
     
     public LevelSelectionPage(Skin skin, MenuManager menuManager) {
@@ -58,28 +61,41 @@ public class LevelSelectionPage extends MenuPage {
         Texture level_preview_texture = assetManager.getTexture(levelNames.get(0));
         Texture buttonBack_texture = assetManager.getTexture("prev_Button");
         Texture buttonNext_texture = assetManager.getTexture("next_Button");
-        
-        addPageEntry(menuManager, x, 444, "Hilfe", new HelpPage(skin, menuManager));  
+
+
+       
+        level_title = new Label("",skin, "default");
         level_preview_d = new DecoImage(assetManager.getTexture(levelNames.get(level_preview_index)));
         
         level_previews = new Texture[levelNames.size()];
+        title = new String[4];
+        title[0] = "1";
+        title[1] = "2";
+        title[2] = "3";
+        title[3] = "4";
         for (String levelName : levelNames) {
             level_previews[level_preview_count] = assetManager.getTexture(levelName);
             level_preview_count++;
         }
-      
+        
+        
         level_preview_d.setTexture(level_previews[level_preview_index]);
         level_preview_d.setBounds(x, 240, 360, 200);
+        level_title.setText(title[level_preview_index]);
+        level_title.setPosition(x, 460);
 
         int right = x + 360;
         createImageButton(buttonBack_texture, right-2*buttonNext_texture.getWidth() - buttonNext_texture.getWidth()/2, 200, 50, 50, this::previousLevel, "buttonSound", true, true);
         createImageButton(buttonNext_texture, right-buttonNext_texture.getWidth(), 200, 50, 50, this::nextLevel, "buttonSound", true, true);
         
         addLeftAlignedButton(x, 191, 100, 50, "Spielen", this::startGame, "einhornMotivated");
+        addPageEntry(menuManager, x, 136, "Hilfe", new HelpPage(skin, menuManager));  
         addLeftAlignedButton(x, 40, 100, 50, "Zurück", () -> menuManager.popPage(),"zurueck");
+        
      
         
         super.addActor(level_preview_d);
+        super.addActor(level_title);
         
         
         
@@ -93,6 +109,8 @@ public class LevelSelectionPage extends MenuPage {
         level_preview_index++;
         level_preview_index %= level_preview_count;
         setLevel(level_preview_index);
+        level_title.setText(title[level_preview_index]);
+        
                     
     }
     
