@@ -60,9 +60,8 @@ public class TextureRenderSystem extends SubSystem {
             alphaTextureShader.setUniformf("u_alpha", alpha);
         }
         
-        DrawUtil.batch.draw(texture, x - w * 0.5f, y - h * 0.5f, originX, originY, w, h,
-                1.0f, 1.0f, angleInDeg, 0, 0, (int) w, (int) h, flipHorizontal, flipVertical);
-
+    	DrawUtil.batch.draw(texture, x - w*0.5f, y - h*0.5f, w*0.5f, h*0.5f, w, h, 1, 1, angleInDeg, 
+    			0, 0, (int) w, (int) h, flipHorizontal, flipVertical);
         
         if(alpha < 1f && alpha >= 0f)
         {

@@ -13,8 +13,8 @@ public class ScoreComponent extends Component implements Pool.Poolable{
     public int bubblegums;
     public int killedEnemies;
     public int killedObstacles;
-    public int deaths;
     public int hits;
+    public int lives = 3;
     
     @Override
     public void reset() {
@@ -24,7 +24,7 @@ public class ScoreComponent extends Component implements Pool.Poolable{
         bubblegums=0;
         killedEnemies=0;
         killedObstacles=0;
-        deaths=0;
+        lives=3;
         hits=0;
     }
 

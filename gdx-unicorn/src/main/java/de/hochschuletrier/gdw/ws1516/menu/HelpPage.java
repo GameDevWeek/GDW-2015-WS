@@ -27,7 +27,7 @@ public class HelpPage extends MenuPage {
         addLabeledTexture("spit_Key", "Spucken",xOffset+5,100,-15,0,44,40);
         addLabeledTexture("jump_Key", "Springen",xOffset+235,100,30,0,129,40);
         addLabeledTexture("checkpoint_checked", "Checkpoint",xOffset+630,450,25,0,128,117);
-        addLabeledTexture("checkpoint_checked", "Checkpoint",xOffset+630,450,25,0,128,117);
+        
        
         addLeftAlignedButton(55, 40, 100, 50, "Zurück", () -> menuManager.popPage(),"zurueck");
     }
