@@ -147,9 +147,9 @@
             "layer": 2,
             "time": 1000,
             "items" : [
-                {"type":"text","x":512, "y": 100,"style":"name","text":"Because of his short arms"},
-                {"type":"text","x":512, "y": 75,"style":"name","delay": 2000,"text":"The T-Rex can't eat his bubblegum!"},
-                {"type":"text","x":512, "y": 100,"style":"name","delay":5000,"text":"You have to help him!"}
+                {"type":"text","x":512, "y": 100,"style":"name","text":"Weil er so kurze Arme hat"},
+                {"type":"text","x":512, "y": 75,"style":"name","delay": 2000,"text":"Kann der T-Rex sein Kaugummi nicht essen!"},
+                {"type":"text","x":512, "y": 100,"style":"name","delay":5000,"text":"Du musst ihm helfen!"}
             ],
             "animations" : [
                 {"time":0, "animation":"untype_instant"},
