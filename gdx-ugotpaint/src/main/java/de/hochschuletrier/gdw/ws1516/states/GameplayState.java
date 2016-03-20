@@ -113,8 +113,8 @@ public class GameplayState extends BaseGameState implements ShowWinScreenEvent.L
     }
 
     @Override
-    public void onShowWinScreenEvent(String name) {
-        menuPageRoot.setWinMessage(name + " hat gewonnen!");
+    public void onShowWinScreenEvent(String name, float pctWinnerFilled) {
+        menuPageRoot.setWinMessage(name + " hat gewonnen!", pctWinnerFilled);
         menuManager.pushPage(menuPageRoot);
         
         inputForwarder.set(menuInputProcessor);

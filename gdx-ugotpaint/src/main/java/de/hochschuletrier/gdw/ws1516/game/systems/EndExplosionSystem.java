@@ -30,6 +30,7 @@ public class EndExplosionSystem extends IntervalSystem implements GameOverEvent.
     private Entity loserEntity;
     private ImmutableArray<Entity> pickups;
     private PlayerComponent winner;
+    private float pctWinnerFilled;
 
     public EndExplosionSystem(int priority) {
         super(GameConstants.END_EXPLOSION_INTERVAL, priority);
@@ -69,11 +70,13 @@ public class EndExplosionSystem extends IntervalSystem implements GameOverEvent.
             loser = ComponentMappers.player.get(playerBlue);
             winner = ComponentMappers.player.get(playerRed);
             loserEntity = playerBlue;
+            pctWinnerFilled = Main.getCanvas().getRedPct();
         } else {
             // blue player wins -> red explodes
             loser = ComponentMappers.player.get(playerRed);
             winner = ComponentMappers.player.get(playerBlue);
             loserEntity = playerRed;
+            pctWinnerFilled = Main.getCanvas().getBluePct();
         }
 
         gameOver = true;
@@ -97,9 +100,9 @@ public class EndExplosionSystem extends IntervalSystem implements GameOverEvent.
             gameOver = false;
             // show win screen
             if (winner.color == PlayerColor.RED){
-                ShowWinScreenEvent.emit("Spieler rot");
+                ShowWinScreenEvent.emit("Spieler rot",pctWinnerFilled);
             } else {
-                ShowWinScreenEvent.emit("Spieler blau");
+                ShowWinScreenEvent.emit("Spieler blau",pctWinnerFilled);
             }
         }
         if (pickups.size() > 0) {

@@ -143,11 +143,12 @@ public class MenuPageRoot extends MenuPage {
         addLeftAlignedButton(x, y, width, 40, text, () -> menuManager.pushPage(page));
     }
 
-    public void setWinMessage(String message){
+    public void setWinMessage(String message, float pctWinnerFilled){
         this.winMessage = message;
+        String pctMessage = "mit: "+Math.round(pctWinnerFilled * 100.0) +"% der Fläche";
 
-        addLabel(500,300,winMessage);
-
+        addLabel(500,360,winMessage);
+        addLabel(500,330,pctMessage);
     }
 
 
