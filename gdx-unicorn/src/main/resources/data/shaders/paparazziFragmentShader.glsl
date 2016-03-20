@@ -17,10 +17,6 @@ precision mediump float;
 // random chosen numbers
 #define SEED_STEP 13.0
 
-
-varying LOWP vec4    v_color;
-varying LOWP vec2    v_texCoords;
-
 // standard frame dimensions in unicorn game 1024 x 600
 uniform LOWP vec2    u_frameDimension;
 uniform LOWP float   u_passedEffectTime;
@@ -45,6 +41,7 @@ varying float   v_modeIntroProgress;
 varying float   v_modeStandardProgress;
 varying float   v_modeOutroProgress;
 
+// functions
 vec3    createCircle(vec2 seed);
 float   getCircleAlpha(vec3 circle);
 float   getCircleFade(float alphaIn);
