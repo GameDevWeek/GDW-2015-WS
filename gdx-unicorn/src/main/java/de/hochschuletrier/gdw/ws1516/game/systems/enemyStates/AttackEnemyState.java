@@ -19,6 +19,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.EnemyBehaviourComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent.EnemyType;
+import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.LookDirection;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State;
 import de.hochschuletrier.gdw.ws1516.game.systems.EnemyHandlingSystem.Action.Type;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
@@ -40,6 +41,11 @@ public class AttackEnemyState extends EnemyBaseState {
         if (movementComp.state == State.GLUED){
             SoundEvent.stopSound("huntergun", entity);
             return new FollowPathEnemyState();
+        }
+        if ( playerPosition.x < enemyPosition.x ){
+            movementComp.lookDirection = LookDirection.LEFT;
+        } else {
+            movementComp.lookDirection = LookDirection.RIGHT;                            
         }
         if (type.type==EnemyType.HUNTER){
             if (!soundPlayed) {

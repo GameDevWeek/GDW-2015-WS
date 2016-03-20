@@ -5,8 +5,6 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.utils.Array;
-
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.ashley.ComponentFactory;
 import de.hochschuletrier.gdw.commons.gdx.physix.PhysixBodyDef;
@@ -16,7 +14,6 @@ import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixModifierCompon
 import de.hochschuletrier.gdw.commons.gdx.physix.systems.PhysixSystem;
 import de.hochschuletrier.gdw.commons.utils.SafeProperties;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
-import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.LookDirection;
 import de.hochschuletrier.gdw.ws1516.game.utils.PhysixUtil;
 
@@ -169,76 +166,119 @@ public class PhysixBodyComponentFactory extends
         entity.add(playerBody);
     }
     
-    private void addPlatform(EntityFactoryParam param, Entity entity,
-            SafeProperties properties) {
+    private void addPlatform(EntityFactoryParam param, Entity entity, SafeProperties properties) {
         
+        //Create body
         PhysixBodyComponent bodyComponent = engine.createComponent(PhysixBodyComponent.class);
         PhysixBodyDef bodyDef = new PhysixBodyDef(BodyDef.BodyType.KinematicBody, physixSystem)
-        .position(param.x, param.y).fixedRotation(false);
+                                .position(param.x, param.y)
+                                .fixedRotation(false);
         bodyComponent.init(bodyDef, physixSystem, entity);
         
+        //Fetch size in tiles
         float tilesWidth = properties.getFloat("sizeWidth", 1.0f);
         float tilesHeight = properties.getFloat("sizeHeight", 1.0f);
         
-      
+        //Create fixture def
         PhysixFixtureDef fixtureDef = getFixtureDef(properties)
                                       .friction(100.0f)
-                                      .shapeBox(GameConstants.TILESIZE_X * tilesWidth,GameConstants.TILESIZE_Y * tilesHeight);
+                                      .shapeBox(GameConstants.TILESIZE_X * tilesWidth,
+                                                GameConstants.TILESIZE_Y * tilesHeight);
         
-        
-        
+        //Add fixture
         bodyComponent.createFixture(fixtureDef);
-        
-        logger.debug("{}", fixtureDef.friction);       
-        
-        
+
+        //Add body
         entity.add(bodyComponent);
+        
     }
     
     private void addCheckpoint(EntityFactoryParam param, Entity entity, SafeProperties properties) {
+        
+        //Create body component
         PhysixBodyComponent bodyComponent = engine.createComponent(PhysixBodyComponent.class);
+        
+        //Define body
         PhysixBodyDef bodyDef = new PhysixBodyDef(BodyDef.BodyType.StaticBody, physixSystem)
-        .position(param.x, param.y).fixedRotation(false);
+                                .position(param.x, param.y)
+                                .fixedRotation(false);
         bodyComponent.init(bodyDef, physixSystem, entity);
         
-        PhysixFixtureDef fixtureDef = getFixtureDef(properties).shapeBox(properties.getFloat("size", 5), properties.getFloat("size", 5));
+        //Define fixture
+        PhysixFixtureDef fixtureDef = getFixtureDef(properties)
+                                      .shapeBox(properties.getFloat("size", 5), properties.getFloat("size", 5));
         fixtureDef.isSensor = properties.getBoolean("isSensor",false);
         
+        //Add fixture
         bodyComponent.createFixture(fixtureDef);
-        bodyComponent.setAngle(0.0f);
-        entity.add(bodyComponent);
-    }
-
-    private void addCircle(EntityFactoryParam param, Entity entity,
-            SafeProperties properties) {
-        PhysixBodyComponent bodyComponent = getBodyComponent(param, entity);
-        PhysixFixtureDef fixtureDef = getFixtureDef(properties).shapeCircle(
-                properties.getFloat("size", 5));
-        fixtureDef.isSensor = properties.getBoolean("isSensor",false);
-        bodyComponent.createFixture(fixtureDef);
+        
+        //Set gravity and angle
         bodyComponent.setAngle(properties.getFloat("angle", 0.0f) * PhysixUtil.DEG2RAD);
         bodyComponent.setGravityScale(properties.getFloat("gravity",1.0f));
+        
+        //Add body
         entity.add(bodyComponent);
-        logger.debug("Circle body created");
+        
     }
 
-    private void addBox(EntityFactoryParam param, Entity entity,
-            SafeProperties properties) {
+    //Create a shircle
+    private void addCircle(EntityFactoryParam param, Entity entity, SafeProperties properties) {
+        
+        //Create body component
         PhysixBodyComponent bodyComponent = getBodyComponent(param, entity);
-        PhysixFixtureDef fixtureDef = getFixtureDef(properties).shapeBox(
-                properties.getFloat("size", 5), properties.getFloat("size", 5));
+        
+        //Create fixture
+        PhysixFixtureDef fixtureDef = getFixtureDef(properties)
+                                      .shapeCircle(properties.getFloat("size"));
+        
+        //IsSensor ? 
+        fixtureDef.isSensor = properties.getBoolean("isSensor",false);
+        
+        //Add fixture
         bodyComponent.createFixture(fixtureDef);
-        bodyComponent.applyImpulse(0, 50000);
+        
+        //Parse angle and gravity
+        bodyComponent.setAngle(properties.getFloat("angle", 0.0f) * PhysixUtil.DEG2RAD);
+        bodyComponent.setGravityScale(properties.getFloat("gravity",1.0f));
+        
+        //Add body to entity
         entity.add(bodyComponent);
+        
     }
 
-    private PhysixBodyComponent getBodyComponent(EntityFactoryParam param,
-            Entity entity) {
-        PhysixBodyComponent bodyComponent = engine
-                .createComponent(PhysixBodyComponent.class);
+    private void addBox(EntityFactoryParam param, Entity entity, SafeProperties properties) {
+        
+        //Create component
+        PhysixBodyComponent bodyComponent = getBodyComponent(param, entity);
+        
+        //Create fixture
+        PhysixFixtureDef fixtureDef = getFixtureDef(properties)
+                                     .shapeBox(properties.getFloat("sizeWidth"),
+                                               properties.getFloat("sizeHeight"));
+                     
+        //IsSensor ?
+        fixtureDef.isSensor = properties.getBoolean("isSensor");
+        
+        //Add fixture
+        bodyComponent.createFixture(fixtureDef);
+        
+        //Parse angle and gravity
+        bodyComponent.setAngle(properties.getFloat("angle", 0.0f) * PhysixUtil.DEG2RAD);
+        bodyComponent.setGravityScale(properties.getFloat("gravity",1.0f));
+        
+        //Add body to entity
+        entity.add(bodyComponent);
+        
+    }
+
+    private PhysixBodyComponent getBodyComponent(EntityFactoryParam param, Entity entity) {
+        
+        //Create, Define, init body
+        PhysixBodyComponent bodyComponent = engine.createComponent(PhysixBodyComponent.class);
         PhysixBodyDef bodyDef = getBodyDef(param);
         bodyComponent.init(bodyDef, physixSystem, entity);
         return bodyComponent;
+        
     }
 
     private PhysixBodyDef getBodyDef(EntityFactoryParam param) {
@@ -246,6 +286,7 @@ public class PhysixBodyComponentFactory extends
                 .position(param.x, param.y).fixedRotation(false);
     }
 
+    //Parses Density, Friction, Restitution
     private PhysixFixtureDef getFixtureDef(SafeProperties properties) {
         return new PhysixFixtureDef(physixSystem)
                 .density(properties.getFloat("density", 5))

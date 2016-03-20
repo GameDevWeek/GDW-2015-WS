@@ -44,7 +44,6 @@ public class EntityLoader implements MapLoader {
                 }
             }
         }
-
         // Test Print
         logger.info("{}", names);
     }

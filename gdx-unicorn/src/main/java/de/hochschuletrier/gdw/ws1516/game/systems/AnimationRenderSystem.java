@@ -139,7 +139,7 @@ public class AnimationRenderSystem extends SubSystem
             return false;
         }
         
-        float animDuration = animation.uninteruptableAnimation.animationDuration;
+        float animDuration = animation.uninteruptableAnimation.getDuration();
         float animTime = animation.stateTime;
         
         if(animTime > animDuration)
@@ -202,7 +202,7 @@ public class AnimationRenderSystem extends SubSystem
         else if(normalized > 1f)
             normalized = 1f;
         normalized = (normalized + 1) * 0.5f;
-        return animationExtended.getKeyFrame(normalized *  animationExtended.animationDuration);
+        return animationExtended.getKeyFrame(normalized *  animationExtended.getDuration());
     }
 
     private TextureRegion getLandingKeyframe(Entity entity, AnimationComponent animation, MovementComponent movement, String stateKey) {
@@ -211,7 +211,7 @@ public class AnimationRenderSystem extends SubSystem
         {
             return null;
         }
-        else if(animation.stateTime > animationExtended.animationDuration)
+        else if(animation.stateTime > animationExtended.getDuration())
         {
             movement.state = MovementComponent.State.ON_GROUND;
             MovementStateChangeEvent.emit(entity, MovementComponent.State.LANDING, MovementComponent.State.ON_GROUND);

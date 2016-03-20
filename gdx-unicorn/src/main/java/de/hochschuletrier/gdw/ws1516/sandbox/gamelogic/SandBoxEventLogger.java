@@ -52,7 +52,7 @@ public class SandBoxEventLogger implements  EnemyActionEvent.Listener, DeathEven
     }
 
     @Override
-    public void onGameOverEvent(boolean won) {
+    public void onGameOverEvent(boolean won, String mapToLoad) {
         // TODO Auto-generated method stub
         
     }

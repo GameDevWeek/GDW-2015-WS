@@ -17,13 +17,17 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.ws1516.events.ActivateSafePointEvent;
 import de.hochschuletrier.gdw.ws1516.events.ActivateSafePointEvent.Listener;
 import de.hochschuletrier.gdw.ws1516.events.GameRespawnEvent;
+import de.hochschuletrier.gdw.ws1516.events.ChangeInGameStateEvent;
+import de.hochschuletrier.gdw.ws1516.events.ChangeInGameStateEvent.GameStateType;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.components.CollectableComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PathComponent;
@@ -42,24 +46,39 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
     private Engine engine;
     private boolean initStartSpawn = false;
     private Texture activatedCheckpointTexture;
+    private PlayerComponent playerComponentSafe = null;
     
     public RespawnSystem()
     {
-        super(Family.all(PlayerComponent.class).get());
+        super(Family.all(PlayerComponent.class).get(),100);
     }
     
    @Override
     protected void processEntity(Entity entity, float deltaTime) {
 
-       PlayerComponent playerComp = ComponentMappers.player.get(entity);
        PhysixBodyComponent physixBody = ComponentMappers.physixBody.get(entity);
        StartPointComponent respawnPosition = ComponentMappers.startPoint.get(entity);
-       if ( physixBody != null && playerComp.doRespawn)
+       PhysixBodyComponent bodyComp = ComponentMappers.physixBody.get(player);
+       MovementComponent move= ComponentMappers.movement.get(player);
+
+       if (  playerComponentSafe.dieLaterTimer > 0.0f  )
        {
+           playerComponentSafe.dieLaterTimer -= deltaTime; 
+       } else if ( physixBody != null && playerComponentSafe.doRespawn )
+       {
+           ChangeInGameStateEvent.emit(GameStateType.GAME_PLAYING);
            physixBody.setPosition(respawnPosition.x,respawnPosition.y);
-           playerComp.blueGumStacks = respawnPosition.blueGums;
-           playerComp.hitpoints = playerComp.maxHitpoints;
-           playerComp.doRespawn = false;
+           playerComponentSafe.blueGumStacks = respawnPosition.blueGums;
+           playerComponentSafe.hitpoints = playerComponentSafe.maxHitpoints;
+           if ( bodyComp != null )
+           {
+               bodyComp.setLinearVelocity(0, 0);
+           }
+           if ( move != null )
+           {
+               move.reset();
+           }
+           playerComponentSafe.doRespawn = false;
            /// Welt zurücksetzten
            for (SavedEntities save : respawnPosition.savedEntities )
            {
@@ -74,38 +93,36 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
                        saveBody.setPosition(save.position.x, save.position.y);
                    }
                } else {
-                   logger.debug("revive {}", save);
                    revive(save);
                }
            }
-           playerComp.flyingCooldown = 0;
-           playerComp.hornAttackCooldown = 0;
-           playerComp.throwBackCooldown = 0;
+           playerComponentSafe.flyingCooldown = 0;
+           playerComponentSafe.hornAttackCooldown = 0;
+           playerComponentSafe.throwBackCooldown = 0;
        }
     }
     
     private void revive(SavedEntities save) {
         save.saved = EntityCreator.createEntity(save.entityType.entityName().toLowerCase(), save.position.x, save.position.y);
         PathComponent path = ComponentMappers.path.get(save.saved);
-        if (path != null)
+        if (path != null && save.path != null)
         {
-            path.points = save.path;
+            path.points = new ArrayList<Vector2>( save.path.size() );
+            for(Vector2 v:save.path) path.points.add(new Vector2(v.x,v.y));
         }
     }
 
     @Override
     public void onGameRepawnEvent() {
         PlayerComponent playerComp = ComponentMappers.player.get(player);
-        MovementComponent move= ComponentMappers.movement.get(player);
+        PhysixBodyComponent bodyComp = ComponentMappers.physixBody.get(player);
         if ( playerComp != null )
         {   /// resets game later (for the physixs)
             playerComp.doRespawn = true;
             playerComp.invulnerableTimer=1.0f;
-            if ( move != null )
-            {
-                move.reset();
-            }
-            
+            playerComp.dieLaterTimer = 5.0f;     /// waits for the DeathAnimation 
+            ChangeInGameStateEvent.emit(GameStateType.GAME_PLAYER_FREEZE);
+//            player.remove(PlayerComponent.class);
         }else
         {
             logger.warn("No Player or no RespawnPoint set");
@@ -138,6 +155,7 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
         if (ComponentMappers.player.get(entity) != null ) 
         {
             player = entity;
+            playerComponentSafe = ComponentMappers.player.get(entity);
         }
     }
     

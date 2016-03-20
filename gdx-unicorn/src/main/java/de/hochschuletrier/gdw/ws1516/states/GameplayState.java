@@ -7,30 +7,24 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.backends.lwjgl.audio.Wav;
-import com.badlogic.gdx.backends.lwjgl.audio.Wav.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.Logger;
-import com.badlogic.gdx.utils.PauseableThread;
 
 import de.hochschuletrier.gdw.commons.gdx.assets.AssetManagerX;
 import de.hochschuletrier.gdw.commons.gdx.input.InputForwarder;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
-import de.hochschuletrier.gdw.commons.gdx.menu.widgets.DecoImage;
 import de.hochschuletrier.gdw.commons.gdx.audio.MusicManager;
 import de.hochschuletrier.gdw.commons.gdx.state.BaseGameState;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.Main;
-import de.hochschuletrier.gdw.ws1516.Settings;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
 import de.hochschuletrier.gdw.ws1516.menu.EndPage;
 import de.hochschuletrier.gdw.ws1516.menu.MainMenuPage;
 import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
-import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
+import de.hochschuletrier.gdw.ws1516.events.ChangeInGameStateEvent;
+import de.hochschuletrier.gdw.ws1516.events.ChangeInGameStateEvent.GameStateType;
 import de.hochschuletrier.gdw.ws1516.events.FinalScoreEvent;
 import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
 
@@ -60,14 +54,14 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
     
     private float generalVolume;
     private float musicVolume;
+    private boolean isGameOver;
     
     
 
-    public GameplayState(AssetManagerX assetManager, Game game) {
+    public GameplayState(AssetManagerX assetManager, Game game, Music music) {
         this.game = game;
         
-        
-        music = assetManager.getMusic("gameplaytheme");
+        this.music = music;
         rainbowMusic = assetManager.getMusic("rainbowtheme");
 
         Skin skin = ((MainMenuState)Main.getInstance().getPersistentState(MainMenuState.class)).getSkin();
@@ -97,10 +91,12 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
             @Override
             public boolean keyUp(int keycode) {
                 if (keycode == Input.Keys.ESCAPE) {
-                    if (mainProcessor == gameInputProcessor) {
-                        mainProcessor = menuInputProcessor;                        
-                    } else {
-                        menuManager.popPage();
+                    if(!isGameOver) {
+                        if (mainProcessor == gameInputProcessor) {
+                            mainProcessor = menuInputProcessor;                        
+                        } else {
+                            menuManager.popPage();
+                        }
                     }
                     return true;
                 }
@@ -123,15 +119,15 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
             Main.getInstance().screenCamera.bind();
             DrawUtil.fillRect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), OVERLAY_COLOR);
             menuManager.render();
-            if ( !Game.PAUSE_ENGINE )
+            if ( Game.isInState( GameStateType.GAME_PLAYING)  )
             {   /** @author Tobi-Gamelogic   hier weis ich ganz sicher dass es pasuiert ist **/
-                PauseGameEvent.emit(true);
+                ChangeInGameStateEvent.emit(GameStateType.GAME_PAUSE);
             }
         }else
         {
-            if ( Game.PAUSE_ENGINE )
+            if ( Game.isInState( GameStateType.GAME_PAUSE ) )
             {
-                PauseGameEvent.emit(false);
+                ChangeInGameStateEvent.emit(GameStateType.GAME_PLAYING );
             }
         }
     }
@@ -176,20 +172,16 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
      * made it a winningScreen upon winning
      */
     @Override
-    public void onGameOverEvent(boolean won) {
+    public void onGameOverEvent(boolean won, String mapToLoad) {
+        isGameOver = true;
         Skin skin = ((MainMenuState)Main.getInstance().getPersistentState(MainMenuState.class)).getSkin();
-        EndPage endPage; 
-        if ( won ){
-            endPage = new EndPage(skin, menuManager, "transparent_bg", EndPage.Type.WIN, scoreComp);
-        } else {
-            endPage = new EndPage(skin, menuManager, "transparent_bg", EndPage.Type.GAMEOVER, scoreComp);
-        }
-        PauseGameEvent.emit(true);
+        EndPage.Type type = won ? EndPage.Type.WIN : EndPage.Type.GAMEOVER;
+        EndPage endPage = new EndPage(skin, menuManager, null, type, scoreComp, mapToLoad);
+        ChangeInGameStateEvent.emit(GameStateType.GAME_PAUSE);
             
         menuManager.addLayer(endPage);
         menuManager.pushPage(endPage);
         inputForwarder.set(menuInputProcessor);
-            
     }
 
 
