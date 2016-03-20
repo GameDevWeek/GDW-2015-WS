@@ -102,7 +102,7 @@
 
                 { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "UI/Hud", "delay": "2000" },
                 { "type": "text", "path" : "text", "style" : "text_left", "text": "Mateo Egey  ", "delay": "675" },
-                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Max Flesh", "delay": "0" },
+                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Max Flesch", "delay": "0" },
 
 
                 { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Level Design", "delay": "2000" },
