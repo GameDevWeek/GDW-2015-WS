@@ -46,6 +46,8 @@ public abstract class Item {
         startTime = originalStartTime;
         pathTime = 0;
         pausePath = 0;
+        animationTime = 0;
+        totalAnimationTime = 0;
         //Fixme: angle, opacity
     }
     

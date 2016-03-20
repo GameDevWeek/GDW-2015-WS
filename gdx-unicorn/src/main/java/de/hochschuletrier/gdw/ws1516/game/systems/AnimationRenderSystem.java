@@ -12,6 +12,7 @@ import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.events.EnemyActionEvent;
 import de.hochschuletrier.gdw.ws1516.events.MovementStateChangeEvent;
 import de.hochschuletrier.gdw.ws1516.events.PlayerStateChangeEvent;
+import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
@@ -22,7 +23,7 @@ import de.hochschuletrier.gdw.ws1516.game.systems.EnemyHandlingSystem.Action.Typ
 import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 
 public class AnimationRenderSystem extends SubSystem 
-    implements MovementStateChangeEvent.Listener, PlayerStateChangeEvent.Listener, EnemyActionEvent.Listener
+    implements MovementStateChangeEvent.Listener, PlayerStateChangeEvent.Listener, EnemyActionEvent.Listener, DeathEvent.Listener
 {
     @SuppressWarnings("unchecked")
     public AnimationRenderSystem() {
@@ -42,6 +43,11 @@ public class AnimationRenderSystem extends SubSystem
         MovementComponent movement = ComponentMappers.movement.get(entity);
         PhysixBodyComponent physics = ComponentMappers.physixBody.get(entity);
         
+//        if(animation.name.equals("HunterDeath"))
+//        {
+//            movement.state = State.DYING;
+//        }
+        
         animation.stateTime += deltaTime;
         if((movement != null && movement.state != animation.lastRenderedState))
         {
@@ -50,7 +56,7 @@ public class AnimationRenderSystem extends SubSystem
         }
         
         TextureRegion keyFrame = null;
-
+      
         if(movement != null)
         {
             animation.currentlyFlipped = (movement.lookDirection) == (MovementComponent.LookDirection.LEFT) ^ animation.flipHorizontal;
@@ -68,6 +74,11 @@ public class AnimationRenderSystem extends SubSystem
             {
                 keyFrame = getShootingKeyFrame(animation, movement, stateKey);
             }
+	        else if(movement.state == State.DYING)
+        	{
+	            System.out.println("dying state");
+            	keyFrame = getDyingKeyFrame(animation, movement, stateKey);
+        	}
             else if((movement.state == State.JUMPING || movement.state == State.FALLING) && physics != null)
             {
                 keyFrame = getAirKeyframe(animation, movement, physics);
@@ -89,6 +100,7 @@ public class AnimationRenderSystem extends SubSystem
        
         drawKeyframe(animation, position, keyFrame);   
     }
+
 
     private void drawKeyframe(AnimationComponent animation, PositionComponent position, TextureRegion keyFrame) {
         if(keyFrame != null)
@@ -124,7 +136,7 @@ public class AnimationRenderSystem extends SubSystem
             return false;
         }
         
-        float animDuration = animation.uninteruptableAnimation.animationDuration;
+        float animDuration = animation.uninteruptableAnimation.getDuration();
         float animTime = animation.stateTime;
         
         if(animTime > animDuration)
@@ -187,7 +199,7 @@ public class AnimationRenderSystem extends SubSystem
         else if(normalized > 1f)
             normalized = 1f;
         normalized = (normalized + 1) * 0.5f;
-        return animationExtended.getKeyFrame(normalized *  animationExtended.animationDuration);
+        return animationExtended.getKeyFrame(normalized *  animationExtended.getDuration());
     }
 
     private TextureRegion getLandingKeyframe(Entity entity, AnimationComponent animation, MovementComponent movement, String stateKey) {
@@ -196,7 +208,7 @@ public class AnimationRenderSystem extends SubSystem
         {
             return null;
         }
-        else if(animation.stateTime > animationExtended.animationDuration)
+        else if(animation.stateTime > animationExtended.getDuration())
         {
             movement.state = MovementComponent.State.ON_GROUND;
             MovementStateChangeEvent.emit(entity, MovementComponent.State.LANDING, MovementComponent.State.ON_GROUND);
@@ -249,6 +261,18 @@ public class AnimationRenderSystem extends SubSystem
     {
        return animation.uninteruptableAnimation.getKeyFrame(animation.stateTime);
     }
+    
+    private TextureRegion getDyingKeyFrame(AnimationComponent animation, MovementComponent movement, String stateKey) 
+    {
+        AnimationExtended animationExtended = animation.animationMap.get(stateKey);
+        
+        if(animationExtended == null)
+        {
+            return null;
+        }
+        
+        return animationExtended.getKeyFrame(animation.stateTime);
+    }
 
     @Override
     public void onPlayerStateChangeEvent(Entity entity, State oldState, State newState) {
@@ -271,7 +295,7 @@ public class AnimationRenderSystem extends SubSystem
     @Override
     public void onEnemyActionEvent(Entity enemy, Type action, float strength) {
         AnimationComponent animationComponent = ComponentMappers.animation.get(enemy);     
-        
+      
         MovementComponent movement = ComponentMappers.movement.get(enemy);
         
         if((animationComponent.name.equals("Paparazzi") || animationComponent.name.equals("Hunter")) && (action == EnemyHandlingSystem.Action.Type.SHOOT))
@@ -283,5 +307,28 @@ public class AnimationRenderSystem extends SubSystem
         {
             animationComponent.resetStateTime();
         }
+    }
+
+    @Override
+    public void onDeathEvent(Entity entity) 
+    {
+//        AnimationComponent animationComponent = ComponentMappers.animation.get(entity);
+//        MovementComponent movementComponent = ComponentMappers.movement.get(entity);
+//        
+//        if(animationComponent != null)
+//        {
+//            animationComponent.resetStateTime();
+//        }
+//        else
+//        {
+//            return;
+//        }
+//        
+//        if(animationComponent.name.equals("Paparazzi") || animationComponent.name.equals("Hunter"))
+//        {
+//            movementComponent.state = State.DYING;
+//            System.out.println("DEATH EVENT");
+//        }
+        
     }
 }

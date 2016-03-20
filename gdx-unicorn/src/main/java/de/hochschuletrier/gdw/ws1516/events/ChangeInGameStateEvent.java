@@ -6,29 +6,22 @@ import com.badlogic.gdx.utils.SnapshotArray;
 import de.hochschuletrier.gdw.ws1516.events.TestEvent.Listener;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 
-public class PauseGameEvent {
+public class ChangeInGameStateEvent {
     public static interface Listener {
-        public void onPauseGameEvent(boolean pauseOn);
-
-        public void onPauseChange() ;
+        public void onPauseGameEvent(GameStateType state);
+    }
+    public static enum GameStateType {
+        GAME_PAUSE,
+        GAME_PLAYING,
+        GAME_PLAYER_FREEZE
     }
 
     private static final SnapshotArray<Listener> listeners = new SnapshotArray<Listener>();
 
-    public static void emit(boolean pauseOn) {
+    public static void emit(GameStateType state) {
         Object[] items = listeners.begin();
         for (int i = 0, n = listeners.size; i < n; i++) {
-            ((Listener) items[i]).onPauseGameEvent(pauseOn);
-            Game.pauseGame(pauseOn);
-        }
-        listeners.end();
-    }
-
-    public static void change() {
-        Object[] items = listeners.begin();
-        for (int i = 0, n = listeners.size; i < n; i++) {
-            ((Listener) items[i]).onPauseChange();
-            Game.switchPause();
+            ((Listener) items[i]).onPauseGameEvent(state);
         }
         listeners.end();
     }

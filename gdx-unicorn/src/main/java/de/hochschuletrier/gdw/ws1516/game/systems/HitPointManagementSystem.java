@@ -19,6 +19,7 @@ import de.hochschuletrier.gdw.ws1516.events.UnicornEnemyCollisionEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornCollisionEvent;
 import de.hochschuletrier.gdw.ws1516.events.ThrowBackEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
@@ -36,6 +37,11 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
     private ComponentMapper<PlayerComponent> pm = ComponentMapper.getFor(PlayerComponent.class);
     private ComponentMapper<MovementComponent> mm = ComponentMapper.getFor(MovementComponent.class);
     private Engine engine;
+    private final Game game;
+    
+    public HitPointManagementSystem(Game game) {
+        this.game = game;
+    }
     
     @Override
     public void addedToEngine(Engine engine) {
@@ -110,8 +116,10 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
                 
                 if (playerComp.lives > 0)
                     GameRespawnEvent.emit();
-                else
-                    GameOverEvent.emit(false);
+                else {
+                    final String mapFilename = game == null ? null : game.getMapFilename();
+                    GameOverEvent.emit(false, mapFilename);
+                }
             }
         }
     }

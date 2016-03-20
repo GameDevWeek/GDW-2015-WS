@@ -4,13 +4,13 @@
         "components": {
             "ScoreBoard":{},
             "StartPosition":{},
-            "Position": { 
+            "Position": {},
+            "Input":{},
+            "Player":{
                 "maxHitpoints":3,
                 "hitpoints":3,
                 "lives":3
             },
-            "Input":{},
-            "Player":{},
             "Movable":{
                 "state": "falling"
                 },
@@ -100,6 +100,20 @@
                 "layer": 50
             },
             "SoundEmitter":{}
+        }
+    },
+    "hunterDeathDummy": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Animation": {
+                "name": "HunterDeath",
+                "animation": "hunter_idle",
+                "dying": "hunter_dying"
+            },
+            "RenderLayer": {
+                "layer": 50
+            }
         }
     },
     "tourist": {
