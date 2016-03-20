@@ -202,7 +202,7 @@
       "layer" :1,
       "time" : -1,
       "items" : [
-        {"type":"animation", "path":"tr_happy","resource":"trex_plottwist", "flipX":"true"}
+        {"type":"animation", "path":"tr_happy","resource":"trex_plottwist"}
       ],
       "animations" : [
         {"time":"0","animation":"pause_path","animationTime":600,"group":"*"}
@@ -213,7 +213,7 @@
       "layer" :2,
       "time" : -1,
       "items" : [
-        {"delay":700,"type":"texture", "path":"gum","resource":"bubblegum_spitting_rainbow"}
+        {"delay":700,"type":"texture", "path":"gum","resource":"bubblegum_spitting_pink"}
       ],
       "animations" : [
       ]

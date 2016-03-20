@@ -4,6 +4,6 @@
     "rainbowtheme": "data/music/powerUp.ogg",
     "data/maps/lvl1.tmx": "data/music/MainMusik.ogg",
     "data/maps/lvl2.tmx": "data/music/Level2Musik.ogg",
-    "data/maps/lvl3.tmx": "data/music/MainMusik.ogg",
+    "data/maps/lvl3.tmx": "data/music/Level3Musik.ogg",
     "data/maps/lvl4.tmx": "data/music/luftlevelTheme.ogg"
 }
