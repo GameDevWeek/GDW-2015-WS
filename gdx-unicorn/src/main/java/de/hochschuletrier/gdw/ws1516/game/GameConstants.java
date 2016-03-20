@@ -78,8 +78,8 @@ public class GameConstants {
     // Scoreboard-Constant
     public static final int SCORE_BASEPOINTS = 0;
     public static final float SCORE_TIME_POINTS = -100.0f/ 60.0f;
-    public static final int SCORE_CHOCOCOINS_POINTS = 5;
-    public static final int SCORE_BONBONS_POINTS = 15;
+    public static final int SCORE_CHOCOCOINS_POINTS = 6;
+    public static final int SCORE_BONBONS_POINTS = 35;
     public static final int SCORE_KILLED_ENEMIES = 0;
     public static final int SCORE_KILLED_OBSTACLES = 0;
     public static final int SCORE_HITS = 0;
