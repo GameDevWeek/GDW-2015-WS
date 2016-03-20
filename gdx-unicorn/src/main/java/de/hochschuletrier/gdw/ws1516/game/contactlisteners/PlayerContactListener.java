@@ -51,7 +51,6 @@ public class PlayerContactListener extends PhysixContactAdapter {
                 // for Jumps:
                 if ("foot".equals(contact.getMyFixture().getUserData())) {
                     if (!contact.getOtherFixture().isSensor()) {
-                        logger.debug("landing{}");
                         MovementComponent.State oldState = ComponentMappers.movement.get(myEntity).state;
                         MovementComponent.State newState = MovementComponent.State.LANDING;
                         MovementStateChangeEvent.emit(myEntity, oldState, newState);

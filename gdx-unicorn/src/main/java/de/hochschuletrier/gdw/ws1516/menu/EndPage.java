@@ -90,7 +90,7 @@ public class EndPage extends MenuPage {
         } else {
             Game game = new Game();
             game.init(assetManager, mapToLoad);
-            main.changeState(new GameplayState(assetManager, game, LevelSelectionPage.getMusicForLevel(mapToLoad, assetManager)));
+            main.changeState(new GameplayState(assetManager, game, assetManager.getMusic(mapToLoad)));
         }
     }
 
