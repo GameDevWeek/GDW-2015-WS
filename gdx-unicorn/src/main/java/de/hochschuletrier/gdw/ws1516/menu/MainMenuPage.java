@@ -44,8 +44,9 @@ public class MainMenuPage extends MenuPage implements ShowCreditsEvent.Listener 
                 menuManager.popPage();
             }, "buttonSound");
         }
-        addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Hilfe", new HelpPage(skin, menuManager));
         addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Optionen", new MenuPageOptions(skin, menuManager));
+        addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Hilfe", new HelpPage(skin, menuManager));
+        
         menuPageCredits = new MenuPageCredits(skin, menuManager);
         addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Credits", menuPageCredits);
 

@@ -30,6 +30,7 @@ public class EndPage extends MenuPage {
         super(skin, background);
         this.menuManager = menuManager;
         this.mapToLoad = mapToLoad;
+        Texture endImage;
 
         String message,messageStyle;
         Sound sound;
@@ -37,7 +38,7 @@ public class EndPage extends MenuPage {
         if (type == Type.GAMEOVER) {
             message = "Verloren!";
             messageStyle = "gameover";
-            Texture endImage = assetManager.getTexture("dead_unicorn_gameover");
+            endImage = assetManager.getTexture("dead_unicorn_gameover");
             addDecoImage(endImage, Main.WINDOW_WIDTH/2, Main.WINDOW_HEIGHT/2, Align.center, Align.center);
             sound = assetManager.getSound("lose_sound");
         } else {
@@ -47,10 +48,12 @@ public class EndPage extends MenuPage {
             message = "Gewonnen!";
             messageStyle = "win";
             sound = assetManager.getSound("win_sound");
-            int timeScore = (int) (GameConstants.SCORE_TIME_POINTS - scoreComp.playedSeconds);
+            int timeScore = (int) (GameConstants.SCORE_TIME_POINTS * scoreComp.playedSeconds);
             final int chocoScore = scoreComp.chocoCoins * GameConstants.SCORE_CHOCOCOINS_POINTS;
             final int bonbonScore = scoreComp.bonbons * GameConstants.SCORE_BONBONS_POINTS;
-
+            
+            endImage = assetManager.getTexture("happy_unicorn_win");
+            addDecoImage(endImage, Main.WINDOW_WIDTH/2+250, Main.WINDOW_HEIGHT/2-50, Align.center, Align.center);
             addScoreLine(400, clock_hud, "Level geschafft ", GameConstants.SCORE_BASEPOINTS); // hier fehlt ein made it icon
             addScoreLine(350, chocoCoins, scoreComp.chocoCoins + " (" + GameConstants.SCORE_CHOCOCOINS_POINTS + " Punkte)", chocoScore);
             addScoreLine(300, bonbons, scoreComp.bonbons + " (" + GameConstants.SCORE_BONBONS_POINTS + " Punkte)", bonbonScore);

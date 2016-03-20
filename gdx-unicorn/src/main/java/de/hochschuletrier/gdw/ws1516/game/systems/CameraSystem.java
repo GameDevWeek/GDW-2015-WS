@@ -85,28 +85,28 @@ public class CameraSystem extends IteratingSystem {
      * @return camera viewport top left corner in world coordinates
      */
     public static Vector2 getViewportTopLeft() {
-        return new Vector2( -camera.getLeftOffset() , -camera.getTopOffset() ).add(getCameraPosition());
+        return new Vector2( camera.getLeftOffset() , camera.getTopOffset() );
     }
     
     /**
      * @return camera viewport top right corner in world coordinates
      */
     public static Vector2 getViewportTopRight() {
-        return new Vector2( +camera.getLeftOffset() , -camera.getTopOffset() ).add(getCameraPosition());
+        return new Vector2( camera.getLeftOffset() + Gdx.graphics.getWidth(), camera.getTopOffset());
     }
     
     /**
      * @return camera viewport bottom right corner in world coordinates
      */
     public static Vector2 getViewportBottomRight() {
-        return new Vector2( +camera.getLeftOffset() , +camera.getTopOffset() ).add(getCameraPosition());
+        return new Vector2( camera.getLeftOffset() + Gdx.graphics.getWidth() , camera.getTopOffset() + Gdx.graphics.getHeight());
     }
     
     /**
      * @return camera viewport bottom left corner in world coordinates
      */
     public static Vector2 getViewportBottomLeft() {
-        return new Vector2( -camera.getLeftOffset() , +camera.getTopOffset() ).add(getCameraPosition());
+        return new Vector2( -camera.getLeftOffset() , camera.getTopOffset() + Gdx.graphics.getHeight() );
     }
     
     public static Vector2 worldToScreenCoordinates(Vector2 world) {

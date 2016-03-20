@@ -9,9 +9,12 @@ import de.hochschuletrier.gdw.commons.gdx.ashley.SortedSubIteratingSystem.SubSys
 import de.hochschuletrier.gdw.commons.gdx.assets.AnimationExtended;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
+import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.EnemyActionEvent;
 import de.hochschuletrier.gdw.ws1516.events.MovementStateChangeEvent;
 import de.hochschuletrier.gdw.ws1516.events.PlayerStateChangeEvent;
+import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
+import de.hochschuletrier.gdw.ws1516.events.UnicornIdleAnimationEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
@@ -22,8 +25,9 @@ import de.hochschuletrier.gdw.ws1516.game.systems.EnemyHandlingSystem.Action.Typ
 import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 
 public class AnimationRenderSystem extends SubSystem 
-    implements MovementStateChangeEvent.Listener, PlayerStateChangeEvent.Listener, EnemyActionEvent.Listener
+    implements MovementStateChangeEvent.Listener, PlayerStateChangeEvent.Listener, EnemyActionEvent.Listener, DeathEvent.Listener
 {
+    @SuppressWarnings("unchecked")
     public AnimationRenderSystem() {
         super(Family.all(PositionComponent.class).one(AnimationComponent.class, UnicornAnimationComponent.class).get());
     }
@@ -31,19 +35,20 @@ public class AnimationRenderSystem extends SubSystem
     @Override
     public void processEntity(Entity entity, float deltaTime) {
         AnimationComponent animation = ComponentMappers.animation.get(entity);
-        
+       
         if(animation == null)
         {
             animation = ComponentMappers.unicornAnimation.get(entity);
         }
         
-        if (animation.name.equals("river_top")) {
-            int i = 0;
-        }
-        
         PositionComponent position = ComponentMappers.position.get(entity);
         MovementComponent movement = ComponentMappers.movement.get(entity);
         PhysixBodyComponent physics = ComponentMappers.physixBody.get(entity);
+        
+//        if(animation.name.equals("HunterDeath"))
+//        {
+//            movement.state = State.DYING;
+//        }
         
         animation.stateTime += deltaTime;
         if((movement != null && movement.state != animation.lastRenderedState))
@@ -53,10 +58,15 @@ public class AnimationRenderSystem extends SubSystem
         }
         
         TextureRegion keyFrame = null;
-
+      
         if(movement != null)
         {
-            animation.currentlyFlipped = (movement.lookDirection) == (MovementComponent.LookDirection.LEFT) ^ animation.flipHorizontal;
+            boolean newFlipState = (movement.lookDirection) == (MovementComponent.LookDirection.LEFT) ^ animation.flipHorizontal;
+            if(animation.currentlyFlipped != newFlipState)
+            {
+                animation.currentlyFlipped = newFlipState;
+            }
+            
             
             String stateKey = movement.state.toString().toLowerCase();
             if(animation.name.equals("Hunter") && uniteruptableAnimationRunning(animation, movement))
@@ -71,6 +81,11 @@ public class AnimationRenderSystem extends SubSystem
             {
                 keyFrame = getShootingKeyFrame(animation, movement, stateKey);
             }
+	        else if(movement.state == State.DYING)
+        	{
+	            System.out.println("dying state");
+            	keyFrame = getDyingKeyFrame(animation, movement, stateKey);
+        	}
             else if((movement.state == State.JUMPING || movement.state == State.FALLING) && physics != null)
             {
                 keyFrame = getAirKeyframe(animation, movement, physics);
@@ -93,6 +108,7 @@ public class AnimationRenderSystem extends SubSystem
         drawKeyframe(animation, position, keyFrame);   
     }
 
+
     private void drawKeyframe(AnimationComponent animation, PositionComponent position, TextureRegion keyFrame) {
         if(keyFrame != null)
         {
@@ -105,14 +121,8 @@ public class AnimationRenderSystem extends SubSystem
             int w = keyFrame.getRegionWidth();
             int h = keyFrame.getRegionHeight();
             
-            if(animation.currentlyFlipped)
-            {
-                DrawUtil.batch.draw(keyFrame, position.x + w * 0.5f + animation.xOffset, position.y - h * 0.5f + animation.yOffset, w * 0.5f + animation.xOffset, h * 0.5f + animation.yOffset, -w, h, 1, 1, position.rotation);
-            }
-            else
-            {
-                DrawUtil.batch.draw(keyFrame, position.x - w * 0.5f - animation.xOffset, position.y - h * 0.5f + animation.yOffset, w * 0.5f - animation.xOffset, h * 0.5f + animation.yOffset, w, h, 1, 1, position.rotation);
-            }
+            float scaleX = animation.currentlyFlipped ? -1: 1;
+            DrawUtil.batch.draw(keyFrame, position.x - w * 0.5f - animation.xOffset, position.y - h * 0.5f + animation.yOffset, w * 0.5f - animation.xOffset, h * 0.5f + animation.yOffset, w, h, scaleX, 1, position.rotation);
             if(animation.alpha < 1f && animation.alpha >= 0f)
             {
                 DrawUtil.setShader(null);
@@ -170,11 +180,29 @@ public class AnimationRenderSystem extends SubSystem
         if(isIdle)
         {
             animationExtended = animation.animationMap.get(idleString);
+
+            if(animationExtended != null && animation.getClass() == UnicornAnimationComponent.class)
+            {
+                UnicornAnimationComponent unicornAnimation = (UnicornAnimationComponent)animation;
+                // Set back animation time if already in next loop
+                if(unicornAnimation.stateTime > animationExtended.getDuration())
+                {
+                    unicornAnimation.resetStateTime();
+                    unicornAnimation.firedIdleEvent = false;
+                }
+                if(animationExtended.getKeyFrameIndex(animation.stateTime) >= 1 && !unicornAnimation.firedIdleEvent)
+                {
+                    unicornAnimation.firedIdleEvent = true;
+                    //UnicornIdleAnimationEvent.emit();
+                    SoundEvent.emit("poop");
+                }
+            }
         }
         else
         {
             animationExtended = animation.animationMap.get(walkingString);
         }
+        
         return animationExtended == null ? null : animationExtended.getKeyFrame(animation.stateTime);
     }
 
@@ -252,6 +280,18 @@ public class AnimationRenderSystem extends SubSystem
     {
        return animation.uninteruptableAnimation.getKeyFrame(animation.stateTime);
     }
+    
+    private TextureRegion getDyingKeyFrame(AnimationComponent animation, MovementComponent movement, String stateKey) 
+    {
+        AnimationExtended animationExtended = animation.animationMap.get(stateKey);
+        
+        if(animationExtended == null)
+        {
+            return null;
+        }
+        
+        return animationExtended.getKeyFrame(animation.stateTime);
+    }
 
     @Override
     public void onPlayerStateChangeEvent(Entity entity, State oldState, State newState) {
@@ -274,7 +314,7 @@ public class AnimationRenderSystem extends SubSystem
     @Override
     public void onEnemyActionEvent(Entity enemy, Type action, float strength) {
         AnimationComponent animationComponent = ComponentMappers.animation.get(enemy);     
-        
+      
         MovementComponent movement = ComponentMappers.movement.get(enemy);
         
         if((animationComponent.name.equals("Paparazzi") || animationComponent.name.equals("Hunter")) && (action == EnemyHandlingSystem.Action.Type.SHOOT))
@@ -286,5 +326,28 @@ public class AnimationRenderSystem extends SubSystem
         {
             animationComponent.resetStateTime();
         }
+    }
+
+    @Override
+    public void onDeathEvent(Entity entity) 
+    {
+//        AnimationComponent animationComponent = ComponentMappers.animation.get(entity);
+//        MovementComponent movementComponent = ComponentMappers.movement.get(entity);
+//        
+//        if(animationComponent != null)
+//        {
+//            animationComponent.resetStateTime();
+//        }
+//        else
+//        {
+//            return;
+//        }
+//        
+//        if(animationComponent.name.equals("Paparazzi") || animationComponent.name.equals("Hunter"))
+//        {
+//            movementComponent.state = State.DYING;
+//            System.out.println("DEATH EVENT");
+//        }
+        
     }
 }

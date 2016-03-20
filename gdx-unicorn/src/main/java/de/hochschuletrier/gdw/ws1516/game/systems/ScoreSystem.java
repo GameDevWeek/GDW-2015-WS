@@ -91,7 +91,7 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
             scoreComponent.bubblegums += value;
                 break;
         case DEATH:
-            scoreComponent.deaths += value;
+            scoreComponent.lives -= value;
                 break;
         case HIT:
             scoreComponent.hits += value;
@@ -112,7 +112,7 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
         long score = finalScore = GameConstants.SCORE_BASEPOINTS + scoreComponent.chocoCoins * GameConstants.SCORE_CHOCOCOINS_POINTS
                 + scoreComponent.bonbons * GameConstants.SCORE_BONBONS_POINTS +
                 (long)(GameConstants.SCORE_TIME_POINTS * scoreComponent.playedSeconds  ) +
-                scoreComponent.deaths  * GameConstants.SCORE_DEATHS + 
+                scoreComponent.lives  * GameConstants.SCORE_LIVES + 
                 scoreComponent.killedEnemies * GameConstants.SCORE_KILLED_ENEMIES  +
                 scoreComponent.killedObstacles * GameConstants.SCORE_KILLED_OBSTACLES +
                 scoreComponent.hits * GameConstants.SCORE_HITS; 
