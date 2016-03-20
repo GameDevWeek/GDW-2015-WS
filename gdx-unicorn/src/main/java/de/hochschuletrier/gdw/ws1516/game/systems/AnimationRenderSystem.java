@@ -13,6 +13,7 @@ import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.EnemyActionEvent;
 import de.hochschuletrier.gdw.ws1516.events.MovementStateChangeEvent;
 import de.hochschuletrier.gdw.ws1516.events.PlayerStateChangeEvent;
+import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
 import de.hochschuletrier.gdw.ws1516.events.UnicornIdleAnimationEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
@@ -202,7 +203,8 @@ public class AnimationRenderSystem extends SubSystem
                 if(animationExtended.getKeyFrameIndex(animation.stateTime) >= 1 && !unicornAnimation.firedIdleEvent)
                 {
                     unicornAnimation.firedIdleEvent = true;
-                    UnicornIdleAnimationEvent.emit();
+                    //UnicornIdleAnimationEvent.emit();
+                    SoundEvent.emit("poop");
                 }
             }
         }

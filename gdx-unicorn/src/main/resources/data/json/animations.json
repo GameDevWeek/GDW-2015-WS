@@ -123,13 +123,13 @@
     "filename": "data/graphics/spritesheets/unicorn_idle_pink_spritesheet.png",
     "frames": 9,
     "frameDuration": [
-      2,
+      3,
       0.1,
       0.1,
       0.1,
       0.1,
       0.1,
-      0.3,
+      1,
       0.1,
       0.1
     ],
@@ -193,13 +193,13 @@
     "filename": "data/graphics/spritesheets/unicorn_idle_blue_spritesheet.png",
     "frames": 9,
     "frameDuration": [
-      2,
+      3,
       0.1,
       0.1,
       0.1,
       0.1,
       0.1,
-      0.3,
+      1,
       0.1,
       0.1
     ],
@@ -263,13 +263,13 @@
     "filename": "data/graphics/spritesheets/unicorn_idle_rainbow_spritesheet.png",
     "frames": 9,
     "frameDuration": [
-      2,
+      3,
       0.1,
       0.1,
       0.1,
       0.1,
       0.1,
-      0.3,
+      1,
       0.1,
       0.1
     ],
