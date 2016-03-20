@@ -23,6 +23,7 @@
                 "pink_jumping": "pink_unicorn_jumping",
                 "pink_landing": "pink_unicorn_landing",
                 "pink_dash": "pink_unicorn_dashing",
+                "pink_dying": "pink_unicorn_dying",
                 "blue_on_ground_idle": "blue_unicorn_idle",
                 "blue_on_ground_walking": "blue_unicorn_walking",
                 "blue_flying": "blue_unicorn_flying",
@@ -30,13 +31,15 @@
                 "blue_jumping": "blue_unicorn_jumping",
                 "blue_landing": "blue_unicorn_landing",
                 "blue_dash": "blue_unicorn_dashing",
+                "blue_dying": "pink_unicorn_dying",
                 "rainbow_on_ground_idle": "rainbow_unicorn_idle",
                 "rainbow_on_ground_walking": "rainbow_unicorn_walking",
                 "rainbow_flying": "rainbow_unicorn_flying",
                 "rainbow_falling": "rainbow_unicorn_falling", 
                 "rainbow_jumping": "rainbow_unicorn_jumping",
                 "rainbow_landing": "rainbow_unicorn_landing",
-                "rainbow_dash": "rainbow_unicorn_dashing"
+                "rainbow_dash": "rainbow_unicorn_dashing",
+                "rainbow_dying": "pink_unicorn_dying"
             },
             "PhysixBody": {
                 "type": "player",

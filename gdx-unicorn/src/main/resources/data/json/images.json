@@ -52,6 +52,7 @@
     "fly_Key": "data/ui/menu/f_key.png",
     "spit_Key": "data/ui/menu/s_key.png",
     "jump_Key": "data/ui/menu/space_key.png",
+    "death_zone":"data/ui/menu/deathzone.png",
  
     
     "platform_3x1": "data/maps/tilesets/platform_3x1.png",

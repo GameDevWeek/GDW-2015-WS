@@ -4,13 +4,6 @@
     "name": { "color": "FFFFFF", "font": "verdana_32", "align": "center" }
   },
   "paths" : {
-    "bg" : {
-      "type": "linear",
-      "destinations":[
-        {"x":511, "y":300, "speed":1},
-        {"x":512, "y":300, "speed":1}
-      ]
-    },
     "tr1" : {
       "type": "linear",
       "destinations":[
@@ -104,17 +97,6 @@
       "animations":[],
       "finalNext" : "trexQ3"
     },
-    "trexQ2":{
-      "layer" :3,
-      "time" : -1,
-      "items" : [
-        {"type":"animation","path":"tr_stay","resource":"trex_crying", "flipX":"true","group":"crying"}
-      ],
-      "animations" : [
-        {"time":0,"animation": "sound/trexSad", "group":"crying"}
-      ],
-      "finalNext" : "trexQ3"
-    },
     "trexQ3":{
       "layer" :3,
       "time" : -1,
@@ -135,7 +117,7 @@
       ],
       "animations" : [
         {"time":0,"animation": "sound/trexHappy", "group":"crying"},
-        {"time":0,"animation": "pause_path", "group":"*","animationTime":2400}
+        {"time":0,"animation": "pause_path", "group":"*","animationTime":2175}
       ]
     },
     "unicornQ1":{
@@ -179,7 +161,7 @@
       "finalNext":"unicornQ5"
     },
     "unicornQ5":{
-      "layer" :2,
+      "layer" :4,
       "time" : -1,
       "items" : [
         {"type":"animation", "path":"uc2","resource":"pink_unicorn_dashing"}
@@ -195,17 +177,17 @@
         {"type":"animation", "path":"uc2_stay","resource":"pink_unicorn_idle"}
       ],
       "animations" : [
-        {"time":0,"animation":"pause_path","group":"*","animationTime":2000}
+        {"time":0,"animation":"pause_path","group":"*","animationTime":4700}
       ]
     },
     "trexQ5":{
-      "layer" :1,
+      "layer" :2,
       "time" : -1,
       "items" : [
         {"type":"animation", "path":"tr_happy","resource":"trex_plottwist"}
       ],
       "animations" : [
-        {"time":"0","animation":"pause_path","animationTime":600,"group":"*"}
+        {"time":"600","animation":"pause_path","animationTime":4700,"group":"*"}
       ],
       "next":"unicornQ6"
     },
