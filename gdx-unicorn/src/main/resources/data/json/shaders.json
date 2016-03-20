@@ -18,5 +18,9 @@
     "alphaTexture":{
         "vertex": "data/shaders/alphaTextureVertexShader.glsl",
         "fragment": "data/shaders/alphaTextureFragmentShader.glsl"
+    },
+    "cave":{
+        "vertex": "data/shaders/caveVertexShader.glsl",
+        "fragment": "data/shaders/caveFragmentShader.glsl"
     }
 }

@@ -13,6 +13,7 @@ import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.EnemyActionEvent;
 import de.hochschuletrier.gdw.ws1516.events.MovementStateChangeEvent;
 import de.hochschuletrier.gdw.ws1516.events.PlayerStateChangeEvent;
+import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
 import de.hochschuletrier.gdw.ws1516.events.UnicornIdleAnimationEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
@@ -26,6 +27,7 @@ import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 public class AnimationRenderSystem extends SubSystem 
     implements MovementStateChangeEvent.Listener, PlayerStateChangeEvent.Listener, EnemyActionEvent.Listener, DeathEvent.Listener
 {
+    @SuppressWarnings("unchecked")
     public AnimationRenderSystem() {
         super(Family.all(PositionComponent.class).one(AnimationComponent.class, UnicornAnimationComponent.class).get());
     }
@@ -37,10 +39,6 @@ public class AnimationRenderSystem extends SubSystem
         if(animation == null)
         {
             animation = ComponentMappers.unicornAnimation.get(entity);
-        }
-        
-        if (animation.name.equals("river_top")) {
-            int i = 0;
         }
         
         PositionComponent position = ComponentMappers.position.get(entity);
@@ -195,7 +193,8 @@ public class AnimationRenderSystem extends SubSystem
                 if(animationExtended.getKeyFrameIndex(animation.stateTime) >= 1 && !unicornAnimation.firedIdleEvent)
                 {
                     unicornAnimation.firedIdleEvent = true;
-                    UnicornIdleAnimationEvent.emit();
+                    //UnicornIdleAnimationEvent.emit();
+                    SoundEvent.emit("poop");
                 }
             }
         }

@@ -13,6 +13,8 @@ import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
 import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
+import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
+import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
 import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
 import de.hochschuletrier.gdw.ws1516.events.ThrowBackEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
@@ -21,6 +23,7 @@ import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent.State;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
+import javafx.scene.input.ScrollEvent;
 
 public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.Listener,
                                                                   HornAttackEvent.Listener,
@@ -213,8 +216,10 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
     public void onDeathEvent(Entity entity) {
         
         //If the player dies, end flying
-        if (ComponentMappers.player.has(entity))
+        if (ComponentMappers.player.has(entity)) {
             EndFlyEvent.emit(entity);
+            ScoreBoardEvent.emit(ScoreType.DEATH, 1);
+        }
         
     }
     

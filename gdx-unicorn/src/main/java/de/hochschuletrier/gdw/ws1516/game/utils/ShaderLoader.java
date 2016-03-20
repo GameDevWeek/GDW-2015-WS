@@ -11,6 +11,7 @@ public class ShaderLoader {
     private static ShaderProgram simpleRainbowShader;
     private static ShaderProgram oldRainbowShader;
     private static ShaderProgram paparazziShader;
+    private static ShaderProgram caveShader;
     
     static
     {
@@ -22,7 +23,9 @@ public class ShaderLoader {
         if(alphaTextureShader == null)
         {
             alphaTextureShader = Main.getInstance().getAssetManager().getShaderProgram("alphaTexture");
-            System.out.println(alphaTextureShader.getLog());
+            if (!Main.IS_RELEASE) {
+                System.out.println(alphaTextureShader.getLog());
+            }
         }
         return alphaTextureShader;
     }
@@ -32,7 +35,9 @@ public class ShaderLoader {
         if(fancyRainbowShader == null)
         {
             fancyRainbowShader = Main.getInstance().getAssetManager().getShaderProgram("fancyRainbow");
-            System.out.println(fancyRainbowShader.getLog());
+            if (!Main.IS_RELEASE) {
+                System.out.println(fancyRainbowShader.getLog());
+            }
         }
         
         return fancyRainbowShader;
@@ -43,7 +48,9 @@ public class ShaderLoader {
         if(simpleRainbowShader == null)
         {
             simpleRainbowShader = Main.getInstance().getAssetManager().getShaderProgram("simpleRainbow");
-            System.out.println(simpleRainbowShader.getLog());
+            if (!Main.IS_RELEASE) {
+                System.out.println(simpleRainbowShader.getLog());
+            }
         }
         
         return simpleRainbowShader;
@@ -54,7 +61,9 @@ public class ShaderLoader {
         if(oldRainbowShader == null)
         {
             oldRainbowShader = Main.getInstance().getAssetManager().getShaderProgram("oldRainbow");
-            System.out.println(oldRainbowShader.getLog());
+            if (!Main.IS_RELEASE) {
+                System.out.println(oldRainbowShader.getLog());
+            }
         }
         
         return oldRainbowShader;
@@ -65,9 +74,24 @@ public class ShaderLoader {
         if(paparazziShader == null)
         {
             paparazziShader = Main.getInstance().getAssetManager().getShaderProgram("paparazzi");
-            System.out.println(paparazziShader.getLog());
+            if (!Main.IS_RELEASE) {
+                System.out.println(paparazziShader.getLog());
+            }
         }
         
         return paparazziShader;
+    }
+    
+    public static ShaderProgram getCaveShader()
+    {
+        if(caveShader == null)
+        {
+            caveShader = Main.getInstance().getAssetManager().getShaderProgram("cave");
+            if (!Main.IS_RELEASE) {
+                System.out.println(caveShader.getLog());
+            }
+        }
+        
+        return caveShader;
     }
 }
