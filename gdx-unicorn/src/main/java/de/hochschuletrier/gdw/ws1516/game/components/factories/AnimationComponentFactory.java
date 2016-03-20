@@ -66,6 +66,5 @@ public class AnimationComponentFactory extends ComponentFactory<EntityFactoryPar
         component.yOffset = properties.getFloat("y_offset", 0f);
         component.alpha = properties.getFloat("alpha", 1.0f);
         component.killWhenFinished = properties.getBoolean("kill_When_Finished", false);
-        System.out.println("Ausgabe Boolean: " + properties.getBoolean("kill_When_Finished", false));
     }
 }

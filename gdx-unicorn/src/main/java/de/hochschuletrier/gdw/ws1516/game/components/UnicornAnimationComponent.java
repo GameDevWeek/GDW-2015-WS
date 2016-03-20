@@ -11,6 +11,8 @@ public class UnicornAnimationComponent extends AnimationComponent {
     public boolean isInRainbowMode;
     public boolean firedIdleEvent;
     
+    public boolean isInDyingAnimation;
+    
     public void switchUnicornColor(UnicornColor color)
     {
         if(color == UnicornColor.pink)
