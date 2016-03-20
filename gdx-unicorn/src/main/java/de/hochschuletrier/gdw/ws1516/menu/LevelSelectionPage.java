@@ -69,10 +69,10 @@ public class LevelSelectionPage extends MenuPage {
         
         level_previews = new Texture[levelNames.size()];
         title = new String[4];
-        title[0] = "1";
-        title[1] = "2";
-        title[2] = "3";
-        title[3] = "4";
+        title[0] = "1. Auf dem Zuckerpfad";
+        title[1] = "2. In den Schokoberg";
+        title[2] = "3. Die bonbonharte Besteigung";
+        title[3] = "4. Mount Eiscreme";
         for (String levelName : levelNames) {
             level_previews[level_preview_count] = assetManager.getTexture(levelName);
             level_preview_count++;

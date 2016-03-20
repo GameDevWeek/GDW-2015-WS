@@ -15,6 +15,7 @@ import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.BackgroundParticleComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.LookDirection;
+import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 
 public class BackgroundParticleRenderSystem extends SortedSubIteratingSystem.SubSystem 
@@ -27,6 +28,13 @@ public class BackgroundParticleRenderSystem extends SortedSubIteratingSystem.Sub
     @Override
     public void processEntity(Entity entity, float deltaTime) 
     {
+        PlayerComponent playerComponent = ComponentMappers.player.get(entity);
+        if(playerComponent != null && playerComponent.doRespawn)
+        {
+            // Early out, no particles while respawning
+            return;
+        }
+        
         BackgroundParticleComponent particleComponent = ComponentMappers.backgroundParticle.get(entity);
         MovementComponent movementComponent = ComponentMappers.movement.get(entity);
         PositionComponent positionComponent = ComponentMappers.position.get(entity);
