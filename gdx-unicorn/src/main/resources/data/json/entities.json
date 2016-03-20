@@ -86,6 +86,7 @@
                 "landing": "hunter_idle",
                 "glued": "hunter_glued",
                 "shooting": "hunter_shooting",
+                "dying": "hunter_dying",
                 "flip_horizontal": true,
                 "x_offset": -5
             },
@@ -108,8 +109,11 @@
             "Position": {},
             "Animation": {
                 "name": "HunterDeath",
-                "animation": "hunter_idle",
-                "dying": "hunter_dying"
+                "on_ground_idle": "hunter_dying",
+                "on_ground_walking": "hunter_dying",
+                "animation": "hunter_dying",
+                "dying": "hunter_dying",
+                "kill_When_Finished": true
             },
             "RenderLayer": {
                 "layer": 50

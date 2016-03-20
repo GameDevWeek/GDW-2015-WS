@@ -8,6 +8,9 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.UnicornIdleAnimationEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.EnemyTypeComponent.EnemyType;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.utils.EntityCreator;
 
@@ -44,9 +47,11 @@ public class DeathAnimationSystem extends IteratingSystem implements DeathEvent.
     public void onDeathEvent(Entity entity) 
     {
         PositionComponent deathPos = ComponentMappers.position.get(entity);
+        EnemyTypeComponent enemyType = ComponentMappers.enemyType.get(entity);
         
-        if(ComponentMappers.enemyType.has(entity) && deathPos != null)
-        {
+            
+        if((enemyType != null) && (enemyType.type == EnemyType.HUNTER))
+        {            
             Entity deathDummy = EntityCreator.createEntity("hunterDeathDummy", deathPos.x, deathPos.y);
             PositionComponent dummyPos = ComponentMappers.position.get(deathDummy);
             if(dummyPos != null)
@@ -54,6 +59,8 @@ public class DeathAnimationSystem extends IteratingSystem implements DeathEvent.
                 dummyPos.x = deathPos.x;
                 dummyPos.y = deathPos.y;
             }
+            AnimationComponent animComp = ComponentMappers.animation.get(deathDummy);
+            animComp.killWhenFinished = true;
         }   
     }
 

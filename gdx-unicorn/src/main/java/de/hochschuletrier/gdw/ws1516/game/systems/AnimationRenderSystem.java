@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.utils.SnapshotArray;
 
 import de.hochschuletrier.gdw.commons.gdx.ashley.SortedSubIteratingSystem.SubSystem;
 import de.hochschuletrier.gdw.commons.gdx.assets.AnimationExtended;
@@ -41,6 +42,7 @@ public class AnimationRenderSystem extends SubSystem
             animation = ComponentMappers.unicornAnimation.get(entity);
         }
         
+        
         PositionComponent position = ComponentMappers.position.get(entity);
         MovementComponent movement = ComponentMappers.movement.get(entity);
         PhysixBodyComponent physics = ComponentMappers.physixBody.get(entity);
@@ -49,6 +51,11 @@ public class AnimationRenderSystem extends SubSystem
 //        {
 //            movement.state = State.DYING;
 //        }
+        
+        if(animation.name.equals("hunterDeathDummy"))
+        {
+            System.out.println("DeathDummy");
+        }
         
         animation.stateTime += deltaTime;
         if((movement != null && movement.state != animation.lastRenderedState))
@@ -75,7 +82,7 @@ public class AnimationRenderSystem extends SubSystem
             }      
             else if(movement.state == MovementComponent.State.ON_GROUND)
             {
-                keyFrame = getGroundKeyframe(animation, movement, stateKey);
+                keyFrame = getGroundKeyframe(animation, movement, stateKey, entity);
             }
             else if(movement.state == State.SHOOTING)
             {
@@ -107,7 +114,6 @@ public class AnimationRenderSystem extends SubSystem
        
         drawKeyframe(animation, position, keyFrame);   
     }
-
 
     private void drawKeyframe(AnimationComponent animation, PositionComponent position, TextureRegion keyFrame) {
         if(keyFrame != null)
@@ -164,7 +170,7 @@ public class AnimationRenderSystem extends SubSystem
         EnemyActionEvent.unregister(this);
     }
 
-    private TextureRegion getGroundKeyframe(AnimationComponent animation, MovementComponent movement, String stateKey) {
+    private TextureRegion getGroundKeyframe(AnimationComponent animation, MovementComponent movement, String stateKey, Entity entity) {
         String idleString = stateKey + "_idle";
         String walkingString = stateKey + "_walking";
         
@@ -203,6 +209,20 @@ public class AnimationRenderSystem extends SubSystem
             animationExtended = animation.animationMap.get(walkingString);
         }
         
+        //check if deathAnimation has to be destroyed
+        if(animationExtended != null)
+        {
+            if(animation.name.equals("hunterDeathDummy") || animation.name.equals("HunterDeath") || animation.name.equals("Hunter"))
+            {
+                float duration = animationExtended.getDuration();
+                System.out.println(animation.name + "  Bool " + animation.killWhenFinished + " - duration " + (animation.stateTime > duration));
+                if(animation.killWhenFinished && animation.stateTime > duration)
+                {
+                    DeathEvent.emit(entity);
+                }
+            }
+        }
+        
         return animationExtended == null ? null : animationExtended.getKeyFrame(animation.stateTime);
     }
 
@@ -231,7 +251,7 @@ public class AnimationRenderSystem extends SubSystem
         {
             movement.state = MovementComponent.State.ON_GROUND;
             MovementStateChangeEvent.emit(entity, MovementComponent.State.LANDING, MovementComponent.State.ON_GROUND);
-            return getGroundKeyframe(animation, movement, stateKey);
+            return getGroundKeyframe(animation, movement, stateKey, entity);
         }
         return animationExtended.getKeyFrame(animation.stateTime);
     }
@@ -278,6 +298,7 @@ public class AnimationRenderSystem extends SubSystem
     
     private TextureRegion getKeyFrameFromAnimationExtended(AnimationComponent animation) 
     {
+        System.out.println("boolean " + animation.killWhenFinished);
        return animation.uninteruptableAnimation.getKeyFrame(animation.stateTime);
     }
     
@@ -331,23 +352,22 @@ public class AnimationRenderSystem extends SubSystem
     @Override
     public void onDeathEvent(Entity entity) 
     {
-//        AnimationComponent animationComponent = ComponentMappers.animation.get(entity);
-//        MovementComponent movementComponent = ComponentMappers.movement.get(entity);
-//        
-//        if(animationComponent != null)
-//        {
-//            animationComponent.resetStateTime();
-//        }
-//        else
-//        {
-//            return;
-//        }
-//        
-//        if(animationComponent.name.equals("Paparazzi") || animationComponent.name.equals("Hunter"))
-//        {
-//            movementComponent.state = State.DYING;
-//            System.out.println("DEATH EVENT");
-//        }
+        AnimationComponent animationComponent = ComponentMappers.animation.get(entity);
+        MovementComponent movementComponent = ComponentMappers.movement.get(entity);
+        
+        if(animationComponent != null)
+        {
+            animationComponent.resetStateTime();
+        }
+        else
+        {
+            return;
+        }
+        
+        if(animationComponent.name.equals("Paparazzi") || animationComponent.name.equals("Hunter"))
+        {
+            movementComponent.state = State.DYING;
+        }
         
     }
 }
