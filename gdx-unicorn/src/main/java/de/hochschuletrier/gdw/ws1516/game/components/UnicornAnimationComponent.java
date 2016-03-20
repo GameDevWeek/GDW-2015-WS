@@ -9,6 +9,7 @@ public class UnicornAnimationComponent extends AnimationComponent {
 
     public boolean isInBlueMode;
     public boolean isInRainbowMode;
+    public boolean firedIdleEvent;
     
     public void switchUnicornColor(UnicornColor color)
     {
