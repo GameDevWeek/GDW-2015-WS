@@ -145,8 +145,8 @@
                     "minAngle" : 45, "maxAngle" : 135,
                     "minCurveAngle": 45, "maxCurveAngle": 135
                 },
-                { "time": 0, "animation": "untype_instant", "group":"text"},
-                { "time": 1000, "animation": "construct_type", "animationTime": 100,"group":"text",
+                { "time": 0, "animation": "untype_instant"},
+                { "time": 1000, "animation": "construct_type", "animationTime": 100,
                     "minRadius" : 100, "maxRadius" : 100,
                     "minAngle" : -35, "maxAngle" : -35,
                     "minCurveAngle": 25, "maxCurveAngle": 55,

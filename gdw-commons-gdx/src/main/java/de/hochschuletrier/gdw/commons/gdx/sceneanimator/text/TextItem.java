@@ -19,7 +19,7 @@ public class TextItem extends Item {
     protected final TextStyle style;
     protected final String originalText;
     protected String shownText;
-    protected float xOffset;
+    protected final float xOffset;
 
     public ArrayList<TextChar> chars;
     private TextAnimation anim;
@@ -37,7 +37,18 @@ public class TextItem extends Item {
             } else {
                 xOffset = -bounds.width / 2;
             }
+        } else {
+            xOffset = 0;
         }
+    }
+
+    @Override
+    public void reset(ArrayList<Animation> animations) {
+        super.reset(animations);
+        
+        shownText = originalText;
+        chars = null;
+        anim = null;
     }
 
     @Override
