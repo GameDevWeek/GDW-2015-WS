@@ -13,16 +13,18 @@ import de.hochschuletrier.gdw.commons.gdx.state.BaseGameState;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.commons.utils.FpsCalculator;
 import de.hochschuletrier.gdw.ws1516.Main;
+import de.hochschuletrier.gdw.ws1516.events.ShowWinScreenEvent;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.menu.MenuPageRoot;
+import de.hochschuletrier.gdw.ws1516.menu.MenuPageWin;
 
 /**
  * Gameplay state
- * 
+ *
  * @author Santo Pfingsten
  */
-public class GameplayState extends BaseGameState {
+public class GameplayState extends BaseGameState implements ShowWinScreenEvent.Listener {
 
     private static final Color OVERLAY_COLOR = new Color(0f, 0f, 0f, 0.5f);
 
@@ -35,12 +37,14 @@ public class GameplayState extends BaseGameState {
     private final FpsCalculator fpsCalc = new FpsCalculator(200, 100, 16);
     private final BitmapFont font;
     private final MenuPageRoot menuPageRoot;
+    private final Skin skin;
+
 
     public GameplayState(AssetManagerX assetManager, Game game) {
         font = assetManager.getFont("verdana_32");
         this.game = game;
 
-        Skin skin = ((MainMenuState)Main.getInstance().getPersistentState(MainMenuState.class)).getSkin();
+        skin = ((MainMenuState) Main.getInstance().getPersistentState(MainMenuState.class)).getSkin();
         menuPageRoot = new MenuPageRoot(skin, menuManager, MenuPageRoot.Type.INGAME);
         menuManager.addLayer(menuPageRoot);
         menuInputProcessor = menuManager.getInputProcessor();
@@ -67,6 +71,7 @@ public class GameplayState extends BaseGameState {
                 return super.keyUp(keycode);
             }
         };
+        ShowWinScreenEvent.register(this);
     }
 
     private void onMenuEmptyPop() {
@@ -83,7 +88,7 @@ public class GameplayState extends BaseGameState {
             DrawUtil.fillRect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), OVERLAY_COLOR);
             menuManager.render();
         }
-        
+
         Main.getInstance().screenCamera.bind();
         font.setColor(Color.WHITE);
         font.draw(DrawUtil.batch, String.format("%.2f FPS", fpsCalc.getFps()), 0, 0);
@@ -103,6 +108,17 @@ public class GameplayState extends BaseGameState {
 
     @Override
     public void dispose() {
+        ShowWinScreenEvent.unregister(this);
         game.dispose();
+    }
+
+    @Override
+    public void onShowWinScreenEvent(String name) {
+        menuPageRoot.setWinMessage(name + " hat gewonnen!");
+        menuManager.pushPage(menuPageRoot);
+        
+        inputForwarder.set(menuInputProcessor);
+        menuPageRoot.fadeToMenu();
+
     }
 }

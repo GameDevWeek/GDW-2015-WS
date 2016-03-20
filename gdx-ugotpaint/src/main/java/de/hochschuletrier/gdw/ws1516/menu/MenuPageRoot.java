@@ -2,6 +2,7 @@ package de.hochschuletrier.gdw.ws1516.menu;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
 import de.hochschuletrier.gdw.commons.gdx.menu.widgets.DecoImage;
@@ -20,12 +21,15 @@ public class MenuPageRoot extends MenuPage {
     public enum Type {
 
         MAINMENU,
-        INGAME
+        INGAME,
+        WINSCREEN
     }
     
     private float canvasAnimationTime = 0;
     private final float totalCanvasAnimationTime = 1;
     private boolean bigCanvas = true;
+    private String winMessage="";
+
 
     public MenuPageRoot(Skin skin, MenuManager menuManager, Type type) {
         super(skin, true);
@@ -49,6 +53,7 @@ public class MenuPageRoot extends MenuPage {
         } else {
             addLeftAlignedButton(x, y - MENU_STEP * (i++), BUTTON_WIDTH, BUTTON_HEIGHT, "Beenden", ()->System.exit(0));
         }
+
         addForeground();
         overlayImage2 = new DecoImage(assetManager.getTexture("overlay_main"));
         addActor(overlayImage2);
@@ -136,5 +141,19 @@ public class MenuPageRoot extends MenuPage {
     protected final void addPageEntry(MenuManager menuManager, int x, int y, int width, String text, MenuPage page) {
         menuManager.addLayer(page);
         addLeftAlignedButton(x, y, width, 40, text, () -> menuManager.pushPage(page));
+    }
+
+    public void setWinMessage(String message){
+        this.winMessage = message;
+
+        addLabel(500,300,winMessage);
+
+    }
+
+
+    private void addLabel(float x, float y, String text) {
+        Label label = new Label(text, skin);
+        label.setPosition(x, y);
+        addActor(label);
     }
 }
