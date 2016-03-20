@@ -3,6 +3,10 @@ package de.hochschuletrier.gdw.ws1516.menu;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
+import de.hochschuletrier.gdw.commons.gdx.state.transition.SplitHorizontalTransition;
+import de.hochschuletrier.gdw.ws1516.events.ChangeInGameStateEvent;
+import de.hochschuletrier.gdw.ws1516.game.Game;
+import de.hochschuletrier.gdw.ws1516.states.GameplayState;
 import de.hochschuletrier.gdw.ws1516.events.ShowCreditsEvent;
 import de.hochschuletrier.gdw.ws1516.states.MainMenuState;
 
@@ -47,7 +51,7 @@ public class MainMenuPage extends MenuPage implements ShowCreditsEvent.Listener 
 
         if (type == Type.MENU) {
             //addLeftAlignedButton(xOffset, yOffset - yStep *( 2* i++), 100, 50, "Beenden", () -> System.exit(-1),"einhornEmpathy");
-            addLeftAlignedButton(xOffset, 40, 100, 50, "Beenden", this::systemExitDelay, "einhornEmpathy");
+            addLeftAlignedButton(xOffset, 40, 100, 50, "Beenden", this::systemExitDelay, "tschuess");
 
         } else if (type == Type.PAUSED) {
             addLeftAlignedButton(xOffset, 40, 100, 50, "Menü", this::stopGame, "menu");

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
@@ -34,7 +35,8 @@ import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
 import de.hochschuletrier.gdw.ws1516.events.GameRestartEvent;
 import de.hochschuletrier.gdw.ws1516.events.PaparazziShootEvent;
-import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
+import de.hochschuletrier.gdw.ws1516.events.ChangeInGameStateEvent;
+import de.hochschuletrier.gdw.ws1516.events.ChangeInGameStateEvent.GameStateType;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
 import de.hochschuletrier.gdw.ws1516.events.TriggerEvent.Action;
@@ -88,8 +90,9 @@ import de.hochschuletrier.gdw.ws1516.menu.LevelSelectionPage;
 import de.hochschuletrier.gdw.ws1516.menu.MenuPageOptions;
 import de.hochschuletrier.gdw.ws1516.sandbox.gamelogic.DummyEnemyExecutionSystem;
 import de.hochschuletrier.gdw.ws1516.states.GameplayState;
+import de.hochschuletrier.gdw.ws1516.events.ChangeInGameStateEvent;
 
-public class Game extends InputAdapter {
+public class Game extends InputAdapter implements ChangeInGameStateEvent.Listener  {
 
     private static final Logger logger = LoggerFactory.getLogger(Game.class);
     
@@ -100,12 +103,11 @@ public class Game extends InputAdapter {
             HotkeyModifier.CTRL);
     private final Hotkey winGameCheat = new Hotkey(this::cheatWin, Input.Keys.F6,
             HotkeyModifier.CTRL);
-    private final Hotkey pauseGame = new Hotkey(()->PauseGameEvent.emit(true), Input.Keys.F5,
-            HotkeyModifier.CTRL);
     private Hotkey healCheating = null;
     private Hotkey rainbow=null;
     
-    public static boolean PAUSE_ENGINE = false;
+
+    private static GameStateType engineState;
 
 
 
@@ -157,6 +159,27 @@ public class Game extends InputAdapter {
     private final BulletSystem bulletSystem = new BulletSystem(engine);
     private final BlockingGumSystem blockingGumSystem = new BlockingGumSystem(engine);
     
+    /// Systems not update while FreezeGame 
+    private final EntitySystem[] updateOnFreeze = {              
+            renderSystem,
+            mapRenderSystem,
+            hudRenderSystem,
+            respawnSystem,
+            cameraSystem,
+            effectsRenderSystem,
+            animationEventHandlerSystem,
+            splatterSystem,
+            soundSystem 
+    };
+    /// Systems  updated while PauseGame 
+    private final EntitySystem[] updateOnPause = {            
+            renderSystem,
+            mapRenderSystem,
+            hudRenderSystem
+    };
+    private EntitySystem[] updateOnPlaying;
+    
+    
     private TiledMap map;
     
     public Game() {
@@ -164,15 +187,15 @@ public class Game extends InputAdapter {
         if (!Main.IS_RELEASE) {
             togglePhysixDebug.register();
             scoreCheating.register();
-            pauseGame.register();
             winGameCheat.register();
         }
+        ChangeInGameStateEvent.register(this);
     }
 
     public void dispose() {
+        ChangeInGameStateEvent.unregister(this);
         togglePhysixDebug.unregister();
         scoreCheating.unregister();
-        pauseGame.unregister();
 //        rainbow.unregister();
 //        healCheating.unregister();
         winGameCheat.unregister();
@@ -191,7 +214,7 @@ public class Game extends InputAdapter {
     }
 
     public void init(AssetManagerX assetManager, String mapFilename) {
-        PAUSE_ENGINE = false;
+        engineState = GameStateType.GAME_PLAYING;
         Main.getInstance().console.register(physixDebug);
         physixDebug.addListener((CVar) -> physixDebugRenderSystem.setProcessing(physixDebug.get()));
         addSystems();
@@ -263,6 +286,7 @@ public class Game extends InputAdapter {
         engine.addSystem(platformHandlingSystem);
         engine.addSystem(platformSystem);
         engine.addSystem(blockingGumSystem);
+        
     }
 
     private void addContactListeners() {
@@ -295,32 +319,15 @@ public class Game extends InputAdapter {
     }
 
 
-
-    public static void pauseGame(boolean pause) {
-        PAUSE_ENGINE = pause;
-    }
-    public static void switchPause() {
-        PAUSE_ENGINE = !PAUSE_ENGINE;
-    }
     
     public void cheatWin() {
         GameOverEvent.emit(true, getNextMapFilename());
     }
     
     public void update(float delta) {
-        cameraSystem.bindCamera();   
-        if ( !PAUSE_ENGINE )
-        {
-            engine.update(delta);
-        } else
-        {   /* 
-                in der Engine Update Methode wird noch mehr
-                 getan, fehlt noch etwas wichtiges um ein Menü am laufen zu halten ??
-             */
-            renderSystem.update(delta);
-            mapRenderSystem.update(delta);
-            hudRenderSystem.update(delta);
-        }
+//        delta = 0;
+        cameraSystem.bindCamera(); 
+        engine.update(delta);
     }
 
     public void createTrigger(Action action,float x, float y, float width, float height, Consumer<Entity> consumer) {
@@ -346,6 +353,7 @@ public class Game extends InputAdapter {
 
     public ParticleEffect effect;
 
+
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
@@ -363,6 +371,47 @@ public class Game extends InputAdapter {
         return keyBoardInputSystem;
     }
 
+    @Override
+    public void onPauseGameEvent(GameStateType state) {
+        if ( state != engineState )
+        {
+            ImmutableArray<EntitySystem> usedSys = engine.getSystems();
+
+            
+            for( EntitySystem sys : usedSys )
+            {
+                 sys.setProcessing(false);
+            }
+            
+            switch( state )
+            {
+            case GAME_PLAYING:
+                for( EntitySystem sys : usedSys )
+                {
+                     sys.setProcessing(true);
+                }
+                break;
+            case GAME_PLAYER_FREEZE:
+                for( EntitySystem sys : updateOnFreeze )
+                {
+                     sys.setProcessing(true);
+                }
+                break;
+            case GAME_PAUSE:
+                for( EntitySystem sys : updateOnPause )
+                {
+                     sys.setProcessing(true);
+                }
+                break;
+            }
+            engineState = state;
+        }
+    }
+
+    public static boolean isInState(GameStateType state) {
+
+        return state == engineState;
+    }
     public String getMapFilename() {
         return map.getFilename();
     }
