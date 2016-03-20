@@ -419,6 +419,8 @@ public class Game extends InputAdapter implements ChangeInGameStateEvent.Listene
                 }
                 break;
             }
+            if(Main.IS_RELEASE)
+                physixDebugRenderSystem.setProcessing(false);
             engineState = state;
         }
     }
