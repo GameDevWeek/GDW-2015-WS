@@ -204,8 +204,9 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
 
     @Override
     public void onRainbowModeEnd(Entity player) {
-        // TODO Auto-generated method stub
-        
+        ComponentMappers.unicornAnimation.get(player).isInBlueMode = false;
+        ComponentMappers.unicornAnimation.get(player).isInRainbowMode = false;
+        EndFlyEvent.emit(player);
     }
 
     public void initializeDeathBorders(TiledMap map) {
