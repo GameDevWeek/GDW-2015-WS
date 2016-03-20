@@ -125,7 +125,7 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
     }
 
     @Override
-    public void onGameOverEvent(boolean won) {
+    public void onGameOverEvent(boolean won, String mapToLoad) {
         finalScore = getFinalScore();
         
     }

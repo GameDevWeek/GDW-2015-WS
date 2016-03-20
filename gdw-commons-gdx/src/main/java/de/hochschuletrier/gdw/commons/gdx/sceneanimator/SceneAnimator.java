@@ -105,7 +105,7 @@ public class SceneAnimator {
         TextStyle style;
         float startTime, angle, opacity, scale;
         int layer;
-        boolean oriented;
+        boolean oriented, flipX, flipY;
         String group;
         for (Map.Entry<String, SceneAnimatorJson.Queue> entry : credits.queues.entrySet()) {
             SceneAnimatorJson.Queue value = entry.getValue();
@@ -119,6 +119,8 @@ public class SceneAnimator {
                 opacity = itemData.opacity != null ? itemData.opacity : 1;
                 group = itemData.group != null ? itemData.group : "";
                 scale = itemData.scale != null ? itemData.scale : 1;
+                flipX = itemData.flipX != null ? itemData.flipX : false;
+                flipY = itemData.flipY != null ? itemData.flipY : false;
 
                 itemStartTime += startTime;
 
@@ -139,7 +141,7 @@ public class SceneAnimator {
                         }
                         break;
                     case ANIMATION:
-                        item = new AnimationItem(group, scale, itemStartTime, angle, oriented, opacity, itemData.resource, getter);
+                        item = new AnimationItem(group, scale, itemStartTime, angle, oriented, flipX, flipY, opacity, itemData.resource, getter);
                         if (itemData.x != null && itemData.y != null) {
                             item.setPosition(itemData.x, itemData.y);
                         }

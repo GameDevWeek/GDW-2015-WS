@@ -40,8 +40,6 @@ public class LevelSelectionPage extends MenuPage {
     public LevelSelectionPage(Skin skin, MenuManager menuManager) {
         super(skin, "menu_bg");
        
-        Main.getInstance().screenCamera.bind();
-        
         try {
             Map<String, String> images = JacksonReader.readMap("data/json/images.json", String.class);
             
