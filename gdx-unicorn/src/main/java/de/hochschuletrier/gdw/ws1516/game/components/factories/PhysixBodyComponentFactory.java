@@ -138,12 +138,14 @@ public class PhysixBodyComponentFactory extends
         PhysixFixtureDef fixtureDef = new PhysixFixtureDef(physixSystem)
                 .density(1).friction(0).restitution(0f)
                 .shapeCircle(width * 0.09f, new Vector2(width * 0.08f, height * -0.4f));
+        fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_ENEMY;
         Fixture fixture = playerBody.createFixture(fixtureDef);
 
      // body
        fixtureDef = new PhysixFixtureDef(physixSystem)
         .density(1f).friction(0f).restitution(0f)
         .shapeBox(width * 0.18f, height * 0.825f, new Vector2(width * 0.08f, height * -0.1f), 0);
+        fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_ENEMY;
         fixture = playerBody.createFixture(fixtureDef);
         fixture.setUserData("head");
 
@@ -152,6 +154,7 @@ public class PhysixBodyComponentFactory extends
         fixtureDef = new PhysixFixtureDef(physixSystem)
                 .density(1).friction(0f).restitution(0f)
                 .shapeCircle(width * 0.1f, new Vector2(width * 0.08f, height * 0.32f));
+        fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_ENEMY;
         fixture = playerBody.createFixture(fixtureDef);
         fixture.setUserData("body");
         
@@ -160,6 +163,7 @@ public class PhysixBodyComponentFactory extends
 
         .density(1).friction(0f).restitution(0f)
         .shapeCircle(width * 0.1f, new Vector2(width * 0.08f, height * 0.32f)).sensor(true);
+        fixtureDef.filter.groupIndex = GameConstants.PHYSIX_COLLISION_ENEMY;
         fixture = playerBody.createFixture(fixtureDef);
         fixture.setUserData("foot");
 

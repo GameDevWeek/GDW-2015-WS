@@ -58,6 +58,13 @@ public class MenuPageOptions extends MenuPage {
                 Settings.flush();
             }
         });
+        soundSlider.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button){
+                soundTest();
+                
+            }
+        });
       
         addLeftAlignedButton(xOffset, 40, 100, 50, "Zurück", () -> menuManager.popPage(), "zurueck");
     }
@@ -85,6 +92,10 @@ public class MenuPageOptions extends MenuPage {
     protected final void addPageEntry(MenuManager menuManager, int x, int y, String text, MenuPage page) {
         menuManager.addLayer(page);
         addLeftAlignedButton(x, y, 150, 40, text, () -> menuManager.pushPage(page),"buttonSound");
+    }
+    
+    public void soundTest(){
+        SoundEmitter.playGlobal(assetManager.getSound("einhornMotivated"), false);
     }
 
 }

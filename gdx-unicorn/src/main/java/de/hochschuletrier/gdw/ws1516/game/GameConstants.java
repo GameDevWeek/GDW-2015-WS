@@ -55,6 +55,7 @@ public class GameConstants {
     public static final short PHYSIX_COLLISION_SPIT = -1;
     public static final short PHYSIX_COLLISION_UNICORN = -1;
     public static final short PHYSIX_COLLISION_BLOCKINGGUM = -1;
+    public static final short PHYSIX_COLLISION_ENEMY = -2;
     
     // Bullet system
     public static final float BULLET_SPEED = (50.0f / 43.0f) * 15.0f;
@@ -75,7 +76,7 @@ public class GameConstants {
     public static float MUSIC_FADE_TIME = 2;
     
     // Scoreborad-Constant
-    public static final int SCORE_BASEPOINTS = 500;
+    public static final int SCORE_BASEPOINTS = 0;
     public static final float SCORE_TIME_POINTS = -100.0f/ 60.0f;
     public static final int SCORE_CHOCOCOINS_POINTS = 5;
     public static final int SCORE_BONBONS_POINTS = 15;

@@ -182,8 +182,9 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
         input.directionX = directionX;
         input.directionY = directionY;
         input.startFly=fly;
+
         if (fly && player.state!=State.RAINBOW) {
-            if (movement.state==de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State.FLYING){
+            if (movement.state==MovementComponent.State.FLYING){
                 EndFlyEvent.emit(entity);
             }else{
                 if ( player.blueGumStacks > 0 ) {
@@ -196,7 +197,7 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
 
 
         if(hornAttack){
-            if (movement.state==de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State.FLYING){
+            if (movement.state==MovementComponent.State.FLYING){
                 EndFlyEvent.emit(entity);
             }else{
                 if (player.state!=State.RAINBOW && player.hornAttackCooldown<=0.0f){
@@ -210,6 +211,13 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
         // Spit button delta
         input.oldSpit = input.spit;
         input.spit = spit;
+        
+        if (movement.state==MovementComponent.State.FLYING) {
+            input.spit = false;
+            input.oldSpit = false;
+            input.gumSpitCooldown = GameConstants.SPIT_COOLDOWN;
+            input.gumSpitCharge = 0.0f;
+        }
         
         // Spit cooldown
         input.gumSpitCooldown -= deltaTime;
