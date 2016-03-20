@@ -51,7 +51,7 @@ public class MenuPageScene extends MenuPage implements SceneAnimator.Getter, Sce
             logger.error("Error loading intro", ex);
         }
 
-        addLeftAlignedButton(55, 40, 100, 50, "Menu", () -> menuManager.popPage(),"buttonSound");
+        addLeftAlignedButton(55, 40, 100, 50, "Menü", () -> menuManager.popPage(),"menu");
         
         addRightAlignedButton(Main.WINDOW_WIDTH - 155, 40, 100, 50, "Skip", this::skip,"buttonSound");
     }
