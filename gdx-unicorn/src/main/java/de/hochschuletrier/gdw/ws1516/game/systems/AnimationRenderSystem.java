@@ -95,7 +95,6 @@ public class AnimationRenderSystem extends SubSystem
             }  
             
         }
-        }
         
         if(keyFrame == null)
         {
