@@ -19,9 +19,11 @@ public class AnimationComponent extends Component implements Pool.Poolable
     public float yOffset;
     public boolean lastRenderedIdle;    
     public float alpha;
+    public boolean killWhenFinished;
     
     @Override
     public void reset() {
+        killWhenFinished = false;
         animationMap = null;
         flipHorizontal = false;
         stateTime = 0;
