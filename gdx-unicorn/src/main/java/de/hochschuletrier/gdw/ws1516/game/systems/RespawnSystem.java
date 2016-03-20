@@ -120,7 +120,7 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
         {   /// resets game later (for the physixs)
             playerComp.doRespawn = true;
             playerComp.invulnerableTimer=1.0f;
-            playerComp.dieLaterTimer = 5.0f;     /// waits for the DeathAnimation 
+            playerComp.dieLaterTimer = 2.5f;     /// waits for the DeathAnimation 
             ChangeInGameStateEvent.emit(GameStateType.GAME_PLAYER_FREEZE);
 //            player.remove(PlayerComponent.class);
         }else
