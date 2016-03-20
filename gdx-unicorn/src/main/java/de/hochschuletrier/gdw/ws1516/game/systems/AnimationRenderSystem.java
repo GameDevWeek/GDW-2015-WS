@@ -1,7 +1,9 @@
 package de.hochschuletrier.gdw.ws1516.game.systems;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
@@ -12,22 +14,29 @@ import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.EnemyActionEvent;
+import de.hochschuletrier.gdw.ws1516.events.GameRespawnEvent;
+import de.hochschuletrier.gdw.ws1516.events.GameRestartEvent;
+import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
 import de.hochschuletrier.gdw.ws1516.events.MovementStateChangeEvent;
 import de.hochschuletrier.gdw.ws1516.events.PlayerStateChangeEvent;
 import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
-import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.State;
+import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.UnicornAnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.systems.EnemyHandlingSystem.Action.Type;
 import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 
 public class AnimationRenderSystem extends SubSystem 
-    implements MovementStateChangeEvent.Listener, PlayerStateChangeEvent.Listener, EnemyActionEvent.Listener, HornAttackEvent.Listener
+    implements MovementStateChangeEvent.Listener, PlayerStateChangeEvent.Listener, EnemyActionEvent.Listener, HornAttackEvent.Listener,
+                DeathEvent.Listener, GameRespawnEvent.Listener, GameRestartEvent.Listener
 {
+    
+    public Engine engine;
+    
     @SuppressWarnings("unchecked")
     public AnimationRenderSystem() {
         super(Family.all(PositionComponent.class).one(AnimationComponent.class, UnicornAnimationComponent.class).get());
@@ -67,7 +76,7 @@ public class AnimationRenderSystem extends SubSystem
             
             String stateKey = movement.state.toString().toLowerCase();
             
-            if(uniteruptableAnimationRunning(animation, movement))
+            if(uniteruptableAnimationRunning(entity, animation, movement))
             {
                 keyFrame = getKeyFrameFromAnimationExtended(animation);
             }      
@@ -126,14 +135,36 @@ public class AnimationRenderSystem extends SubSystem
         }
     }
 
-    private boolean uniteruptableAnimationRunning(AnimationComponent animation, MovementComponent movement) 
+    private boolean uniteruptableAnimationRunning(Entity entity, AnimationComponent animation, MovementComponent movement) 
     {
         if(animation.uninteruptableAnimation == null)
         {
             return false;
         }
         
-        if(animation.uninteruptableAnimation.getPlayMode() == PlayMode.NORMAL)
+        if(animation.getClass() == UnicornAnimationComponent.class)
+        {
+            UnicornAnimationComponent unicornAnmation = (UnicornAnimationComponent)animation;
+            if(unicornAnmation.isInDyingAnimation)
+            {
+                PlayerComponent player = ComponentMappers.player.get(entity);
+                if(player != null)
+                {
+                    if(!player.doRespawn)
+                    {
+                        unicornAnmation.isInDyingAnimation = false;
+                        unicornAnmation.uninteruptableAnimation = null;
+                        unicornAnmation.resetStateTime();
+                    }
+                }
+            }
+        }
+        
+        if(animation.uninteruptableAnimation == null)
+        {
+            return false;
+        }
+        else if(animation.uninteruptableAnimation != null && animation.uninteruptableAnimation.getPlayMode() == PlayMode.NORMAL)
         {
             float animDuration = animation.uninteruptableAnimation.getDuration();
             float animTime = animation.stateTime;
@@ -359,6 +390,48 @@ public class AnimationRenderSystem extends SubSystem
         {
             animation.resetStateTime();
             animation.uninteruptableAnimation = null;
+        }
+    }
+
+    @Override
+    public void onGameRestartEvent() {
+//        if(engine != null)
+//        {
+//            ImmutableArray<Entity> arr = engine.getEntitiesFor(Family.all(UnicornAnimationComponent.class).get());
+//            for(Entity entity : arr)
+//            {
+//                UnicornAnimationComponent animation = ComponentMappers.unicornAnimation.get(entity);
+//                animation.resetStateTime();
+//                animation.uninteruptableAnimation = null;
+//            }
+//        }
+    }
+
+    @Override
+    public void onGameRepawnEvent() {
+//        if(engine != null)
+//        {
+//            ImmutableArray<Entity> arr = engine.getEntitiesFor(Family.all(UnicornAnimationComponent.class).get());
+//            for(Entity entity : arr)
+//            {
+//                UnicornAnimationComponent animation = ComponentMappers.unicornAnimation.get(entity);
+//                animation.resetStateTime();
+//                animation.uninteruptableAnimation = null;
+//            }
+//        }
+    }
+
+    @Override
+    public void onDeathEvent(Entity entity) {
+        if(ComponentMappers.player.has(entity))
+        {
+            UnicornAnimationComponent animation = ComponentMappers.unicornAnimation.get(entity);
+            if(animation != null)
+            {
+                animation.resetStateTime();
+                animation.uninteruptableAnimation = animation.animationMap.get("dying");
+                animation.isInDyingAnimation = true;
+            }
         }
     }
 }
