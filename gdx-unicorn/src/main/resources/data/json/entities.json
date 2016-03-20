@@ -161,6 +161,9 @@
             "SoundEmitter":{}
         }
     },
+    "touristDeathDummy": {
+    
+    },
     "platform": {
         "meta": {},
         "components": {

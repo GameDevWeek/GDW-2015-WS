@@ -234,6 +234,7 @@ public class Game extends InputAdapter implements ChangeInGameStateEvent.Listene
         
         //TEST   
         EntityCreator.createEntity("bubblegum_rainbow", 1250, 2911);
+        EntityCreator.createEntity("hunter", 1000, 200);
 
         loadMap(mapFilename);
         mapRenderSystem.initialzeRenderer(map, "map_background", cameraSystem);

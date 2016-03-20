@@ -47,16 +47,6 @@ public class AnimationRenderSystem extends SubSystem
         MovementComponent movement = ComponentMappers.movement.get(entity);
         PhysixBodyComponent physics = ComponentMappers.physixBody.get(entity);
         
-//        if(animation.name.equals("HunterDeath"))
-//        {
-//            movement.state = State.DYING;
-//        }
-        
-        if(animation.name.equals("hunterDeathDummy"))
-        {
-            System.out.println("DeathDummy");
-        }
-        
         animation.stateTime += deltaTime;
         if((movement != null && movement.state != animation.lastRenderedState))
         {
@@ -91,7 +81,6 @@ public class AnimationRenderSystem extends SubSystem
             }
 	        else if(movement.state == State.DYING)
         	{
-	            System.out.println("dying state");
             	keyFrame = getDyingKeyFrame(animation, movement, stateKey);
         	}
             else if((movement.state == State.JUMPING || movement.state == State.FALLING) && physics != null)
@@ -110,7 +99,7 @@ public class AnimationRenderSystem extends SubSystem
         
         if(keyFrame == null)
         {
-            keyFrame = getDefaultKeyframe(animation);
+            keyFrame = getDefaultKeyframe(animation, entity);
         }
        
         drawKeyframe(animation, position, keyFrame);   
@@ -214,21 +203,7 @@ public class AnimationRenderSystem extends SubSystem
         else
         {
             animationExtended = animation.animationMap.get(walkingString);
-        }
-        
-        //check if deathAnimation has to be destroyed
-        if(animationExtended != null)
-        {
-            if(animation.name.equals("hunterDeathDummy") || animation.name.equals("HunterDeath") || animation.name.equals("Hunter"))
-            {
-                float duration = animationExtended.getDuration();
-                System.out.println(animation.name + "  Bool " + animation.killWhenFinished + " - duration " + (animation.stateTime > duration));
-                if(animation.killWhenFinished && animation.stateTime > duration)
-                {
-                    DeathEvent.emit(entity);
-                }
-            }
-        }
+        }      
         
         return animationExtended == null ? null : animationExtended.getKeyFrame(animation.stateTime);
     }
@@ -272,7 +247,7 @@ public class AnimationRenderSystem extends SubSystem
         return animationExtended.getKeyFrame(animation.stateTime);
     }
     
-    private TextureRegion getDefaultKeyframe(AnimationComponent animation) {
+    private TextureRegion getDefaultKeyframe(AnimationComponent animation, Entity entity) {
         AnimationExtended animationExtended = animation.animationMap.get("on_ground_walking");
         if(animation.name.equals("Hunter"))
         {
@@ -286,6 +261,18 @@ public class AnimationRenderSystem extends SubSystem
                 return null;
             }
         }
+        
+        //check if animation has to be deleted
+        if(animationExtended != null)
+        {
+            float duration = animationExtended.getDuration();
+            System.out.println(animation.name + "  Bool " + animation.killWhenFinished + " - duration " + (animation.stateTime > duration));
+            if(animation.killWhenFinished && animation.stateTime > duration)
+            {
+               DeathEvent.emit(entity);
+            }
+        }
+        
         return animationExtended.getKeyFrame(animation.stateTime);
     }
     
@@ -305,7 +292,7 @@ public class AnimationRenderSystem extends SubSystem
     
     private TextureRegion getKeyFrameFromAnimationExtended(AnimationComponent animation) 
     {
-        System.out.println("boolean " + animation.killWhenFinished);
+       System.out.println("getKeyFrameFromAnimationExtended " + animation.killWhenFinished);
        return animation.uninteruptableAnimation.getKeyFrame(animation.stateTime);
     }
     
@@ -359,22 +346,22 @@ public class AnimationRenderSystem extends SubSystem
     @Override
     public void onDeathEvent(Entity entity) 
     {
-        AnimationComponent animationComponent = ComponentMappers.animation.get(entity);
-        MovementComponent movementComponent = ComponentMappers.movement.get(entity);
-        
-        if(animationComponent != null)
-        {
-            animationComponent.resetStateTime();
-        }
-        else
-        {
-            return;
-        }
-        
-        if(animationComponent.name.equals("Paparazzi") || animationComponent.name.equals("Hunter"))
-        {
-            movementComponent.state = State.DYING;
-        }
+//        AnimationComponent animationComponent = ComponentMappers.animation.get(entity);
+//        MovementComponent movementComponent = ComponentMappers.movement.get(entity);
+//        
+//        if(animationComponent != null)
+//        {
+//            animationComponent.resetStateTime();
+//        }
+//        else
+//        {
+//            return;
+//        }
+//        
+//        if(animationComponent.name.equals("Paparazzi") || animationComponent.name.equals("Hunter"))
+//        {
+//            movementComponent.state = State.DYING;
+//        }
         
     }
 }
