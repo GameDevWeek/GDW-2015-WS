@@ -87,7 +87,8 @@ public class TriggerSystem extends EntitySystem implements TriggerEvent.Listener
                 }                 
             break; 
         case WINING_ZONE:
-                if ( playerComp != null )
+                PlayerComponent playerCompTrigger=ComponentMappers.player.get(triggeringEntity);
+                if ( playerCompTrigger != null )
                 {
                     GameOverEvent.emit(true, game.getNextMapFilename());
                 }
