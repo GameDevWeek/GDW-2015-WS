@@ -433,7 +433,6 @@
             "Position": {
             },
             "Animation": {
-                "name": "river_top",
                 "default_animation": "chocolate_river_top"
             },
             "RenderLayer": {

@@ -118,6 +118,7 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
     private final PhysixDebugRenderSystem physixDebugRenderSystem = new PhysixDebugRenderSystem(
             GameConstants.PRIORITY_DEBUG_WORLD);
     private final CameraSystem cameraSystem = new CameraSystem(GameConstants.PRIORITY_CAMERA);
+    private final CameraSystem caveLightsRenderSystem = new CameraSystem(GameConstants.PRIORITY_CAVE_LIGHTS_RENDERING);
     private final RenderSystem renderSystem = new RenderSystem(GameConstants.PRIORITY_RENDERING);
     private final UpdatePositionSystem updatePositionSystem = new UpdatePositionSystem(
             GameConstants.PRIORITY_PHYSIX + 1);
@@ -249,6 +250,7 @@ public class Game extends InputAdapter implements GameRestartEvent.Listener {
         engine.addSystem(physixSystem);
         engine.addSystem(physixDebugRenderSystem);
         engine.addSystem(cameraSystem);
+        engine.addSystem(caveLightsRenderSystem);
         engine.addSystem(renderSystem);
         engine.addSystem(animationEventHandlerSystem);
         engine.addSystem(updatePositionSystem);

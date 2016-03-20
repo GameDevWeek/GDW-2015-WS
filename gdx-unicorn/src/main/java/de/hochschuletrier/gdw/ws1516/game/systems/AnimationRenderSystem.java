@@ -24,6 +24,7 @@ import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 public class AnimationRenderSystem extends SubSystem 
     implements MovementStateChangeEvent.Listener, PlayerStateChangeEvent.Listener, EnemyActionEvent.Listener
 {
+    @SuppressWarnings("unchecked")
     public AnimationRenderSystem() {
         super(Family.all(PositionComponent.class).one(AnimationComponent.class, UnicornAnimationComponent.class).get());
     }
@@ -35,10 +36,6 @@ public class AnimationRenderSystem extends SubSystem
         if(animation == null)
         {
             animation = ComponentMappers.unicornAnimation.get(entity);
-        }
-        
-        if (animation.name.equals("river_top")) {
-            int i = 0;
         }
         
         PositionComponent position = ComponentMappers.position.get(entity);
