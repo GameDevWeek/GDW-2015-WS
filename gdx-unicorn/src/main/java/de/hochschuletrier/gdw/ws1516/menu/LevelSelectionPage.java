@@ -54,10 +54,12 @@ public class LevelSelectionPage extends MenuPage {
             e.printStackTrace();
         }
         
+        int x = 55;
         Texture level_preview_texture = assetManager.getTexture(levelNames.get(0));
         Texture buttonBack_texture = assetManager.getTexture("prev_Button");
         Texture buttonNext_texture = assetManager.getTexture("next_Button");
         
+        addPageEntry(menuManager, x, 444, "Informationen", new HelpPage(skin, menuManager));  
         level_preview_d = new DecoImage(assetManager.getTexture(levelNames.get(level_preview_index)));
         
         level_previews = new Texture[levelNames.size()];
@@ -67,14 +69,14 @@ public class LevelSelectionPage extends MenuPage {
         }
       
         level_preview_d.setTexture(level_previews[level_preview_index]);
-        level_preview_d.setPosition(312, 240);
-                      
-        createImageButton(buttonBack_texture, 310-20-buttonBack_texture.getWidth(), 260, 50, 50, this::previousLevel, "buttonSound", true, true);
-        createImageButton(buttonNext_texture, 310+level_preview_texture.getWidth()+20, 260, 50, 50, this::nextLevel, "buttonSound", true, true);
+        level_preview_d.setBounds(x, 240, 360, 200);
+
+        int right = x + 360;
+        createImageButton(buttonBack_texture, right-2*buttonNext_texture.getWidth() - buttonNext_texture.getWidth()/2, 200, 50, 50, this::previousLevel, "buttonSound", true, true);
+        createImageButton(buttonNext_texture, right-buttonNext_texture.getWidth(), 200, 50, 50, this::nextLevel, "buttonSound", true, true);
         
-        addCenteredButton(512, 200, 50, 50, "Spielen", this::startGame, "einhornMotivated");
-        addLeftAlignedButton(55, 40, 100, 50, "Zurück", () -> menuManager.popPage(),"zurueck");
-        addPageEntry(menuManager, 55, 370, "Informationen", new HelpPage(skin, menuManager));  
+        addLeftAlignedButton(x, 191, 100, 50, "Spielen", this::startGame, "einhornMotivated");
+        addLeftAlignedButton(x, 40, 100, 50, "Zurück", () -> menuManager.popPage(),"zurueck");
      
         
         super.addActor(level_preview_d);
@@ -109,7 +111,7 @@ public class LevelSelectionPage extends MenuPage {
             if(Gdx.files.internal(filename).exists()) {
                 Game game = new Game();
                 game.init(assetManager, filename);
-                main.changeState(new GameplayState(assetManager, game, LevelSelectionPage.getMusicForLevel(filename, assetManager)));
+                main.changeState(new GameplayState(assetManager, game, assetManager.getMusic(filename)));
             } else {
                 assetManager.getSound("death").play();
             }  
@@ -124,18 +126,5 @@ public class LevelSelectionPage extends MenuPage {
     
     public int getIndexOfSelectedLevel() {
         return level_preview_index;
-    }
-    
-    public static Music getMusicForLevel(String levelName, AssetManagerX assetManager) {
-        switch (levelName) {
-        case "data/maps/lvl1.tmx":
-            return assetManager.getMusic("gameplaytheme");
-        case "data/maps/lvl2.tmx":
-            return assetManager.getMusic("gameplaytheme_level2");
-        case "data/maps/lvl4.tmx":
-            return assetManager.getMusic("gameplaytheme_level4");
-        default:
-            return assetManager.getMusic("gameplaytheme");
-        }
     }
 }

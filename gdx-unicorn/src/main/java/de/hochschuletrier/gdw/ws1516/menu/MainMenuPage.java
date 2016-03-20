@@ -44,16 +44,17 @@ public class MainMenuPage extends MenuPage implements ShowCreditsEvent.Listener 
                 menuManager.popPage();
             }, "buttonSound");
         }
+        addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Hilfe", new HelpPage(skin, menuManager));
         addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Optionen", new MenuPageOptions(skin, menuManager));
         menuPageCredits = new MenuPageCredits(skin, menuManager);
         addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Credits", menuPageCredits);
 
         if (type == Type.MENU) {
             //addLeftAlignedButton(xOffset, yOffset - yStep *( 2* i++), 100, 50, "Beenden", () -> System.exit(-1),"einhornEmpathy");
-            addLeftAlignedButton(xOffset, yOffset - yStep * (2 * i++), 100, 50, "Beenden", this::systemExitDelay, "tschuess");
+            addLeftAlignedButton(xOffset, 40, 100, 50, "Beenden", this::systemExitDelay, "tschuess");
 
         } else if (type == Type.PAUSED) {
-            addLeftAlignedButton(xOffset, yOffset - yStep * (2 * i++), 100, 50, "Menü", this::stopGame, "menu");
+            addLeftAlignedButton(xOffset, 40, 100, 50, "Menü", this::stopGame, "menu");
         }
     }
     
