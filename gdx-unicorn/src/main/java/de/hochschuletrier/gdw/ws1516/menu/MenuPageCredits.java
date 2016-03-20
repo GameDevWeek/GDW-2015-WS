@@ -45,7 +45,7 @@ public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter, S
         super(skin, "menu_bg");
         this.menuManager = menuManager;
         try {
-            sceneAnimator = new SceneAnimator(this, "data/json/credits.json");
+            sceneAnimator = new SceneAnimator(this, "data/json/endSequence.json");
             sceneAnimator.addListener(this);
             final SceneAnimatorActor sceneAnimatorActor = new SceneAnimatorActor(sceneAnimator);
             menuManager.getStage().addListener(new ClickListener() {
