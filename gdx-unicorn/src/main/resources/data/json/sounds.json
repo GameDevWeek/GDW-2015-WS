@@ -25,5 +25,6 @@
     "trexDead":"data/sounds/TrexDead.wav",
     "trexHappy":"data/sounds/TrexHappy.wav",
     "trexSad":"data/sounds/TrexSad.wav",
-    "tschuess":"data/sounds/tschuess.wav"
+    "tschuess":"data/sounds/tschuess.wav",
+    "poop":"data/sounds/poop.wav"
 }

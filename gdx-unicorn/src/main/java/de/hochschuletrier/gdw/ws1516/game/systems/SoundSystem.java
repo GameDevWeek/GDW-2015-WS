@@ -125,6 +125,12 @@ public class SoundSystem extends IteratingSystem
         }
 
     }
+    
+    @Override
+    public void onSoundPlay(String sound, boolean b) {
+        Entity unicorn = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first();
+        onSoundPlay(sound, unicorn, b);
+    }
 
     @Override
     public void onSoundStop(Entity entity) {
