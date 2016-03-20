@@ -115,6 +115,7 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
         PaparazziShootEvent.register(this);
         DeathEvent.register(this);
         TriggerEvent.register(this);
+        ActivateSafePointEvent.register(this);
 
         //DEBUG
         paparazzi1Hotkey.register();
@@ -131,6 +132,7 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
         PaparazziShootEvent.unregister(this);
         DeathEvent.unregister(this);
         TriggerEvent.unregister(this);
+        ActivateSafePointEvent.unregister(this);
 
         //DEBUG
         paparazzi1Hotkey.unregister();
