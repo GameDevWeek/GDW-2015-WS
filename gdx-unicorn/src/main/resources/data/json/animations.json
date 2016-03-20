@@ -402,7 +402,7 @@
     "rows": 1
   },
   "trex_plottwist": {
-    "filename": "data/graphics/spritesheets/trex_plottwist.png",
+    "filename": "data/graphics/spritesheets/trex_plottwist_left.png",
     "frames": 4,
     "frameDuration": [
       0.15,
@@ -410,7 +410,7 @@
       0.15,
       0.15
     ],
-    "playType": "NORMAL",
+    "playType": "REVERSED",
     "columns": 4,
     "rows": 1
   },
