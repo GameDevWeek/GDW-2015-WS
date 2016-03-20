@@ -15,6 +15,7 @@ import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornCollisionEvent;
 import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
+import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
@@ -24,7 +25,8 @@ import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent.State;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.LookDirection;
 
-public class KeyboardInputSystem extends IteratingSystem implements InputProcessor {
+public class KeyboardInputSystem extends IteratingSystem implements InputProcessor,
+                                                                    DeathEvent.Listener{
     private static final Logger logger        = LoggerFactory.getLogger(KeyboardInputSystem.class);
     private boolean             jump          = false;
     private boolean             spit          = false;
@@ -47,6 +49,18 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
     // public public void addedToEngine(Engine engine) {
     // logger.debug("wurde Hinzugefügt{}");
     // };
+    
+    @Override
+    public void addedToEngine (Engine engine) {
+        super.addedToEngine(engine);
+        DeathEvent.register(this);
+    }
+
+    @Override
+    public void removedFromEngine (Engine engine) {
+        super.removedFromEngine(engine);
+        DeathEvent.unregister(this);
+    }
     
     @Override
     public boolean keyDown(int keycode) {
@@ -223,6 +237,26 @@ public class KeyboardInputSystem extends IteratingSystem implements InputProcess
 
         input.lookDirection = lookDirection;
         
+    }
+
+    @Override
+    public void onDeathEvent(Entity entity) {
+ 
+        //If the player dies, reset the spit system
+        if (ComponentMappers.player.has(entity) && ComponentMappers.input.has(entity)) {
+            
+            //Fetch components
+            InputComponent input = entity.getComponent(InputComponent.class);
+            PlayerComponent player = entity.getComponent(PlayerComponent.class);
+            
+            //Reset spit system
+            input.spit = false;
+            input.oldSpit = false;
+            input.gumSpitCharge = 0.0f;
+            input.gumSpitCooldown = 0.0f;
+            
+        }
+            
     }
     
 }

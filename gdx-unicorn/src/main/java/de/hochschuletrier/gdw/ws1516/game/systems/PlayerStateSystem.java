@@ -23,8 +23,11 @@ import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent.State;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 
 public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.Listener,
-    HornAttackEvent.Listener, StartFlyEvent.Listener, EndFlyEvent.Listener, ThrowBackEvent.Listener
-    {
+                                                                  HornAttackEvent.Listener,
+                                                                  StartFlyEvent.Listener,
+                                                                  EndFlyEvent.Listener,
+                                                                  ThrowBackEvent.Listener,
+                                                                  DeathEvent.Listener {
 
     private static final Logger logger = LoggerFactory.getLogger(PlayerStateSystem.class);
     private float maxGameBottom;
@@ -46,6 +49,7 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         StartFlyEvent.register(this);
         EndFlyEvent.register(this);
         ThrowBackEvent.register(this);
+        DeathEvent.register(this);
     }
     
     @Override
@@ -57,6 +61,7 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         StartFlyEvent.unregister(this);
         EndFlyEvent.unregister(this);
         ThrowBackEvent.unregister(this);
+        DeathEvent.unregister(this );
     }
     
     @Override
@@ -204,5 +209,13 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         
     }
 
+    @Override
+    public void onDeathEvent(Entity entity) {
+        
+        //If the player dies, end flying
+        if (ComponentMappers.player.has(entity))
+            EndFlyEvent.emit(entity);
+        
+    }
     
 }
