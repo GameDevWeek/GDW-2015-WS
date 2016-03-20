@@ -80,6 +80,7 @@ public class GameConstants {
     public static final int SCORE_KILLED_ENEMIES = 0;
     public static final int SCORE_KILLED_OBSTACLES = 0;
     public static final int SCORE_HITS = 0;
+    public static final int SCORE_LIVES = 100;
 
     //Vision System
     public static final int GLOBAL_VISION=5;
