@@ -43,7 +43,6 @@ public class RenderSystem extends SortedSubIteratingSystem {
     {
         super.addedToEngine(engine);
         EnemyActionEvent.register(animationRenderSystem);
-        DeathEvent.register(animationRenderSystem);
     }
     
     @Override
@@ -51,7 +50,6 @@ public class RenderSystem extends SortedSubIteratingSystem {
     {
         super.removedFromEngine(engine);
         EnemyActionEvent.unregister(animationRenderSystem);
-        DeathEvent.unregister(animationRenderSystem);
     }
 
     @Override

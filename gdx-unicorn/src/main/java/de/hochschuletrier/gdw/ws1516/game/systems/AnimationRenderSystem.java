@@ -26,7 +26,7 @@ import de.hochschuletrier.gdw.ws1516.game.systems.EnemyHandlingSystem.Action.Typ
 import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 
 public class AnimationRenderSystem extends SubSystem 
-    implements MovementStateChangeEvent.Listener, PlayerStateChangeEvent.Listener, EnemyActionEvent.Listener, DeathEvent.Listener
+    implements MovementStateChangeEvent.Listener, PlayerStateChangeEvent.Listener, EnemyActionEvent.Listener
 {
     @SuppressWarnings("unchecked")
     public AnimationRenderSystem() {
@@ -47,6 +47,7 @@ public class AnimationRenderSystem extends SubSystem
         MovementComponent movement = ComponentMappers.movement.get(entity);
         PhysixBodyComponent physics = ComponentMappers.physixBody.get(entity);
         
+        
         animation.stateTime += deltaTime;
         if((movement != null && movement.state != animation.lastRenderedState))
         {
@@ -61,7 +62,6 @@ public class AnimationRenderSystem extends SubSystem
             boolean newFlipState = (movement.lookDirection) == (MovementComponent.LookDirection.LEFT) ^ animation.flipHorizontal;
             if(animation.currentlyFlipped != newFlipState)
             {
-                animation.xOffset = -animation.xOffset;
                 animation.currentlyFlipped = newFlipState;
             }
             
@@ -117,14 +117,8 @@ public class AnimationRenderSystem extends SubSystem
             int w = keyFrame.getRegionWidth();
             int h = keyFrame.getRegionHeight();
             
-            if(animation.currentlyFlipped)
-            {
-                DrawUtil.batch.draw(keyFrame, position.x + w * 0.5f + animation.xOffset, position.y - h * 0.5f + animation.yOffset, w * 0.5f + animation.xOffset, h * 0.5f + animation.yOffset, -w, h, 1, 1, position.rotation);
-            }
-            else
-            {
-                DrawUtil.batch.draw(keyFrame, position.x - w * 0.5f - animation.xOffset, position.y - h * 0.5f + animation.yOffset, w * 0.5f - animation.xOffset, h * 0.5f + animation.yOffset, w, h, 1, 1, position.rotation);
-            }
+            float scaleX = animation.currentlyFlipped ? -1: 1;
+            DrawUtil.batch.draw(keyFrame, position.x - w * 0.5f - animation.xOffset, position.y - h * 0.5f + animation.yOffset, w * 0.5f - animation.xOffset, h * 0.5f + animation.yOffset, w, h, scaleX, 1, position.rotation);
             if(animation.alpha < 1f && animation.alpha >= 0f)
             {
                 DrawUtil.setShader(null);
@@ -292,7 +286,6 @@ public class AnimationRenderSystem extends SubSystem
     
     private TextureRegion getKeyFrameFromAnimationExtended(AnimationComponent animation) 
     {
-       System.out.println("getKeyFrameFromAnimationExtended " + animation.killWhenFinished);
        return animation.uninteruptableAnimation.getKeyFrame(animation.stateTime);
     }
     
@@ -341,27 +334,5 @@ public class AnimationRenderSystem extends SubSystem
         {
             animationComponent.resetStateTime();
         }
-    }
-
-    @Override
-    public void onDeathEvent(Entity entity) 
-    {
-//        AnimationComponent animationComponent = ComponentMappers.animation.get(entity);
-//        MovementComponent movementComponent = ComponentMappers.movement.get(entity);
-//        
-//        if(animationComponent != null)
-//        {
-//            animationComponent.resetStateTime();
-//        }
-//        else
-//        {
-//            return;
-//        }
-//        
-//        if(animationComponent.name.equals("Paparazzi") || animationComponent.name.equals("Hunter"))
-//        {
-//            movementComponent.state = State.DYING;
-//        }
-        
     }
 }

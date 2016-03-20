@@ -17,6 +17,8 @@ import de.hochschuletrier.gdw.ws1516.events.HealEvent;
 import de.hochschuletrier.gdw.ws1516.events.HitEvent;
 import de.hochschuletrier.gdw.ws1516.events.UnicornEnemyCollisionEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornCollisionEvent;
+import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
+import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
 import de.hochschuletrier.gdw.ws1516.events.ThrowBackEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.Game;
@@ -100,6 +102,7 @@ public class HitPointManagementSystem extends EntitySystem implements HitEvent.L
         PlayerComponent playerComp = pm.get(entity);
 
         if (playerComp == null) { //es handelt sich also um einen Gegner und nicht um das Einhorn, also Gegner entfernen.
+            ScoreBoardEvent.emit( ScoreType.KILLED_ENEMIE, 1);
             engine.removeEntity(entity);
             return;
         }
