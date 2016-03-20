@@ -51,23 +51,17 @@ public class MenuPageOptions extends MenuPage {
             }
         });
 
-        soundSlider.addListener(new ClickListener() {
-            
+        soundSlider.addListener(new ChangeListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y)  {
+            public void changed(ChangeEvent event, Actor actor) {
                 Settings.soundValue.set(soundSlider.getValue());
                 Settings.flush();
-                soundTest();
             }
         });
       
         addLeftAlignedButton(xOffset, 40, 100, 50, "Zurück", () -> menuManager.popPage(), "zurueck");
     }
 
-    public void soundTest() {
-        SoundEmitter.playGlobal(assetManager.getSound("einhornEmpathy"), false);
-    }
-    
     public void reset(){
         System.out.println(""+Settings.generalValue.get()+" "+Settings.musicValue.get()+""+Settings.soundValue.get());
         Settings.reset();
