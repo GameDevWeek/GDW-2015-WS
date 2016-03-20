@@ -153,7 +153,7 @@
     "frameDuration": [
       0.15
     ],
-    "playType": "LOOP_PINGPONG",
+    "playType": "LOOP",
     "columns": 9,
     "rows": 1
   },
@@ -223,7 +223,7 @@
     "frameDuration": [
       0.15
     ],
-    "playType": "LOOP_PINGPONG",
+    "playType": "LOOP",
     "columns": 9,
     "rows": 1
   },
@@ -293,7 +293,7 @@
     "frameDuration": [
       0.15
     ],
-    "playType": "LOOP_PINGPONG",
+    "playType": "LOOP",
     "columns": 9,
     "rows": 1
   },
