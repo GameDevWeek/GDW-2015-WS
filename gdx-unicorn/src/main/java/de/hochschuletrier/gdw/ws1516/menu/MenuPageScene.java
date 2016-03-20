@@ -31,8 +31,8 @@ public class MenuPageScene extends MenuPage implements SceneAnimator.Getter, Sce
     private SceneAnimator sceneAnimator;
     private final Runnable callback;
 
-    public MenuPageScene(Skin skin, MenuManager menuManager, String filename, Runnable callback) {
-        super(skin, "intro_bg");
+    public MenuPageScene(Skin skin, MenuManager menuManager, String filename, Runnable callback, String bg) {
+        super(skin, bg);
         this.menuManager = menuManager;
         this.callback = callback;
         

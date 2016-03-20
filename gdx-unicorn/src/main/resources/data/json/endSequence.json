@@ -217,16 +217,6 @@
       ],
       "animations" : [
       ]
-    },
-    "bgQ":{
-      "layer" :0,
-      "time" : 0,
-      "items" : [
-        {"type":"texture","path":"bg","resource":"intro_bg"}
-      ],
-      "animations" : [
-        {"time":0, "animation":"pause_path", "animationTime":-1, "group":"*"}
-      ]
     }
   }
 }

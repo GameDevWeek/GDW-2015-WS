@@ -66,5 +66,9 @@
     "lvl3_background": "data/graphics/background_lvl3_big.png",
     "lvl4_background": "data/graphics/background_lvl4_big.png",
 
-    "intro_bg" : "data/graphics/background_intro.png"
+    "intro_bg" : "data/graphics/background_intro.png",
+    "outro_bg" : "data/graphics/background_outro.png",
+
+    "alle" : "data/graphics/AlleTeilnehmer.jpg"
+
 }
