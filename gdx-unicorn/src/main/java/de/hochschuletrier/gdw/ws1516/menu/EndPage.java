@@ -48,7 +48,7 @@ public class EndPage extends MenuPage {
             message = "Gewonnen!";
             messageStyle = "win";
             sound = assetManager.getSound("win_sound");
-            int timeScore = (int) (GameConstants.SCORE_TIME_POINTS - scoreComp.playedSeconds);
+            int timeScore = (int) (GameConstants.SCORE_TIME_POINTS * scoreComp.playedSeconds);
             final int chocoScore = scoreComp.chocoCoins * GameConstants.SCORE_CHOCOCOINS_POINTS;
             final int bonbonScore = scoreComp.bonbons * GameConstants.SCORE_BONBONS_POINTS;
             
