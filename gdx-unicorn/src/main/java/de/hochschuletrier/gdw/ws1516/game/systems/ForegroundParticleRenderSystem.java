@@ -14,6 +14,7 @@ import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.ForegroundParticleComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
+import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent.LookDirection;
 import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 
@@ -27,6 +28,13 @@ public class ForegroundParticleRenderSystem extends SortedSubIteratingSystem.Sub
     @Override
     public void processEntity(Entity entity, float deltaTime)
     {
+        PlayerComponent playerComponent = ComponentMappers.player.get(entity);
+        if(playerComponent != null && playerComponent.doRespawn)
+        {
+            // Early out, no particles while respawning
+            return;
+        }
+        
         ForegroundParticleComponent particleComponent = ComponentMappers.foregroundParticle.get(entity);
         MovementComponent movementComponent = ComponentMappers.movement.get(entity);
         PositionComponent positionComponent = ComponentMappers.position.get(entity);
