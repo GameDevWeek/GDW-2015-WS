@@ -30,7 +30,8 @@ import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
 import de.hochschuletrier.gdw.ws1516.menu.EndPage;
 import de.hochschuletrier.gdw.ws1516.menu.MainMenuPage;
 import de.hochschuletrier.gdw.ws1516.events.GameOverEvent;
-import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
+import de.hochschuletrier.gdw.ws1516.events.ChangeInGameStateEvent;
+import de.hochschuletrier.gdw.ws1516.events.ChangeInGameStateEvent.GameStateType;
 import de.hochschuletrier.gdw.ws1516.events.FinalScoreEvent;
 import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
 
@@ -122,15 +123,15 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
             Main.getInstance().screenCamera.bind();
             DrawUtil.fillRect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), OVERLAY_COLOR);
             menuManager.render();
-            if ( !Game.PAUSE_ENGINE )
+            if ( Game.isInState( GameStateType.GAME_PLAYING)  )
             {   /** @author Tobi-Gamelogic   hier weis ich ganz sicher dass es pasuiert ist **/
-                PauseGameEvent.emit(true);
+                ChangeInGameStateEvent.emit(GameStateType.GAME_PAUSE);
             }
         }else
         {
-            if ( Game.PAUSE_ENGINE )
+            if ( Game.isInState( GameStateType.GAME_PAUSE ) )
             {
-                PauseGameEvent.emit(false);
+                ChangeInGameStateEvent.emit(GameStateType.GAME_PLAYING );
             }
         }
     }
@@ -183,7 +184,7 @@ public class GameplayState extends BaseGameState implements GameOverEvent.Listen
         } else {
             endPage = new EndPage(skin, menuManager, "transparent_bg", EndPage.Type.GAMEOVER, scoreComp);
         }
-        PauseGameEvent.emit(true);
+        ChangeInGameStateEvent.emit(GameStateType.GAME_PAUSE);
             
         menuManager.addLayer(endPage);
         menuManager.pushPage(endPage);

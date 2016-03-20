@@ -24,7 +24,10 @@ import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.ws1516.events.ActivateSafePointEvent;
 import de.hochschuletrier.gdw.ws1516.events.ActivateSafePointEvent.Listener;
 import de.hochschuletrier.gdw.ws1516.events.GameRespawnEvent;
+import de.hochschuletrier.gdw.ws1516.events.ChangeInGameStateEvent;
+import de.hochschuletrier.gdw.ws1516.events.ChangeInGameStateEvent.GameStateType;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
+import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.components.CollectableComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PathComponent;
@@ -43,6 +46,7 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
     private Engine engine;
     private boolean initStartSpawn = false;
     private Texture activatedCheckpointTexture;
+    private PlayerComponent playerComponentSafe = null;
     
     public RespawnSystem()
     {
@@ -52,16 +56,20 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
    @Override
     protected void processEntity(Entity entity, float deltaTime) {
 
-       PlayerComponent playerComp = ComponentMappers.player.get(entity);
        PhysixBodyComponent physixBody = ComponentMappers.physixBody.get(entity);
        StartPointComponent respawnPosition = ComponentMappers.startPoint.get(entity);
        PhysixBodyComponent bodyComp = ComponentMappers.physixBody.get(player);
        MovementComponent move= ComponentMappers.movement.get(player);
-       if ( physixBody != null && playerComp.doRespawn)
+
+       if (  playerComponentSafe.dieLaterTimer > 0.0f  )
        {
+           playerComponentSafe.dieLaterTimer -= deltaTime; 
+       } else if ( physixBody != null && playerComponentSafe.doRespawn )
+       {
+           ChangeInGameStateEvent.emit(GameStateType.GAME_PLAYING);
            physixBody.setPosition(respawnPosition.x,respawnPosition.y);
-           playerComp.blueGumStacks = respawnPosition.blueGums;
-           playerComp.hitpoints = playerComp.maxHitpoints;
+           playerComponentSafe.blueGumStacks = respawnPosition.blueGums;
+           playerComponentSafe.hitpoints = playerComponentSafe.maxHitpoints;
            if ( bodyComp != null )
            {
                bodyComp.setLinearVelocity(0, 0);
@@ -70,7 +78,7 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
            {
                move.reset();
            }
-           playerComp.doRespawn = false;
+           playerComponentSafe.doRespawn = false;
            /// Welt zurücksetzten
            for (SavedEntities save : respawnPosition.savedEntities )
            {
@@ -88,9 +96,9 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
                    revive(save);
                }
            }
-           playerComp.flyingCooldown = 0;
-           playerComp.hornAttackCooldown = 0;
-           playerComp.throwBackCooldown = 0;
+           playerComponentSafe.flyingCooldown = 0;
+           playerComponentSafe.hornAttackCooldown = 0;
+           playerComponentSafe.throwBackCooldown = 0;
        }
     }
     
@@ -112,7 +120,9 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
         {   /// resets game later (for the physixs)
             playerComp.doRespawn = true;
             playerComp.invulnerableTimer=1.0f;
-            
+            playerComp.dieLaterTimer = 5.0f;     /// waits for the DeathAnimation 
+            ChangeInGameStateEvent.emit(GameStateType.GAME_PLAYER_FREEZE);
+//            player.remove(PlayerComponent.class);
         }else
         {
             logger.warn("No Player or no RespawnPoint set");
@@ -145,6 +155,7 @@ public class RespawnSystem extends IteratingSystem implements GameRespawnEvent.L
         if (ComponentMappers.player.get(entity) != null ) 
         {
             player = entity;
+            playerComponentSafe = ComponentMappers.player.get(entity);
         }
     }
     

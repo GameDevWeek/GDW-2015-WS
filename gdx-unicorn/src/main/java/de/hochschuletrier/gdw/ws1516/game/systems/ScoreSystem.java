@@ -18,19 +18,19 @@ import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.ScoreComponent;
 import de.hochschuletrier.gdw.ws1516.events.FinalScoreEvent;
-import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
+import de.hochschuletrier.gdw.ws1516.events.ChangeInGameStateEvent;
+import de.hochschuletrier.gdw.ws1516.events.ChangeInGameStateEvent.GameStateType;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent;
 import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
 import de.hochschuletrier.gdw.ws1516.events.ScoreBoardEvent.ScoreType;
 /*
  * TODO listeners für Objekte einsammeln und zählen in diesem hoch
  */
-public class ScoreSystem extends EntitySystem implements EntityListener , ScoreBoardEvent.Listener , PauseGameEvent.Listener, GameOverEvent.Listener{
+public class ScoreSystem extends EntitySystem implements EntityListener , ScoreBoardEvent.Listener , GameOverEvent.Listener{
 
     private static final Logger logger = LoggerFactory.getLogger(ScoreSystem.class);
     private static long finalScore;
     private ScoreComponent scoreComponent;
-    private boolean gameIsPaused;
     
     public ScoreSystem() {
         scoreComponent = null;
@@ -41,9 +41,7 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
         Family family=Family.all(ScoreComponent.class).get();
         engine.addEntityListener(family, this);
         ScoreBoardEvent.register(this);
-        PauseGameEvent.register(this);
         GameOverEvent.register(this);
-        gameIsPaused = false;
     }
     
     @Override
@@ -51,13 +49,11 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
         super.removedFromEngine(engine);
         engine.removeEntityListener(this);
         ScoreBoardEvent.unregister(this);
-        PauseGameEvent.unregister(this);
         GameOverEvent.unregister(this);
     }
 
     @Override
     public void update(float deltaTime) {
-        if ( !gameIsPaused )
         {
             if(scoreComponent != null)
             {
@@ -123,26 +119,16 @@ public class ScoreSystem extends EntitySystem implements EntityListener , ScoreB
         return (score>0)?score:0;
         
     }
-
-    @Override
-    public void onPauseGameEvent(boolean pauseOn) {
-        gameIsPaused = pauseOn;
+   
+    public static long getFinalScoreStatic() {
+        return finalScore;
     }
 
     @Override
     public void onGameOverEvent(boolean won) {
-        gameIsPaused = true;        
-    }
-
-    @Override
-    public void onPauseChange() {
-        onPauseGameEvent(!gameIsPaused);
+        finalScore = getFinalScore();
         
     }
 
-    public static long getFinalScoreStatic() {
-        return finalScore;
-    }
-    
     
 }
