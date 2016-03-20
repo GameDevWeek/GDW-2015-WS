@@ -27,6 +27,7 @@
     "bubble" : "data/graphics/bubble.png",
     "checkpoint_checked": "data/maps/tilesets/checkpoint_checked.png",
     "checkpoint_unchecked": "data/maps/tilesets/checkpoint_unchecked.png",
+    "candle" : "data/graphics/candle.png",
     
     "hunter" : "data/graphics/enemy_hunter.png",
     "paparazzi" : "data/graphics/enemy_paparazzi.png",

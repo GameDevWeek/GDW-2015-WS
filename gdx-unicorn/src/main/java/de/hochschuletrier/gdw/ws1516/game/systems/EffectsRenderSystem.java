@@ -15,13 +15,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 
-import de.hochschuletrier.gdw.commons.devcon.ConsoleCmd;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.Hotkey;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.HotkeyModifier;
+import de.hochschuletrier.gdw.commons.gdx.state.ScreenListener;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.PaparazziShootEvent;
+import de.hochschuletrier.gdw.ws1516.events.ActivateSafePointEvent;
+import de.hochschuletrier.gdw.ws1516.events.TriggerEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.CameraTargetComponent;
@@ -29,21 +31,41 @@ import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 
 
+public class EffectsRenderSystem extends IteratingSystem implements PaparazziShootEvent.Listener, DeathEvent.Listener, TriggerEvent.Listener, ActivateSafePointEvent.Listener, ScreenListener {
 
-public class EffectsRenderSystem extends IteratingSystem implements PaparazziShootEvent.Listener, DeathEvent.Listener {
-    
-    private float paparazziEffectRemainingDuration;
-    private float paparazziEffectDuration;
+    private Texture screenOverlayWhiteRect;
+
+    private float[] frameDimensions;
     
     private Vector2 cameraTargetScreenPos;
     
-    private Texture screenOverlayWhiteRect;
+    // color set as RGBA [0.0, 1.0]. alpha is used as maximum result alpha for overlay.
+    private final float[] paparazziColor = new float[]{ 1.0f, 1.0f, 1.0f, 0.9f };
+    private final float paparazziOverlaySafeCircleRadius;
+            
+    private float paparazziEffectIntensity;
+    private float paparazziEffectRemainingDuration;
+    private float paparazziEffectDuration;
+    private float[] paparazziEffectSeed;
     
-    private final ConsoleCmd paparazziConsole = new ConsoleCmd("pap", 0, "Usage: pap (duration) - Activates paparazzi mode for (duration) seconds") { @Override public void execute(List<String> args) { consolePaparazzi(args); } };
-    private float paparazziIntensity = 0.0f;
-    private Vector2 paparazziEffectSeed;
+    // color set as RGBA [0.0, 1.0]. alpha is used as maximum result alpha for overlay.
+    private final float[] caveLightColor = new float[]{ 1.0f, 0.8f, 0.0f, 0.6f };
+    private final float[] caveDarknessColor = new float[]{ 0.0f, 0.0f, 0.0f, 0.35f };
     
+    private static final int MAX_LIGHT_UNIFORMS = 15;
+    private static final float CAVE_GLOW_DURATION = 6.0f; // in seconds
+    private static final float CAVE_INTRO_DURATION = 1.0f; // in seconds
+    private static final float CAVE_OUTRO_DURATION = 1.0f; // in seconds
+    private boolean isInsideCave;
+    private boolean isActivatedSafePointInsideCave;
+    
+    private boolean isInCaveIntro;
+    private boolean isInCaveOutro;
+    private float caveTime;
+    private float caveEffectIntensity;
+    private float caveEffectLightGlowIntensity;
 
+    //DEBUG
     // hotkey 1: about 1.0 intensity
     private final Hotkey paparazzi1Hotkey = new Hotkey(()->PaparazziShootEvent.emit((float)Math.random()), Input.Keys.F9,
             HotkeyModifier.CTRL);
@@ -51,17 +73,31 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
     private final Hotkey paparazzi0Hotkey = new Hotkey(()->PaparazziShootEvent.emit((float) (Math.random() + GameConstants.GLOBAL_VISION * GameConstants.UNICORN_SIZE)), Input.Keys.F8,
             HotkeyModifier.CTRL);
 
+    
+    
     @SuppressWarnings("unchecked")
     public EffectsRenderSystem(int priority) {
         super(Family.all(CameraTargetComponent.class, PositionComponent.class).get(), priority);
-        
-        cameraTargetScreenPos = new Vector2( (float) (Gdx.graphics.getWidth()* 0.5), (float) (Gdx.graphics.getHeight() * 0.5) );
         
         // create white rectangle texture to initiate draw call
         Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
         this.screenOverlayWhiteRect = new Texture(pixmap);
+        
+        // set initial values
+        // paparazzi
+        frameDimensions = new float[]{ Gdx.graphics.getWidth(), Gdx.graphics.getHeight() };
+        cameraTargetScreenPos = new Vector2( (float) (Gdx.graphics.getWidth()* 0.5), (float) (Gdx.graphics.getHeight() * 0.5) );
+        paparazziOverlaySafeCircleRadius = (float) (GameConstants.UNICORN_SIZE * 0.8);
+        resetPaparazzi();
+        
+        // cave
+        isActivatedSafePointInsideCave = false;
+        isInCaveIntro = false;
+        isInCaveOutro = false;
+        caveEffectLightGlowIntensity = caveEffectIntensity = 0.0f;
+        caveTime = 0.0f;
     }
     
     @Override
@@ -73,15 +109,16 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
     
     @Override
     public void addedToEngine(Engine engine) {
+        
+        Main.getInstance().addScreenListener(this);
 
         PaparazziShootEvent.register(this);
         DeathEvent.register(this);
+        TriggerEvent.register(this);
 
+        //DEBUG
         paparazzi1Hotkey.register();
         paparazzi0Hotkey.register();
-        
-        //DEBUG
-        Main.getInstance().console.register(paparazziConsole);
         
         super.addedToEngine(engine);
     }
@@ -89,58 +126,44 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
     @Override
     public void removedFromEngine(Engine engine) {
         
+        Main.getInstance().removeScreenListener(this);
+        
         PaparazziShootEvent.unregister(this);
         DeathEvent.unregister(this);
+        TriggerEvent.unregister(this);
 
+        //DEBUG
         paparazzi1Hotkey.unregister();
         paparazzi0Hotkey.unregister();
         
-        //DEBUG
-        Main.getInstance().console.unregister(paparazziConsole);
-        
         super.removedFromEngine(engine);
     }
+
+    @Override
+    public void resize(int width, int height) {
+        frameDimensions = new float[]{ width, height };
+    }
+    
+    // PAPARAZZI
     
     @Override
     public void onPaparazziShootEvent(float distance) {
-        startPaparazzi(distance, GameConstants.PAPARAZZI_DURATION, new Vector2(distance, distance*2));
+        startPaparazzi(distance, GameConstants.PAPARAZZI_DURATION, distance, distance*2);
     }
     
-    private void startPaparazzi(float distance, float duration, Vector2 seed)
+    private void startPaparazzi(float distance, float duration, float seed1, float seed2)
     {
         paparazziEffectDuration = paparazziEffectRemainingDuration = duration;
-        paparazziEffectSeed = seed;
+        paparazziEffectSeed = new float[]{ seed1, seed2 };
 
         float maxRange = GameConstants.GLOBAL_VISION * GameConstants.UNICORN_SIZE;
         float minRange = GameConstants.UNICORN_SIZE;
-        paparazziIntensity = (1 - Math.max((distance - minRange) / maxRange, 0));
+        paparazziEffectIntensity = (1 - Math.max((distance - minRange) / maxRange, 0));
     }
     
     private void resetPaparazzi()
     {
-        paparazziEffectDuration = paparazziEffectRemainingDuration = paparazziIntensity = 0.0f;
-    }
-
-    protected void consolePaparazzi(List<String> args) {
-        float duration;
-        final float stdDuration = 2.0f;
-        if(args.size() <= 1)
-        {
-            duration = stdDuration;
-        }
-        else
-        {
-            try
-            {
-                duration = Float.parseFloat(args.get(1));
-            }
-            catch(Exception e)
-            {
-                duration = stdDuration;
-            }
-        }
-        paparazziEffectSeed.add(3.6f, 7.8f);
-        startPaparazzi(500, duration, paparazziEffectSeed);
+        paparazziEffectDuration = paparazziEffectRemainingDuration = paparazziEffectIntensity = 0.0f;
     }
 
     @Override
@@ -148,8 +171,112 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
         if (ComponentMappers.player.has(entity))
         {
             resetPaparazzi();
+            resetCaveOnDeath();
         }
     }
+    
+    // CAVE ENTER/CAVE EXIT    
+    private void startCave()
+    {
+        isInsideCave = true;
+        
+        isInCaveIntro = true;
+        isInCaveOutro = false;
+        
+        if (!isInCaveOutro)
+        {
+            caveEffectLightGlowIntensity = caveEffectIntensity = 0.0f;
+            caveTime = 0.001f; // start shader usage
+        }
+    }
+    
+    private void stopCave()
+    {
+        isInsideCave = false;
+        
+        isInCaveIntro = false;
+        isInCaveOutro = true;
+    }
+    
+    private void resetCaveOnDeath()
+    {
+        isInsideCave = isActivatedSafePointInsideCave;
+        if (!isInsideCave) {
+            isInCaveIntro = false;
+            isInCaveOutro = false;
+            
+            caveEffectLightGlowIntensity = caveEffectIntensity = 0.0f;
+            caveTime = 0.0f;
+        }
+    }
+    
+    private void calculateNextCaveIntensityStep(float deltaTime) {
+        
+        if (isInCaveIntro)
+        {
+            caveEffectIntensity += deltaTime / CAVE_INTRO_DURATION;
+            if (caveEffectIntensity > 1.0f)
+            {
+                caveEffectIntensity = 1.0f;
+                isInCaveIntro = false;
+            }
+        }
+        else if (isInCaveOutro)
+        {
+            caveEffectIntensity -= deltaTime / CAVE_OUTRO_DURATION;
+            if (caveEffectIntensity < 0.0f)
+            {
+                caveEffectIntensity = 0.0f;
+                isInCaveOutro = false;
+                caveTime = 0.0f;
+            }
+        }
+        else
+        {
+            caveEffectIntensity = 1.0f;
+        }
+        
+        if (caveEffectIntensity > 0.0f)
+        {
+            caveTime += deltaTime;
+            caveEffectLightGlowIntensity = (float) Math.sin((caveTime / CAVE_GLOW_DURATION * Math.PI) % Math.PI);
+        }
+    }
+
+    @Override
+    public void onActivateCheckPointEvent(Entity unicorn, Entity safePoint) {
+        isActivatedSafePointInsideCave = isInsideCave;
+    }
+    
+    public void onTriggerEvent(TriggerEvent.Action action, Entity triggeringEntity) {
+        
+        switch (action) {
+            case CAVE_ENTER:
+                if (!isInsideCave) {
+                    startCave();
+                }
+                break;
+            case CAVE_EXIT:
+                if (isInsideCave) {
+                    stopCave();
+                }
+                break;
+        }
+        
+    };
+
+    private void setLightsAsUniform(ShaderProgram shader) {
+        float[] lightSourceCoords = CaveLightsRenderSystem.getMapLightsInViewport(MAX_LIGHT_UNIFORMS);
+        shader.setUniformf("u_numOfLights", lightSourceCoords[0]);
+        for (int i = 0; i < MAX_LIGHT_UNIFORMS; ++i)
+        {
+            shader.setUniform2fv("u_lightSource" + i, lightSourceCoords, 1+ i * 2, 2);
+        }
+        //System.out.println(lightSourceCoords[0]);
+    }
+    
+    
+    // UPDATE
     
     private Vector2 cameraScreenToShaderScreenCoords(Vector2 in)
     {
@@ -159,6 +286,26 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
     @Override
     public void update(float deltaTime) {
         
+        if (caveTime > 0.0f) {
+            
+            calculateNextCaveIntensityStep(deltaTime);
+            ShaderProgram shader = ShaderLoader.getCaveShader();
+            DrawUtil.setShader(shader);
+            if(shader != null)
+            {
+                shader.setUniformf("u_caveIntensity", caveEffectIntensity);
+                shader.setUniformf("u_lightGlowIntensity", caveEffectLightGlowIntensity);
+                shader.setUniformf("u_lightGlowRadius", GameConstants.CAVE_LIGHT_GLOW_RADIUS);
+                shader.setUniform4fv("u_lightColor", caveLightColor, 0, 4);
+                shader.setUniform4fv("u_darknessColor", caveDarknessColor, 0, 4);
+                
+                setLightsAsUniform(shader);
+            }
+            
+            DrawUtil.batch.draw(screenOverlayWhiteRect, CameraSystem.getViewportTopLeft().x, CameraSystem.getViewportTopLeft().y, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            DrawUtil.batch.flush();
+        }
+        
         if (paparazziEffectRemainingDuration > 0.0f) {
                     
             paparazziEffectRemainingDuration -= deltaTime;
@@ -166,21 +313,17 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
             DrawUtil.setShader(shader);
             if(shader != null)
             {
-                float[] dimensions = new float[]{ Gdx.graphics.getWidth(), Gdx.graphics.getHeight() };
-                shader.setUniform2fv("u_frameDimension", dimensions, 0, 2);
+                shader.setUniform2fv("u_frameDimension", frameDimensions, 0, 2);
+                shader.setUniform4fv("u_paparazziColor", paparazziColor, 0, 4);
                 
                 shader.setUniformf("u_effectDuration", paparazziEffectDuration);
                 shader.setUniformf("u_passedEffectTime", paparazziEffectDuration - Math.max(paparazziEffectRemainingDuration, 0.0f));
+                shader.setUniformf("u_paparazziIntensity", paparazziEffectIntensity);
+                shader.setUniform2fv("u_paparazziSeed", paparazziEffectSeed, 0, 2);
                 
-                // color set as RGBA [0.0, 1.0]. alpha is used as maximum result alpha for overlay.
-                float[] paparazziColor = new float[]{ 1.0f, 1.0f, 1.0f, 0.9f };
-                shader.setUniform4fv("u_paparazziColor", paparazziColor, 0, 4);
-                float[] paparazziSeed = new float[]{ paparazziEffectSeed.x, paparazziEffectSeed.y };
-                shader.setUniform2fv("u_paparazziSeed", paparazziSeed, 0, 2);
                 Vector2 shaderCoords = cameraScreenToShaderScreenCoords(cameraTargetScreenPos);
-                float[] paparazziOverlaySafeCircle = new float[]{ shaderCoords.x, shaderCoords.y , 100.0f };
+                float[] paparazziOverlaySafeCircle = new float[]{ shaderCoords.x, shaderCoords.y , paparazziOverlaySafeCircleRadius };
                 shader.setUniform3fv("u_paparazziOverlaySafeCircle", paparazziOverlaySafeCircle, 0, 3);
-                shader.setUniformf("u_paparazziIntensity", paparazziIntensity);
             }
             
             DrawUtil.batch.draw(screenOverlayWhiteRect, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -191,5 +334,7 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
         
         super.update(deltaTime);
     }
+    
+   
 
 }

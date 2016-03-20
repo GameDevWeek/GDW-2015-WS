@@ -26,6 +26,7 @@ import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 public class AnimationRenderSystem extends SubSystem 
     implements MovementStateChangeEvent.Listener, PlayerStateChangeEvent.Listener, EnemyActionEvent.Listener, DeathEvent.Listener
 {
+    @SuppressWarnings("unchecked")
     public AnimationRenderSystem() {
         super(Family.all(PositionComponent.class).one(AnimationComponent.class, UnicornAnimationComponent.class).get());
     }
