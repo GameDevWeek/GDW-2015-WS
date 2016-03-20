@@ -66,7 +66,6 @@ public class AnimationRenderSystem extends SubSystem
             boolean newFlipState = (movement.lookDirection) == (MovementComponent.LookDirection.LEFT) ^ animation.flipHorizontal;
             if(animation.currentlyFlipped != newFlipState)
             {
-                animation.xOffset = -animation.xOffset;
                 animation.currentlyFlipped = newFlipState;
             }
             
@@ -124,14 +123,8 @@ public class AnimationRenderSystem extends SubSystem
             int w = keyFrame.getRegionWidth();
             int h = keyFrame.getRegionHeight();
             
-            if(animation.currentlyFlipped)
-            {
-                DrawUtil.batch.draw(keyFrame, position.x + w * 0.5f + animation.xOffset, position.y - h * 0.5f + animation.yOffset, w * 0.5f + animation.xOffset, h * 0.5f + animation.yOffset, -w, h, 1, 1, position.rotation);
-            }
-            else
-            {
-                DrawUtil.batch.draw(keyFrame, position.x - w * 0.5f - animation.xOffset, position.y - h * 0.5f + animation.yOffset, w * 0.5f - animation.xOffset, h * 0.5f + animation.yOffset, w, h, 1, 1, position.rotation);
-            }
+            float scaleX = animation.currentlyFlipped ? -1: 1;
+            DrawUtil.batch.draw(keyFrame, position.x - w * 0.5f - animation.xOffset, position.y - h * 0.5f + animation.yOffset, w * 0.5f - animation.xOffset, h * 0.5f + animation.yOffset, w, h, scaleX, 1, position.rotation);
             if(animation.alpha < 1f && animation.alpha >= 0f)
             {
                 DrawUtil.setShader(null);
