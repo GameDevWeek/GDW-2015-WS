@@ -39,10 +39,6 @@ public class AnimationRenderSystem extends SubSystem
             animation = ComponentMappers.unicornAnimation.get(entity);
         }
         
-        if (animation.name.equals("river_top")) {
-            int i = 0;
-        }
-        
         PositionComponent position = ComponentMappers.position.get(entity);
         MovementComponent movement = ComponentMappers.movement.get(entity);
         PhysixBodyComponent physics = ComponentMappers.physixBody.get(entity);
