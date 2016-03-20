@@ -139,7 +139,7 @@
                 { "type": "text", "path" : "text", "style" : "text_center", "text": "Santo Pfingsten", "delay": "675" },
 
 
-                { "type": "text", "path" : "thanks", "group" : "title", "style" : "title_center", "text": "Thank you for playing!", "delay": "2000" }
+                { "type": "text", "path" : "thanks", "group" : "title", "style" : "title_center", "text": "Danke fürs Spielen!", "delay": "2000" }
             ],
             "animations": [
                 { "time": 0, "animation": "construct", "animationTime": 1000, "group": "title",
