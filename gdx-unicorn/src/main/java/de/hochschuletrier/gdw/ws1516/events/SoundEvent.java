@@ -8,6 +8,7 @@ import de.hochschuletrier.gdw.ws1516.events.TestEvent.Listener;
 public class SoundEvent {
     public static interface Listener {
         void onSoundPlay(String sound, Entity playOver, boolean b);
+        void onSoundPlay(String sound, boolean b);
 
         void onSoundStop(String sound, Entity playOver);
         void onSoundStop(Entity playOver);
@@ -35,6 +36,18 @@ public class SoundEvent {
 
     public static void emit(String sound, Entity entity) {
         emit(sound, entity, false);
+    }
+    
+    public static void emit (String sound, boolean loops) {
+        Object[] items = listeners.begin();
+        for (int i = 0, n = listeners.size; i < n; i++) {
+            ((Listener) items[i]).onSoundPlay(sound, loops);
+        }
+        listeners.end();
+    }
+    
+    public static void emit(String sound) {
+        emit(sound, false);
     }
 
     public static void stopSound(Entity entity) {

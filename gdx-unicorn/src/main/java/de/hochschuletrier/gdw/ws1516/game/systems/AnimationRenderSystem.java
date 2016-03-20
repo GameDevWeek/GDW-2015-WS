@@ -10,10 +10,12 @@ import de.hochschuletrier.gdw.commons.gdx.ashley.SortedSubIteratingSystem.SubSys
 import de.hochschuletrier.gdw.commons.gdx.assets.AnimationExtended;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
+import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.EnemyActionEvent;
 import de.hochschuletrier.gdw.ws1516.events.MovementStateChangeEvent;
 import de.hochschuletrier.gdw.ws1516.events.PlayerStateChangeEvent;
-import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
+import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
+import de.hochschuletrier.gdw.ws1516.events.UnicornIdleAnimationEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
@@ -26,6 +28,7 @@ import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 public class AnimationRenderSystem extends SubSystem 
     implements MovementStateChangeEvent.Listener, PlayerStateChangeEvent.Listener, EnemyActionEvent.Listener, DeathEvent.Listener
 {
+    @SuppressWarnings("unchecked")
     public AnimationRenderSystem() {
         super(Family.all(PositionComponent.class).one(AnimationComponent.class, UnicornAnimationComponent.class).get());
     }
@@ -33,14 +36,10 @@ public class AnimationRenderSystem extends SubSystem
     @Override
     public void processEntity(Entity entity, float deltaTime) {
         AnimationComponent animation = ComponentMappers.animation.get(entity);
-        
+       
         if(animation == null)
         {
             animation = ComponentMappers.unicornAnimation.get(entity);
-        }
-        
-        if (animation.name.equals("river_top")) {
-            int i = 0;
         }
         
         
@@ -69,7 +68,13 @@ public class AnimationRenderSystem extends SubSystem
       
         if(movement != null)
         {
-            animation.currentlyFlipped = (movement.lookDirection) == (MovementComponent.LookDirection.LEFT) ^ animation.flipHorizontal;
+            boolean newFlipState = (movement.lookDirection) == (MovementComponent.LookDirection.LEFT) ^ animation.flipHorizontal;
+            if(animation.currentlyFlipped != newFlipState)
+            {
+                animation.xOffset = -animation.xOffset;
+                animation.currentlyFlipped = newFlipState;
+            }
+            
             
             String stateKey = movement.state.toString().toLowerCase();
             if(animation.name.equals("Hunter") && uniteruptableAnimationRunning(animation, movement))
@@ -188,6 +193,23 @@ public class AnimationRenderSystem extends SubSystem
         if(isIdle)
         {
             animationExtended = animation.animationMap.get(idleString);
+
+            if(animationExtended != null && animation.getClass() == UnicornAnimationComponent.class)
+            {
+                UnicornAnimationComponent unicornAnimation = (UnicornAnimationComponent)animation;
+                // Set back animation time if already in next loop
+                if(unicornAnimation.stateTime > animationExtended.getDuration())
+                {
+                    unicornAnimation.resetStateTime();
+                    unicornAnimation.firedIdleEvent = false;
+                }
+                if(animationExtended.getKeyFrameIndex(animation.stateTime) >= 1 && !unicornAnimation.firedIdleEvent)
+                {
+                    unicornAnimation.firedIdleEvent = true;
+                    //UnicornIdleAnimationEvent.emit();
+                    SoundEvent.emit("poop");
+                }
+            }
         }
         else
         {

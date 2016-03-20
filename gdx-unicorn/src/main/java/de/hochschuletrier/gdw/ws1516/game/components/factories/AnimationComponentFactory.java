@@ -26,8 +26,14 @@ public class AnimationComponentFactory extends ComponentFactory<EntityFactoryPar
                 String idleString = properties.getString(animState.toString().toLowerCase() + "_idle");
                 String walkingString = properties.getString(animState.toString().toLowerCase() + "_walking");
                 
-                component.animationMap.put(animState.toString().toLowerCase() + "_idle", assetManager.getAnimation(idleString));
-                component.animationMap.put(animState.toString().toLowerCase() + "_walking", assetManager.getAnimation(walkingString));                
+                if(idleString != null)
+                {
+                    component.animationMap.put(animState.toString().toLowerCase() + "_idle", assetManager.getAnimation(idleString));
+                }
+                if(idleString != null)
+                {
+                    component.animationMap.put(animState.toString().toLowerCase() + "_walking", assetManager.getAnimation(walkingString));
+                }            
             }
             else
             {

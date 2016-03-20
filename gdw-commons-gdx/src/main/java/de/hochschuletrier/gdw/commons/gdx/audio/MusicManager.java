@@ -43,17 +43,22 @@ public class MusicManager {
                     music.stop();
                     return true;
                 }
-                music.setVolume(muted ? 0 : globalVolume);
+                setVolumeInternal(muted ? 0 : globalVolume);
             } else {
                 if (muted) {
                     music.setVolume(0);
                 } else if (fadeOut) {
-                    music.setVolume(globalVolume * (1 - (time / totalTime)));
+                    setVolumeInternal(globalVolume * (1 - (time / totalTime)));
                 } else {
-                    music.setVolume(globalVolume * (time / totalTime));
+                    setVolumeInternal(globalVolume * (time / totalTime));
                 }
             }
             return false;
+        }
+
+        private void setVolumeInternal(float volume) {
+            if(music.getVolume() != volume)
+                music.setVolume(volume);
         }
     }
 

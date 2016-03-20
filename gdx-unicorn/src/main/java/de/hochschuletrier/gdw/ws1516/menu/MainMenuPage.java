@@ -36,7 +36,7 @@ public class MainMenuPage extends MenuPage implements ShowCreditsEvent.Listener 
             ShowCreditsEvent.register(this);
             levelSelectionPage = new LevelSelectionPage(skin, menuManager);
             menuManager.addLayer(levelSelectionPage);
-            MenuPageScene introPage = new MenuPageScene(skin, menuManager, "data/json/intro.json", this::onIntroSkipped);
+            MenuPageScene introPage = new MenuPageScene(skin, menuManager, "data/json/intro.json", this::onIntroSkipped,"intro_bg");
             addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Spiel starten", introPage);
             //addLeftAlignedButton(xOffset, yOffset - yStep *( i++), 150, 50, "Start Game", this::startGame);
         } else if (type == Type.PAUSED) {
@@ -44,16 +44,17 @@ public class MainMenuPage extends MenuPage implements ShowCreditsEvent.Listener 
                 menuManager.popPage();
             }, "buttonSound");
         }
+        addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Hilfe", new HelpPage(skin, menuManager));
         addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Optionen", new MenuPageOptions(skin, menuManager));
         menuPageCredits = new MenuPageCredits(skin, menuManager);
         addPageEntry(menuManager, xOffset, yOffset - yStep * (i++), "Credits", menuPageCredits);
 
         if (type == Type.MENU) {
             //addLeftAlignedButton(xOffset, yOffset - yStep *( 2* i++), 100, 50, "Beenden", () -> System.exit(-1),"einhornEmpathy");
-            addLeftAlignedButton(xOffset, yOffset - yStep * (2 * i++), 100, 50, "Beenden", this::systemExitDelay, "einhornEmpathy");
+            addLeftAlignedButton(xOffset, 40, 100, 50, "Beenden", this::systemExitDelay, "tschuess");
 
         } else if (type == Type.PAUSED) {
-            addLeftAlignedButton(xOffset, yOffset - yStep * (2 * i++), 100, 50, "Menü", this::stopGame, "menu");
+            addLeftAlignedButton(xOffset, 40, 100, 50, "Menü", this::stopGame, "menu");
         }
     }
     

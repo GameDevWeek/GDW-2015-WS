@@ -126,13 +126,13 @@
     "filename": "data/graphics/spritesheets/unicorn_idle_pink_spritesheet.png",
     "frames": 9,
     "frameDuration": [
-      2,
+      3,
       0.1,
       0.1,
       0.1,
       0.1,
       0.1,
-      0.3,
+      1,
       0.1,
       0.1
     ],
@@ -151,13 +151,13 @@
     "rows": 1
   },
   "pink_unicorn_flying": {
-    "filename": "data/graphics/unicorn_s.png",
-    "frames": 1,
+    "filename": "data/graphics/spritesheets/unicorn_fly_pink_spritesheet.png",
+    "frames": 9,
     "frameDuration": [
       0.15
     ],
     "playType": "LOOP",
-    "columns": 1,
+    "columns": 9,
     "rows": 1
   },
   "pink_unicorn_jumping": {
@@ -196,13 +196,13 @@
     "filename": "data/graphics/spritesheets/unicorn_idle_blue_spritesheet.png",
     "frames": 9,
     "frameDuration": [
-      2,
+      3,
       0.1,
       0.1,
       0.1,
       0.1,
       0.1,
-      0.3,
+      1,
       0.1,
       0.1
     ],
@@ -221,13 +221,13 @@
     "rows": 1
   },
   "blue_unicorn_flying": {
-    "filename": "data/graphics/unicorn_s.png",
-    "frames": 1,
+    "filename": "data/graphics/spritesheets/unicorn_fly_blue_spritesheet.png",
+    "frames": 9,
     "frameDuration": [
       0.15
     ],
     "playType": "LOOP",
-    "columns": 1,
+    "columns": 9,
     "rows": 1
   },
   "blue_unicorn_jumping": {
@@ -266,13 +266,13 @@
     "filename": "data/graphics/spritesheets/unicorn_idle_rainbow_spritesheet.png",
     "frames": 9,
     "frameDuration": [
-      2,
+      3,
       0.1,
       0.1,
       0.1,
       0.1,
       0.1,
-      0.3,
+      1,
       0.1,
       0.1
     ],
@@ -291,13 +291,13 @@
     "rows": 1
   },
   "rainbow_unicorn_flying": {
-    "filename": "data/graphics/unicorn_s.png",
-    "frames": 1,
+    "filename": "data/graphics/spritesheets/unicorn_fly_pink_spritesheet.png",
+    "frames": 9,
     "frameDuration": [
       0.15
     ],
     "playType": "LOOP",
-    "columns": 1,
+    "columns": 9,
     "rows": 1
   },
   "rainbow_unicorn_jumping": {
