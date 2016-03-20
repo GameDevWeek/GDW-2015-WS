@@ -87,7 +87,7 @@
                 "glued": "hunter_glued",
                 "shooting": "hunter_shooting",
                 "flip_horizontal": true,
-                "x_offset": 20
+                "x_offset": -5
             },
             "PhysixBody": {
                 "type": "enemy",
@@ -100,6 +100,20 @@
                 "layer": 50
             },
             "SoundEmitter":{}
+        }
+    },
+    "hunterDeathDummy": {
+        "meta": {},
+        "components": {
+            "Position": {},
+            "Animation": {
+                "name": "HunterDeath",
+                "animation": "hunter_idle",
+                "dying": "hunter_dying"
+            },
+            "RenderLayer": {
+                "layer": 50
+            }
         }
     },
     "tourist": {
@@ -128,7 +142,7 @@
                 "glued": "paparazzi_glued",
                 "shooting": "paparazzi_shooting",
                 "flip_horizontal": true,
-                "x_offset": 12
+                "x_offset": -12
             },
             "PhysixBody": {
                 "type": "enemy",
@@ -433,7 +447,6 @@
             "Position": {
             },
             "Animation": {
-                "name": "river_top",
                 "default_animation": "chocolate_river_top"
             },
             "RenderLayer": {
@@ -459,10 +472,14 @@
         "components": {
             "Position": {},
             "Texture": {
-                "texture": ""
+                "texture": "candle",
+                "flipVertical": true
+            },
+            "RenderLayer": {
+                "layer": 5
             },
             "Light": {
-                "intensity": 10.0
+                "intensity": 0.5
             }
         }
     },

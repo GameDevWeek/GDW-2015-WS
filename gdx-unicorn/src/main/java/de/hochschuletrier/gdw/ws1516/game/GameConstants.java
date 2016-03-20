@@ -19,7 +19,10 @@ public class GameConstants {
     public static final int PRIORITY_HUD = 40;
     public static final int PRIORITY_NAME = 50;
     public static final int PRIORITY_REMOVE_ENTITIES = 1000;
+    public static final int PRIORITY_DEATH_ANIMATION = 18;
     public static final int PRIORITY_ANIMATION_EVENTS = 999;
+    public static final int PRIORITY_CAVE_LIGHTS_RENDERING = 900;
+    
 
     // PooledEngine parameters
     public static final int ENTITY_POOL_INITIAL_SIZE = 32;
@@ -95,11 +98,14 @@ public class GameConstants {
     public static final float RAINBOW_ALPHA = 0.65f;
     public static final float RAINBOW_AMPLITUDE = 0.2f;
     public static final float PAPARAZZI_DURATION = 2.0f;
+    public static final float CAVE_LIGHT_GLOW_RADIUS = (float) (1.5 * Math.max(TILESIZE_X, TILESIZE_Y));
     
     // Particle parameters
     public static final float IDLE_PARTICLE_REDUCTION = 0.2f;
     
     // Animation parameters
-    public static final double THROWBACK_ANIMATION_PERIODS = 3;
+
     public static final float TIME_TO_WAIT_TO_SHOOT = 0.5f;
+    public static final double THROWBACK_ANIMATION_PERIODS = 3;
+
 }
