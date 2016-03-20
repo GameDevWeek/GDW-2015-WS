@@ -2,7 +2,7 @@
     "textStyles" : {
         "title_left": { "color": "F8BB08", "font": "verdana_32", "align": "right" },
         "title_right": { "color": "F8BB08", "font": "verdana_32", "align": "left" },
-        "title_center": { "color": "F8BB08", "font": "verdana_32", "align": "center" },
+        "title_center": { "color": "FF35D2", "font": "verdana_32", "align": "center" },
         "text_center": { "color": "FFFFFF", "font": "verdana_32", "align": "center" },
         "text_left": { "color": "FFFFFF", "font": "verdana_32", "align": "right" },
         "text_right": { "color": "FFFFFF", "font": "verdana_32", "align": "left" }
@@ -121,6 +121,8 @@
                 { "type": "text", "path" : "text", "style" : "text_right", "text": "  Loni", "delay": "0" },
                 { "type": "text", "path" : "text", "style" : "text_left", "text": "Sandra Weyand  ", "delay": "675" },
                 { "type": "text", "path" : "text", "style" : "text_right", "text": "  Julia Eiden", "delay": "0" },
+                { "type": "text", "path" : "text", "style" : "text_center", "text": "Kore Kaluzynski", "delay": "675" },
+
 
                 { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Sequence Animation", "delay": "2000" },
                 { "type": "text", "path" : "text", "style" : "text_left", "text": "Kore Kaluzynski  ", "delay": "675" },
