@@ -26,7 +26,7 @@ import de.hochschuletrier.gdw.ws1516.game.systems.EnemyHandlingSystem.Action.Typ
 import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 
 public class AnimationRenderSystem extends SubSystem 
-    implements MovementStateChangeEvent.Listener, PlayerStateChangeEvent.Listener, EnemyActionEvent.Listener, DeathEvent.Listener
+    implements MovementStateChangeEvent.Listener, PlayerStateChangeEvent.Listener, EnemyActionEvent.Listener
 {
     @SuppressWarnings("unchecked")
     public AnimationRenderSystem() {
@@ -46,11 +46,6 @@ public class AnimationRenderSystem extends SubSystem
         PositionComponent position = ComponentMappers.position.get(entity);
         MovementComponent movement = ComponentMappers.movement.get(entity);
         PhysixBodyComponent physics = ComponentMappers.physixBody.get(entity);
-        
-//        if(animation.name.equals("HunterDeath"))
-//        {
-//            movement.state = State.DYING;
-//        }
         
         if(animation.name.equals("hunterDeathDummy"))
         {
@@ -347,27 +342,5 @@ public class AnimationRenderSystem extends SubSystem
         {
             animationComponent.resetStateTime();
         }
-    }
-
-    @Override
-    public void onDeathEvent(Entity entity) 
-    {
-        AnimationComponent animationComponent = ComponentMappers.animation.get(entity);
-        MovementComponent movementComponent = ComponentMappers.movement.get(entity);
-        
-        if(animationComponent != null)
-        {
-            animationComponent.resetStateTime();
-        }
-        else
-        {
-            return;
-        }
-        
-        if(animationComponent.name.equals("Paparazzi") || animationComponent.name.equals("Hunter"))
-        {
-            movementComponent.state = State.DYING;
-        }
-        
     }
 }

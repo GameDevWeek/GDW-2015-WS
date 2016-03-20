@@ -75,7 +75,7 @@
             },
             "Behaviour": {
                 "cooldown":1.35
-                },
+            },
             "Animation": {
                 "name": "Hunter",
                 "on_ground_idle": "hunter_idle",
@@ -109,10 +109,7 @@
             "Position": {},
             "Animation": {
                 "name": "HunterDeath",
-                "on_ground_idle": "hunter_dying",
-                "on_ground_walking": "hunter_dying",
-                "animation": "hunter_dying",
-                "dying": "hunter_dying",
+                "default_animation": "hunter_dying",
                 "kill_When_Finished": true
             },
             "RenderLayer": {
