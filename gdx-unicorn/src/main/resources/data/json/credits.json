@@ -15,6 +15,13 @@
                 {"x": 512, "y": 700, "speed": 75 }
             ]
         },
+        "photo": {
+            "type": "linear",
+            "destinations": [
+                {"x": 512, "y": -300, "speed": 75 },
+                {"x": 512, "y": 300, "speed": 75 }
+            ]
+        },
         "thanks": {
             "type": "linear",
             "destinations": [
@@ -119,6 +126,13 @@
                 { "type": "text", "path" : "text", "style" : "text_left", "text": "Kore Kaluzynski  ", "delay": "675" },
                 { "type": "text", "path" : "text", "style" : "text_right", "text": "  David Siepen", "delay": "0" },
 
+                { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Quality Assurance", "delay": "2000" },
+                { "type": "text", "path" : "text", "style" : "text_left", "text": "Jerome Jähnig  ", "delay": "675" },
+                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Santo Pfingsten", "delay": "0" },
+                { "type": "text", "path" : "text", "style" : "text_left", "text": "Wera Goßner ", "delay": "675" },
+                { "type": "text", "path" : "text", "style" : "text_right", "text": "  Kristofer Schmitz", "delay": "0" },
+                { "type": "text", "path" : "text", "style" : "text_center", "text": "Tristan-Philip Semmler", "delay": "675" },
+
                 { "type": "text", "path" : "text", "group" : "title", "style" : "title_center", "text": "Helfer in Not", "delay": "2000" },
                 { "type": "text", "path" : "text", "style" : "text_center", "text": "Santo Pfingsten", "delay": "675" },
 
@@ -131,26 +145,24 @@
                     "minAngle" : 45, "maxAngle" : 135,
                     "minCurveAngle": 45, "maxCurveAngle": 135
                 },
-                { "time": 0, "animation": "untype_instant" },
-                { "time": 1000, "animation": "construct_type", "animationTime": 100,
+                { "time": 0, "animation": "untype_instant", "group":"text"},
+                { "time": 1000, "animation": "construct_type", "animationTime": 100,"group":"text",
                     "minRadius" : 100, "maxRadius" : 100,
                     "minAngle" : -35, "maxAngle" : -35,
                     "minCurveAngle": 25, "maxCurveAngle": 55,
                     "trailMaxSteps": 3, "trailStepTime": 50
                 },
-
-                { "time": 0, "animation": "untype_instant", "group": "btw" },
-                { "time": 0, "animation": "untype_instant", "group": "git1" },
-                { "time": 0, "animation": "untype_instant", "group": "git1b" },
-                { "time": 0, "animation": "untype_instant", "group": "git2" },
-                { "time": 1000, "animation": "type", "animationTime": 80, "group": "btw" },
-                { "time": 1000, "animation": "type", "animationTime": 80, "group": "git1" },
-                { "time": 1000, "animation": "type", "animationTime": 80, "group": "git2" },
-                { "time": 3800, "animation": "untype", "animationTime": 50, "group": "git2" },
-                { "time": 6600, "animation": "untype", "animationTime": 50, "group": "git1" },
-                { "time": 7500, "animation": "type", "animationTime": 50, "group": "git1b" },
-
                 { "time": 14000, "animation": "fade_out", "animationTime": 2000, "group": "*" }
+            ],
+            "finalNext":"photo"
+        },
+        "photo": {
+            "time":-1,
+            "items": [
+                { "type": "texture", "path" : "photo", "resource": "alle"}
+            ],
+            "animations":[
+                {"time":7950,"animation":"pause_path","animationTime":3000}
             ]
         },
         "stuff": {

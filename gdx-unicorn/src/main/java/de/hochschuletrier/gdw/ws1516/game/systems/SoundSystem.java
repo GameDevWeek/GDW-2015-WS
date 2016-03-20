@@ -125,6 +125,12 @@ public class SoundSystem extends IteratingSystem
         }
 
     }
+    
+    @Override
+    public void onSoundPlay(String sound, boolean b) {
+        Entity unicorn = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first();
+        onSoundPlay(sound, unicorn, b);
+    }
 
     @Override
     public void onSoundStop(Entity entity) {
@@ -172,7 +178,7 @@ public class SoundSystem extends IteratingSystem
                     break;
                 }
             } else if (enemy != null) {
-                SoundEvent.emit("paparazzidie", player);
+                SoundEvent.emit("splatter", player);
             } else if (ComponentMappers.player.has(entity)) {
                 SoundEvent.emit("lose_sound", player);
             }
@@ -229,7 +235,7 @@ public class SoundSystem extends IteratingSystem
     @Override
     public void onEndFlyEvent(Entity entity) {
         SoundEvent.stopSound("aufblasen",entity);
-        SoundEvent.emit("splatter", entity);
+        SoundEvent.emit("pop", entity);
     }
 
     @Override

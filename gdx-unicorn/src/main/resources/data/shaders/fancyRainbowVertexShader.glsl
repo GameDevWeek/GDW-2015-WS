@@ -31,9 +31,9 @@ float getRainbowAlpha()
 	}
 	
 	// Fade rainbow out
-	if(u_durationLeft <= 0.5)
+	if(u_durationLeft <= 2.0)
 	{
-		return u_rainbowAlpha * u_durationLeft * 2;
+		return u_rainbowAlpha * u_durationLeft * 0.5;
 	}
 	
 	// Default

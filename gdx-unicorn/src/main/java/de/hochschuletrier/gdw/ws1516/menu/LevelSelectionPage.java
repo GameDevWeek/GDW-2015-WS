@@ -59,7 +59,7 @@ public class LevelSelectionPage extends MenuPage {
         Texture buttonBack_texture = assetManager.getTexture("prev_Button");
         Texture buttonNext_texture = assetManager.getTexture("next_Button");
         
-        addPageEntry(menuManager, x, 444, "Informationen", new HelpPage(skin, menuManager));  
+        addPageEntry(menuManager, x, 444, "Hilfe", new HelpPage(skin, menuManager));  
         level_preview_d = new DecoImage(assetManager.getTexture(levelNames.get(level_preview_index)));
         
         level_previews = new Texture[levelNames.size()];
