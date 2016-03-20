@@ -84,7 +84,7 @@ public class EndPage extends MenuPage {
     private void nextLevel() {
         if(mapToLoad == null) {
             menuManager.popPage();
-            MenuPageScene outroPage = new MenuPageScene(skin, menuManager, "data/json/endSequence.json", this::onOutroSkipped);
+            MenuPageScene outroPage = new MenuPageScene(skin, menuManager, "data/json/endSequence.json", this::onOutroSkipped,"outro_bg");
             menuManager.addLayer(outroPage);
             menuManager.pushPage(outroPage);
         } else {
