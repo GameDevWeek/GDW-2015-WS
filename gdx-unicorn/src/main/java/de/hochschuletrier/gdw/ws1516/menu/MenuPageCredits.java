@@ -59,7 +59,7 @@ public class MenuPageCredits extends MenuPage implements SceneAnimator.Getter, S
             logger.error("Error loading credits", ex);
         }
 
-        addLeftAlignedButton(55, 40, 100, 50, "Menu", () -> menuManager.popPage(),"buttonSound");
+        addLeftAlignedButton(55, 40, 100, 50, "Menü", () -> menuManager.popPage(),"buttonSound");
     }
     
     @Override
