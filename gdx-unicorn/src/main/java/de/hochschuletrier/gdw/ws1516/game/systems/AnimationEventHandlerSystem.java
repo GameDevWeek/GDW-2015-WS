@@ -9,12 +9,16 @@ import de.hochschuletrier.gdw.ws1516.events.ActivateSafePointEvent;
 import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
 import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
 import de.hochschuletrier.gdw.ws1516.events.StartFlyEvent;
+import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.SafePointTextureComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.UnicornAnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.UnicornAnimationComponent.UnicornColor;
 
-public class AnimationEventHandlerSystem extends IteratingSystem implements RainbowEvent.Listener, StartFlyEvent.Listener, EndFlyEvent.Listener, ActivateSafePointEvent.Listener {
+public class AnimationEventHandlerSystem extends IteratingSystem implements RainbowEvent.Listener,
+                                                                            StartFlyEvent.Listener,
+                                                                            EndFlyEvent.Listener,
+                                                                            ActivateSafePointEvent.Listener {
 
     @SuppressWarnings("unchecked")
     public AnimationEventHandlerSystem(int priority) {
@@ -90,4 +94,5 @@ public class AnimationEventHandlerSystem extends IteratingSystem implements Rain
     protected void processEntity(Entity entity, float deltaTime) {
         // Nothing todo
     }
+    
 }

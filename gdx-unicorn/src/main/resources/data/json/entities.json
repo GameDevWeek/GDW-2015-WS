@@ -4,13 +4,13 @@
         "components": {
             "ScoreBoard":{},
             "StartPosition":{},
-            "Position": { 
+            "Position": {},
+            "Input":{},
+            "Player":{
                 "maxHitpoints":3,
                 "hitpoints":3,
                 "lives":3
             },
-            "Input":{},
-            "Player":{},
             "Movable":{
                 "state": "falling"
                 },
@@ -357,7 +357,8 @@
                 "friction": 0.2,
                 "restitution": 0.4,
                 "isSensor": true,
-                "gravity" : 0.0
+                "gravity" : 0.0,
+                "angle" : 0.0
             },
             "RenderLayer": {
                 "layer": 58

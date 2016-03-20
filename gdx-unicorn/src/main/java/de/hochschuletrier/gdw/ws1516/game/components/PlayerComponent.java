@@ -30,6 +30,7 @@ public class PlayerComponent extends Component implements Poolable {
     public float throwBackCooldown;
     public float flyingCooldown;
     public int blueGumStacks;
+    public float dieLaterTimer;
 
     @Override
     public void reset() {
@@ -44,6 +45,7 @@ public class PlayerComponent extends Component implements Poolable {
         throwBackCooldown=0;
         blueGumStacks = 0;
         flyingCooldown = 0;
+        dieLaterTimer = 0;
     }
    
 }

@@ -51,7 +51,6 @@ public class PlayerContactListener extends PhysixContactAdapter {
                 // for Jumps:
                 if ("foot".equals(contact.getMyFixture().getUserData())) {
                     if (!contact.getOtherFixture().isSensor()) {
-                        logger.debug("landing{}");
                         MovementComponent.State oldState = ComponentMappers.movement.get(myEntity).state;
                         MovementComponent.State newState = MovementComponent.State.LANDING;
                         MovementStateChangeEvent.emit(myEntity, oldState, newState);
@@ -83,7 +82,9 @@ public class PlayerContactListener extends PhysixContactAdapter {
         if (ComponentMappers.player.has(playerEn) && ComponentMappers.enemyType.has(otherEn)) {
             // TODO Hornattack
             PlayerComponent player = playerEn.getComponent(PlayerComponent.class);
-            if (player.state == PlayerComponent.State.HORNATTACK && "horn".equals(contact.getMyFixture().getUserData())) {
+            if (ComponentMappers.movement.get(otherEn).state == MovementComponent.State.GLUED) {
+                HornCollisionEvent.emit(playerEn, otherEn);
+            } else if (player.state == PlayerComponent.State.HORNATTACK && "horn".equals(contact.getMyFixture().getUserData())) {
                 HornCollisionEvent.emit(playerEn, otherEn);
                 //logger.debug("hornKollision {}");
             } else {
@@ -136,12 +137,18 @@ public class PlayerContactListener extends PhysixContactAdapter {
             }
           
         }
-        if (ComponentMappers.enemyType.has(myEntity) && ComponentMappers.player.has(otherEntity)) {
-            PlayerComponent player = otherEntity.getComponent(PlayerComponent.class);
-            if (player.state == PlayerComponent.State.HORNATTACK && "horn".equals(contact.getOtherFixture().getUserData())) {
-                HornCollisionEvent.emit(otherEntity, myEntity);
+
+        if (ComponentMappers.player.has(playerEn) && ComponentMappers.enemyType.has(otherEn)) {
+            // TODO Hornattack
+            PlayerComponent player = playerEn.getComponent(PlayerComponent.class);
+            if (ComponentMappers.movement.get(otherEn).state == MovementComponent.State.GLUED) {
+                HornCollisionEvent.emit(playerEn, otherEn);
+            } else if (player.state == PlayerComponent.State.HORNATTACK && "horn".equals(contact.getMyFixture().getUserData())) {
+                HornCollisionEvent.emit(playerEn, otherEn);
+                //logger.debug("hornKollision {}");
             } else {
-                UnicornEnemyCollisionEvent.emit(myEntity, otherEntity);
+                UnicornEnemyCollisionEvent.emit(playerEn, otherEn);
+                //logger.debug("gegnerKollision {}");
             }
         }
         

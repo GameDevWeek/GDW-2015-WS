@@ -35,12 +35,13 @@ import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.commons.tiled.tmx.TmxImage;
 import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.events.RainbowEvent;
-import de.hochschuletrier.gdw.ws1516.events.PauseGameEvent;
+import de.hochschuletrier.gdw.ws1516.events.ChangeInGameStateEvent;
+import de.hochschuletrier.gdw.ws1516.events.ChangeInGameStateEvent.GameStateType;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 import de.hochschuletrier.gdw.ws1516.states.GameplayState;
 
-public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Listener, PauseGameEvent.Listener
+public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Listener, ChangeInGameStateEvent.Listener
 {
     private final CVarInt rainbowType = new CVarInt("fancyRainbow", 0, 0, 2, 0, "sets fancy rainbowmode");
     private final ConsoleCmd rainbow = new ConsoleCmd("rainbow", 0, "Usage: rainbow [duration] - Activates rainbow mode for [duration] seconds") { @Override public void execute(List<String> args) { startRainbow(args); } };
@@ -82,7 +83,7 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
         super.addedToEngine(engine);
         
         RainbowEvent.register(this);
-        PauseGameEvent.register(this);
+        ChangeInGameStateEvent.register(this);
         
         Main.getInstance().console.register(rainbow);
         Main.getInstance().console.register(rainbowFrequency);
@@ -97,7 +98,7 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
         super.removedFromEngine(engine);
         
         RainbowEvent.unregister(this);
-        PauseGameEvent.unregister(this);
+        ChangeInGameStateEvent.unregister(this);
         
         Main.getInstance().console.unregister(rainbow);
         Main.getInstance().console.unregister(rainbowFrequency);
@@ -273,12 +274,18 @@ public class MapRenderSystem extends IteratingSystem implements RainbowEvent.Lis
     }
 
     @Override
-    public void onPauseGameEvent(boolean pauseOn) {
-        isPaused = pauseOn;
-    }
-
-    @Override
-    public void onPauseChange() {
-        isPaused = !isPaused;
+    public void onPauseGameEvent(GameStateType state) {
+        switch (state ) {
+        case GAME_PAUSE:  
+                isPaused = true;
+        case GAME_PLAYER_FREEZE:  
+            break;
+        case GAME_PLAYING:
+                isPaused = false;
+            break;
+        default:
+            break;
+        }
+        
     }
 }

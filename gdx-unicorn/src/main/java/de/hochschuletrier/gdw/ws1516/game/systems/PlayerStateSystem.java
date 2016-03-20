@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 
+import de.hochschuletrier.gdw.commons.tiled.TiledMap;
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
 import de.hochschuletrier.gdw.ws1516.events.EndFlyEvent;
 import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
@@ -19,12 +20,20 @@ import de.hochschuletrier.gdw.ws1516.game.GameConstants;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.PlayerComponent.State;
+import de.hochschuletrier.gdw.ws1516.game.components.PositionComponent;
 
 public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.Listener,
-    HornAttackEvent.Listener, StartFlyEvent.Listener, EndFlyEvent.Listener, ThrowBackEvent.Listener
-    {
+                                                                  HornAttackEvent.Listener,
+                                                                  StartFlyEvent.Listener,
+                                                                  EndFlyEvent.Listener,
+                                                                  ThrowBackEvent.Listener,
+                                                                  DeathEvent.Listener {
 
     private static final Logger logger = LoggerFactory.getLogger(PlayerStateSystem.class);
+    private float maxGameBottom;
+    private float maxGameRight;
+    private int maxGameLeft;
+    private int maxGameTop;
     
     public PlayerStateSystem() 
     {
@@ -40,6 +49,7 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         StartFlyEvent.register(this);
         EndFlyEvent.register(this);
         ThrowBackEvent.register(this);
+        DeathEvent.register(this);
     }
     
     @Override
@@ -51,6 +61,7 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         StartFlyEvent.unregister(this);
         EndFlyEvent.unregister(this);
         ThrowBackEvent.unregister(this);
+        DeathEvent.unregister(this );
     }
     
     @Override
@@ -58,8 +69,10 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
     {
         boolean dieLater = false;
         MovementComponent movementComp = ComponentMappers.movement.get(entity);
+        PositionComponent position = ComponentMappers.position.get(entity);
         PlayerComponent playerComp = ComponentMappers.player.get(entity);
         playerComp.stateTimer = Math.max(playerComp.stateTimer - deltaTime, 0);
+        
         playerComp.hornAttackCooldown = Math.max(playerComp.hornAttackCooldown - deltaTime, 0);
         playerComp.throwBackCooldown = Math.max(playerComp.throwBackCooldown - deltaTime, 0);
         playerComp.invulnerableTimer = Math.max(playerComp.invulnerableTimer - deltaTime, 0);
@@ -85,6 +98,11 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
             {
                 DeathEvent.emit(entity);                
             }
+        }
+        if ( position.x < maxGameLeft || position.x > maxGameRight ||
+                position.y < maxGameTop || position.y > maxGameBottom )
+        {
+            DeathEvent.emit(entity);
         }
     }
     
@@ -183,5 +201,21 @@ public class PlayerStateSystem extends IteratingSystem implements RainbowEvent.L
         
     }
 
+    public void initializeDeathBorders(TiledMap map) {
+        maxGameBottom = map.getHeight()*GameConstants.TILESIZE_X;
+        maxGameRight = map.getWidth() * GameConstants.TILESIZE_Y;
+        maxGameLeft = 0;
+        maxGameTop = 0;
+        
+    }
+
+    @Override
+    public void onDeathEvent(Entity entity) {
+        
+        //If the player dies, end flying
+        if (ComponentMappers.player.has(entity))
+            EndFlyEvent.emit(entity);
+        
+    }
     
 }
