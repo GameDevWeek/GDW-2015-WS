@@ -241,7 +241,6 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
             caveTime += deltaTime;
             caveEffectLightGlowIntensity = (float) Math.sin((caveTime / CAVE_GLOW_DURATION * Math.PI) % Math.PI);
         }
-        System.out.println(caveEffectIntensity);
     }
 
     @Override
@@ -273,6 +272,7 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
         {
             shader.setUniform2fv("u_lightSource" + i, lightSourceCoords, 1+ i * 2, 2);
         }
+        //System.out.println(lightSourceCoords[0]);
     }
     
     

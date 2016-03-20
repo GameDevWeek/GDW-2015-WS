@@ -472,10 +472,14 @@
         "components": {
             "Position": {},
             "Texture": {
-                "texture": ""
+                "texture": "candle",
+                "flipVertical": true
+            },
+            "RenderLayer": {
+                "layer": 5
             },
             "Light": {
-                "intensity": 10.0
+                "intensity": 0.5
             }
         }
     },

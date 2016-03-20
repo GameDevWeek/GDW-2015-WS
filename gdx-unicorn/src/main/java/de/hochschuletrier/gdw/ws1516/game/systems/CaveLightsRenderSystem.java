@@ -21,7 +21,7 @@ public class CaveLightsRenderSystem extends IteratingSystem {
     
     @SuppressWarnings("unchecked")
     public CaveLightsRenderSystem(int priority) {
-        super(Family.all(LightComponent.class).get(), priority);
+        super(Family.all(LightComponent.class, PositionComponent.class).get(), priority);
         
         lightListComplete = false;
         lights = new ArrayList<>();
@@ -61,12 +61,12 @@ public class CaveLightsRenderSystem extends IteratingSystem {
         return ( (lights.get(lightIndex).x + GameConstants.CAVE_LIGHT_GLOW_RADIUS) >= CameraSystem.getViewportTopLeft().x )
                 && ( (lights.get(lightIndex).x - GameConstants.CAVE_LIGHT_GLOW_RADIUS) <= CameraSystem.getViewportBottomRight().x )
                 && ( (lights.get(lightIndex).y + GameConstants.CAVE_LIGHT_GLOW_RADIUS) >= CameraSystem.getViewportTopLeft().y )
-                && ( (lights.get(lightIndex).y - GameConstants.CAVE_LIGHT_GLOW_RADIUS) <= CameraSystem.getViewportTopLeft().y );
+                && ( (lights.get(lightIndex).y - GameConstants.CAVE_LIGHT_GLOW_RADIUS) <= CameraSystem.getViewportBottomRight().y );
     }
     
     public static float[] getMapLightsInViewport(int maximumLights)
     {
-        float[] lightSourceCoords  = new float[maximumLights];
+        float[] lightSourceCoords  = new float[1 + 2 * maximumLights];
         int lightCoordIndex = 1; // index 0 stores number of lights
         if (lights != null) {
             for (int i = 0; i < lights.size(); ++i)

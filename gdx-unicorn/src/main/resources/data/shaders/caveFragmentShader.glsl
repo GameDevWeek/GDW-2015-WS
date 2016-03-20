@@ -15,7 +15,7 @@ uniform vec4    u_darknessColor;
 
 uniform sampler2D   u_texture;
 
-
+varying float   u_numOfLights;
 varying vec4    v_lightSource0;
 varying vec4    v_lightSource1;
 varying vec4    v_lightSource2;
