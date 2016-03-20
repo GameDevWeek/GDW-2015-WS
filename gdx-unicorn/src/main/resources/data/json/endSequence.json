@@ -97,17 +97,6 @@
       "animations":[],
       "finalNext" : "trexQ3"
     },
-    "trexQ2":{
-      "layer" :3,
-      "time" : -1,
-      "items" : [
-        {"type":"animation","path":"tr_stay","resource":"trex_crying", "flipX":"true","group":"crying"}
-      ],
-      "animations" : [
-        {"time":0,"animation": "sound/trexSad", "group":"crying"}
-      ],
-      "finalNext" : "trexQ3"
-    },
     "trexQ3":{
       "layer" :3,
       "time" : -1,
