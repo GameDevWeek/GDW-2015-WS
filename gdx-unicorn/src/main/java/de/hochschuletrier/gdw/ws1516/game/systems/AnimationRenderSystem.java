@@ -4,10 +4,10 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.utils.SnapshotArray;
 
 import de.hochschuletrier.gdw.commons.gdx.ashley.SortedSubIteratingSystem.SubSystem;
 import de.hochschuletrier.gdw.commons.gdx.assets.AnimationExtended;
+import de.hochschuletrier.gdw.commons.gdx.assets.AnimationExtended.PlayMode;
 import de.hochschuletrier.gdw.commons.gdx.physix.components.PhysixBodyComponent;
 import de.hochschuletrier.gdw.commons.gdx.utils.DrawUtil;
 import de.hochschuletrier.gdw.ws1516.events.DeathEvent;
@@ -15,7 +15,7 @@ import de.hochschuletrier.gdw.ws1516.events.EnemyActionEvent;
 import de.hochschuletrier.gdw.ws1516.events.MovementStateChangeEvent;
 import de.hochschuletrier.gdw.ws1516.events.PlayerStateChangeEvent;
 import de.hochschuletrier.gdw.ws1516.events.SoundEvent;
-import de.hochschuletrier.gdw.ws1516.events.UnicornIdleAnimationEvent;
+import de.hochschuletrier.gdw.ws1516.events.HornAttackEvent;
 import de.hochschuletrier.gdw.ws1516.game.ComponentMappers;
 import de.hochschuletrier.gdw.ws1516.game.components.AnimationComponent;
 import de.hochschuletrier.gdw.ws1516.game.components.MovementComponent;
@@ -26,7 +26,7 @@ import de.hochschuletrier.gdw.ws1516.game.systems.EnemyHandlingSystem.Action.Typ
 import de.hochschuletrier.gdw.ws1516.game.utils.ShaderLoader;
 
 public class AnimationRenderSystem extends SubSystem 
-    implements MovementStateChangeEvent.Listener, PlayerStateChangeEvent.Listener, EnemyActionEvent.Listener
+    implements MovementStateChangeEvent.Listener, PlayerStateChangeEvent.Listener, EnemyActionEvent.Listener, HornAttackEvent.Listener
 {
     @SuppressWarnings("unchecked")
     public AnimationRenderSystem() {
@@ -47,11 +47,6 @@ public class AnimationRenderSystem extends SubSystem
         MovementComponent movement = ComponentMappers.movement.get(entity);
         PhysixBodyComponent physics = ComponentMappers.physixBody.get(entity);
         
-        if(animation.name.equals("hunterDeathDummy"))
-        {
-            System.out.println("DeathDummy");
-        }
-        
         animation.stateTime += deltaTime;
         if((movement != null && movement.state != animation.lastRenderedState))
         {
@@ -71,7 +66,8 @@ public class AnimationRenderSystem extends SubSystem
             
             
             String stateKey = movement.state.toString().toLowerCase();
-            if(animation.name.equals("Hunter") && uniteruptableAnimationRunning(animation, movement))
+            
+            if(uniteruptableAnimationRunning(animation, movement))
             {
                 keyFrame = getKeyFrameFromAnimationExtended(animation);
             }      
@@ -85,7 +81,6 @@ public class AnimationRenderSystem extends SubSystem
             }
 	        else if(movement.state == State.DYING)
         	{
-	            System.out.println("dying state");
             	keyFrame = getDyingKeyFrame(animation, movement, stateKey);
         	}
             else if((movement.state == State.JUMPING || movement.state == State.FALLING) && physics != null)
@@ -138,17 +133,24 @@ public class AnimationRenderSystem extends SubSystem
             return false;
         }
         
-        float animDuration = animation.uninteruptableAnimation.getDuration();
-        float animTime = animation.stateTime;
-        
-        if(animTime > animDuration)
+        if(animation.uninteruptableAnimation.getPlayMode() == PlayMode.NORMAL)
         {
-            movement.state = State.ON_GROUND;
+            float animDuration = animation.uninteruptableAnimation.getDuration();
+            float animTime = animation.stateTime;
+            
+            if(animTime > animDuration)
+            {
+                movement.state = State.ON_GROUND;
+                return true;
+            }
+            
+            animation.uninteruptableAnimation = null;
+            return false;
+        }
+        else
+        {
             return true;
         }
-        
-        animation.uninteruptableAnimation = null;
-        return false;
     }
 
     public void registerListeners()
@@ -210,7 +212,6 @@ public class AnimationRenderSystem extends SubSystem
             if(animation.name.equals("hunterDeathDummy") || animation.name.equals("HunterDeath") || animation.name.equals("Hunter"))
             {
                 float duration = animationExtended.getDuration();
-                System.out.println(animation.name + "  Bool " + animation.killWhenFinished + " - duration " + (animation.stateTime > duration));
                 if(animation.killWhenFinished && animation.stateTime > duration)
                 {
                     DeathEvent.emit(entity);
@@ -293,7 +294,6 @@ public class AnimationRenderSystem extends SubSystem
     
     private TextureRegion getKeyFrameFromAnimationExtended(AnimationComponent animation) 
     {
-        System.out.println("boolean " + animation.killWhenFinished);
        return animation.uninteruptableAnimation.getKeyFrame(animation.stateTime);
     }
     
@@ -341,6 +341,26 @@ public class AnimationRenderSystem extends SubSystem
         if(animationComponent != null)
         {
             animationComponent.resetStateTime();
+        }
+    }
+
+    @Override
+    public void onHornAttackStart(Entity player) {
+        UnicornAnimationComponent animation = ComponentMappers.unicornAnimation.get(player);
+        if(animation != null)
+        {
+            animation.resetStateTime();
+            animation.uninteruptableAnimation = animation.animationMap.get("dash");
+        }
+    }
+
+    @Override
+    public void onHornAttackStop(Entity player) {
+        UnicornAnimationComponent animation = ComponentMappers.unicornAnimation.get(player);
+        if(animation != null)
+        {
+            animation.resetStateTime();
+            animation.uninteruptableAnimation = null;
         }
     }
 }

@@ -52,6 +52,12 @@ public class UnicornAnimationComponentFactory extends AnimationComponentFactory 
                     }
                 }
             }
+            
+            // add dash
+            String dashString = properties.getString(color.toString() + "_dash");
+            if(dashString != null)
+            map.put("dash", assetManager.getAnimation(dashString));
+            
             component.unicornColoredAnimations.put(color.toString(), map);
         }
         
