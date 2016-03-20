@@ -87,7 +87,7 @@
                 "glued": "hunter_glued",
                 "shooting": "hunter_shooting",
                 "flip_horizontal": true,
-                "x_offset": 20
+                "x_offset": -5
             },
             "PhysixBody": {
                 "type": "enemy",
@@ -128,7 +128,7 @@
                 "glued": "paparazzi_glued",
                 "shooting": "paparazzi_shooting",
                 "flip_horizontal": true,
-                "x_offset": 12
+                "x_offset": -12
             },
             "PhysixBody": {
                 "type": "enemy",

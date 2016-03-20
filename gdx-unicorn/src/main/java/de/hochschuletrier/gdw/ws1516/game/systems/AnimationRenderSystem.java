@@ -56,7 +56,13 @@ public class AnimationRenderSystem extends SubSystem
 
         if(movement != null)
         {
-            animation.currentlyFlipped = (movement.lookDirection) == (MovementComponent.LookDirection.LEFT) ^ animation.flipHorizontal;
+            boolean newFlipState = (movement.lookDirection) == (MovementComponent.LookDirection.LEFT) ^ animation.flipHorizontal;
+            if(animation.currentlyFlipped != newFlipState)
+            {
+                animation.xOffset = -animation.xOffset;
+                animation.currentlyFlipped = newFlipState;
+            }
+            
             
             String stateKey = movement.state.toString().toLowerCase();
             if(animation.name.equals("Hunter") && uniteruptableAnimationRunning(animation, movement))
