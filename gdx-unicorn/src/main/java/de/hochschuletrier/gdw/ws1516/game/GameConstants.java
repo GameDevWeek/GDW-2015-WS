@@ -19,6 +19,7 @@ public class GameConstants {
     public static final int PRIORITY_HUD = 40;
     public static final int PRIORITY_NAME = 50;
     public static final int PRIORITY_REMOVE_ENTITIES = 1000;
+    public static final int PRIORITY_DEATH_ANIMATION = 18;
     public static final int PRIORITY_ANIMATION_EVENTS = 999;
 
     // PooledEngine parameters
@@ -99,6 +100,8 @@ public class GameConstants {
     public static final float IDLE_PARTICLE_REDUCTION = 0.2f;
     
     // Animation parameters
-    public static final double THROWBACK_ANIMATION_PERIODS = 3;
+
     public static final float TIME_TO_WAIT_TO_SHOOT = 0.5f;
+    public static final double THROWBACK_ANIMATION_PERIODS = 3;
+
 }
