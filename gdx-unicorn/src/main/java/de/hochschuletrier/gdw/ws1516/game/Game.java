@@ -193,6 +193,8 @@ public class Game extends InputAdapter implements ChangeInGameStateEvent.Listene
             togglePhysixDebug.register();
             scoreCheating.register();
             winGameCheat.register();
+        } else {
+            physixDebugRenderSystem.setProcessing(false);
         }
         ChangeInGameStateEvent.register(this);
     }
