@@ -91,7 +91,8 @@
                 "shooting": "hunter_shooting",
                 "dying": "hunter_dying",
                 "flip_horizontal": true,
-                "x_offset": -5
+                "x_offset": -2,
+                "x_offset_flipped": -7
             },
             "PhysixBody": {
                 "type": "enemy",
@@ -145,7 +146,9 @@
                 "landing": "paparazzi_idle",
                 "glued": "paparazzi_glued",
                 "shooting": "paparazzi_shooting",
-                "flip_horizontal": true
+                "flip_horizontal": true,
+                "x_offset": -5,
+                "x_offset_flipped": -4
             },
             "PhysixBody": {
                 "type": "enemy",

@@ -118,7 +118,8 @@ public class AnimationRenderSystem extends SubSystem
             int h = keyFrame.getRegionHeight();
             
             float scaleX = animation.currentlyFlipped ? -1: 1;
-            DrawUtil.batch.draw(keyFrame, position.x - w * 0.5f - animation.xOffset, position.y - h * 0.5f + animation.yOffset, w * 0.5f - animation.xOffset, h * 0.5f + animation.yOffset, w, h, scaleX, 1, position.rotation);
+            float xOff = animation.currentlyFlipped ? animation.xOffsetFlipped : animation.xOffset;
+            DrawUtil.batch.draw(keyFrame, position.x - w * 0.5f - xOff, position.y - h * 0.5f + animation.yOffset, w * 0.5f - xOff, h * 0.5f + animation.yOffset, w, h, scaleX, 1, position.rotation);
             if(animation.alpha < 1f && animation.alpha >= 0f)
             {
                 DrawUtil.setShader(null);
