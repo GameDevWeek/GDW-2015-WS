@@ -45,8 +45,7 @@ void main()
     
     // only darken
     float intensityAlpha = u_darknessColor.a * u_caveIntensity;
-	//gl_FragColor = vec4(u_darknessColor.rgb, intensityAlpha);
-	gl_FragColor = vec4(1.0,1.0,1.0,1.0);
+	gl_FragColor = vec4(u_darknessColor.rgb, intensityAlpha);
 }
 
 // lerps from a [t = 0] to b [t = 1]

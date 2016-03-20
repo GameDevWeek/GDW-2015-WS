@@ -50,7 +50,7 @@ public class EffectsRenderSystem extends IteratingSystem implements PaparazziSho
     
     // color set as RGBA [0.0, 1.0]. alpha is used as maximum result alpha for overlay.
     private final float[] caveLightColor = new float[]{ 1.0f, 0.8f, 0.0f, 0.6f };
-    private final float[] caveDarknessColor = new float[]{ 0.0f, 0.0f, 0.0f, 0.3f };
+    private final float[] caveDarknessColor = new float[]{ 0.0f, 0.0f, 0.0f, 0.35f };
     
     private static final int MAX_LIGHT_UNIFORMS = 15;
     private static final float CAVE_GLOW_DURATION = 6.0f; // in seconds

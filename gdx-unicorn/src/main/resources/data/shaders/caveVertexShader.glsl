@@ -63,5 +63,4 @@ void main()
     
     // converting vertex position into gl screen coordinates
 	gl_Position =  u_projTrans * a_position;
-	//gl_Position = vec4(0.0,0.0,0.0,1.0);
 }
