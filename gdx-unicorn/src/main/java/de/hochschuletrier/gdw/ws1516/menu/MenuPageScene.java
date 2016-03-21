@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import de.hochschuletrier.gdw.commons.gdx.assets.AnimationExtended;
+import de.hochschuletrier.gdw.commons.gdx.audio.SoundEmitter;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.Hotkey;
 import de.hochschuletrier.gdw.commons.gdx.input.hotkey.HotkeyModifier;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
@@ -35,7 +36,7 @@ public class MenuPageScene extends MenuPage implements SceneAnimator.Getter, Sce
         super(skin, bg);
         this.menuManager = menuManager;
         this.callback = callback;
-        
+
         try {
             sceneAnimator = new SceneAnimator(this, filename);
             sceneAnimator.addListener(this);
@@ -51,14 +52,11 @@ public class MenuPageScene extends MenuPage implements SceneAnimator.Getter, Sce
             logger.error("Error loading intro", ex);
         }
 
+        addLeftAlignedButton(55, 40, 100, 50, "Menü", () -> menuManager.popPage(), "menu");
 
-        addLeftAlignedButton(55, 40, 100, 50, "Menü", () -> menuManager.popPage(),"menu");
-       
-
-        
-        addRightAlignedButton(Main.WINDOW_WIDTH - 155, 40, 100, 50, "Überspringen", this::skip,"buttonSound");
+        addRightAlignedButton(Main.WINDOW_WIDTH - 155, 40, 100, 50, "Überspringen", this::skip, "buttonSound");
     }
-    
+
     private void increaseSpeed() {
         sceneAnimator.setTimeFactor(Math.min(10.0f, sceneAnimator.getTimeFactor() + 1.f));
     }
@@ -70,14 +68,14 @@ public class MenuPageScene extends MenuPage implements SceneAnimator.Getter, Sce
     private void resetSpeed() {
         sceneAnimator.setTimeFactor(1.0f);
     }
-    
+
     @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);
-        
+
         // If this is a build jar file, disable hotkeys
         if (!Main.IS_RELEASE && increaseSpeed != null) {
-            if(visible) {
+            if (visible) {
                 increaseSpeed.register();
                 decreaseSpeed.register();
                 resetSpeed.register();
@@ -87,10 +85,11 @@ public class MenuPageScene extends MenuPage implements SceneAnimator.Getter, Sce
                 resetSpeed.unregister();
             }
         }
-        if(sceneAnimator != null && visible)
+        if (sceneAnimator != null && visible) {
             sceneAnimator.reset();
+        }
     }
-    
+
     private void skip() {
         this.callback.run();
     }
@@ -117,6 +116,9 @@ public class MenuPageScene extends MenuPage implements SceneAnimator.Getter, Sce
 
     @Override
     public Sound getSound(String name) {
-        return assetManager.getSound(name);
+        // temp fix for silent sounds
+        final Sound sound = assetManager.getSound(name);
+        SoundEmitter.playGlobal(sound, false);
+        return null;
     }
 }

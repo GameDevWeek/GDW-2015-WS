@@ -136,6 +136,7 @@
         {"type":"animation", "path":"uc_stay","resource":"pink_unicorn_jumping_up"}
       ],
       "animations" : [
+        {"time":1500,"animation": "sound/spuckCharge"}
       ],
       "finalNext":"unicornQ3"
     },
@@ -146,6 +147,7 @@
         {"type":"animation", "path":"uc_stay","resource":"pink_unicorn_jumping_up_no_loop"}
       ],
       "animations" : [
+        {"time":500,"animation": "sound/spucken"}
       ],
       "next":"gumQ",
       "finalNext":"unicornQ4"
@@ -178,6 +180,17 @@
       ],
       "animations" : [
         {"time":0,"animation":"pause_path","group":"*","animationTime":4700}
+      ],
+      "next" : "unicornQ7"
+    },
+    "unicornQ7":{
+      "layer" :4,
+      "time" : -1,
+      "items" : [
+        {"type":"animation", "x" : -1000, "y": -1000,"resource":"pink_unicorn_idle"}
+      ],
+      "animations" : [
+        {"time":3000,"animation": "sound/poop"}
       ]
     },
     "trexQ5":{
@@ -187,6 +200,7 @@
         {"type":"animation", "path":"tr_happy","resource":"trex_plottwist"}
       ],
       "animations" : [
+        {"time":0,"animation": "sound/trexDead"},
         {"time":"600","animation":"pause_path","animationTime":4700,"group":"*"}
       ],
       "next":"unicornQ6"
