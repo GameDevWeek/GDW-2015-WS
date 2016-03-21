@@ -73,7 +73,7 @@ public class GameConstants {
     public static final float SPIT_BLOCKING_ORIGINY = 16.0f;
     public static final float SPIT_BLOCKING_ALPHA_START = 0.8f;
     
-    public static float MUSIC_FADE_TIME = 2;
+    public static float MUSIC_FADE_TIME = 0.5f;
     
     // Scoreboard-Constant
     public static final int SCORE_BASEPOINTS = 0;
