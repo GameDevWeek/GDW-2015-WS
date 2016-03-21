@@ -21,9 +21,10 @@
         <module>gdw-commons-gdx</module>
         <module>gdw-examples</module>
         <module>gdx-test</module>
+        <module>gdx-unicorn</module>
+        <module>gdx-ugotpaint</module>
         <module>gdx-tools</module>
-        
-  </modules>
+    </modules>
 
     <dependencies>
         <dependency>
