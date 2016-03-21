@@ -16,6 +16,7 @@ import de.hochschuletrier.gdw.ws1516.Main;
 import de.hochschuletrier.gdw.ws1516.events.ShowWinScreenEvent;
 import de.hochschuletrier.gdw.ws1516.game.Game;
 import de.hochschuletrier.gdw.ws1516.game.GameConstants;
+import de.hochschuletrier.gdw.ws1516.game.utils.PlayerColor;
 import de.hochschuletrier.gdw.ws1516.menu.MenuPageRoot;
 
 /**
@@ -112,12 +113,25 @@ public class GameplayState extends BaseGameState implements ShowWinScreenEvent.L
     }
 
     @Override
-    public void onShowWinScreenEvent(String name, float pctWinnerFilled) {
-        menuPageRoot.setWinMessage(name + " hat gewonnen!", pctWinnerFilled);
+    public void onShowWinScreenEvent(PlayerColor color, float pctWinnerFilled) {
+        menuManager.popAllPages();
+        switch(color) {
+            case RED:
+                menuPageRoot.setWinMessage( "Spieler Rot hat gewonnen!", pctWinnerFilled);
+                break;
+            case BLUE:
+                menuPageRoot.setWinMessage( "Spieler Blau hat gewonnen!", pctWinnerFilled);
+                break;
+            case NEUTRAL:
+                menuPageRoot.setWinMessage( "Unentschieden!", pctWinnerFilled);
+                break;
+            default:
+                throw new AssertionError(color.name());
+            
+        }
         menuManager.pushPage(menuPageRoot);
         
         inputForwarder.set(menuInputProcessor);
         menuPageRoot.fadeToMenu();
-
     }
 }

@@ -72,9 +72,10 @@ public class MenuPage extends Group {
         }
     }
 
-    protected final void addLeftAlignedButton(int x, int y, int width, int height, String text, Runnable runnable) {
+    protected final TextButton addLeftAlignedButton(int x, int y, int width, int height, String text, Runnable runnable) {
         TextButton button = addButton(x, y, width, height, text, runnable, "default");
         button.getLabel().setAlignment(Align.left);
+        return button;
     }
 
     protected final void addCenteredButton(int x, int y, int width, int height, String text, Runnable runnable) {

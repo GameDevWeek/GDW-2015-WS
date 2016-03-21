@@ -21,7 +21,7 @@ public class MenuPageHelp extends MenuPage {
         addLabel(x, y - (i++)* LABEL_STEP, "Schuss: q");
         i+=0.5f;
         addLabel(x, y - (i++)* LABEL_STEP, "Screenshot: strg + F1");
-        addLeftAlignedButton(MENU_X, MENU_Y - LABEL_STEP * 3, BUTTON_WIDTH, BUTTON_HEIGHT, "Zurück", () -> menuManager.popPage());
+        addLeftAlignedButton(MENU_X, MENU_Y - MENU_STEP * 3, BUTTON_WIDTH, BUTTON_HEIGHT, "Zurück", () -> menuManager.popPage());
         addForeground();
     }
 

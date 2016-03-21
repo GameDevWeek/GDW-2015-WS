@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import de.hochschuletrier.gdw.commons.gdx.menu.MenuManager;
 import de.hochschuletrier.gdw.commons.gdx.menu.widgets.DecoImage;
 import de.hochschuletrier.gdw.ws1516.Cursor;
@@ -17,6 +18,7 @@ public class MenuPageRoot extends MenuPage {
     private final Type type;
     private final MenuManager menuManager;
     private final DecoImage overlayImage2;
+    private TextButton continueButton;
 
     public enum Type {
 
@@ -41,7 +43,7 @@ public class MenuPageRoot extends MenuPage {
         if (type == Type.MAINMENU) {
             addLeftAlignedButton(x, y - MENU_STEP * (i++), BUTTON_WIDTH, BUTTON_HEIGHT, "Spiel Starten", this::fadeToGame);
         } else {
-            addLeftAlignedButton(x, y - MENU_STEP * (i++), BUTTON_WIDTH, BUTTON_HEIGHT, "Fortsetzen", this::fadeToGame);
+            continueButton = addLeftAlignedButton(x, y - MENU_STEP * (i++), BUTTON_WIDTH, BUTTON_HEIGHT, "Fortsetzen", this::fadeToGame);
         }
         addPageEntry(menuManager, x, y - MENU_STEP * (i++), BUTTON_WIDTH, "Hilfe", new MenuPageHelp(skin, menuManager));
         addPageEntry(menuManager, x, y - MENU_STEP * (i++), BUTTON_WIDTH, "Credits", new MenuPageCredits(skin, menuManager));
@@ -126,6 +128,7 @@ public class MenuPageRoot extends MenuPage {
             game.init(assetManager);
             main.changeState(new GameplayState(assetManager, game));
         } else {
+            menuManager.popAllPages();
             menuManager.popPage();
         }
     }
@@ -146,6 +149,7 @@ public class MenuPageRoot extends MenuPage {
 
         addLabel(500,360,message);
         addLabel(500,330,pctMessage);
+        continueButton.getLabel().setText("Bild anzeigen");
     }
 
 
