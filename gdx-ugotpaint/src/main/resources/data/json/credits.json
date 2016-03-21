@@ -1,0 +1,55 @@
+{
+    "textStyles" : {
+        "title_left": { "color": "285AAA", "font": "credits_title_font", "align": "right" },
+        "title_right": { "color": "285AAA", "font": "credits_title_font", "align": "left" },
+        "title_center": { "color": "285AAA", "font": "credits_title_font", "align": "center" },
+        "text_center": { "color": "000000", "font": "credits_name_font", "align": "center" },
+        "text_left": { "color": "000000", "font": "credits_name_font", "align": "right" },
+        "text_right": { "color": "000000", "font": "credits_name_font", "align": "left" }
+    },
+    "paths" : {
+        "text": {
+            "type": "linear",
+            "destinations": [
+                {"x": 360, "y": 240, "speed": 30 },
+                {"x": 360, "y": 560, "speed": 30 }
+            ]
+        }
+    },
+    "queues": {
+        "text": {
+            "time": 0,
+            "items" : [
+                { "type": "text", "path" : "text", "group" : "title", "style" : "title_right", "text": "Organisation", "delay": "0" },
+                { "type": "text", "path" : "text", "style" : "text_right", "text": "Santo Pfingsten", "delay": "1350" },
+                
+                { "type": "text", "path" : "text", "group" : "title", "style" : "title_right", "text": "Entwicklung", "delay": "2000" },
+                { "type": "text", "path" : "text", "style" : "text_right", "text": "Santo Pfingsten", "delay": "1350" },
+                { "type": "text", "path" : "text", "style" : "text_right", "text": "David Siepen", "delay": "1000" },
+                
+                { "type": "text", "path" : "text", "group" : "title", "style" : "title_right", "text": "Grafik Design", "delay": "2000" },
+                { "type": "text", "path" : "text", "style" : "text_right", "text": "Julia Eiden", "delay": "1350" },
+                
+                { "type": "text", "path" : "text", "group" : "title", "style" : "title_right", "text": "Sound Design", "delay": "2000" },
+                { "type": "text", "path" : "text", "style" : "text_right", "text": "Minh Duc Dao", "delay": "1350" },
+                { "type": "text", "path" : "text", "style" : "text_right", "text": "Jason Merse", "delay": "1000" }
+            ],
+            "animations": [
+                { "time": 0, "animation": "construct", "animationTime": 1000, "group": "title",
+                    "minRadius" : 100, "maxRadius" : 300,
+                    "minAngle" : 45, "maxAngle" : 135,
+                    "minCurveAngle": 45, "maxCurveAngle": 135
+                },
+                { "time": 0, "animation": "untype_instant" },
+                { "time": 1000, "animation": "construct_type", "animationTime": 100,
+                    "minRadius" : 100, "maxRadius" : 100,
+                    "minAngle" : -35, "maxAngle" : -35,
+                    "minCurveAngle": 25, "maxCurveAngle": 55,
+                    "trailMaxSteps": 3, "trailStepTime": 50
+                },
+                
+                { "time": 8500, "animation": "fade_out", "animationTime": 2000, "group": "*" }
+            ]
+        }
+    }
+}

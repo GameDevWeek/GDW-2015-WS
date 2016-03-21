@@ -1,0 +1,46 @@
+{
+    "snake": {
+        "meta": {},
+        "components": {
+            "Input": {},
+            "Player": {},
+            "SoundEmitter": {},
+            "Position": {},
+            "Animation": {}
+        }
+    },
+    "pickup": {
+        "meta": {},
+        "components": {
+            "Pickup": {},
+            "Position": {},
+            "Animation": {}
+        }
+    },
+    "projectile": {
+        "meta": {},
+        "components": {
+            "SoundEmitter": {},
+            "Position": {},
+            "Projectile": {},
+            "Animation": {},
+            "Particle": {}
+        }
+    },
+    "splash": {
+        "meta": {},
+        "components": {
+            "SoundEmitter": {},
+            "Position": {},
+            "Splash": {},
+            "Animation": {}
+        }
+    },
+    "explosion":{
+        "meta":{},
+        "components":{
+            "Position":{},
+            "Particle":{}
+        }
+    }
+}

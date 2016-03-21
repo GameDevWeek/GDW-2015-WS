@@ -1,0 +1,7 @@
+{
+    "click": "data/sounds/click.wav",
+    "alarm": "data/sounds/alarm.wav",
+    "gameover": "data/sounds/gameover.wav",
+    "shoot": "data/sounds/shoot.wav",
+    "splash": "data/sounds/splash.wav"
+}
