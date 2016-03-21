@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import de.hochschuletrier.gdw.commons.gdx.audio.SoundEmitter;
 
 import de.hochschuletrier.gdw.commons.gdx.cameras.orthogonal.LimitedSmoothCamera;
 import de.hochschuletrier.gdw.ws1516.Main;
@@ -70,6 +71,7 @@ public class CameraSystem extends IteratingSystem {
         super.update(deltaTime);
         
         camera.setDestination(targetX, targetY);
+        SoundEmitter.setListenerPosition(targetX, targetY, 100, SoundEmitter.Mode.STEREO);
         camera.update(deltaTime);
         camera.bind();
     }

@@ -103,7 +103,6 @@ public class SoundSystem extends IteratingSystem
     @Override
     public void update(float deltaTime) {
         camera = CameraSystem.getCameraPosition();
-        SoundEmitter.setListenerPosition(camera.x, camera.y, 100, SoundEmitter.Mode.STEREO);
         SoundEmitter.updateGlobal();
         super.update(deltaTime);
     };

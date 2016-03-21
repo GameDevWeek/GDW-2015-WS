@@ -219,13 +219,10 @@ public class Main extends StateBasedGame {
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-        SoundEmitter.setListenerPosition(width / 2, height / 2, 10, emitterMode.get());
     }
 
     public void onEmitterModeChanged(CVar cvar) {
-        int x = Gdx.graphics.getWidth() / 2;
-        int y = Gdx.graphics.getHeight() / 2;
-        SoundEmitter.setListenerPosition(x, y, 10, emitterMode.get());
+        SoundEmitter.setListenerPosition(0, 0, 10, emitterMode.get());
     }
 
     @Override
