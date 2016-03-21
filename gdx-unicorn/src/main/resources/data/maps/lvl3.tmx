@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="450" height="100" tilewidth="64" tileheight="64" nextobjectid="1000">
  <properties>
-  <property name="next_map" value="/data/maps/lvl4.tmx"/>
+  <property name="next_map" value="data/maps/lvl4.tmx"/>
  </properties>
  <tileset firstgid="1" name="statics_tileset" tilewidth="64" tileheight="64" tilecount="100">
   <image source="tilesets/statics_tileset.png" width="640" height="640"/>
